@@ -1,2 +1,2 @@
 # PanelStudio
-A simple yet flexible library to create ClickGUIs designed for use in
+A simple yet flexible library to create ClickGUIs designed for use in Minecraft utility mods.
