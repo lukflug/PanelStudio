@@ -13,7 +13,7 @@ A simple yet flexible library to create ClickGUIs designed for use in Minecraft 
 * Future Theme:
 ![future](https://cdn.discordapp.com/attachments/755077474861449277/771799117998718986/unknown.png)
 
-This repostiory only includes the GameSense themes, however, since Cyber didn't want me to publish the other themes. The library has no depedencies (aside from the JRE iteslf), so it can easily be used for other purposes, aside from Minecraft utility mods.
+This repostiory only includes the GameSense themes, however, since Cyber didn't want me to publish the other themes. The library has no depedencies (aside from the JRE itself), so it can be easily used for other purposes, aside from Minecraft utility mods.
 
 To include the project in your gradle build, you have to add following to your `settings.gradle`:
 ```
