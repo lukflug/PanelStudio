@@ -2,5 +2,7 @@ plugins {
 	id 'java-library'
 }
 
-group='com.lukflug'
-version='0.0.0-SNAPSHOT'
+allprojects {
+	group='com.lukflug'
+	version='0.0.0-SNAPSHOT'
+}
