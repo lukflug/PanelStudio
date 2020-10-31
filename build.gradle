@@ -1,0 +1,6 @@
+group='com.lukflug'
+version='0.0.0-SNAPSHOT'
+
+plugins {
+	id 'java-library'
+}
