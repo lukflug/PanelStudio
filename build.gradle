@@ -1,4 +1,4 @@
 allprojects {
-	group = 'com.lukflug'
+	group = 'com.lukflug.panelstudio'
 	version = '0.0.0'
 }
