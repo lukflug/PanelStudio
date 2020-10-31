@@ -38,3 +38,10 @@ buildNumber.properties
 .project
 .classpath
 .settings/
+
+# Gradle
+.gradle/
+build/
+gradle/
+gradlew
+gradlew.bat
