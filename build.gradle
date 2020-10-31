@@ -1,4 +1,4 @@
 allprojects {
-	group='com.lukflug'
-	version='0.0.0-SNAPSHOT'
+	group = 'com.lukflug'
+	version = '0.0.0'
 }
