@@ -3,11 +3,16 @@ package com.lukflug.panelstudio.settings;
 /**
  * A setting representing an enumeration.
  * @author lukflug
- * @param <T> the enumeration in question
  */
-public interface EnumSetting<T extends Enum<T>> extends Setting<T> {
+public interface EnumSetting {
 	/**
 	 * Cycle through the values of the enumeration.
 	 */
 	public void increment();
+	
+	/**
+	 * Get the current value.
+	 * @return the name of the current enum value
+	 */
+	public String getName();
 }

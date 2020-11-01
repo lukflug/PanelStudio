@@ -13,7 +13,7 @@ public class EnumComponent extends FocusableComponent {
 	/**
 	 * The setting in question.
 	 */
-	protected EnumSetting<?> setting;
+	protected EnumSetting setting;
 	
 	/**
 	 * Constructor.
@@ -21,7 +21,7 @@ public class EnumComponent extends FocusableComponent {
 	 * @param renderer {@link Renderer} for the component.
 	 * @param setting the setting in question
 	 */
-	public EnumComponent(String title, Renderer renderer, EnumSetting<?> setting) {
+	public EnumComponent(String title, Renderer renderer, EnumSetting setting) {
 		super(title,renderer);
 		this.setting=setting;
 	}
@@ -32,7 +32,7 @@ public class EnumComponent extends FocusableComponent {
 	@Override
 	public void render (Context context) {
 		super.render(context);
-		renderer.renderTitle(context,title+": \u00A77"+setting.getValue().name(),hasFocus(context));
+		renderer.renderTitle(context,title+": \u00A77"+setting.getName(),hasFocus(context));
 	}
 	
 	/**
