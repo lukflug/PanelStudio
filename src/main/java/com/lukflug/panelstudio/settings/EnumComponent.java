@@ -32,7 +32,7 @@ public class EnumComponent extends FocusableComponent {
 	@Override
 	public void render (Context context) {
 		super.render(context);
-		renderer.renderTitle(context,title+": \u00A77"+setting.getName(),hasFocus(context));
+		renderer.renderTitle(context,title+": \u00A77"+setting.getValue(),hasFocus(context));
 	}
 	
 	/**

@@ -38,6 +38,7 @@ buildNumber.properties
 .project
 .classpath
 .settings/
+bin/
 
 # Gradle
 .gradle/
