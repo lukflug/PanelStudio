@@ -13,8 +13,9 @@ A simple yet flexible library to create ClickGUIs designed for use in Minecraft 
 * Future Theme:
 ![future](https://cdn.discordapp.com/attachments/755077474861449277/771799117998718986/unknown.png)
 
-This repostiory only includes the GameSense themes, however, since Cyber didn't want me to publish the other themes. The library has no depedencies (aside from the JRE itself), so it can be easily used for other purposes, aside from Minecraft utility mods.
+This repostiory only includes the GameSense themes, however, since Cyber didn't want me to publish the other themes. The library has no depedencies (aside from the JRE itself), so it can be easily used for other purposes, aside from Minecraft utility mods. Thanks to Go_Hoosiers, for suggesting the name of this library. If you use this library, some attribution would be greatly appreciated.
 
+## Use with Gradle
 To include the project in your gradle build, you have to add following to your `settings.gradle`:
 ```
 sourceControl {
@@ -31,6 +32,13 @@ implementation("com.lukflug:panelstudio") {
 	}
 }
 ```
+Note: you may need to use the deperecated `compile` instead of `implementation` for compatibility with Shadow. To have a valid mod jar when builidng a forge mod, add following to `build.gradle` under `shadowJar` under `dependencies`:
+```
+include(dependency('com.lukflug:panelstudio'))
+```
+**Warning: the code in this repository may be subject to change and may cause your code to become incompatible, so fork this repo and include the fork in your project.** I may publish binaries on maven central, if there is sufficient demand.
+
+## Implementation in Minecraft clients
 To use this library in your Minecraft clients, you have to do following things:
 * Implement the `Interface` interface.
 * Implement the `ColorScheme` interface.
@@ -38,5 +46,3 @@ To use this library in your Minecraft clients, you have to do following things:
 * Populate the `ClickGUI` object with the desired components (probably requires marking your settings objects with the interfaces in the `settings` package).
 * It is recommended to have a class extending Minecraft's `GuiScreen` and implementing `Interface`, that has `ClickGUI` as a field and populates it in the constructor.
 * For reference, consult the javadoc and see the implementation in GameSense.
-
-**Warning: the code in this repository may be subject to change and may cause your code to become incompatible, so fork this repo and include the fork in your project.** I may publish binaries on maven central, if there is sufficient demand. Thanks to Go_Hoosiers, for suggesting the name of this library. If you use this library, some attribution would be greatly appreciated.
