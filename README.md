@@ -26,8 +26,8 @@ To use this library in your Minecraft clients, you have to do following things:
 * It is recommended to have a class extending Minecraft's `GuiScreen` and implementing `Interface`, that has `ClickGUI` as a field and populates it in the constructor.
 * For reference, consult the javadoc and see the implementation in GameSense.
 
-## Use with Gradle
-To include the project in your gradle build, you have to add following to your `settings.gradle`:
+## Use as Gradle source dependency
+To include the newest version in this repository in your gradle build, you have to add following to your `settings.gradle`:
 ```
 sourceControl {
 	gitRepository("https://github.com/lukflug/PanelStudio.git") {
@@ -47,4 +47,4 @@ Note: you may need to use the deperecated `compile` instead of `implementation` 
 ```
 include(dependency('com.lukflug:panelstudio'))
 ```
-**Warning: the code in this repository may be subject to change and may cause your code to become incompatible, so fork this repo and include the fork in your project.**
+**Warning: the code in this repository may be subject to change and may cause your code to become incompatible, so fork this repo and include the fork in your project. For regular use, the binaries at the Maven repository is recommended.**
