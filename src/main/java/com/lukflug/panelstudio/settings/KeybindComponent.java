@@ -30,7 +30,7 @@ public class KeybindComponent extends FocusableComponent {
 	@Override
 	public void render (Context context) {
 		super.render(context);
-		String text=title+keybind.getName();
+		String text=title+keybind.getKeyName();
 		if (hasFocus(context)) text=title+"...";
 		renderer.renderTitle(context,text,hasFocus(context),hasFocus(context));
 	}

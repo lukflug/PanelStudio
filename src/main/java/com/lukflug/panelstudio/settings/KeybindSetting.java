@@ -21,5 +21,5 @@ public interface KeybindSetting {
      * Get the name of the key that is binded.
      * @return name of the key
      */
-	public String getName();
+	public String getKeyName();
 }
