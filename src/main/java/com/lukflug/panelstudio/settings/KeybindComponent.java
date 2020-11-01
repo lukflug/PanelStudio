@@ -12,7 +12,7 @@ public class KeybindComponent extends FocusableComponent {
 	/**
 	 * The keybind in question.
 	 */
-	KeybindSetting keybind;
+	protected KeybindSetting keybind;
 	
 	/**
 	 * Constructor.
