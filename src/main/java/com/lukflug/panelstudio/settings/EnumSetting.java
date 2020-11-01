@@ -14,5 +14,5 @@ public interface EnumSetting {
 	 * Get the current value.
 	 * @return the name of the current enum value
 	 */
-	public String getValue();
+	public String getValueName();
 }
