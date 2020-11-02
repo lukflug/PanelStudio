@@ -26,6 +26,23 @@ To use this library in your Minecraft clients, you have to do following things:
 * It is recommended to have a class extending Minecraft's `GuiScreen` and implementing `Interface`, that has `ClickGUI` as a field and populates it in the constructor.
 * For reference, consult the javadoc and see the implementation in GameSense.
 
+## Use in Gradle
+Add following to your `repositories` section in `build.gradle`:
+```
+maven {
+	name = 'lukflug'
+	url = 'https://lukflug.github.io/maven'
+}
+```
+In addition you have to add following to your `build.gradle` under `dependencies`:
+```
+implementation("com.lukflug:panelstudio:0.0.0")
+```
+Note: you may need to use the deperecated `compile` instead of `implementation` for compatibility with Shadow. To have a valid mod jar when builidng a forge mod, add following to `build.gradle` under `shadowJar` under `dependencies`:
+```
+include(dependency('com.lukflug:panelstudio'))
+```
+
 ## Use as Gradle source dependency
 To include the newest version in this repository in your gradle build, you have to add following to your `settings.gradle`:
 ```
