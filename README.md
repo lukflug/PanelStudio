@@ -24,7 +24,7 @@ To use this library in your Minecraft clients, you have to do following things:
 * Use one of the supplied Themes or implement one yourself, to have a different look from GameSense (see `ClearTheme` and `GameSenseTheme` for reference).
 * Populate the `ClickGUI` object with the desired components (probably requires marking your settings objects with the interfaces in the `settings` package).
 * It is recommended to have a class extending Minecraft's `GuiScreen` and implementing `Interface`, that has `ClickGUI` as a field and populates it in the constructor.
-* For reference, consult the javadoc and see the implementation in GameSense.
+* For reference, consult the [javadoc](https://lukflug.github.io/javadoc/panelstudio/0.0.1/) and see the implementation in GameSense.
 
 ## Use in Gradle
 Add following to your `repositories` section in `build.gradle`:
