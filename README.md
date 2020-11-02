@@ -36,7 +36,7 @@ maven {
 ```
 In addition you have to add following to your `build.gradle` under `dependencies`:
 ```
-implementation("com.lukflug:panelstudio:0.0.0")
+implementation("com.lukflug:panelstudio:0.0.1")
 ```
 Note: you may need to use the deperecated `compile` instead of `implementation` for compatibility with Shadow. To have a valid mod jar when builidng a forge mod, add following to `build.gradle` under `shadowJar` under `dependencies`:
 ```
