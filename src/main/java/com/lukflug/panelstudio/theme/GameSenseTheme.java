@@ -23,17 +23,17 @@ public class GameSenseTheme implements Theme {
 	}
 	
 	@Override
-	public Renderer getPanelRender() {
+	public Renderer getPanelRenderer() {
 		return panelRenderer;
 	}
 
 	@Override
-	public Renderer getContainerRender() {
+	public Renderer getContainerRenderer() {
 		return containerRenderer;
 	}
 
 	@Override
-	public Renderer getComponentRender() {
+	public Renderer getComponentRenderer() {
 		return componentRenderer;
 	}
 

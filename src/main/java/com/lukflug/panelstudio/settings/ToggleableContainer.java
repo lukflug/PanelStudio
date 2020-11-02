@@ -44,6 +44,6 @@ public class ToggleableContainer extends CollapsibleContainer {
 	 */
 	@Override
 	protected boolean isActive() {
-		return toggle.isRunning();
+		return toggle.isOn();
 	}
 }

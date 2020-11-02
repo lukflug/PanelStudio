@@ -19,7 +19,7 @@ public abstract class RendererBase implements Renderer {
 	protected ColorScheme scheme=null;
 	
 	/**
-	 * Constructor
+	 * Constructor.
 	 * @param height default component height
 	 * @param offset default vertical offset
 	 * @param border default horizontal border
@@ -30,16 +30,25 @@ public abstract class RendererBase implements Renderer {
 		this.border=border;
 	}
 	
+	/**
+	 * Get default component height.
+	 */
 	@Override
 	public int getHeight() {
 		return height;
 	}
 
+	/**
+	 * Get default component vertical offset.
+	 */
 	@Override
 	public int getOffset() {
 		return offset;
 	}
 
+	/**
+	 * Get default component horizontal border.
+	 */
 	@Override
 	public int getBorder() {
 		return border;

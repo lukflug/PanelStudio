@@ -13,8 +13,8 @@ import com.lukflug.panelstudio.theme.Renderer;
 public abstract class Slider extends FocusableComponent {
 	/**
 	 * Constructor.
-	 * @param title caption of the slider.
-	 * @param renderer renderer for the slider.
+	 * @param title caption of the slider
+	 * @param renderer renderer for the slider
 	 */
 	public Slider(String title, Renderer renderer) {
 		super(title, renderer);
@@ -38,12 +38,12 @@ public abstract class Slider extends FocusableComponent {
 
 	/**
 	 * Abstract method to get the current slider value.
-	 * @return the slider value between 0 (empty) and 1 (full).
+	 * @return the slider value between 0 (empty) and 1 (full)
 	 */
 	protected abstract double getValue();
 	/**
 	 * Abstract method to update the slider value.
-	 * @param value the slider value between 0 (empty) and 1 (full).
+	 * @param value the slider value between 0 (empty) and 1 (full)
 	 */
 	protected abstract void setValue (double value);
 }

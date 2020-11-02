@@ -6,7 +6,7 @@ import java.awt.Rectangle;
 import com.lukflug.panelstudio.Context;
 
 /**
- * An Interface to standardize the appearance of different components
+ * An Interface to standardize the appearance of different components.
  * @author lukflug
  */
 public interface Renderer {
@@ -91,14 +91,14 @@ public interface Renderer {
 	public Color getMainColor (boolean focus, boolean active);
 	
 	/**
-	 * Returns the standard background color 
+	 * Returns the standard background color.
 	 * @param focus the focus state for the component
 	 * @return the background color
 	 */
 	public Color getBackgroundColor (boolean focus);
 	
 	/**
-	 * Returns the font color
+	 * Returns the font color.
 	 * @param focus the focus state for the component
 	 * @return the font color
 	 */

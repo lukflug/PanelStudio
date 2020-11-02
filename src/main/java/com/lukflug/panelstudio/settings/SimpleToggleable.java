@@ -30,7 +30,7 @@ public class SimpleToggleable implements Toggleable {
 	 * Returns the boolean.
 	 */
 	@Override
-	public boolean isRunning() {
+	public boolean isOn() {
 		return value;
 	}
 

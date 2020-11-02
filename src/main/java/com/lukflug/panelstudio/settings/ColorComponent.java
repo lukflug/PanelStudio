@@ -79,7 +79,7 @@ public class ColorComponent extends CollapsibleContainer {
 	protected class ColorButton extends FocusableComponent {
 		/**
 		 * Constructor.
-		 * @param renderer the {@link Renderer} for the component.
+		 * @param renderer the {@link Renderer} for the component
 		 */
 		public ColorButton(Renderer renderer) {
 			super("Rainbow",renderer);
@@ -141,13 +141,13 @@ public class ColorComponent extends CollapsibleContainer {
 		}
 
 		/**
-		 * Implementation for {@link Slider#getValue()}
+		 * Implementation for {@link Slider#getValue()}.
 		 */
 		@Override
 		protected double getValue() {
 			Color c=setting.getColor();
 			if (value<3) {
-				if (colorModel.isRunning()) return Color.RGBtoHSB(c.getRed(),c.getGreen(),c.getBlue(),null)[value];
+				if (colorModel.isOn()) return Color.RGBtoHSB(c.getRed(),c.getGreen(),c.getBlue(),null)[value];
 				switch (value) {
 				case 0:
 					return c.getRed()/255.0f;
@@ -161,7 +161,7 @@ public class ColorComponent extends CollapsibleContainer {
 		}
 
 		/**
-		 * Implementation for {@link Slider#setValue(double)}
+		 * Implementation for {@link Slider#setValue(double)}.
 		 */
 		@Override
 		protected void setValue(double value) {
@@ -169,19 +169,19 @@ public class ColorComponent extends CollapsibleContainer {
 			float[] color=Color.RGBtoHSB(c.getRed(),c.getGreen(),c.getBlue(),null);
 			switch (this.value) {
 			case 0:
-				if (colorModel.isRunning()) c=Color.getHSBColor((float)value,color[1],color[2]);
+				if (colorModel.isOn()) c=Color.getHSBColor((float)value,color[1],color[2]);
 				else c=new Color((int)(255*value),c.getGreen(),c.getBlue());
 				if (alpha) setting.setValue(new Color(c.getRed(),c.getGreen(),c.getBlue(),setting.getColor().getAlpha()));
 				else setting.setValue(c);
 				break;
 			case 1:
-				if (colorModel.isRunning()) c=Color.getHSBColor(color[0],(float)value,color[2]);
+				if (colorModel.isOn()) c=Color.getHSBColor(color[0],(float)value,color[2]);
 				else c=new Color(c.getRed(),(int)(255*value),c.getBlue());
 				if (alpha) setting.setValue(new Color(c.getRed(),c.getGreen(),c.getBlue(),setting.getColor().getAlpha()));
 				else setting.setValue(c);
 				break;
 			case 2:
-				if (colorModel.isRunning()) c=Color.getHSBColor(color[0],color[1],(float)value);
+				if (colorModel.isOn()) c=Color.getHSBColor(color[0],color[1],(float)value);
 				else c=new Color(c.getRed(),c.getGreen(),(int)(255*value));
 				if (alpha) setting.setValue(new Color(c.getRed(),c.getGreen(),c.getBlue(),setting.getColor().getAlpha()));
 				else setting.setValue(c);
@@ -193,18 +193,18 @@ public class ColorComponent extends CollapsibleContainer {
 		}
 		
 		/**
-		 * Get the caption of the component based on index and colorModel
+		 * Get the caption of the component based on index and colorModel.
 		 * @param value the index of the slider
 		 * @return caption for the slider
 		 */
 		protected String getTitle (int value) {
 			switch (value) {
 			case 0:
-				return (colorModel.isRunning()?"Hue:":"Red:")+" \u00A77";
+				return (colorModel.isOn()?"Hue:":"Red:")+" \u00A77";
 			case 1:
-				return (colorModel.isRunning()?"Saturation:":"Green:")+" \u00A77";
+				return (colorModel.isOn()?"Saturation:":"Green:")+" \u00A77";
 			case 2:
-				return (colorModel.isRunning()?"Brightness:":"Blue:")+" \u00A77";
+				return (colorModel.isOn()?"Brightness:":"Blue:")+" \u00A77";
 			case 3:
 				return "Alpha: \u00A77";
 			}
@@ -212,7 +212,7 @@ public class ColorComponent extends CollapsibleContainer {
 		}
 		
 		protected int getMax() {
-			if (!colorModel.isRunning()) return 255;
+			if (!colorModel.isOn()) return 255;
 			else if (value==0) return 360;
 			else if (value<3) return 100;
 			else return 255;

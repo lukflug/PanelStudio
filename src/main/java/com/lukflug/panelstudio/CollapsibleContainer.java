@@ -32,11 +32,11 @@ public class CollapsibleContainer extends Container {
 		getHeight(context);
 		renderer.renderBackground(context,hasFocus(context));
 		context.setHeight(renderer.getHeight());
-		renderer.renderTitle(context,title,hasFocus(context),isActive(),open.isRunning());
-		if (open.isRunning()) {
+		renderer.renderTitle(context,title,hasFocus(context),isActive(),open.isOn());
+		if (open.isOn()) {
 			super.render(context);
 		}
-		renderer.renderBorder(context,hasFocus(context),isActive(),open.isRunning());
+		renderer.renderBorder(context,hasFocus(context),isActive(),open.isOn());
 	}
 	
 	/**
@@ -44,7 +44,7 @@ public class CollapsibleContainer extends Container {
 	 */
 	@Override
 	public void handleButton (Context context, int button) {
-		if (open.isRunning()) super.handleButton(context,button);
+		if (open.isOn()) super.handleButton(context,button);
 		else {
 			context.setHeight(renderer.getHeight());
 			updateFocus(context,button);
@@ -59,7 +59,7 @@ public class CollapsibleContainer extends Container {
 	 */
 	@Override
 	public void handleKey (Context context, int scancode) {
-		if (open.isRunning()) super.handleKey(context,scancode);
+		if (open.isOn()) super.handleKey(context,scancode);
 		else context.setHeight(renderer.getHeight());
 	}
 	
@@ -68,7 +68,7 @@ public class CollapsibleContainer extends Container {
 	 */
 	@Override
 	public void getHeight (Context context) {
-		if (open.isRunning()) super.getHeight(context);
+		if (open.isOn()) super.getHeight(context);
 		else context.setHeight(renderer.getHeight());
 	}
 	
@@ -77,10 +77,14 @@ public class CollapsibleContainer extends Container {
 	 */
 	@Override
 	public void exit (Context context) {
-		if (open.isRunning()) super.exit(context);
+		if (open.isOn()) super.exit(context);
 		else context.setHeight(renderer.getHeight());
 	}
 	
+	/**
+	 * Method to determine whether title bar is active or not.
+	 * @return set to true, if title bar is active
+	 */
 	protected boolean isActive() {
 		return true;
 	}

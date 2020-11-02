@@ -18,7 +18,7 @@ public class EnumComponent extends FocusableComponent {
 	/**
 	 * Constructor.
 	 * @param title name of the setting
-	 * @param renderer {@link Renderer} for the component.
+	 * @param renderer {@link Renderer} for the component
 	 * @param setting the setting in question
 	 */
 	public EnumComponent(String title, Renderer renderer, EnumSetting setting) {

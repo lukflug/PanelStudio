@@ -6,10 +6,22 @@ import java.awt.Color;
  * Setting representing a color.
  * @author lukflug
  */
-public interface ColorSetting extends Setting<Color> {
+public interface ColorSetting {
+	/**
+	 * Get the current value for the color setting.
+	 * @return the current color
+	 */
+	Color getValue();
+	
+	/**
+	 * Set the non-rainbow color.
+	 * @param value the value
+	 */
+	void setValue (Color value);
+	
 	/**
 	 * Get the color, ignoring the rainbow.
-	 * @return the color of the color setting
+	 * @return the color ignoring the rainbow
 	 */
 	public Color getColor();
 	

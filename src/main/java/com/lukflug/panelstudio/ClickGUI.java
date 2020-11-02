@@ -35,7 +35,7 @@ public class ClickGUI implements FocusManager {
 	}
 	
 	/**
-	 * Get a list of panels in the GUI
+	 * Get a list of panels in the GUI.
 	 * @return list of all panels (direct children)
 	 */
 	public List<FixedComponent> getComponents() {
@@ -43,7 +43,7 @@ public class ClickGUI implements FocusManager {
 	}
 	
 	/**
-	 * Add a component to the GUI
+	 * Add a component to the GUI.
 	 * @param component component to be added
 	 */
 	public void addComponent (FixedComponent component) {

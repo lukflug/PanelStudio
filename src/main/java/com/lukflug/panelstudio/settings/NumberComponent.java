@@ -12,15 +12,7 @@ public class NumberComponent extends Slider {
 	/**
 	 * The setting in question.
 	 */
-	protected NumberSetting<?> setting;
-	/**
-	 * The minimum possible value for the setting.
-	 */
-	protected double min;
-	/**
-	 * The maximum possible value for the setting.
-	 */
-	protected double max;
+	protected NumberSetting setting;
 	/**
 	 * The name of the setting.
 	 */
@@ -29,16 +21,14 @@ public class NumberComponent extends Slider {
 	/**
 	 * Constructor.
 	 * @param text name of the setting
-	 * @param renderer {@link Renderer} for the component.
+	 * @param renderer {@link Renderer} for the component
 	 * @param setting the setting in question
 	 * @param min minimum value for the setting
 	 * @param max maximum value for the setting
 	 */
-	public NumberComponent(String text, Renderer renderer, NumberSetting<?> setting, double min, double max) {
+	public NumberComponent(String text, Renderer renderer, NumberSetting setting, double min, double max) {
 		super("",renderer);
 		this.setting=setting;
-		this.min=min;
-		this.max=max;
 		this.text=text;
 	}
 	
@@ -47,23 +37,24 @@ public class NumberComponent extends Slider {
 	 */
 	@Override
 	public void render (Context context) {
-		title=String.format("%s: \u00A77%.1f",text,setting.getValue().doubleValue());
+		if (setting.getPrecision()==0) title=String.format("%s: \u00A77%d",text,(int)setting.getValue());
+		else  title=String.format("%s: \u00A77%."+setting.getPrecision()+"f",text,setting.getValue());
 		super.render(context);
 	}
 
 	/**
-	 * Implementation of {@link Slider#getValue()}
+	 * Implementation of {@link Slider#getValue()}.
 	 */
 	@Override
 	protected double getValue() {
-		return (setting.getValue().doubleValue()-min)/(max-min);
+		return (setting.getValue()-setting.getMinimumValue())/(setting.getMaximumValue()-setting.getMinimumValue());
 	}
 
 	/**
-	 * Implementation of {@link Slider#setValue(double)}
+	 * Implementation of {@link Slider#setValue(double)}.
 	 */
 	@Override
 	protected void setValue(double value) {
-		setting.fromDouble(value*(max-min)+min);
+		setting.setValue(value*(setting.getMaximumValue()-setting.getMinimumValue())+setting.getMinimumValue());
 	}
 }

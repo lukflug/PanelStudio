@@ -43,7 +43,8 @@ public interface Interface {
 	public void drawString (Point pos, String s, Color c);
 	
 	/**
-	 * Draw a triangle on the screen. The color of the triangle should ideally be smoothly interpolated. 
+	 * Draw a triangle on the screen.
+	 * The color of the triangle should ideally be smoothly interpolated. 
 	 * May only be called in a GUI rendering method.
 	 * @param pos1 the first corner of the triangle
 	 * @param pos2 the second corner of the triangle

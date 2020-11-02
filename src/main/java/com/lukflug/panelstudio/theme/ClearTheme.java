@@ -24,17 +24,17 @@ public class ClearTheme implements Theme {
 	}
 	
 	@Override
-	public Renderer getPanelRender() {
+	public Renderer getPanelRenderer() {
 		return panelRenderer;
 	}
 
 	@Override
-	public Renderer getContainerRender() {
+	public Renderer getContainerRenderer() {
 		return componentRenderer;
 	}
 
 	@Override
-	public Renderer getComponentRender() {
+	public Renderer getComponentRenderer() {
 		return componentRenderer;
 	}
 

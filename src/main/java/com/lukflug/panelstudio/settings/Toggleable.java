@@ -14,5 +14,5 @@ public interface Toggleable {
 	 * Get the boolean value.
 	 * @return the value
 	 */
-	public boolean isRunning();
+	public boolean isOn();
 }

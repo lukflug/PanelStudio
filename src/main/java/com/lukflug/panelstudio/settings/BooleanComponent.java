@@ -13,15 +13,15 @@ public class BooleanComponent extends FocusableComponent {
 	/**
 	 * The setting in question.
 	 */
-	protected Setting<Boolean> setting;
+	protected Toggleable setting;
 	
 	/**
 	 * Constructor.
 	 * @param title name of the setting
-	 * @param renderer {@link Renderer} for the component.
+	 * @param renderer {@link Renderer} for the component
 	 * @param setting the setting in question
 	 */
-	public BooleanComponent(String title, Renderer renderer, Setting<Boolean> setting) {
+	public BooleanComponent(String title, Renderer renderer, Toggleable setting) {
 		super(title,renderer);
 		this.setting=setting;
 	}
@@ -32,7 +32,7 @@ public class BooleanComponent extends FocusableComponent {
 	@Override
 	public void render (Context context) {
 		super.render(context);
-		renderer.renderTitle(context,title,hasFocus(context),setting.getValue());
+		renderer.renderTitle(context,title,hasFocus(context),setting.isOn());
 	}
 	
 	/**
@@ -43,7 +43,7 @@ public class BooleanComponent extends FocusableComponent {
 	public void handleButton (Context context, int button) {
 		super.handleButton(context,button);
 		if (button==Interface.LBUTTON && context.isClicked()) {
-			setting.setValue(!setting.getValue());
+			setting.toggle();
 		}
 	}
 }

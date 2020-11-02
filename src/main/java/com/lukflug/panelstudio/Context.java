@@ -10,11 +10,11 @@ import java.awt.Rectangle;
  */
 public class Context {
 	/**
-	 * The current {@link Interface}
+	 * The current {@link Interface}.
 	 */
 	private Interface inter;
 	/**
-	 * The current {@link FoucsManager}
+	 * The current {@link FoucsManager}.
 	 */
 	private FocusManager manager;
 	/**

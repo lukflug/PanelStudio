@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.lukflug</groupId>
   <artifactId>panelstudio</artifactId>
-  <version>0.0.0</version>
+  <version>0.0.1</version>
   <name>PanelStudio</name>
   <description>A simple yet flexible library to create ClickGUIs designed for use in Minecraft utility mods.</description>
 </project>

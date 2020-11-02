@@ -7,20 +7,20 @@ package com.lukflug.panelstudio.theme;
  */
 public interface Theme {
 	/**
-	 * Returns the renderer that should be used by the root components (i.e. {@link com.lukflug.panelstudio.FixedComponent})
+	 * Returns the renderer that should be used by the root components (i.e. {@link com.lukflug.panelstudio.FixedComponent}).
 	 * @return the panel renderer
 	 */
-	public Renderer getPanelRender();
+	public Renderer getPanelRenderer();
 	
 	/**
 	 * Returns the renderer that should be used by containers.
 	 * @return the container renderer
 	 */
-	public Renderer getContainerRender();
+	public Renderer getContainerRenderer();
 	
 	/**
 	 * Returns the renderer that should be used by components.
 	 * @return the component renderer
 	 */
-	public Renderer getComponentRender();
+	public Renderer getComponentRenderer();
 }
