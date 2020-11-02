@@ -3,17 +3,17 @@ package com.lukflug.panelstudio.settings;
 /**
  * Setting representing an adjustable number.
  * @author lukflug
- * @param <T> the number type
  */
 public interface NumberSetting {
 	/**
 	 * Get the number as double.
-	 * @param value the number
+	 * @return the current setting
 	 */
 	public double getNumber();
 	
 	/**
 	 * Set the number.
+	 * @param value the new number
 	 */
 	public void setNumber (double value);
 	
