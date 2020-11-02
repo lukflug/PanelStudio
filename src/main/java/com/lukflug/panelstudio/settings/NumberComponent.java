@@ -37,8 +37,8 @@ public class NumberComponent extends Slider {
 	 */
 	@Override
 	public void render (Context context) {
-		if (setting.getPrecision()==0) title=String.format("%s: \u00A77%d",text,(int)setting.getValue());
-		else  title=String.format("%s: \u00A77%."+setting.getPrecision()+"f",text,setting.getValue());
+		if (setting.getPrecision()==0) title=String.format("%s: \u00A77%d",text,(int)setting.getNumber());
+		else  title=String.format("%s: \u00A77%."+setting.getPrecision()+"f",text,setting.getNumber());
 		super.render(context);
 	}
 
@@ -47,7 +47,7 @@ public class NumberComponent extends Slider {
 	 */
 	@Override
 	protected double getValue() {
-		return (setting.getValue()-setting.getMinimumValue())/(setting.getMaximumValue()-setting.getMinimumValue());
+		return (setting.getNumber()-setting.getMinimumValue())/(setting.getMaximumValue()-setting.getMinimumValue());
 	}
 
 	/**
@@ -55,6 +55,6 @@ public class NumberComponent extends Slider {
 	 */
 	@Override
 	protected void setValue(double value) {
-		setting.setValue(value*(setting.getMaximumValue()-setting.getMinimumValue())+setting.getMinimumValue());
+		setting.setNumber(value*(setting.getMaximumValue()-setting.getMinimumValue())+setting.getMinimumValue());
 	}
 }

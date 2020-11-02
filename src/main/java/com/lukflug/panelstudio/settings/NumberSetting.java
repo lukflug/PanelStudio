@@ -10,12 +10,12 @@ public interface NumberSetting {
 	 * Get the number as double.
 	 * @param value the number
 	 */
-	public double getValue();
+	public double getNumber();
 	
 	/**
 	 * Set the number.
 	 */
-	public void setValue (double value);
+	public void setNumber (double value);
 	
 	/**
 	 * Get the maximum allowed value for the setting.
