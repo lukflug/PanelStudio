@@ -27,20 +27,24 @@ To use this library in your Minecraft clients, you have to do following things:
 * For reference, consult the [javadoc](https://lukflug.github.io/javadoc/panelstudio/0.0.1/) and see the implementation in GameSense.
 
 ## Use in Gradle
-Add following to your `repositories` section in `build.gradle`:
+Add following to your `build.gradle`:
 ```
-maven {
-	name = 'lukflug'
-	url = 'https://lukflug.github.io/maven'
+repositories {
+	maven {
+		name = 'lukflug'
+		url = 'https://lukflug.github.io/maven'
+	}
 }
-```
-In addition you have to add following to your `build.gradle` under `dependencies`:
-```
-implementation("com.lukflug:panelstudio:0.0.1")
-```
-Note: you may need to use the deperecated `compile` instead of `implementation` for compatibility with Shadow. To have a valid mod jar when builidng a forge mod, add following to `build.gradle` under `shadowJar` under `dependencies`:
-```
-include(dependency('com.lukflug:panelstudio'))
+
+dependencies {
+	compile("com.lukflug:panelstudio:0.0.1")
+}
+
+shadowJar {
+	dependencies {
+		include(dependency('com.lukflug:panelstudio'))
+	}
+}
 ```
 
 ## Use as Gradle source dependency
@@ -52,16 +56,20 @@ sourceControl {
 	}
 }
 ```
-In addition you have to add following to your `build.gradle` under `dependencies`:
+In addition you have to add following to your `build.gradle`:
 ```
-implementation("com.lukflug:panelstudio") {
-	version {
-		branch='main'
+dependencies {
+	implementation("com.lukflug:panelstudio") {
+		version {
+			branch='main'
+		}
 	}
 }
-```
-Note: you may need to use the deperecated `compile` instead of `implementation` for compatibility with Shadow. To have a valid mod jar when builidng a forge mod, add following to `build.gradle` under `shadowJar` under `dependencies`:
-```
-include(dependency('com.lukflug:panelstudio'))
+
+shadowJar {
+	dependencies {
+		include(dependency('com.lukflug:panelstudio'))
+	}
+}
 ```
 **Warning: the code in this repository may be subject to change and may cause your code to become incompatible, so fork this repo and include the fork in your project. For regular use, the binaries at the Maven repository is recommended.**
