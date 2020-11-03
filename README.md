@@ -72,4 +72,4 @@ shadowJar {
 	}
 }
 ```
-**Warning: the code in this repository may be subject to change and may cause your code to become incompatible, so fork this repo and include the fork in your project. For regular use, the binaries at the Maven repository is recommended.**
+**Warning: the code in this repository may be subject to change and may cause your code to become incompatible, so fork this repo and include the fork in your project. The binaries in  the Maven repository are recommended for regular use.**
