@@ -32,7 +32,7 @@ public abstract class Slider extends FocusableComponent {
 			else if (value>1) value=1;
 			setValue(value);
 		}
-		renderer.renderRect(context,"",hasFocus(context),false,new Rectangle(new Point((int)(context.getPos().x+context.getSize().width*getValue()),context.getPos().y),new Dimension((int)(context.getSize().width*(1-getValue())),renderer.getHeight())),false);
+		renderer.renderRect(context,"",hasFocus(context),false,new Rectangle(new Point(context.getPos().x+(int)(context.getSize().width*getValue()),context.getPos().y),new Dimension((int)(context.getSize().width*(1-getValue())),renderer.getHeight())),false);
 		renderer.renderRect(context,title,hasFocus(context),true,new Rectangle(context.getPos(),new Dimension((int)(context.getSize().width*getValue()),renderer.getHeight())),true);
 	}
 
