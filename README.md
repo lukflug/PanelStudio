@@ -59,7 +59,7 @@ sourceControl {
 In addition you have to add following to your `build.gradle`:
 ```
 dependencies {
-	implementation("com.lukflug:panelstudio") {
+	compile("com.lukflug:panelstudio") {
 		version {
 			branch='main'
 		}
