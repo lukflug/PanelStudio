@@ -8,7 +8,7 @@ import java.util.List;
  * All components should be a direct or indirect child of this objects.
  * @author lukflug
  */
-public class ClickGUI implements FocusManager {
+public class ClickGUI {
 	/**
 	 * List of direct child components (i.e. panels).
 	 * The must all be {@link FixedComponent}.
@@ -55,9 +55,10 @@ public class ClickGUI implements FocusManager {
 	 */
 	public void render() {
 		int highest=0;
+		FixedComponent focusComponent=null;
 		for (int i=components.size()-1;i>=0;i--) {
 			FixedComponent component=components.get(i);
-			Context context=new Context(inter,this,width,component.getPosition(inter),true,true);
+			Context context=new Context(inter,width,component.getPosition(inter),true,true);
 			component.getHeight(context);
 			if (context.isHovered()) {
 				highest=i;
@@ -66,8 +67,13 @@ public class ClickGUI implements FocusManager {
 		}
 		for (int i=0;i<components.size();i++) {
 			FixedComponent component=components.get(i);
-			Context context=new Context(inter,this,width,component.getPosition(inter),true,i>=highest);
+			Context context=new Context(inter,width,component.getPosition(inter),true,i>=highest);
 			component.render(context);
+			if (context.foucsRequested()) focusComponent=component;
+		}
+		if (focusComponent!=null) {
+			components.remove(focusComponent);
+			components.add(focusComponent);
 		}
 	}
 	
@@ -79,11 +85,17 @@ public class ClickGUI implements FocusManager {
 	 */
 	public void handleButton (int button) {
 		boolean highest=true;
+		FixedComponent focusComponent=null;
 		for (int i=components.size()-1;i>=0;i--) {
 			FixedComponent component=components.get(i);
-			Context context=new Context(inter,this,width,component.getPosition(inter),true,highest);
+			Context context=new Context(inter,width,component.getPosition(inter),true,highest);
 			component.handleButton(context,button);
 			if (context.isHovered()) highest=false;
+			if (context.foucsRequested()) focusComponent=component;
+		}
+		if (focusComponent!=null) {
+			components.remove(focusComponent);
+			components.add(focusComponent);
 		}
 	}
 	
@@ -93,10 +105,16 @@ public class ClickGUI implements FocusManager {
 	 */
 	public void handleKey (int scancode) {
 		boolean highest=true;
+		FixedComponent focusComponent=null;
 		for (FixedComponent component: components) {
-			Context context=new Context(inter,this,width,component.getPosition(inter),true,highest);
+			Context context=new Context(inter,width,component.getPosition(inter),true,highest);
 			component.handleKey(context,scancode);
 			if (context.isHovered()) highest=false;
+			if (context.foucsRequested()) focusComponent=component;
+		}
+		if (focusComponent!=null) {
+			components.remove(focusComponent);
+			components.add(focusComponent);
 		}
 	}
 	
@@ -105,20 +123,16 @@ public class ClickGUI implements FocusManager {
 	 */
 	public void exit() {
 		boolean highest=true;
+		FixedComponent focusComponent=null;
 		for (FixedComponent component: components) {
-			Context context=new Context(inter,this,width,component.getPosition(inter),true,highest);
+			Context context=new Context(inter,width,component.getPosition(inter),true,highest);
 			component.exit(context);
 			if (context.isHovered()) highest=false;
+			if (context.foucsRequested()) focusComponent=component;
 		}
-	}
-	
-	/**
-	 * Method to be called by a panel that requests focus within the GUI.
-	 * Moves the panel requesting focus to the top.
-	 */
-	@Override
-	public void requestFocus (Focusable component) {
-		components.remove(component);
-		components.add((FixedComponent)component);
+		if (focusComponent!=null) {
+			components.remove(focusComponent);
+			components.add(focusComponent);
+		}
 	}
 }

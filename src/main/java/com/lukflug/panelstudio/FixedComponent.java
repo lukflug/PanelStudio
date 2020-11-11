@@ -7,7 +7,7 @@ import java.awt.Point;
  * (i.e. the position isn't determined by the parent via {@link Context}).
  * @author lukflug
  */
-public interface FixedComponent extends Component,Focusable {
+public interface FixedComponent extends Component {
 	/**
 	 * Get the current component position.
 	 * @param inter current interface
@@ -17,7 +17,8 @@ public interface FixedComponent extends Component,Focusable {
 	
 	/**
 	 * Set the current component position.
+	 * @param inter current interface
 	 * @param position new position
 	 */
-	public void setPosition (Point position);
+	public void setPosition (Interface inter, Point position);
 }

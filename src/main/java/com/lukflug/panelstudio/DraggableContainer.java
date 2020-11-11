@@ -71,7 +71,7 @@ public class DraggableContainer extends CollapsibleContainer implements FixedCom
 	 * Set the position of the panel.
 	 */
 	@Override
-	public void setPosition(final Point position) {
+	public void setPosition(Interface inter, Point position) {
 		this.position=new Point(position);
 	}
 
@@ -80,6 +80,6 @@ public class DraggableContainer extends CollapsibleContainer implements FixedCom
 	 */
 	@Override
 	protected void handleFocus (Context context, boolean focus) {
-		if (focus) context.getFocusManager().requestFocus(this);
+		if (focus) context.requestFocus();
 	}
 }

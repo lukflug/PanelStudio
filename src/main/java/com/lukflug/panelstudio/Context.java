@@ -8,7 +8,7 @@ import java.awt.Rectangle;
  * A class for the communication between a component and its parent.
  * @author lukflug
  */
-public class Context {
+public final class Context {
 	/**
 	 * The current {@link Interface}.
 	 */
