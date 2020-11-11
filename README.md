@@ -1,5 +1,5 @@
 # PanelStudio
-A simple yet flexible library to create ClickGUIs designed for use in Minecraft utility mods. It was originally designed for a private client, but made open source, so that it could be used for [GameSense](https://github.com/IUDevman/gamesense-client). Here are some screenshots of what is possible with this client:
+A simple yet flexible library to create ClickGUIs designed for use in Minecraft utility mods. It was originally designed for a private client, but made open source, so that it could be used for [GameSense](https://github.com/IUDevman/gamesense-client). Here are some screenshots of what is possible with this library:
 * CyberHack Theme:
 ![cyberhack](https://cdn.discordapp.com/attachments/755077474861449277/770697901499744286/2020-10-27_18.16.50.png)
 * GameSense 2.0 Theme:

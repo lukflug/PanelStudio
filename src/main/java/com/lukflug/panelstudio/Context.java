@@ -14,10 +14,6 @@ public class Context {
 	 */
 	private Interface inter;
 	/**
-	 * The current {@link FoucsManager}.
-	 */
-	private FocusManager manager;
-	/**
 	 * The size of the component.
 	 * The width is decided by the parent, while the height is decided by the component.
 	 */
@@ -36,10 +32,15 @@ public class Context {
 	 * Only has meaning if the mouse cursor is hovering over the component.
 	 */
 	private boolean onTop;
+	/**
+	 * Set to true by the child using {@link #requestFocus()}.
+	 * Used to indicate that the focus within the parent should be given to the child component.
+	 */
+	private boolean focusRequested=false;
 	
 	/**
 	 * Constructor that should be used when a parent is calling a method by the child.
-	 * {@link #inter}, {@link #manager} and {@link #onTop} are inherited without modification.
+	 * {@link #inter} and {@link #onTop} are inherited without modification.
 	 * @param context the context of the parent
 	 * @param border the horizontal border (left and right) for the child
 	 * @param offset the vertical position of the child relative to the parent's position
@@ -47,7 +48,6 @@ public class Context {
 	 */
 	public Context (Context context, int border, int offset, boolean focus) {
 		inter=context.getInterface();
-		manager=context.getFocusManager();
 		size=new Dimension(context.getSize().width-border*2,0);
 		position=new Point(context.getPos());
 		position.translate(border,offset);
@@ -58,15 +58,13 @@ public class Context {
 	/**
 	 * Constructor that should be used by the root parent (i.e. {@link ClickGUI}).
 	 * @param inter the current {@link Interface}
-	 * @param manager the current {@link FocusManager}
 	 * @param width the width of the component
 	 * @param position the position of the component
 	 * @param focus set to false, to disable the component from having focus
 	 * @param onTop set to false, if a component is above another component at the current cursor position
 	 */
-	public Context (Interface inter, FocusManager manager, int width, Point position, boolean focus, boolean onTop) {
+	public Context (Interface inter, int width, Point position, boolean focus, boolean onTop) {
 		this.inter=inter;
-		this.manager=manager;
 		size=new Dimension(width,0);
 		this.position=new Point(position);
 		this.focus=focus;
@@ -79,14 +77,6 @@ public class Context {
 	 */
 	public Interface getInterface() {
 		return inter;
-	}
-	
-	/**
-	 * Returns the current {@link FocusManager}.
-	 * @return the current {@link FocusManager}
-	 */
-	public FocusManager getFocusManager() {
-		return manager;
 	}
 	
 	/**
@@ -127,6 +117,21 @@ public class Context {
 	 */
 	public boolean onTop() {
 		return onTop;
+	}
+
+	/**
+	 * Used to indicate to the parent that the current component has to have focus within the parent.
+	 */
+	public void requestFocus() {
+		focusRequested=true;
+	}
+
+	/**
+	 * Returns {@link #focusRequested}.
+	 * @return whether the child is requesting focus.
+	 */
+	public boolean foucsRequested() {
+		return focusRequested;
 	}
 	
 	/**

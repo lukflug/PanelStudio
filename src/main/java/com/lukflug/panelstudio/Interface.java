@@ -14,6 +14,10 @@ public interface Interface {
 	 * @see #getButton(int)
 	 */
 	public static final int LBUTTON=0;
+	/**
+	 * ID for the right mouse button.
+	 * @see #getButton(int)
+	 */
 	public static final int RBUTTON=1;
 	
 	/**
