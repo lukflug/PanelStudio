@@ -15,12 +15,28 @@ public interface TabGUIRenderer {
 	public int getHeight();
 	
 	/**
+	 * Get the default component distance between parent and child container.
+	 * @return component border
+	 */
+	public int getBorder();
+	
+	/**
 	 * Renders the background of a component.
 	 * @param context the current context
 	 * @param offset the vertical position of the text highlight
 	 * @param height the height of the text highlight and of single components
 	 */
 	public void renderBackground (Context context, int offset, int height);
+	
+	/**
+	 * Renders the caption of a child in a container.
+	 * @param context the current context
+	 * @param caption caption of the child in question
+	 * @param index the index of the child in the container
+	 * @param height the height of a single child component
+	 * @param active whether the child component is active
+	 */
+	public void renderCaption (Context context, String caption, int index, int height, boolean active);
 	
 	/**
 	 * Returns the default color scheme.

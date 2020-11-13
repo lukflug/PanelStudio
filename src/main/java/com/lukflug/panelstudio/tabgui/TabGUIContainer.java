@@ -8,7 +8,7 @@ import com.lukflug.panelstudio.Context;
 import com.lukflug.panelstudio.theme.Renderer;
 
 /**
- * Element of TabGUI.
+ * Element of TabGUI. Renders a list of child components.
  * @author lukflug
  */
 public class TabGUIContainer implements TabGUIComponent {
@@ -25,10 +25,19 @@ public class TabGUIContainer implements TabGUIComponent {
 	 */
 	protected List<TabGUIComponent> components;
 	/**
-	 * Current child component having focus.
+	 * Whether child component having focus.
 	 */
-	protected TabGUIComponent component=null;
+	protected boolean childOpen=false;
+	/**
+	 * Index of the currently selected component.
+	 */
+	protected int selected=0;
 	
+	/**
+	 * Constructor.
+	 * @param title caption of the container
+	 * @param renderer the {@link TabGUIRenderer} for this container
+	 */
 	public TabGUIContainer (String title, TabGUIRenderer renderer) {
 		this.title=title;
 		this.renderer=renderer;
@@ -58,11 +67,15 @@ public class TabGUIContainer implements TabGUIComponent {
 	public void render(Context context) {
 		getHeight(context);
 		renderer.renderBackground(context,0,renderer.getHeight());
-		Point p=context.getPos();
-		p.translate(1,0);
-		for (TabGUIComponent component: components) {
-			context.getInterface().drawString(p,component.getTitle(),renderer.getColorScheme().getFontColor());
-			p.translate(0,renderer.getHeight());
+		for (int i=0;i<components.size();i++) {
+			TabGUIComponent component=components.get(i);
+			renderer.renderCaption(context,component.getTitle(),i,renderer.getHeight(),component.isActive());
+		}
+		if (childOpen) {
+			Point p=context.getPos();
+			p.translate(context.getSize().width+renderer.getBorder(),selected*renderer.getHeight());
+			Context subContext=new Context(context.getInterface(),context.getSize().width,p,context.hasFocus(),context.onTop());
+			components.get(selected).render(subContext);
 		}
 	}
 
@@ -80,7 +93,22 @@ public class TabGUIContainer implements TabGUIComponent {
 	@Override
 	public void handleKey(Context context, int scancode) {
 		getHeight(context);
-		// TODO Auto-generated method stub
+		if (renderer.isEscapeKey(scancode)) {
+			childOpen=false;
+		} else if (!childOpen) {
+			if (renderer.isUpKey(scancode)) {
+				if (--selected<0) selected=components.size()-1;
+			} else if (renderer.isDownKey(scancode)) {
+				if (++selected>=components.size()) selected=0;
+			} else if (renderer.isSelectKey(scancode)) {
+				if (components.get(selected).select()) childOpen=true;
+			}
+		} else {
+			Point p=context.getPos();
+			p.translate(context.getSize().width+renderer.getBorder(),selected*renderer.getHeight());
+			Context subContext=new Context(context.getInterface(),context.getSize().width,p,context.hasFocus(),context.onTop());
+			components.get(selected).handleKey(subContext,scancode);
+		}
 	}
 
 	/**
