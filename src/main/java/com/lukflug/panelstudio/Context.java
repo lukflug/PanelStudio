@@ -139,7 +139,7 @@ public final class Context {
 	 * @return set to true, if mouse is hovering and component isn't below another one 
 	 */
 	public boolean isHovered() {
-		return inter.getMouse().x>=position.x && inter.getMouse().x<=position.x+size.width && inter.getMouse().y>=position.y && inter.getMouse().y<=position.y+size.height && onTop;
+		return inter.getMouse().x>=position.x && inter.getMouse().x<position.x+size.width && inter.getMouse().y>=position.y && inter.getMouse().y<position.y+size.height && onTop;
 	}
 	
 	/**
