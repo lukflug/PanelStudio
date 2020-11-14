@@ -47,6 +47,7 @@ public class DefaultRenderer implements TabGUIRenderer {
 	@Override
 	public void renderBackground(Context context, int offset, int height) {
 		Color bgcolor=scheme.getBackgroundColor();
+		bgcolor=new Color(bgcolor.getRed(),bgcolor.getGreen(),bgcolor.getBlue(),scheme.getOpacity());
 		Color border=scheme.getOutlineColor();
 		Color active=scheme.getActiveColor();
 		context.getInterface().fillRect(context.getRect(),bgcolor,bgcolor,bgcolor,bgcolor);
@@ -62,9 +63,9 @@ public class DefaultRenderer implements TabGUIRenderer {
 	public void renderCaption(Context context, String caption, int index, int height, boolean active) {
 		Color color;
 		if (active) color=scheme.getActiveColor();
-		else color=scheme.getOutlineColor();
+		else color=scheme.getFontColor();
 		Point p=context.getPos();
-		p.translate(1,index*height);
+		p.translate(0,index*height);
 		context.getInterface().drawString(p,caption,color);
 	}
 
