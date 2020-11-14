@@ -22,6 +22,10 @@ public class DraggableContainer extends CollapsibleContainer implements FixedCom
 	 * Current position of the panel.
 	 */
 	protected Point position;
+	/**
+	 * The panel width.
+	 */
+	protected int width;
 	
 	/**
 	 * Constructor.
@@ -30,9 +34,10 @@ public class DraggableContainer extends CollapsibleContainer implements FixedCom
 	 * @param open {@link Toggleable} to indicate whether the container is open or closed
 	 * @param position the initial position of the container
 	 */
-	public DraggableContainer(String title, Renderer renderer, Toggleable open, Point position) {
+	public DraggableContainer(String title, Renderer renderer, Toggleable open, Point position, int width) {
 		super(title,renderer,open);
 		this.position=position;
+		this.width=width;
 	}
 
 	/**
@@ -73,6 +78,11 @@ public class DraggableContainer extends CollapsibleContainer implements FixedCom
 	@Override
 	public void setPosition(Interface inter, Point position) {
 		this.position=new Point(position);
+	}
+
+	@Override
+	public int getWidth() {
+		return width;
 	}
 
 	/**

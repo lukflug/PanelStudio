@@ -15,6 +15,10 @@ public class TabGUI extends TabGUIContainer implements FixedComponent {
 	 * Current position of the TabGUI.
 	 */
 	protected Point position;
+	/**
+	 * The witdh of the TabGUI.
+	 */
+	protected int width;
 	
 	/**
 	 * Constructor.
@@ -22,9 +26,10 @@ public class TabGUI extends TabGUIContainer implements FixedComponent {
 	 * @param renderer the renderer for the TabGUI
 	 * @param position the intitial position for the TabGUI
 	 */
-	public TabGUI(String title, TabGUIRenderer renderer, Point position) {
+	public TabGUI(String title, TabGUIRenderer renderer, Point position, int width) {
 		super(title, renderer);
 		this.position=position;
+		this.width=width;
 	}
 
 	/**
@@ -41,6 +46,11 @@ public class TabGUI extends TabGUIContainer implements FixedComponent {
 	@Override
 	public void setPosition(Interface inter, Point position) {
 		this.position=position;
+	}
+
+	@Override
+	public int getWidth() {
+		return width;
 	}
 
 }

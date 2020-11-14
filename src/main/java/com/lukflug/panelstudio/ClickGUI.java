@@ -18,19 +18,14 @@ public class ClickGUI {
 	 * The {@link Interface} to be used by the GUI.
 	 */
 	protected Interface inter;
-	/**
-	 * The width of the panels.
-	 */
-	protected final int width;
 	
 	/**
 	 * Constructor for the GUI.
 	 * @param inter the {@link Interface} to be used by the GUI
 	 * @param width the width of the panels.
 	 */
-	public ClickGUI (Interface inter, int width) {
+	public ClickGUI (Interface inter) {
 		this.inter=inter;
-		this.width=width;
 		components=new ArrayList<FixedComponent>();
 	}
 	
@@ -58,7 +53,7 @@ public class ClickGUI {
 		FixedComponent focusComponent=null;
 		for (int i=components.size()-1;i>=0;i--) {
 			FixedComponent component=components.get(i);
-			Context context=new Context(inter,width,component.getPosition(inter),true,true);
+			Context context=new Context(inter,component.getWidth(),component.getPosition(inter),true,true);
 			component.getHeight(context);
 			if (context.isHovered()) {
 				highest=i;
@@ -67,7 +62,7 @@ public class ClickGUI {
 		}
 		for (int i=0;i<components.size();i++) {
 			FixedComponent component=components.get(i);
-			Context context=new Context(inter,width,component.getPosition(inter),true,i>=highest);
+			Context context=new Context(inter,component.getWidth(),component.getPosition(inter),true,i>=highest);
 			component.render(context);
 			if (context.foucsRequested()) focusComponent=component;
 		}
@@ -88,7 +83,7 @@ public class ClickGUI {
 		FixedComponent focusComponent=null;
 		for (int i=components.size()-1;i>=0;i--) {
 			FixedComponent component=components.get(i);
-			Context context=new Context(inter,width,component.getPosition(inter),true,highest);
+			Context context=new Context(inter,component.getWidth(),component.getPosition(inter),true,highest);
 			component.handleButton(context,button);
 			if (context.isHovered()) highest=false;
 			if (context.foucsRequested()) focusComponent=component;
@@ -107,7 +102,7 @@ public class ClickGUI {
 		boolean highest=true;
 		FixedComponent focusComponent=null;
 		for (FixedComponent component: components) {
-			Context context=new Context(inter,width,component.getPosition(inter),true,highest);
+			Context context=new Context(inter,component.getWidth(),component.getPosition(inter),true,highest);
 			component.handleKey(context,scancode);
 			if (context.isHovered()) highest=false;
 			if (context.foucsRequested()) focusComponent=component;
@@ -125,7 +120,7 @@ public class ClickGUI {
 		boolean highest=true;
 		FixedComponent focusComponent=null;
 		for (FixedComponent component: components) {
-			Context context=new Context(inter,width,component.getPosition(inter),true,highest);
+			Context context=new Context(inter,component.getWidth(),component.getPosition(inter),true,highest);
 			component.exit(context);
 			if (context.isHovered()) highest=false;
 			if (context.foucsRequested()) focusComponent=component;

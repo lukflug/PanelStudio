@@ -66,7 +66,7 @@ public class TabGUIContainer implements TabGUIComponent {
 	@Override
 	public void render(Context context) {
 		getHeight(context);
-		renderer.renderBackground(context,0,renderer.getHeight());
+		renderer.renderBackground(context,selected*renderer.getHeight(),renderer.getHeight());
 		for (int i=0;i<components.size();i++) {
 			TabGUIComponent component=components.get(i);
 			renderer.renderCaption(context,component.getTitle(),i,renderer.getHeight(),component.isActive());
