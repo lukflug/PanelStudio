@@ -53,8 +53,8 @@ public class CollapsibleContainer extends FocusableComponent {
 		renderer.renderBackground(context,hasFocus(context));
 		super.render(context);
 		renderer.renderTitle(context,title,hasFocus(context),isActive(),open.isOn());
-		if (open.getValue()!=1) {
-			Context subContext=new Context(context,0,getContainerOffset(),hasFocus(context));
+		if (open.getValue()!=0) {
+			Context subContext=new Context(context,0,getContainerOffset(),hasFocus(context),open.getValue()==1);
 			container.getHeight(subContext);
 			context.getInterface().window(getClipRect(context,subContext.getSize().height));
 			container.render(subContext);
@@ -69,7 +69,7 @@ public class CollapsibleContainer extends FocusableComponent {
 	 */
 	@Override
 	public void handleButton (Context context, int button) {
-		if (open.getValue()==0) {
+		if (open.getValue()==1) {
 			Context subContext=new Context(context,0,getContainerOffset(),hasFocus(context));
 			container.getHeight(subContext);
 			if (getClipRect(context,subContext.getSize().height).contains(context.getInterface().getMouse())) {
@@ -88,7 +88,7 @@ public class CollapsibleContainer extends FocusableComponent {
 	 */
 	@Override
 	public void handleKey (Context context, int scancode) {
-		if (open.getValue()==0) {
+		if (open.getValue()==1) {
 			Context subContext=new Context(context,0,getContainerOffset(),hasFocus(context));
 			container.handleKey(subContext,scancode);
 			context.setHeight(getRenderHeight(subContext.getSize().height));
@@ -100,7 +100,7 @@ public class CollapsibleContainer extends FocusableComponent {
 	 */
 	@Override
 	public void getHeight (Context context) {
-		if (open.getValue()!=1) {
+		if (open.getValue()!=0) {
 			Context subContext=new Context(context,0,getContainerOffset(),hasFocus(context));
 			container.getHeight(subContext);
 			context.setHeight(getRenderHeight(subContext.getSize().height));
@@ -112,7 +112,7 @@ public class CollapsibleContainer extends FocusableComponent {
 	 */
 	@Override
 	public void exit (Context context) {
-		if (open.getValue()==0) {
+		if (open.getValue()==1) {
 			Context subContext=new Context(context,0,getContainerOffset(),hasFocus(context));
 			container.exit(subContext);
 			context.setHeight(getRenderHeight(subContext.getSize().height));
