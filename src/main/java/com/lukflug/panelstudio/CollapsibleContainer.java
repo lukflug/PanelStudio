@@ -51,9 +51,9 @@ public class CollapsibleContainer extends FocusableComponent {
 		if (open.isOn()) {
 			Context subContext=new Context(context,0,renderer.getHeight(),hasFocus(context));
 			container.getHeight(subContext);
-			context.getInterface().window(getClipRect(context,subContext.getSize().height));
+			//context.getInterface().window(getClipRect(context,subContext.getSize().height));
 			container.render(subContext);
-			context.getInterface().restore();
+			//context.getInterface().restore();
 			context.setHeight(getRenderHeight(subContext.getSize().height));
 		}
 		renderer.renderBorder(context,hasFocus(context),isActive(),open.isOn());
