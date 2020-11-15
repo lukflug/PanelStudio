@@ -2,6 +2,7 @@ package com.lukflug.panelstudio;
 
 import java.awt.Rectangle;
 
+import com.lukflug.panelstudio.settings.AnimatedToggleable;
 import com.lukflug.panelstudio.settings.Toggleable;
 import com.lukflug.panelstudio.theme.Renderer;
 
@@ -9,7 +10,7 @@ import com.lukflug.panelstudio.theme.Renderer;
  * Container that can be closed and scrolled, so that its children can be hidden.
  * @author lukflug
  */
-public class CollapsibleContainer extends FocusableComponent {
+public class CollapsibleContainer extends FocusableComponent implements Toggleable {
 	/**
 	 * {@link Container} containing the children.
 	 */
@@ -17,7 +18,7 @@ public class CollapsibleContainer extends FocusableComponent {
 	/**
 	 * {@link Toggleable} indicating whether the container is open or closed. 
 	 */
-	public AnimatedToggleable open;
+	protected AnimatedToggleable open;
 	/**
 	 * Cached render height.
 	 */
@@ -52,7 +53,7 @@ public class CollapsibleContainer extends FocusableComponent {
 		getHeight(context);
 		renderer.renderBackground(context,hasFocus(context));
 		super.render(context);
-		renderer.renderTitle(context,title,hasFocus(context),isActive(),open.isOn());
+		renderer.renderTitle(context,title,hasFocus(context),isActive(),open.getValue()!=0);
 		if (open.getValue()!=0) {
 			Context subContext=new Context(context,0,getContainerOffset(),hasFocus(context),open.getValue()==1);
 			container.getHeight(subContext);
@@ -61,7 +62,7 @@ public class CollapsibleContainer extends FocusableComponent {
 			context.getInterface().restore();
 			context.setHeight(getRenderHeight(subContext.getSize().height));
 		}
-		renderer.renderBorder(context,hasFocus(context),isActive(),open.isOn());
+		renderer.renderBorder(context,hasFocus(context),isActive(),open.getValue()!=0);
 	}
 	
 	/**
@@ -72,9 +73,9 @@ public class CollapsibleContainer extends FocusableComponent {
 		if (open.getValue()==1) {
 			Context subContext=new Context(context,0,getContainerOffset(),hasFocus(context));
 			container.getHeight(subContext);
-			if (getClipRect(context,subContext.getSize().height).contains(context.getInterface().getMouse())) {
-				container.handleButton(subContext,button);
-			}
+			boolean onTop=getClipRect(context,subContext.getSize().height).contains(context.getInterface().getMouse());
+			subContext=new Context(context,0,getContainerOffset(),hasFocus(context),onTop);
+			container.handleButton(subContext,button);
 			context.setHeight(getRenderHeight(subContext.getSize().height));
 			updateFocus(context,button);
 		} else super.handleButton(context,button);
@@ -141,7 +142,8 @@ public class CollapsibleContainer extends FocusableComponent {
 	 * @return the visible height
 	 */
 	protected int getRenderHeight (int containerHeight) {
-		return renderHeight=(int)(containerHeight*open.getValue()+renderer.getHeight());
+		renderHeight=containerHeight;
+		return (int)(containerHeight*open.getValue()+renderer.getHeight());
 	}
 	
 	/**
@@ -152,5 +154,22 @@ public class CollapsibleContainer extends FocusableComponent {
 	 */
 	protected Rectangle getClipRect (Context context, int height) {
 		return new Rectangle(context.getPos().x,context.getPos().y+renderer.getHeight(),context.getSize().width,getRenderHeight(height)-renderer.getHeight());
+	}
+
+	/**
+	 * Toggle the open state. And release focus of children if closing.
+	 */
+	@Override
+	public void toggle() {
+		open.toggle();
+		if (!open.isOn()) container.releaseFocus();
+	}
+
+	/**
+	 * Get the open state.
+	 */
+	@Override
+	public boolean isOn() {
+		return open.isOn();
 	}
 }

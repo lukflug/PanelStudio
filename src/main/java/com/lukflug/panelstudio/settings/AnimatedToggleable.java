@@ -1,6 +1,6 @@
-package com.lukflug.panelstudio;
+package com.lukflug.panelstudio.settings;
 
-import com.lukflug.panelstudio.settings.Toggleable;
+import com.lukflug.panelstudio.Animation;
 
 /**
  * Animation that is also a toggle.
