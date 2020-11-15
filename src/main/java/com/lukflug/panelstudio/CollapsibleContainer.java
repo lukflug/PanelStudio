@@ -1,6 +1,5 @@
 package com.lukflug.panelstudio;
 
-import java.awt.Point;
 import java.awt.Rectangle;
 
 import com.lukflug.panelstudio.settings.Toggleable;
@@ -51,9 +50,10 @@ public class CollapsibleContainer extends FocusableComponent {
 		renderer.renderTitle(context,title,hasFocus(context),isActive(),open.isOn());
 		if (open.isOn()) {
 			Context subContext=new Context(context,0,renderer.getHeight(),hasFocus(context));
-			//context.getInterface().window(getClipRect(context,subContext.getSize().height));
+			container.getHeight(subContext);
+			context.getInterface().window(getClipRect(context,subContext.getSize().height));
 			container.render(subContext);
-			//context.getInterface().restore();
+			context.getInterface().restore();
 			context.setHeight(getRenderHeight(subContext.getSize().height));
 		}
 		renderer.renderBorder(context,hasFocus(context),isActive(),open.isOn());
@@ -66,12 +66,11 @@ public class CollapsibleContainer extends FocusableComponent {
 	public void handleButton (Context context, int button) {
 		if (open.isOn()) {
 			Context subContext=new Context(context,0,renderer.getHeight(),hasFocus(context));
-			Rectangle rect=getClipRect(context,subContext.getSize().height);
-			Point p=context.getInterface().getMouse();
-			if (p.x>=rect.x && p.x<rect.x+rect.width && p.y>=rect.y && p.y<rect.y+rect.height) {
+			if (getClipRect(context,subContext.getSize().height).contains(context.getInterface().getMouse())) {
 				container.handleButton(subContext,button);
 			}
 			context.setHeight(getRenderHeight(subContext.getSize().height));
+			updateFocus(context,button);
 		} else super.handleButton(context,button);
 		if (context.isHovered() && context.getInterface().getMouse().y<=context.getPos().y+renderer.getHeight() && button==Interface.RBUTTON && context.getInterface().getButton(Interface.RBUTTON)) {
 			open.toggle();
