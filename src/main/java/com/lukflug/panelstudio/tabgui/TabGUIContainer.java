@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lukflug.panelstudio.Animation;
 import com.lukflug.panelstudio.Context;
 import com.lukflug.panelstudio.theme.Renderer;
 
@@ -32,16 +33,25 @@ public class TabGUIContainer implements TabGUIComponent {
 	 * Index of the currently selected component.
 	 */
 	protected int selected=0;
+	/**
+	 * Object handling highlight animation.
+	 */
+	protected Animation selectedAnimation=null;
 	
 	/**
 	 * Constructor.
 	 * @param title caption of the container
 	 * @param renderer the {@link TabGUIRenderer} for this container
+	 * @param animation the animation for {@link #selectedAnimation}, may be null
 	 */
-	public TabGUIContainer (String title, TabGUIRenderer renderer) {
+	public TabGUIContainer (String title, TabGUIRenderer renderer, Animation animation) {
 		this.title=title;
 		this.renderer=renderer;
 		components=new ArrayList<TabGUIComponent>();
+		if (animation!=null) {
+			animation.initValue(selected);
+			selectedAnimation=animation;
+		}
 	}
 	
 	/**
@@ -66,16 +76,15 @@ public class TabGUIContainer implements TabGUIComponent {
 	@Override
 	public void render(Context context) {
 		getHeight(context);
-		renderer.renderBackground(context,selected*renderer.getHeight(),renderer.getHeight());
+		int offset=selected*renderer.getHeight();
+		if (selectedAnimation!=null) offset=(int)(selectedAnimation.getValue()*renderer.getHeight());
+		renderer.renderBackground(context,offset,renderer.getHeight());
 		for (int i=0;i<components.size();i++) {
 			TabGUIComponent component=components.get(i);
 			renderer.renderCaption(context,component.getTitle(),i,renderer.getHeight(),component.isActive());
 		}
 		if (childOpen) {
-			Point p=context.getPos();
-			p.translate(context.getSize().width+renderer.getBorder(),selected*renderer.getHeight());
-			Context subContext=new Context(context.getInterface(),context.getSize().width,p,context.hasFocus(),context.onTop());
-			components.get(selected).render(subContext);
+			components.get(selected).render(getSubContext(context));
 		}
 	}
 
@@ -104,10 +113,7 @@ public class TabGUIContainer implements TabGUIComponent {
 				if (components.get(selected).select()) childOpen=true;
 			}
 		} else {
-			Point p=context.getPos();
-			p.translate(context.getSize().width+renderer.getBorder(),selected*renderer.getHeight());
-			Context subContext=new Context(context.getInterface(),context.getSize().width,p,context.hasFocus(),context.onTop());
-			components.get(selected).handleKey(subContext,scancode);
+			components.get(selected).handleKey(getSubContext(context),scancode);
 		}
 	}
 
@@ -141,5 +147,15 @@ public class TabGUIContainer implements TabGUIComponent {
 	@Override
 	public boolean select() {
 		return true;
+	}
+	
+	/**
+	 * Create a sub-context.
+	 * @return a context for a child-component
+	 */
+	protected Context getSubContext (Context context) {
+		Point p=context.getPos();
+		p.translate(context.getSize().width+renderer.getBorder(),selected*renderer.getHeight());
+		return new Context(context.getInterface(),context.getSize().width,p,context.hasFocus(),context.onTop());
 	}
 }

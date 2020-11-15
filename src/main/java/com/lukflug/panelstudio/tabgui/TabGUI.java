@@ -2,6 +2,7 @@ package com.lukflug.panelstudio.tabgui;
 
 import java.awt.Point;
 
+import com.lukflug.panelstudio.Animation;
 import com.lukflug.panelstudio.FixedComponent;
 import com.lukflug.panelstudio.Interface;
 
@@ -24,10 +25,11 @@ public class TabGUI extends TabGUIContainer implements FixedComponent {
 	 * Constructor.
 	 * @param title caption for the TabGUI
 	 * @param renderer the renderer for the TabGUI
-	 * @param position the intitial position for the TabGUI
+	 * @param animation the animation for the TabGUI
+	 * @param position the initial position for the TabGUI
 	 */
-	public TabGUI(String title, TabGUIRenderer renderer, Point position, int width) {
-		super(title, renderer);
+	public TabGUI(String title, TabGUIRenderer renderer, Animation animation, Point position, int width) {
+		super(title, renderer,animation);
 		this.position=position;
 		this.width=width;
 	}
@@ -52,5 +54,4 @@ public class TabGUI extends TabGUIContainer implements FixedComponent {
 	public int getWidth() {
 		return width;
 	}
-
 }
