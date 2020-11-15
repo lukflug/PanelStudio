@@ -49,4 +49,9 @@ public interface Component {
 	 * @param context the {@link Context} for the component
 	 */
 	public void exit (Context context);
+	
+	/**
+	 * Called when a parent loses focus.
+	 */
+	public void releaseFocus();
 }

@@ -106,4 +106,22 @@ public class Container extends FocusableComponent {
 		}
 		context.setHeight(posy);
 	}
+	
+	/**
+	 * Reset focus state of self and children.
+	 */
+	@Override
+	public void releaseFocus() {
+		super.releaseFocus();
+		for (Component component: components) {
+			component.releaseFocus();
+		}
+	}
+	
+	/**
+	 * Releases focus of children when called.
+	 */
+	protected void handleFocus (Context context, boolean focus) {
+		if (!focus) releaseFocus();
+	}
 }

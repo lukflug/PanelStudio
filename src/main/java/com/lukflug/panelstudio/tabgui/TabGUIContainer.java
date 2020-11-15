@@ -160,4 +160,11 @@ public class TabGUIContainer implements TabGUIComponent {
 		p.translate(context.getSize().width+renderer.getBorder(),selected*renderer.getHeight());
 		return new Context(context.getInterface(),context.getSize().width,p,context.hasFocus(),context.onTop());
 	}
+
+	/**
+	 * Does nothing.
+	 */
+	@Override
+	public void releaseFocus() {
+	}
 }

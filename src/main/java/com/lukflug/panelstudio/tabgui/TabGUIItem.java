@@ -86,4 +86,11 @@ public class TabGUIItem implements TabGUIComponent {
 		toggle.toggle();
 		return false;
 	}
+
+	/**
+	 * Does nothing.
+	 */
+	@Override
+	public void releaseFocus() {
+	}
 }
