@@ -1,5 +1,8 @@
 package com.lukflug.panelstudio;
 
+import java.awt.Point;
+import java.awt.Rectangle;
+
 import com.lukflug.panelstudio.settings.Toggleable;
 import com.lukflug.panelstudio.theme.Renderer;
 
@@ -48,8 +51,10 @@ public class CollapsibleContainer extends FocusableComponent {
 		renderer.renderTitle(context,title,hasFocus(context),isActive(),open.isOn());
 		if (open.isOn()) {
 			Context subContext=new Context(context,0,renderer.getHeight(),hasFocus(context));
+			context.getInterface().window(getClipRect(context,subContext.getSize().height));
 			container.render(subContext);
-			context.setHeight(subContext.getSize().height+renderer.getHeight());
+			context.getInterface().restore();
+			context.setHeight(getRenderHeight(subContext.getSize().height));
 		}
 		renderer.renderBorder(context,hasFocus(context),isActive(),open.isOn());
 	}
@@ -61,8 +66,12 @@ public class CollapsibleContainer extends FocusableComponent {
 	public void handleButton (Context context, int button) {
 		if (open.isOn()) {
 			Context subContext=new Context(context,0,renderer.getHeight(),hasFocus(context));
-			container.handleButton(subContext,button);
-			context.setHeight(subContext.getSize().height+renderer.getHeight());
+			Rectangle rect=getClipRect(context,subContext.getSize().height);
+			Point p=context.getInterface().getMouse();
+			if (p.x>=rect.x && p.x<rect.x+rect.width && p.y>=rect.y && p.y<rect.y+rect.height) {
+				container.handleButton(subContext,button);
+			}
+			context.setHeight(getRenderHeight(subContext.getSize().height));
 		} else super.handleButton(context,button);
 		if (context.isHovered() && context.getInterface().getMouse().y<=context.getPos().y+renderer.getHeight() && button==Interface.RBUTTON && context.getInterface().getButton(Interface.RBUTTON)) {
 			open.toggle();
@@ -77,7 +86,7 @@ public class CollapsibleContainer extends FocusableComponent {
 		if (open.isOn()) {
 			Context subContext=new Context(context,0,renderer.getHeight(),hasFocus(context));
 			container.handleKey(subContext,scancode);
-			context.setHeight(subContext.getSize().height+renderer.getHeight());
+			context.setHeight(getRenderHeight(subContext.getSize().height));
 		} else super.handleKey(context,scancode);
 	}
 	
@@ -89,7 +98,7 @@ public class CollapsibleContainer extends FocusableComponent {
 		if (open.isOn()) {
 			Context subContext=new Context(context,0,renderer.getHeight(),hasFocus(context));
 			container.getHeight(subContext);
-			context.setHeight(subContext.getSize().height+renderer.getHeight());
+			context.setHeight(getRenderHeight(subContext.getSize().height));
 		} else super.getHeight(context);
 	}
 	
@@ -101,7 +110,7 @@ public class CollapsibleContainer extends FocusableComponent {
 		if (open.isOn()) {
 			Context subContext=new Context(context,0,renderer.getHeight(),hasFocus(context));
 			container.exit(subContext);
-			context.setHeight(subContext.getSize().height+renderer.getHeight());
+			context.setHeight(getRenderHeight(subContext.getSize().height));
 		} else super.exit(context);
 	}
 	
@@ -111,5 +120,24 @@ public class CollapsibleContainer extends FocusableComponent {
 	 */
 	protected boolean isActive() {
 		return true;
+	}
+	
+	/**
+	 * Get the container height.
+	 * @param containerHeight the total height of the children
+	 * @return the visible height
+	 */
+	protected int getRenderHeight (int containerHeight) {
+		return containerHeight+renderer.getHeight();
+	}
+	
+	/**
+	 * Returns the clipping rectangle for the container
+	 * @param context for this component
+	 * @param height the height of the container
+	 * @return the clipping rectangle
+	 */
+	protected Rectangle getClipRect (Context context, int height) {
+		return new Rectangle(context.getPos().x,context.getPos().y+renderer.getHeight(),context.getSize().width,getRenderHeight(height)-renderer.getHeight());
 	}
 }
