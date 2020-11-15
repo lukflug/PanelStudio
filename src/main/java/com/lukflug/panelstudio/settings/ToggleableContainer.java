@@ -1,5 +1,6 @@
 package com.lukflug.panelstudio.settings;
 
+import com.lukflug.panelstudio.Animation;
 import com.lukflug.panelstudio.CollapsibleContainer;
 import com.lukflug.panelstudio.Context;
 import com.lukflug.panelstudio.Interface;
@@ -22,8 +23,8 @@ public class ToggleableContainer extends CollapsibleContainer {
 	 * @param open the {@link Toggleable} indicating whether the container is open or closed
 	 * @param toggle the {@link Toggleable} to be toggled by the user
 	 */
-	public ToggleableContainer(String title, Renderer renderer, Toggleable open, Toggleable toggle) {
-		super(title,renderer,open);
+	public ToggleableContainer(String title, Renderer renderer, Toggleable open, Animation animation, Toggleable toggle) {
+		super(title,renderer,open,animation);
 		this.toggle=toggle;
 	}
 	

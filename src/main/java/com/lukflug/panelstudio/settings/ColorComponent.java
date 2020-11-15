@@ -2,6 +2,7 @@ package com.lukflug.panelstudio.settings;
 
 import java.awt.Color;
 
+import com.lukflug.panelstudio.Animation;
 import com.lukflug.panelstudio.CollapsibleContainer;
 import com.lukflug.panelstudio.Context;
 import com.lukflug.panelstudio.FocusableComponent;
@@ -46,8 +47,8 @@ public class ColorComponent extends CollapsibleContainer {
 	 * @param rainbow whether to render a rainbow slider
 	 * @param colorModel {@link Toggleable} indicating whether to use RGB (false) or HSB (true)
 	 */
-	public ColorComponent(String title, Renderer renderer, Renderer componentRenderer, ColorSetting setting, boolean alpha, boolean rainbow, Toggleable colorModel) {
-		super(title,renderer,new SimpleToggleable(false));
+	public ColorComponent(String title, Renderer renderer, Animation animation, Renderer componentRenderer, ColorSetting setting, boolean alpha, boolean rainbow, Toggleable colorModel) {
+		super(title,renderer,new SimpleToggleable(false),animation);
 		this.setting=setting;
 		this.alpha=alpha;
 		this.rainbow=rainbow;

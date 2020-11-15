@@ -17,18 +17,23 @@ public class CollapsibleContainer extends FocusableComponent {
 	/**
 	 * {@link Toggleable} indicating whether the container is open or closed. 
 	 */
-	public Toggleable open;
+	public AnimatedToggleable open;
+	/**
+	 * Cached render height.
+	 */
+	protected int renderHeight;
 	
 	/**
 	 * Constructor.
 	 * @param title the caption for the container
 	 * @param renderer the {@link Renderer} for the container
 	 * @param open the {@link Toggleable} for {@link #open}
+	 * @param animation the animation for this container
 	 */
-	public CollapsibleContainer (String title, Renderer renderer, Toggleable open) {
+	public CollapsibleContainer (String title, Renderer renderer, Toggleable open, Animation animation) {
 		super(title,renderer);
 		container=new Container(title,renderer);
-		this.open=open;
+		this.open=new AnimatedToggleable(open,animation);
 	}
 	
 	/**
@@ -49,7 +54,7 @@ public class CollapsibleContainer extends FocusableComponent {
 		super.render(context);
 		renderer.renderTitle(context,title,hasFocus(context),isActive(),open.isOn());
 		if (open.isOn()) {
-			Context subContext=new Context(context,0,renderer.getHeight(),hasFocus(context));
+			Context subContext=new Context(context,0,getContainerOffset(),hasFocus(context));
 			container.getHeight(subContext);
 			context.getInterface().window(getClipRect(context,subContext.getSize().height));
 			container.render(subContext);
@@ -65,7 +70,7 @@ public class CollapsibleContainer extends FocusableComponent {
 	@Override
 	public void handleButton (Context context, int button) {
 		if (open.isOn()) {
-			Context subContext=new Context(context,0,renderer.getHeight(),hasFocus(context));
+			Context subContext=new Context(context,0,getContainerOffset(),hasFocus(context));
 			container.getHeight(subContext);
 			if (getClipRect(context,subContext.getSize().height).contains(context.getInterface().getMouse())) {
 				container.handleButton(subContext,button);
@@ -84,7 +89,7 @@ public class CollapsibleContainer extends FocusableComponent {
 	@Override
 	public void handleKey (Context context, int scancode) {
 		if (open.isOn()) {
-			Context subContext=new Context(context,0,renderer.getHeight(),hasFocus(context));
+			Context subContext=new Context(context,0,getContainerOffset(),hasFocus(context));
 			container.handleKey(subContext,scancode);
 			context.setHeight(getRenderHeight(subContext.getSize().height));
 		} else super.handleKey(context,scancode);
@@ -96,7 +101,7 @@ public class CollapsibleContainer extends FocusableComponent {
 	@Override
 	public void getHeight (Context context) {
 		if (open.isOn()) {
-			Context subContext=new Context(context,0,renderer.getHeight(),hasFocus(context));
+			Context subContext=new Context(context,0,getContainerOffset(),hasFocus(context));
 			container.getHeight(subContext);
 			context.setHeight(getRenderHeight(subContext.getSize().height));
 		} else super.getHeight(context);
@@ -108,7 +113,7 @@ public class CollapsibleContainer extends FocusableComponent {
 	@Override
 	public void exit (Context context) {
 		if (open.isOn()) {
-			Context subContext=new Context(context,0,renderer.getHeight(),hasFocus(context));
+			Context subContext=new Context(context,0,getContainerOffset(),hasFocus(context));
 			container.exit(subContext);
 			context.setHeight(getRenderHeight(subContext.getSize().height));
 		} else super.exit(context);
@@ -123,12 +128,20 @@ public class CollapsibleContainer extends FocusableComponent {
 	}
 	
 	/**
+	 * Returns the vertical container offset
+	 * @return vertical offset
+	 */
+	protected int getContainerOffset() {
+		return (int)(renderer.getHeight()-(1-open.getValue())*renderHeight);
+	}
+	
+	/**
 	 * Get the container height.
 	 * @param containerHeight the total height of the children
 	 * @return the visible height
 	 */
 	protected int getRenderHeight (int containerHeight) {
-		return containerHeight+renderer.getHeight();
+		return renderHeight=(int)(containerHeight*open.getValue()+renderer.getHeight());
 	}
 	
 	/**
