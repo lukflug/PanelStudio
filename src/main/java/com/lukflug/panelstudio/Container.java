@@ -36,13 +36,12 @@ public class Container extends FocusableComponent {
 	/**
 	 * Render the container.
 	 * Components are rendered in a column based on the height they specify via {@link Context#setHeight(int)}.
-	 * Vertical space is reserved for the container itself at the top based on {@link Renderer#getHeight()}.
 	 * The horizontal border is defined by {@link Renderer#getBorder()}.
 	 * The vertical space between to components is defined by {@link Renderer#getOffset()}. 
 	 */
 	@Override
 	public void render (Context context) {
-		int posy=renderer.getHeight()+renderer.getOffset();
+		int posy=renderer.getOffset();
 		for (Component component: components) {
 			Context subContext=new Context(context,renderer.getBorder(),posy,hasFocus(context));
 			component.render(subContext);
@@ -56,7 +55,7 @@ public class Container extends FocusableComponent {
 	 */
 	@Override
 	public void handleButton (Context context, int button) {
-		int posy=renderer.getHeight()+renderer.getOffset();
+		int posy=renderer.getOffset();
 		for (Component component: components) {
 			Context subContext=new Context(context,renderer.getBorder(),posy,hasFocus(context));
 			component.handleButton(subContext,button);
@@ -71,7 +70,7 @@ public class Container extends FocusableComponent {
 	 */
 	@Override
 	public void handleKey (Context context, int scancode) {
-		int posy=renderer.getHeight()+renderer.getOffset();
+		int posy=renderer.getOffset();
 		for (Component component: components) {
 			Context subContext=new Context(context,renderer.getBorder(),posy,hasFocus(context));
 			component.handleKey(subContext,scancode);
@@ -85,7 +84,7 @@ public class Container extends FocusableComponent {
 	 */
 	@Override
 	public void getHeight (Context context) {
-		int posy=renderer.getHeight()+renderer.getOffset();
+		int posy=renderer.getOffset();
 		for (Component component: components) {
 			Context subContext=new Context(context,renderer.getBorder(),posy,hasFocus(context));
 			component.getHeight(subContext);
@@ -99,7 +98,7 @@ public class Container extends FocusableComponent {
 	 */
 	@Override
 	public void exit (Context context) {
-		int posy=renderer.getHeight()+renderer.getOffset();
+		int posy=renderer.getOffset();
 		for (Component component: components) {
 			Context subContext=new Context(context,renderer.getBorder(),posy,hasFocus(context));
 			component.exit(subContext);

@@ -4,10 +4,14 @@ import com.lukflug.panelstudio.settings.Toggleable;
 import com.lukflug.panelstudio.theme.Renderer;
 
 /**
- * Container that can be closed, so that its child component.
+ * Container that can be closed and scrolled, so that its children can be hidden.
  * @author lukflug
  */
-public class CollapsibleContainer extends Container {
+public class CollapsibleContainer extends FocusableComponent {
+	/**
+	 * {@link Container} containing the children.
+	 */
+	protected Container container;
 	/**
 	 * {@link Toggleable} indicating whether the container is open or closed. 
 	 */
@@ -21,7 +25,16 @@ public class CollapsibleContainer extends Container {
 	 */
 	public CollapsibleContainer (String title, Renderer renderer, Toggleable open) {
 		super(title,renderer);
+		container=new Container(title,renderer);
 		this.open=open;
+	}
+	
+	/**
+	 * Add a component to the container.
+	 * @param component the component to be added
+	 */
+	public void addComponent (Component component) {
+		container.addComponent(component);
 	}
 	
 	/**
@@ -31,10 +44,12 @@ public class CollapsibleContainer extends Container {
 	public void render (Context context) {
 		getHeight(context);
 		renderer.renderBackground(context,hasFocus(context));
-		context.setHeight(renderer.getHeight());
+		super.render(context);
 		renderer.renderTitle(context,title,hasFocus(context),isActive(),open.isOn());
 		if (open.isOn()) {
-			super.render(context);
+			Context subContext=new Context(context,0,renderer.getHeight(),hasFocus(context));
+			container.render(subContext);
+			context.setHeight(subContext.getSize().height+renderer.getHeight());
 		}
 		renderer.renderBorder(context,hasFocus(context),isActive(),open.isOn());
 	}
@@ -44,11 +59,11 @@ public class CollapsibleContainer extends Container {
 	 */
 	@Override
 	public void handleButton (Context context, int button) {
-		if (open.isOn()) super.handleButton(context,button);
-		else {
-			context.setHeight(renderer.getHeight());
-			updateFocus(context,button);
-		}
+		if (open.isOn()) {
+			Context subContext=new Context(context,0,renderer.getHeight(),hasFocus(context));
+			container.handleButton(subContext,button);
+			context.setHeight(subContext.getSize().height+renderer.getHeight());
+		} else super.handleButton(context,button);
 		if (context.isHovered() && context.getInterface().getMouse().y<=context.getPos().y+renderer.getHeight() && button==Interface.RBUTTON && context.getInterface().getButton(Interface.RBUTTON)) {
 			open.toggle();
 		}
@@ -59,8 +74,11 @@ public class CollapsibleContainer extends Container {
 	 */
 	@Override
 	public void handleKey (Context context, int scancode) {
-		if (open.isOn()) super.handleKey(context,scancode);
-		else context.setHeight(renderer.getHeight());
+		if (open.isOn()) {
+			Context subContext=new Context(context,0,renderer.getHeight(),hasFocus(context));
+			container.handleKey(subContext,scancode);
+			context.setHeight(subContext.getSize().height+renderer.getHeight());
+		} else super.handleKey(context,scancode);
 	}
 	
 	/**
@@ -68,8 +86,11 @@ public class CollapsibleContainer extends Container {
 	 */
 	@Override
 	public void getHeight (Context context) {
-		if (open.isOn()) super.getHeight(context);
-		else context.setHeight(renderer.getHeight());
+		if (open.isOn()) {
+			Context subContext=new Context(context,0,renderer.getHeight(),hasFocus(context));
+			container.getHeight(subContext);
+			context.setHeight(subContext.getSize().height+renderer.getHeight());
+		} else super.getHeight(context);
 	}
 	
 	/**
@@ -77,8 +98,11 @@ public class CollapsibleContainer extends Container {
 	 */
 	@Override
 	public void exit (Context context) {
-		if (open.isOn()) super.exit(context);
-		else context.setHeight(renderer.getHeight());
+		if (open.isOn()) {
+			Context subContext=new Context(context,0,renderer.getHeight(),hasFocus(context));
+			container.exit(subContext);
+			context.setHeight(subContext.getSize().height+renderer.getHeight());
+		} else super.exit(context);
 	}
 	
 	/**
