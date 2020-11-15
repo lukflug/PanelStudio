@@ -56,13 +56,14 @@ public class Container extends FocusableComponent {
 	@Override
 	public void handleButton (Context context, int button) {
 		int posy=renderer.getOffset();
+		getHeight(context);
+		updateFocus(context,button);
 		for (Component component: components) {
 			Context subContext=new Context(context,renderer.getBorder(),posy,hasFocus(context));
 			component.handleButton(subContext,button);
 			posy+=subContext.getSize().height+renderer.getOffset();
 		}
 		context.setHeight(posy);
-		updateFocus(context,button);
 	}
 
 	/**
