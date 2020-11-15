@@ -107,8 +107,10 @@ public class TabGUIContainer implements TabGUIComponent {
 		} else if (!childOpen) {
 			if (renderer.isUpKey(scancode)) {
 				if (--selected<0) selected=components.size()-1;
+				selectedAnimation.setValue(selected*renderer.getHeight());
 			} else if (renderer.isDownKey(scancode)) {
 				if (++selected>=components.size()) selected=0;
+				selectedAnimation.setValue(selected*renderer.getHeight());
 			} else if (renderer.isSelectKey(scancode)) {
 				if (components.get(selected).select()) childOpen=true;
 			}
