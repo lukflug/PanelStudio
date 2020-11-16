@@ -116,7 +116,7 @@ public interface Interface {
 	public void drawImage (Rectangle r, int rotation, boolean parity, int image);
 	
 	/**
-	 * Clip all rendering on screen outside the union of a specified rectangle and the current cliping rectangle.
+	 * Clip all rendering on screen outside the intersection of the specified rectangle and the current clipping rectangle.
 	 * May only be called in a GUI rendering method.
 	 * The calling method should restore clipping by calling {@link #restore()} after rendering.
 	 * @param r the clipping rectangle

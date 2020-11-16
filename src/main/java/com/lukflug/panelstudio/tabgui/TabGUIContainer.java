@@ -118,6 +118,14 @@ public class TabGUIContainer implements TabGUIComponent {
 			components.get(selected).handleKey(getSubContext(context),scancode);
 		}
 	}
+	
+	/**
+	 * Do nothing.
+	 */
+	@Override
+	public void handleScroll (Context context, int diff) {
+		getHeight(context);
+	}
 
 	/**
 	 * Returns the container height.

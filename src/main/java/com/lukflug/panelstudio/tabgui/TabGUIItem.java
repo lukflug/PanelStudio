@@ -55,6 +55,13 @@ public class TabGUIItem implements TabGUIComponent {
 	@Override
 	public void handleKey(Context context, int scancode) {
 	}
+	
+	/**
+	 * Does nothing.
+	 */
+	@Override
+	public void handleScroll (Context context, int diff) {
+	}
 
 	/**
 	 * Does nothing.

@@ -20,9 +20,17 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	 */
 	protected AnimatedToggleable open;
 	/**
-	 * Cached render height.
+	 * Cached combined height of children.
 	 */
-	protected int renderHeight;
+	protected int childHeight=0;
+	/**
+	 * Cached container scroll height.
+	 */
+	protected int containerHeight=0;
+	/**
+	 * Current scroll offset.
+	 */
+	protected int scrollPosition=0;
 	
 	/**
 	 * Constructor.
@@ -98,6 +106,16 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	}
 	
 	/**
+	 * Scroll scroll bar.
+	 */
+	@Override
+	public void handleScroll (Context context, int diff) {
+		scrollPosition+=diff;
+		if (scrollPosition>childHeight-containerHeight) scrollPosition=childHeight-containerHeight;
+		if (scrollPosition<0) scrollPosition=0;
+	}
+	
+	/**
 	 * Returns the current height, accounting for whether the container is open or closed.
 	 */
 	@Override
@@ -130,25 +148,39 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	}
 	
 	/**
-	 * Returns the vertical container offset
-	 * @return vertical offset
+	 * Get the height of the container, accounting for scrolling.
+	 * @param childHeight the total height of the children
+	 * @return the scroll height
 	 */
-	protected int getContainerOffset() {
-		return (int)(renderer.getHeight()-(1-open.getValue())*renderHeight);
+	protected int getScrollHeight (int childHeight) {
+		return childHeight;
 	}
 	
 	/**
-	 * Get the container height.
-	 * @param containerHeight the total height of the children
+	 * Get the visible container height.
+	 * @param childHeight the total height of the children
 	 * @return the visible height
 	 */
-	protected int getRenderHeight (int containerHeight) {
-		renderHeight=containerHeight;
+	protected int getRenderHeight (int childHeight) {
+		this.childHeight=childHeight;
+		containerHeight=getScrollHeight(childHeight);
+		if (scrollPosition>childHeight-containerHeight) scrollPosition=childHeight-containerHeight;
+		if (scrollPosition<0) scrollPosition=0;
 		return (int)(containerHeight*open.getValue()+renderer.getHeight());
 	}
 	
 	/**
-	 * Returns the clipping rectangle for the container
+	 * Returns the vertical container offset.
+	 * @return vertical offset
+	 */
+	protected int getContainerOffset() {
+		if (scrollPosition>childHeight-containerHeight) scrollPosition=childHeight-containerHeight;
+		if (scrollPosition<0) scrollPosition=0;
+		return (int)(renderer.getHeight()-scrollPosition-(1-open.getValue())*containerHeight);
+	}
+	
+	/**
+	 * Returns the clipping rectangle for the container.
 	 * @param context for this component
 	 * @param height the height of the container
 	 * @return the clipping rectangle
