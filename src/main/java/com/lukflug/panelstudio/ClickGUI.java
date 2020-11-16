@@ -114,6 +114,25 @@ public class ClickGUI {
 	}
 	
 	/**
+	 * Handle the mouse wheel being scrolled
+	 * @param diff the amount by which the wheel was moved
+	 */
+	public void handleScroll (int diff) {
+		boolean highest=true;
+		FixedComponent focusComponent=null;
+		for (FixedComponent component: components) {
+			Context context=new Context(inter,component.getWidth(),component.getPosition(inter),true,highest);
+			component.handleScroll(context,diff);
+			if (context.isHovered()) highest=false;
+			if (context.foucsRequested()) focusComponent=component;
+		}
+		if (focusComponent!=null) {
+			components.remove(focusComponent);
+			components.add(focusComponent);
+		}
+	}
+	
+	/**
 	 * Handle the GUI being closed.
 	 */
 	public void exit() {
