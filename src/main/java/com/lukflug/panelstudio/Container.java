@@ -79,6 +79,20 @@ public class Container extends FocusableComponent {
 		}
 		context.setHeight(posy);
 	}
+
+	/**
+	 * Handle mouse wheel being scrolled.
+	 */
+	@Override
+	public void handleScroll (Context context, int diff) {
+		int posy=renderer.getOffset();
+		for (Component component: components) {
+			Context subContext=new Context(context,renderer.getBorder(),posy,hasFocus(context));
+			component.handleKey(subContext,diff);
+			posy+=subContext.getSize().height+renderer.getOffset();
+		}
+		context.setHeight(posy);
+	}
 	
 	/**
 	 * Returns the total height of the container, accounting for the height of its child components.
