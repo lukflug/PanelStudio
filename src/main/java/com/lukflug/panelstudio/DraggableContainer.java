@@ -55,7 +55,9 @@ public class DraggableContainer extends CollapsibleContainer implements FixedCom
 		} else if (!context.getInterface().getButton(Interface.LBUTTON) && dragging) {
 			Point mouse=context.getInterface().getMouse();
 			dragging=false;
-			position.translate(mouse.x-attachPoint.x,mouse.y-attachPoint.y);
+			Point p=getPosition(context.getInterface());
+			p.translate(mouse.x-attachPoint.x,mouse.y-attachPoint.y);
+			setPosition(context.getInterface(),p);
 		}
 		super.handleButton(context, button);
 	}
