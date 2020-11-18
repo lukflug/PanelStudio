@@ -52,17 +52,15 @@ public class DraggableContainer extends CollapsibleContainer implements FixedCom
 	public void handleButton (Context context, int button) {
 		if (bodyDrag) super.handleButton(context, button);
 		else context.setHeight(renderer.getHeight());
-		if (context.isClicked()) {
-			if (button==Interface.LBUTTON) {
-				dragging=true;
-				attachPoint=context.getInterface().getMouse();
-			} else if (!context.getInterface().getButton(Interface.LBUTTON) && dragging) {
-				Point mouse=context.getInterface().getMouse();
-				dragging=false;
-				Point p=getPosition(context.getInterface());
-				p.translate(mouse.x-attachPoint.x,mouse.y-attachPoint.y);
-				setPosition(context.getInterface(),p);
-			}
+		if (context.isClicked() && button==Interface.LBUTTON) {
+			dragging=true;
+			attachPoint=context.getInterface().getMouse();
+		} else if (!context.getInterface().getButton(Interface.LBUTTON) && dragging) {
+			Point mouse=context.getInterface().getMouse();
+			dragging=false;
+			Point p=getPosition(context.getInterface());
+			p.translate(mouse.x-attachPoint.x,mouse.y-attachPoint.y);
+			setPosition(context.getInterface(),p);
 		}
 		if (!bodyDrag) super.handleButton(context, button);
 	}
