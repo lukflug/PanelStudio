@@ -41,6 +41,7 @@ public class HUDPanel extends DraggableContainer {
 		addComponent(component);
 		this.guiOpen=guiOpen;
 		this.component=component;
+		bodyDrag=true;
 	}
 	
 	/**
