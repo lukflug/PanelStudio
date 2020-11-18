@@ -66,10 +66,11 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 			// Pre-calculate clipping rectangle
 			Context subContext=new Context(context,0,getContainerOffset(),hasFocus(context),open.getValue()==1);
 			container.getHeight(subContext);
-			context.getInterface().window(getClipRect(context,subContext.getSize().height));
+			Rectangle rect=getClipRect(context,subContext.getSize().height);
+			if (rect!=null) context.getInterface().window(rect);
 			// Render component
 			container.render(subContext);
-			context.getInterface().restore();
+			if (rect!=null) context.getInterface().restore();
 			context.setHeight(getRenderHeight(subContext.getSize().height));
 		}
 		renderer.renderBorder(context,hasFocus(context),isActive(),open.getValue()!=0);
@@ -87,7 +88,9 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 			context.setHeight(getRenderHeight(subContext.getSize().height));
 			updateFocus(context,button);
 			// Handle button click with proper onTop masking
-			boolean onTop=getClipRect(context,subContext.getSize().height).contains(context.getInterface().getMouse());
+			boolean onTop=true;
+			Rectangle rect=getClipRect(context,subContext.getSize().height);
+			if (rect!=null) onTop=rect.contains(context.getInterface().getMouse());
 			subContext=new Context(context,0,getContainerOffset(),hasFocus(context),onTop);
 			container.handleButton(subContext,button);
 			context.setHeight(getRenderHeight(subContext.getSize().height));

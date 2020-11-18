@@ -79,8 +79,18 @@ public class HUDPanel extends DraggableContainer {
 	/**
 	 * Get the child component width.
 	 */
+	@Override
 	public int getWidth() {
 		return component.getWidth()+renderer.getBorder()*2;
+	}
+	
+	/**
+	 * Disable clipping, if container fully open.
+	 */
+	@Override
+	protected Rectangle getClipRect (Context context, int height) {
+		if (open.getValue()!=1) return super.getClipRect(context,height);
+		else return null;
 	}
 	
 	
