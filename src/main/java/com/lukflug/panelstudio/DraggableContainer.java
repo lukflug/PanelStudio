@@ -47,18 +47,7 @@ public class DraggableContainer extends CollapsibleContainer implements FixedCom
 	@Override
 	public void handleButton (Context context, int button) {
 		context.setHeight(renderer.getHeight());
-		if (context.isClicked()) {
-			if (button==Interface.LBUTTON) {
-				dragging=true;
-				attachPoint=context.getInterface().getMouse();
-			}
-		} else if (!context.getInterface().getButton(Interface.LBUTTON) && dragging) {
-			Point mouse=context.getInterface().getMouse();
-			dragging=false;
-			Point p=getPosition(context.getInterface());
-			p.translate(mouse.x-attachPoint.x,mouse.y-attachPoint.y);
-			setPosition(context.getInterface(),p);
-		}
+		handleDragging(context,button);
 		super.handleButton(context, button);
 	}
 
@@ -94,5 +83,25 @@ public class DraggableContainer extends CollapsibleContainer implements FixedCom
 	@Override
 	protected void handleFocus (Context context, boolean focus) {
 		if (focus) context.requestFocus();
+	}
+	
+	/**
+	 * Should be called by {@link #handleButton(Context, int)} to update the dragging state.
+	 * @param context current context
+	 * @param button which button changed its state
+	 */
+	protected void handleDragging (Context context, int button) {
+		if (context.isClicked()) {
+			if (button==Interface.LBUTTON) {
+				dragging=true;
+				attachPoint=context.getInterface().getMouse();
+			} else if (!context.getInterface().getButton(Interface.LBUTTON) && dragging) {
+				Point mouse=context.getInterface().getMouse();
+				dragging=false;
+				Point p=getPosition(context.getInterface());
+				p.translate(mouse.x-attachPoint.x,mouse.y-attachPoint.y);
+				setPosition(context.getInterface(),p);
+			}
+		}
 	}
 }

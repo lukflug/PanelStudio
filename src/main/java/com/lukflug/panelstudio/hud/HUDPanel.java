@@ -48,7 +48,10 @@ public class HUDPanel extends DraggableContainer {
 	 */
 	@Override
 	public void handleButton (Context context, int button) {
-		if (guiOpen.isOn()) super.handleButton(context,button);
+		if (guiOpen.isOn()) {
+			super.handleButton(context,button);
+			handleDragging(context,button);
+		}
 	}
 
 	/**
