@@ -39,6 +39,14 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 	}
 	
 	/**
+	 * Returns all components.
+	 */
+	@Override
+	public List<FixedComponent> getComponents() {
+		return allComponents;
+	}
+	
+	/**
 	 * Add component to {@link #allComponents} instead of the {@link ClickGUI} list.
 	 */
 	@Override
