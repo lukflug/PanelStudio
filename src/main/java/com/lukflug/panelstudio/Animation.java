@@ -40,6 +40,14 @@ public abstract class Animation {
 	}
 	
 	/**
+	 * Get the target value.
+	 * @return the current {@link #value}
+	 */
+	public double getTarget() {
+		return value;
+	}
+	
+	/**
 	 * Set the value, with a transition between the old and new value.
 	 * @param value the new value
 	 */

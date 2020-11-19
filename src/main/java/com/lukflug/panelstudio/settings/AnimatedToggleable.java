@@ -44,6 +44,7 @@ public final class AnimatedToggleable implements Toggleable {
 	}
 	
 	public double getValue() {
+		if (animation.getTarget()!=(toggle.isOn()?1:0)) toggle();
 		return animation.getValue();
 	}
 }

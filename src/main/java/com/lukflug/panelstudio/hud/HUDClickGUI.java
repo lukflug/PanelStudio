@@ -52,6 +52,7 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 	@Override
 	public void addComponent (FixedComponent component) {
 		allComponents.add(component);
+		if (guiOpen) super.addComponent(component);
 	}
 	
 	/**
@@ -61,6 +62,7 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 	public void addHUDComponent (FixedComponent component) {
 		hudComponents.add(component);
 		addComponent(component);
+		if (!guiOpen) super.addComponent(component);
 	}
 
 	/**
