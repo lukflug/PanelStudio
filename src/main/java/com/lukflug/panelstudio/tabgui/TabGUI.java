@@ -39,7 +39,7 @@ public class TabGUI extends TabGUIContainer implements FixedComponent {
 	 */
 	@Override
 	public Point getPosition(Interface inter) {
-		return position;
+		return new Point(position);
 	}
 
 	/**
