@@ -66,6 +66,7 @@ public class HUDPanel extends DraggableContainer {
 	@Override
 	public Point getPosition (Interface inter) {
 		position=component.getPosition(inter);
+		position.translate(0,-renderer.getHeight()-renderer.getOffset());
 		return super.getPosition(inter);
 	}
 
@@ -74,7 +75,7 @@ public class HUDPanel extends DraggableContainer {
 	 */
 	@Override
 	public void setPosition (Interface inter, Point position) {
-		component.setPosition(inter,position);
+		component.setPosition(inter,new Point(position.x,position.y+renderer.getHeight()+renderer.getOffset()));
 	}
 	
 	/**
