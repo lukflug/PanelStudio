@@ -47,6 +47,19 @@ public interface Interface {
 	public void drawString (Point pos, String s, Color c);
 	
 	/**
+	 * Get the font width of a string being rendered by {@link #drawString(Point, String, Color)}
+	 * @param s the string to be considered
+	 * @return
+	 */
+	public int getFontWidth (String s);
+	
+	/**
+	 * Get height of font rendered by {@link #drawString(Point, String, Color)}
+	 * @return the font height
+	 */
+	public int getFontHeight();
+	
+	/**
 	 * Draw a triangle on the screen.
 	 * The color of the triangle should ideally be smoothly interpolated. 
 	 * May only be called in a GUI rendering method.
