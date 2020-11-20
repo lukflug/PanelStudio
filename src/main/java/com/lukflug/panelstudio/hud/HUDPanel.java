@@ -82,8 +82,8 @@ public class HUDPanel extends DraggableContainer {
 	 * Get the child component width.
 	 */
 	@Override
-	public int getWidth() {
-		return component.getWidth()+renderer.getBorder()*2;
+	public int getWidth (Interface inter) {
+		return component.getWidth(inter)+renderer.getBorder()*2;
 	}
 	
 	/**

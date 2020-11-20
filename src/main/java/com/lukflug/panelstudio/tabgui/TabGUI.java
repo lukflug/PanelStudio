@@ -51,7 +51,7 @@ public class TabGUI extends TabGUIContainer implements FixedComponent {
 	}
 
 	@Override
-	public int getWidth() {
+	public int getWidth (Interface inter) {
 		return width;
 	}
 }

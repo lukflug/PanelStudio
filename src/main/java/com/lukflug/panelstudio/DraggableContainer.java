@@ -87,7 +87,7 @@ public class DraggableContainer extends CollapsibleContainer implements FixedCom
 	}
 
 	@Override
-	public int getWidth() {
+	public int getWidth (Interface inter) {
 		return width;
 	}
 

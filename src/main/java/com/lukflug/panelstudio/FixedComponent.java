@@ -24,7 +24,8 @@ public interface FixedComponent extends Component {
 	
 	/**
 	 * Get the component width.
+	 * @param inter current interface
 	 * @return component width
 	 */
-	public int getWidth();
+	public int getWidth (Interface inter);
 }
