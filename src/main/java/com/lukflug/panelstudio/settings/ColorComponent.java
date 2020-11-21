@@ -151,14 +151,14 @@ public class ColorComponent extends CollapsibleContainer {
 				if (colorModel.isOn()) return Color.RGBtoHSB(c.getRed(),c.getGreen(),c.getBlue(),null)[value];
 				switch (value) {
 				case 0:
-					return c.getRed()/255.0f;
+					return c.getRed()/255.0;
 				case 1:
-					return c.getGreen()/255.0f;
+					return c.getGreen()/255.0;
 				case 2:
-					return c.getBlue()/255.0f;
+					return c.getBlue()/255.0;
 				}
 			}
-			return c.getAlpha()/255.0f;
+			return c.getAlpha()/255.0;
 		}
 
 		/**
