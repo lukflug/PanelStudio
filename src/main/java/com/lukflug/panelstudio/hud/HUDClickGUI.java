@@ -76,7 +76,7 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 	}
 
 	/**
-	 * Reteurs whether GUI is open.
+	 * Returns whether GUI is open.
 	 */
 	@Override
 	public boolean isOn() {
