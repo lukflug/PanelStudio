@@ -17,12 +17,6 @@ public class DefaultRenderer implements TabGUIRenderer {
 	protected int height,border;
 	protected int up,down,left,right,enter;
 	
-	/**
-	 * Constructor.
-	 * @param scheme default color scheme
-	 * @param height default height
-	 * @param border default border
-	 */
 	public DefaultRenderer (ColorScheme scheme, int height, int border, int up, int down, int left, int right, int enter) {
 		this.scheme=scheme;
 		this.border=border;

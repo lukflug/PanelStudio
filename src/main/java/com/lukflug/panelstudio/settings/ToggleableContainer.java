@@ -21,6 +21,7 @@ public class ToggleableContainer extends CollapsibleContainer {
 	 * @param title caption of the container
 	 * @param renderer the {@link Renderer} for the container
 	 * @param open the {@link Toggleable} indicating whether the container is open or closed
+	 * @param animation the animation for opening and closing the container
 	 * @param toggle the {@link Toggleable} to be toggled by the user
 	 */
 	public ToggleableContainer(String title, Renderer renderer, Toggleable open, Animation animation, Toggleable toggle) {

@@ -49,7 +49,7 @@ public interface Interface {
 	/**
 	 * Get the font width of a string being rendered by {@link #drawString(Point, String, Color)}
 	 * @param s the string to be considered
-	 * @return
+	 * @return the font width
 	 */
 	public int getFontWidth (String s);
 	

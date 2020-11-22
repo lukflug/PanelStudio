@@ -41,6 +41,7 @@ public class ColorComponent extends CollapsibleContainer {
 	 * Constructor.
 	 * @param title the name of the setting
 	 * @param renderer the renderer for the color setting container
+	 * @param animation the animation for opening and closing
 	 * @param componentRenderer the renderer for the children of the container
 	 * @param setting the setting in question
 	 * @param alpha whether to render an alpha slider

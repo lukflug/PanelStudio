@@ -27,6 +27,7 @@ public class TabGUI extends TabGUIContainer implements FixedComponent {
 	 * @param renderer the renderer for the TabGUI
 	 * @param animation the animation for the TabGUI
 	 * @param position the initial position for the TabGUI
+	 * @param width the width of the TabGUI
 	 */
 	public TabGUI(String title, TabGUIRenderer renderer, Animation animation, Point position, int width) {
 		super(title, renderer,animation);

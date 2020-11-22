@@ -161,6 +161,7 @@ public class TabGUIContainer implements TabGUIComponent {
 	
 	/**
 	 * Create a sub-context.
+	 * @param context the current context
 	 * @return a context for a child-component
 	 */
 	protected Context getSubContext (Context context) {

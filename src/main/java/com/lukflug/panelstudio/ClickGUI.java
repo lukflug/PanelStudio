@@ -22,7 +22,6 @@ public class ClickGUI {
 	/**
 	 * Constructor for the GUI.
 	 * @param inter the {@link Interface} to be used by the GUI
-	 * @param width the width of the panels.
 	 */
 	public ClickGUI (Interface inter) {
 		this.inter=inter;
