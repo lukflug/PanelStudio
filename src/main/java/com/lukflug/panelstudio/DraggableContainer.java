@@ -22,17 +22,28 @@ public class DraggableContainer extends CollapsibleContainer implements FixedCom
 	 * Current position of the panel.
 	 */
 	protected Point position;
+	/**
+	 * The panel width.
+	 */
+	protected int width;
+	/**
+	 * Whether to allow the body to be dragged.
+	 */
+	protected boolean bodyDrag=false;
 	
 	/**
 	 * Constructor.
 	 * @param title caption of the container
 	 * @param renderer {@link Renderer} for the container
 	 * @param open {@link Toggleable} to indicate whether the container is open or closed
+	 * @param animation the animation for opening and closing the container
 	 * @param position the initial position of the container
+	 * @param width the width of the container
 	 */
-	public DraggableContainer(String title, Renderer renderer, Toggleable open, Point position) {
-		super(title,renderer,open);
+	public DraggableContainer(String title, Renderer renderer, Toggleable open, Animation animation, Point position, int width) {
+		super(title,renderer,open,animation);
 		this.position=position;
+		this.width=width;
 	}
 
 	/**
@@ -40,18 +51,19 @@ public class DraggableContainer extends CollapsibleContainer implements FixedCom
 	 */
 	@Override
 	public void handleButton (Context context, int button) {
-		context.setHeight(renderer.getHeight());
-		if (context.isClicked()) {
-			if (button==Interface.LBUTTON) {
-				dragging=true;
-				attachPoint=context.getInterface().getMouse();
-			}
+		if (bodyDrag) super.handleButton(context, button);
+		else context.setHeight(renderer.getHeight());
+		if (context.isClicked() && button==Interface.LBUTTON) {
+			dragging=true;
+			attachPoint=context.getInterface().getMouse();
 		} else if (!context.getInterface().getButton(Interface.LBUTTON) && dragging) {
 			Point mouse=context.getInterface().getMouse();
 			dragging=false;
-			position.translate(mouse.x-attachPoint.x,mouse.y-attachPoint.y);
+			Point p=getPosition(context.getInterface());
+			p.translate(mouse.x-attachPoint.x,mouse.y-attachPoint.y);
+			setPosition(context.getInterface(),p);
 		}
-		super.handleButton(context, button);
+		if (!bodyDrag) super.handleButton(context, button);
 	}
 
 	/**
@@ -73,6 +85,11 @@ public class DraggableContainer extends CollapsibleContainer implements FixedCom
 	@Override
 	public void setPosition(Interface inter, Point position) {
 		this.position=new Point(position);
+	}
+
+	@Override
+	public int getWidth (Interface inter) {
+		return width;
 	}
 
 	/**

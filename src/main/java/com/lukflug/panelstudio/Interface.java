@@ -47,6 +47,19 @@ public interface Interface {
 	public void drawString (Point pos, String s, Color c);
 	
 	/**
+	 * Get the font width of a string being rendered by {@link #drawString(Point, String, Color)}
+	 * @param s the string to be considered
+	 * @return the font width
+	 */
+	public int getFontWidth (String s);
+	
+	/**
+	 * Get height of font rendered by {@link #drawString(Point, String, Color)}
+	 * @return the font height
+	 */
+	public int getFontHeight();
+	
+	/**
 	 * Draw a triangle on the screen.
 	 * The color of the triangle should ideally be smoothly interpolated. 
 	 * May only be called in a GUI rendering method.
@@ -116,16 +129,16 @@ public interface Interface {
 	public void drawImage (Rectangle r, int rotation, boolean parity, int image);
 	
 	/**
-	 * Clip all rendering on screen outside the specified rectangle.
+	 * Clip all rendering on screen outside the intersection of the specified rectangle and the current clipping rectangle.
 	 * May only be called in a GUI rendering method.
-	 * The calling method should disable clipping by calling {@link #restore()} after rendering.
+	 * The calling method should restore clipping by calling {@link #restore()} after rendering.
 	 * @param r the clipping rectangle
 	 * @see #restore()
 	 */
 	public void window (Rectangle r);
 	
 	/**
-	 * Disable the clipping.
+	 * Restore the clipping to the previous state.
 	 * @see #window(Rectangle)
 	 */
 	public void restore();

@@ -2,6 +2,7 @@ package com.lukflug.panelstudio.settings;
 
 import java.awt.Color;
 
+import com.lukflug.panelstudio.Animation;
 import com.lukflug.panelstudio.CollapsibleContainer;
 import com.lukflug.panelstudio.Context;
 import com.lukflug.panelstudio.FocusableComponent;
@@ -40,14 +41,15 @@ public class ColorComponent extends CollapsibleContainer {
 	 * Constructor.
 	 * @param title the name of the setting
 	 * @param renderer the renderer for the color setting container
+	 * @param animation the animation for opening and closing
 	 * @param componentRenderer the renderer for the children of the container
 	 * @param setting the setting in question
 	 * @param alpha whether to render an alpha slider
 	 * @param rainbow whether to render a rainbow slider
 	 * @param colorModel {@link Toggleable} indicating whether to use RGB (false) or HSB (true)
 	 */
-	public ColorComponent(String title, Renderer renderer, Renderer componentRenderer, ColorSetting setting, boolean alpha, boolean rainbow, Toggleable colorModel) {
-		super(title,renderer,new SimpleToggleable(false));
+	public ColorComponent(String title, Renderer renderer, Animation animation, Renderer componentRenderer, ColorSetting setting, boolean alpha, boolean rainbow, Toggleable colorModel) {
+		super(title,renderer,new SimpleToggleable(false),animation);
 		this.setting=setting;
 		this.alpha=alpha;
 		this.rainbow=rainbow;
@@ -150,14 +152,14 @@ public class ColorComponent extends CollapsibleContainer {
 				if (colorModel.isOn()) return Color.RGBtoHSB(c.getRed(),c.getGreen(),c.getBlue(),null)[value];
 				switch (value) {
 				case 0:
-					return c.getRed()/255.0f;
+					return c.getRed()/255.0;
 				case 1:
-					return c.getGreen()/255.0f;
+					return c.getGreen()/255.0;
 				case 2:
-					return c.getBlue()/255.0f;
+					return c.getBlue()/255.0;
 				}
 			}
-			return c.getAlpha()/255.0f;
+			return c.getAlpha()/255.0;
 		}
 
 		/**

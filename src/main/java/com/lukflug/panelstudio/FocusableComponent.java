@@ -71,6 +71,14 @@ public class FocusableComponent implements Component {
 	public void getHeight(Context context) {
 		context.setHeight(renderer.getHeight());
 	}
+	
+	/**
+	 * Set the height of this component to the height specified by {@link Renderer}.
+	 */
+	@Override
+	public void handleScroll (Context context, int diff) {
+		context.setHeight(renderer.getHeight());
+	}
 
 	/**
 	 * Set the height of this component to the height specified by {@link Renderer}.
@@ -92,7 +100,8 @@ public class FocusableComponent implements Component {
 	/**
 	 * Reset focus state.
 	 */
-	protected void releaseFocus() {
+	@Override
+	public void releaseFocus() {
 		focus=false;
 	}
 	
@@ -111,9 +120,9 @@ public class FocusableComponent implements Component {
 	}
 	
 	/**
-	 * Does nothing, called when the focus state changes.
+	 * Does nothing, called when the focus state changes due to a mouse event.
 	 * @param context the {@link Context} for the component
-	 * @param focus the new foucs state
+	 * @param focus the new focus state
 	 */
 	protected void handleFocus (Context context, boolean focus) {
 	}

@@ -56,6 +56,24 @@ public final class Context {
 	}
 	
 	/**
+	 * Constructor that should be used when a parent is calling a method by the child.
+	 * {@link #inter} and {@link #onTop} are inherited without modification.
+	 * @param context the context of the parent
+	 * @param border the horizontal border (left and right) for the child
+	 * @param offset the vertical position of the child relative to the parent's position
+	 * @param focus focus state of the parent
+	 * @param onTop whether component is in the front
+	 */
+	public Context (Context context, int border, int offset, boolean focus, boolean onTop) {
+		inter=context.getInterface();
+		size=new Dimension(context.getSize().width-border*2,0);
+		position=new Point(context.getPos());
+		position.translate(border,offset);
+		this.focus=context.hasFocus()&&focus;
+		this.onTop=context.onTop()&&onTop;
+	}
+	
+	/**
 	 * Constructor that should be used by the root parent (i.e. {@link ClickGUI}).
 	 * @param inter the current {@link Interface}
 	 * @param width the width of the component
@@ -139,7 +157,7 @@ public final class Context {
 	 * @return set to true, if mouse is hovering and component isn't below another one 
 	 */
 	public boolean isHovered() {
-		return inter.getMouse().x>=position.x && inter.getMouse().x<=position.x+size.width && inter.getMouse().y>=position.y && inter.getMouse().y<=position.y+size.height && onTop;
+		return new Rectangle(position,size).contains(inter.getMouse()) && onTop;
 	}
 	
 	/**

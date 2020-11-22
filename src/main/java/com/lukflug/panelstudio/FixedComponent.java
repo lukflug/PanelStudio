@@ -21,4 +21,11 @@ public interface FixedComponent extends Component {
 	 * @param position new position
 	 */
 	public void setPosition (Interface inter, Point position);
+	
+	/**
+	 * Get the component width.
+	 * @param inter current interface
+	 * @return component width
+	 */
+	public int getWidth (Interface inter);
 }
