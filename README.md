@@ -13,7 +13,15 @@ A simple yet flexible library to create ClickGUIs designed for use in Minecraft 
 * Future Theme:
 ![future](https://cdn.discordapp.com/attachments/747111616407011389/779996632334073896/2020-11-21_20.25.30.png)
 
-This repostiory only includes the GameSense themes, however, since Cyber didn't want me to publish the other themes. The library has no depedencies (aside from the JRE itself), so it can be easily used for other purposes, aside from Minecraft utility mods. Thanks to Go_Hoosiers, for suggesting the name of this library. If you use this library, some attribution would be greatly appreciated.
+This repostiory only includes the GameSense themes, however, since Cyber didn't want me to publish the other themes. The library has no depedencies (aside from the JRE itself), so it can be easily used for other purposes, aside from Minecraft utility mods. Thanks to Go_Hoosiers, for suggesting the name of this library. If you use this library, some attribution would be greatly appreciated. Consider visiting the PanelStudio discord server: (https://discord.gg/E3DrF4XvUE).
+
+## Structure
+This library contains following packages:
+* `com.lukflug.panelstudio`: basic library and ClickGUI.
+* `com.lukflug.panelstudio.settings`: common ClickGUI components and interfaces to mark module setting classes.
+* `com.lukflug.panelstudio.theme`: contains base classes for themes and GameSense themes.
+* `com.lukflug.panelstudio.tabgui`: TabGUI.
+* `com.lukflug.panelstudio.hud`: HUD panels.
 
 ## Features
 * Ability to easily create new themes/skins.
