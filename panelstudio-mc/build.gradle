@@ -8,7 +8,6 @@ compileJava {
 	sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-allprojects {
-	group = 'com.lukflug'
-	version = '0.1.0'
+task packageDistribution(type: Jar) {
+    from "$projectDir/src/main/java"
 }
