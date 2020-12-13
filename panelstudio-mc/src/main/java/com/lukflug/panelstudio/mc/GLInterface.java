@@ -100,7 +100,7 @@ public abstract class GLInterface implements Interface {
 	@Override
 	public synchronized int loadImage(String name) {
 		try {
-			ResourceLocation rl=new ResourceLocation("gamesense:gui/"+name);
+			ResourceLocation rl=new ResourceLocation(getResourcePrefix()+name);
 			InputStream stream=Minecraft.getMinecraft().resourceManager.getResource(rl).getInputStream();
 			BufferedImage image=ImageIO.read(stream);
 			int texture=TextureUtil.glGenTextures();
@@ -153,6 +153,10 @@ public abstract class GLInterface implements Interface {
         GlStateManager.disableTexture2D();
 	}
 	
+	/**
+	 * Utility function to set clipping rectangle by projecting the coordinates using gluProject.
+	 * @param r the clipping rectangle
+	 */
 	protected void scissor (Rectangle r) {
 		if (r==null) {
 			GL11.glScissor(0,0,0,0);
@@ -207,12 +211,19 @@ public abstract class GLInterface implements Interface {
 		}
 	}
 	
+	/**
+	 * Update the matrix buffers.
+	 */
 	public void getMatrices() {
 		GlStateManager.getFloat(GL11.GL_MODELVIEW_MATRIX,MODELVIEW);
 		GlStateManager.getFloat(GL11.GL_PROJECTION_MATRIX,PROJECTION);
 		GlStateManager.glGetInteger(GL11.GL_VIEWPORT,VIEWPORT);
 	}
 	
+	/**
+	 * Set OpenGL to the state used by the rendering methods.
+	 * Should be called before rendering.
+	 */
 	public static void begin() {
 		GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
@@ -221,11 +232,24 @@ public abstract class GLInterface implements Interface {
         GlStateManager.glLineWidth(2);
 	}
 	
+	/**
+	 * Restore OpenGL to the state expected by Minecraft.
+	 * Should be called after rendering.
+	 */
 	public static void end() {
 		GlStateManager.shadeModel(GL11.GL_FLAT);
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
 	}
 	
+	/**
+	 * Get the z-coordinate to render everything.
+	 * @return the z-level
+	 */
 	protected abstract float getZLevel();
+	/**
+	 * Get the Minecraft resource location string.
+	 * @return
+	 */
+	protected abstract String getResourcePrefix();
 }
