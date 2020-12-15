@@ -40,16 +40,16 @@ public abstract class MinecraftGUI extends GuiScreen {
 	 */
 	protected void renderGUI() {
 		getInterface().getMatrices();
-    	GLInterface.begin();
-        getGUI().render();
-        GLInterface.end();
+		GLInterface.begin();
+		getGUI().render();
+		GLInterface.end();
 	}
 	
 	/**
 	 * Draws the screen, updates the mouse position and handles scroll events.
 	 */
 	@Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		renderGUI();
     	mouse=new Point(mouseX,mouseY);
         int scroll=Mouse.getDWheel();

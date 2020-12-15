@@ -38,29 +38,29 @@ public abstract class GLInterface implements Interface {
 	/**
 	 * Buffer to store current projection matrix.
 	 */
-    private static final FloatBuffer PROJECTION = GLAllocation.createDirectFloatBuffer(16);
-    /**
-     * Buffer to store current viewport.
-     */
+	private static final FloatBuffer PROJECTION = GLAllocation.createDirectFloatBuffer(16);
+	/**
+	 * Buffer to store current viewport.
+	 */
 	private static final IntBuffer VIEWPORT = GLAllocation.createDirectIntBuffer(16);
 	/**
 	 * Buffer used to calculate coordinates using gluProject.
 	 */
-    private static final FloatBuffer COORDS = GLAllocation.createDirectFloatBuffer(3);
-    /**
-     * Clipping rectangle stack.
-     */
-    private Stack<Rectangle> clipRect=new Stack<Rectangle>();
-    
+	private static final FloatBuffer COORDS = GLAllocation.createDirectFloatBuffer(3);
+	/**
+	 * Clipping rectangle stack.
+	 */
+	private Stack<Rectangle> clipRect=new Stack<Rectangle>();
+
 	@Override
 	public void fillTriangle(Point pos1, Point pos2, Point pos3, Color c1, Color c2, Color c3) {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
-        bufferbuilder.begin(GL11.GL_TRIANGLES,DefaultVertexFormats.POSITION_COLOR);
-        	bufferbuilder.pos(pos1.x,pos1.y,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).endVertex();
-        	bufferbuilder.pos(pos2.x,pos2.y,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).endVertex();
-        	bufferbuilder.pos(pos3.x,pos3.y,getZLevel()).color(c3.getRed()/255.0f,c3.getGreen()/255.0f,c3.getBlue()/255.0f,c3.getAlpha()/255.0f).endVertex();
-        tessellator.draw();
+		bufferbuilder.begin(GL11.GL_TRIANGLES,DefaultVertexFormats.POSITION_COLOR);
+			bufferbuilder.pos(pos1.x,pos1.y,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).endVertex();
+			bufferbuilder.pos(pos2.x,pos2.y,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).endVertex();
+			bufferbuilder.pos(pos3.x,pos3.y,getZLevel()).color(c3.getRed()/255.0f,c3.getGreen()/255.0f,c3.getBlue()/255.0f,c3.getAlpha()/255.0f).endVertex();
+			tessellator.draw();
 	}
 
 	@Override

@@ -6,6 +6,18 @@ package com.lukflug.panelstudio;
  */
 public interface ConfigList {
 	/**
+	 * Begin loading/storing configuration.
+	 * @param loading set if loading
+	 */
+	public void begin (boolean loading);
+	
+	/**
+	 * End loading/storing configuration.
+	 * @param loading set if loading
+	 */
+	public void end (boolean loading);
+	
+	/**
 	 * Add panel to the configuration.
 	 * @param title the title
 	 * @return the new panel configuration to be populated by the panel

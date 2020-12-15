@@ -154,9 +154,11 @@ public class ClickGUI {
 	 * @param config the configuration list to be used
 	 */
 	public void saveConfig (ConfigList config) {
+		config.begin(false);
 		for (FixedComponent component: getComponents()) {
 			component.saveConfig(inter,config.addPanel(component.getTitle()));
 		}
+		config.end(false);
 	}
 	
 	/**
@@ -164,8 +166,10 @@ public class ClickGUI {
 	 * @param config the configuration list to be used
 	 */
 	public void loadConfig (ConfigList config) {
+		config.begin(true);
 		for (FixedComponent component: getComponents()) {
 			component.loadConfig(inter,config.getPanel(component.getTitle()));
 		}
+		config.end(true);
 	}
 }
