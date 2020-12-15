@@ -99,4 +99,16 @@ public class DraggableContainer extends CollapsibleContainer implements FixedCom
 	protected void handleFocus (Context context, boolean focus) {
 		if (focus) context.requestFocus();
 	}
+
+	@Override
+	public void saveConfig(Interface inter, PanelConfig config) {
+		config.savePositon(position);
+		config.saveState(open.isOn());
+	}
+
+	@Override
+	public void loadConfig(Interface inter, PanelConfig config) {
+		position=config.loadPosition();
+		if (open.isOn()!=config.loadState()) open.toggle();
+	}
 }

@@ -5,6 +5,7 @@ import java.awt.Point;
 import com.lukflug.panelstudio.Animation;
 import com.lukflug.panelstudio.FixedComponent;
 import com.lukflug.panelstudio.Interface;
+import com.lukflug.panelstudio.PanelConfig;
 
 /**
  * A {@link TabGUIContainer} that is also a {@link FixedComponent}.
@@ -54,5 +55,15 @@ public class TabGUI extends TabGUIContainer implements FixedComponent {
 	@Override
 	public int getWidth (Interface inter) {
 		return width;
+	}
+
+	@Override
+	public void saveConfig(Interface inter, PanelConfig config) {
+		config.savePositon(position);
+	}
+
+	@Override
+	public void loadConfig(Interface inter, PanelConfig config) {
+		position=config.loadPosition();
 	}
 }
