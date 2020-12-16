@@ -24,7 +24,7 @@ public class ListComponent extends HUDComponent {
 	/**
 	 * Constructor.
 	 * @param name the title of the component
-	 * @param theme the theme for the component
+	 * @param renderer the renderer for the component
 	 * @param position the initial position
 	 * @param list the list to be rendered
 	 */

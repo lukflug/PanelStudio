@@ -1,14 +1,11 @@
 
-plugins {
-	id 'java-library'
+allprojects {
+	apply plugin: 'java-library'
+	group = 'com.lukflug'
+	version = '0.1.1'
 }
 
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 compileJava {
 	sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
-}
-
-allprojects {
-	group = 'com.lukflug'
-	version = '0.1.0'
 }
