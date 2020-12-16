@@ -156,7 +156,7 @@ public class ClickGUI {
 	public void saveConfig (ConfigList config) {
 		config.begin(false);
 		for (FixedComponent component: getComponents()) {
-			PanelConfig cf=config.getPanel(component.getTitle());
+			PanelConfig cf=config.addPanel(component.getTitle());
 			if (cf!=null) component.saveConfig(inter,cf);
 		}
 		config.end(false);
