@@ -107,6 +107,7 @@ public abstract class HUDComponent implements FixedComponent {
 
 	@Override
 	public void loadConfig(Interface inter, PanelConfig config) {
-		position=config.loadPosition();
+		Point pos=config.loadPosition();
+		if (pos!=null) position=pos;
 	}
 }

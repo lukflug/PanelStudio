@@ -64,6 +64,7 @@ public class TabGUI extends TabGUIContainer implements FixedComponent {
 
 	@Override
 	public void loadConfig(Interface inter, PanelConfig config) {
-		position=config.loadPosition();
+		Point pos=config.loadPosition();
+		if (pos!=null) position=pos;
 	}
 }

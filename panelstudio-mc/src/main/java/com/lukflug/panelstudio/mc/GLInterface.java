@@ -75,26 +75,26 @@ public abstract class GLInterface implements Interface {
 
 	@Override
 	public void fillRect(Rectangle r, Color c1, Color c2, Color c3, Color c4) {
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
-        bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-	        bufferbuilder.pos(r.x,r.y+r.height,getZLevel()).color(c4.getRed()/255.0f,c4.getGreen()/255.0f,c4.getBlue()/255.0f,c4.getAlpha()/255.0f).endVertex();
-	        bufferbuilder.pos(r.x+r.width,r.y+r.height,getZLevel()).color(c3.getRed()/255.0f,c3.getGreen()/255.0f,c3.getBlue()/255.0f,c3.getAlpha()/255.0f).endVertex();
-	        bufferbuilder.pos(r.x+r.width,r.y,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).endVertex();
-	        bufferbuilder.pos(r.x,r.y,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).endVertex();
-        tessellator.draw();
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder bufferbuilder = tessellator.getBuffer();
+		bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+			bufferbuilder.pos(r.x,r.y+r.height,getZLevel()).color(c4.getRed()/255.0f,c4.getGreen()/255.0f,c4.getBlue()/255.0f,c4.getAlpha()/255.0f).endVertex();
+			bufferbuilder.pos(r.x+r.width,r.y+r.height,getZLevel()).color(c3.getRed()/255.0f,c3.getGreen()/255.0f,c3.getBlue()/255.0f,c3.getAlpha()/255.0f).endVertex();
+			bufferbuilder.pos(r.x+r.width,r.y,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).endVertex();
+			bufferbuilder.pos(r.x,r.y,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).endVertex();
+		tessellator.draw();
 	}
 
 	@Override
 	public void drawRect(Rectangle r, Color c1, Color c2, Color c3, Color c4) {
 		Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
-        bufferbuilder.begin(GL11.GL_LINE_LOOP, DefaultVertexFormats.POSITION_COLOR);
-	        bufferbuilder.pos(r.x,r.y+r.height,getZLevel()).color(c4.getRed()/255.0f,c4.getGreen()/255.0f,c4.getBlue()/255.0f,c4.getAlpha()/255.0f).endVertex();
-	        bufferbuilder.pos(r.x+r.width,r.y+r.height,getZLevel()).color(c3.getRed()/255.0f,c3.getGreen()/255.0f,c3.getBlue()/255.0f,c3.getAlpha()/255.0f).endVertex();
-	        bufferbuilder.pos(r.x+r.width,r.y,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).endVertex();
-	        bufferbuilder.pos(r.x,r.y,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).endVertex();
-        tessellator.draw();
+		BufferBuilder bufferbuilder = tessellator.getBuffer();
+		bufferbuilder.begin(GL11.GL_LINE_LOOP, DefaultVertexFormats.POSITION_COLOR);
+			bufferbuilder.pos(r.x,r.y+r.height,getZLevel()).color(c4.getRed()/255.0f,c4.getGreen()/255.0f,c4.getBlue()/255.0f,c4.getAlpha()/255.0f).endVertex();
+			bufferbuilder.pos(r.x+r.width,r.y+r.height,getZLevel()).color(c3.getRed()/255.0f,c3.getGreen()/255.0f,c3.getBlue()/255.0f,c3.getAlpha()/255.0f).endVertex();
+			bufferbuilder.pos(r.x+r.width,r.y,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).endVertex();
+			bufferbuilder.pos(r.x,r.y,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).endVertex();
+		tessellator.draw();
 	}
 	
 	@Override
@@ -141,16 +141,16 @@ public abstract class GLInterface implements Interface {
 			texCoords[1][1]=temp2;
 		}
 		Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
-        GlStateManager.bindTexture(image);
-        GlStateManager.enableTexture2D();
-        bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        	bufferbuilder.pos(r.x,r.y+r.height,getZLevel()).tex(texCoords[0][0],texCoords[0][1]).endVertex();
-        	bufferbuilder.pos(r.x+r.width,r.y+r.height,getZLevel()).tex(texCoords[1][0],texCoords[1][1]).endVertex();
-        	bufferbuilder.pos(r.x+r.width,r.y,getZLevel()).tex(texCoords[2][0],texCoords[2][1]).endVertex();
-        	bufferbuilder.pos(r.x,r.y,getZLevel()).tex(texCoords[3][0],texCoords[3][1]).endVertex();
-        tessellator.draw();
-        GlStateManager.disableTexture2D();
+		BufferBuilder bufferbuilder = tessellator.getBuffer();
+		GlStateManager.bindTexture(image);
+		GlStateManager.enableTexture2D();
+		bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+			bufferbuilder.pos(r.x,r.y+r.height,getZLevel()).tex(texCoords[0][0],texCoords[0][1]).endVertex();
+			bufferbuilder.pos(r.x+r.width,r.y+r.height,getZLevel()).tex(texCoords[1][0],texCoords[1][1]).endVertex();
+			bufferbuilder.pos(r.x+r.width,r.y,getZLevel()).tex(texCoords[2][0],texCoords[2][1]).endVertex();
+			bufferbuilder.pos(r.x,r.y,getZLevel()).tex(texCoords[3][0],texCoords[3][1]).endVertex();
+		tessellator.draw();
+		GlStateManager.disableTexture2D();
 	}
 	
 	/**
@@ -226,10 +226,10 @@ public abstract class GLInterface implements Interface {
 	 */
 	public static void begin() {
 		GlStateManager.enableBlend();
-        GlStateManager.disableTexture2D();
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        GlStateManager.shadeModel(GL11.GL_SMOOTH);
-        GlStateManager.glLineWidth(2);
+		GlStateManager.disableTexture2D();
+		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		GlStateManager.shadeModel(GL11.GL_SMOOTH);
+		GlStateManager.glLineWidth(2);
 	}
 	
 	/**
@@ -238,8 +238,8 @@ public abstract class GLInterface implements Interface {
 	 */
 	public static void end() {
 		GlStateManager.shadeModel(GL11.GL_FLAT);
-        GlStateManager.enableTexture2D();
-        GlStateManager.disableBlend();
+		GlStateManager.enableTexture2D();
+		GlStateManager.disableBlend();
 	}
 	
 	/**

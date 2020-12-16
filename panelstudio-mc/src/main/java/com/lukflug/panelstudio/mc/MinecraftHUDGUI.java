@@ -26,8 +26,8 @@ public abstract class MinecraftHUDGUI extends MinecraftGUI {
 	 * @param scancode the key scancode
 	 */
 	public void handleKeyEvent (int scancode) {
-    	if (scancode!=1 && !getHUDGUI().isOn()) getHUDGUI().handleKey(scancode);
-    }
+		if (scancode!=1 && !getHUDGUI().isOn()) getHUDGUI().handleKey(scancode);
+	}
 	
 	@Override
 	protected void keyTyped(final char typedChar, final int keyCode) {
@@ -36,9 +36,9 @@ public abstract class MinecraftHUDGUI extends MinecraftGUI {
 	}
 	
 	/**
-     * Get the {@link HUDClickGUI} to be rendered.
-     * @return current ClickGUI
-     */
+	 * Get the {@link HUDClickGUI} to be rendered.
+	 * @return current ClickGUI
+	 */
 	protected abstract HUDClickGUI getHUDGUI();
 
 	@Override

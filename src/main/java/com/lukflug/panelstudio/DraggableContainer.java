@@ -108,7 +108,8 @@ public class DraggableContainer extends CollapsibleContainer implements FixedCom
 
 	@Override
 	public void loadConfig(Interface inter, PanelConfig config) {
-		position=config.loadPosition();
+		Point pos=config.loadPosition();
+		if (pos!=null) position=pos;
 		if (open.isOn()!=config.loadState()) open.toggle();
 	}
 }

@@ -51,87 +51,87 @@ public abstract class MinecraftGUI extends GuiScreen {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		renderGUI();
-    	mouse=new Point(mouseX,mouseY);
-        int scroll=Mouse.getDWheel();
-        if (scroll!=0) {
-        	if (scroll>0) getGUI().handleScroll(-getScrollSpeed());
-        	else getGUI().handleScroll(getScrollSpeed());
-        }
-    }
+		mouse=new Point(mouseX,mouseY);
+		int scroll=Mouse.getDWheel();
+		if (scroll!=0) {
+			if (scroll>0) getGUI().handleScroll(-getScrollSpeed());
+			else getGUI().handleScroll(getScrollSpeed());
+		}
+	}
 
 	/**
 	 * Updates {@link #lButton} and {@link #rButton}.
 	 */
-    @Override
-    public void mouseClicked(int mouseX, int mouseY, int clickedButton) {
-    	mouse=new Point(mouseX,mouseY);
-    	switch (clickedButton) {
-    	case Interface.LBUTTON:
-    		lButton=true;
-    		break;
-    	case Interface.RBUTTON:
-    		rButton=true;
-    		break;
-    	}
-    	getGUI().handleButton(clickedButton);
-    }
+	@Override
+	public void mouseClicked(int mouseX, int mouseY, int clickedButton) {
+		mouse=new Point(mouseX,mouseY);
+		switch (clickedButton) {
+		case Interface.LBUTTON:
+			lButton=true;
+			break;
+		case Interface.RBUTTON:
+			rButton=true;
+			break;
+		}
+		getGUI().handleButton(clickedButton);
+	}
 
-    /**
-     * Updates {@link #lButton} and {@link #rButton}.
-     */
-    @Override
-    public void mouseReleased(int mouseX, int mouseY, int releaseButton) {
-    	mouse=new Point(mouseX,mouseY);
-    	switch (releaseButton) {
-    	case Interface.LBUTTON:
-    		lButton=false;
-    		break;
-    	case Interface.RBUTTON:
-    		rButton=false;
-    		break;
-    	}
-    	getGUI().handleButton(releaseButton);
-    }
-    
-    /**
-     * Handles the current keys being typed.
-     */
-    @Override
-    protected void keyTyped(final char typedChar, final int keyCode) {
-    	if (keyCode == 1) {
-    		getGUI().exit();
-    		Minecraft.getMinecraft().displayGuiScreen(null);
-    	} else getGUI().handleKey(keyCode);
-    }
-
-    /**
-     * Returns false.
-     */
-    @Override
-    public boolean doesGuiPauseGame() {
-        return false;
-    }
-    
-    /**
-     * Get the {@link ClickGUI} to be rendered.
-     * @return current ClickGUI
-     */
-    protected abstract ClickGUI getGUI();
-    /**
-     * Get current {@link GUIInterface}.
-     * @return the current interface
-     */
-    protected abstract GUIInterface getInterface();
-    /**
-     * Get current scroll speed.
-     * @return the scroll speed
-     */
-    protected abstract int getScrollSpeed();
+	/**
+	 * Updates {@link #lButton} and {@link #rButton}.
+	 */
+	@Override
+	public void mouseReleased(int mouseX, int mouseY, int releaseButton) {
+		mouse=new Point(mouseX,mouseY);
+		switch (releaseButton) {
+		case Interface.LBUTTON:
+			lButton=false;
+		break;
+		case Interface.RBUTTON:
+			rButton=false;
+			break;
+		}
+		getGUI().handleButton(releaseButton);
+	}
 	
-    /**
-     * Implementation of {@link GLInterface} to be used with {@link MinecraftGUI}
-     * @author lukflug
-     */
+	/**
+	 * Handles the current keys being typed.
+	 */
+	@Override
+	protected void keyTyped(final char typedChar, final int keyCode) {
+		if (keyCode == 1) {
+			getGUI().exit();
+			Minecraft.getMinecraft().displayGuiScreen(null);
+		} else getGUI().handleKey(keyCode);
+	}
+
+	/**
+	 * Returns false.
+	 */
+	@Override
+	public boolean doesGuiPauseGame() {
+		return false;
+	}
+	
+	/**
+	 * Get the {@link ClickGUI} to be rendered.
+	 * @return current ClickGUI
+	 */
+	protected abstract ClickGUI getGUI();
+	/**
+	 * Get current {@link GUIInterface}.
+	 * @return the current interface
+	 */
+	protected abstract GUIInterface getInterface();
+	/**
+	 * Get current scroll speed.
+	 * @return the scroll speed
+	 */
+	protected abstract int getScrollSpeed();
+	
+	/**
+	 * Implementation of {@link GLInterface} to be used with {@link MinecraftGUI}
+	 * @author lukflug
+	 */
 	public abstract class GUIInterface extends GLInterface {
 		@Override
 		public boolean getButton(int button) {
