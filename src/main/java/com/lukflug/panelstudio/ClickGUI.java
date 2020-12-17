@@ -148,4 +148,30 @@ public class ClickGUI {
 			components.add(focusComponent);
 		}
 	}
+	
+	/**
+	 * Store the GUI state.
+	 * @param config the configuration list to be used
+	 */
+	public void saveConfig (ConfigList config) {
+		config.begin(false);
+		for (FixedComponent component: getComponents()) {
+			PanelConfig cf=config.addPanel(component.getTitle());
+			if (cf!=null) component.saveConfig(inter,cf);
+		}
+		config.end(false);
+	}
+	
+	/**
+	 * Load the GUI state.
+	 * @param config the configuration list to be used
+	 */
+	public void loadConfig (ConfigList config) {
+		config.begin(true);
+		for (FixedComponent component: getComponents()) {
+			PanelConfig cf=config.getPanel(component.getTitle());
+			if (cf!=null) component.loadConfig(inter,cf);
+		}
+		config.end(true);
+	}
 }

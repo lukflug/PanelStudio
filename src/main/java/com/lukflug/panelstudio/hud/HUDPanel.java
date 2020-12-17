@@ -9,6 +9,7 @@ import com.lukflug.panelstudio.Context;
 import com.lukflug.panelstudio.DraggableContainer;
 import com.lukflug.panelstudio.FixedComponent;
 import com.lukflug.panelstudio.Interface;
+import com.lukflug.panelstudio.PanelConfig;
 import com.lukflug.panelstudio.settings.Toggleable;
 import com.lukflug.panelstudio.theme.ColorScheme;
 import com.lukflug.panelstudio.theme.Renderer;
@@ -93,6 +94,18 @@ public class HUDPanel extends DraggableContainer {
 	protected Rectangle getClipRect (Context context, int height) {
 		if (open.getValue()!=1) return super.getClipRect(context,height);
 		else return null;
+	}
+
+	@Override
+	public void saveConfig(Interface inter, PanelConfig config) {
+		component.saveConfig(inter,config);
+		config.saveState(open.isOn());
+	}
+
+	@Override
+	public void loadConfig(Interface inter, PanelConfig config) {
+		component.loadConfig(inter,config);
+		if (open.isOn()!=config.loadState()) open.toggle();
 	}
 	
 	

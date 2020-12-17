@@ -28,4 +28,18 @@ public interface FixedComponent extends Component {
 	 * @return component width
 	 */
 	public int getWidth (Interface inter);
+	
+	/**
+	 * Saves the component state
+	 * @param inter current interface
+	 * @param config configuration to use
+	 */
+	public void saveConfig (Interface inter, PanelConfig config);
+	
+	/**
+	 * Loads the component state
+	 * @param inter current interface
+	 * @param config configuration to use
+	 */
+	public void loadConfig (Interface inter, PanelConfig config);
 }

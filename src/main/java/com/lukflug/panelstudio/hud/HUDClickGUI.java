@@ -24,7 +24,7 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 	 */
 	protected Set<FixedComponent> hudComponents;
 	/**
-	 * 
+	 * Whether the GUI components are shown or not.
 	 */
 	protected boolean guiOpen=false;
 	

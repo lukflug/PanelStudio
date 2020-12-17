@@ -1,5 +1,5 @@
 # PanelStudio
-A simple yet flexible library to create ClickGUIs designed for use in Minecraft utility mods. It was originally designed for a private client, but made open source, so that it could be used for [GameSense](https://github.com/IUDevman/gamesense-client). Here are some screenshots of what is possible with this library:
+A simple yet flexible library to create ClickGUIs designed for use in Minecraft utility mods. It was originally designed for a private client, but made open source, so that it could be used for [GameSense](https://github.com/IUDevman/gamesense-client). Here are some screenshots of what is possible with this library (note that these themes are examples and that one can make the GUI look like basically anything):
 * CyberHack Theme:
 ![cyberhack](https://cdn.discordapp.com/attachments/747111616407011389/779996603510947870/2020-11-21_20.23.26.png)
 * GameSense 2.0 Theme:
@@ -23,6 +23,8 @@ This library contains following packages:
 * `com.lukflug.panelstudio.tabgui`: TabGUI.
 * `com.lukflug.panelstudio.hud`: HUD panels.
 
+In addition to the core PanelStudio library, there is the PanelStudio-MC library (`com.lukflug.panelstudio.mc` package), which is a source code library that includes Minecraft depedencies. It was tested on Minecraft Forge 1.12.2, but probably works on Fabric and may or may not work on other Minecraft versions. The PanelStudio core library works on any Minecraft version (and even on any non-Minecraft application).
+
 ## Features
 * Ability to easily create new themes/skins.
 * Overlapping Panels.
@@ -32,21 +34,7 @@ This library contains following packages:
 ## Implementation in Minecraft clients
 A jar of this library is available in the Maven repository at https://lukflug.github.io/maven/ as `com.lukflug.panelstudio`.
 
-### ClickGUI
-To use the ClickGUI, following interfaces need to be implemented
-* `Interface`
-* `ColorScheme`
-In addition:
-* Use one of the supplied Themes or implement one yourself, to have a different look from GameSense (see `ClearTheme` and `GameSenseTheme` for reference).
-* Populate the `ClickGUI` object with the desired components (i.e. adding a `DraggableContainer` for each category, adding a `CollapsibleContainer` for each module, and adding a settings component for each setting, this probably requires marking your settings objects with the interfaces in the `settings` package).
-* It is recommended to have a class extending Minecraft's `GuiScreen` and implementing `Interface`, that has `ClickGUI` as a field, which gets populates in the constructor.
-* For reference, consult the [javadoc](https://lukflug.github.io/javadoc/panelstudio/0.1.0/) and see the implementation in GameSense.
-* Some custom classes may need to be created, for specific behaviour.
-
-### HUD
-Use `HUDClickGUI` instead of `ClickGUI`. Requries calling rendering functions even when the ClickGUI is closed, in order to render the HUD panels. HUD componets have to be `FixedComponent` (use `HUDComponent` as base class) and have to be added to the `HUDClickGUI` via a `HUDPanel`. This will make the HUD component a draggable panel when the ClickGUI is open. PanelStuudio provides `TabGUI` as a stock HUD component. The `TabGUI` requires passing key events when the ClickGUI is closed and has to be populated with categories and modules.
-
-## Use in Gradle
+### Use in Gradle
 Add following to your `build.gradle`:
 ```
 repositories {
@@ -57,7 +45,7 @@ repositories {
 }
 
 dependencies {
-	compile("com.lukflug:panelstudio:0.1.0")
+	compile("com.lukflug:panelstudio:0.1.1")
 }
 
 shadowJar {
@@ -66,30 +54,130 @@ shadowJar {
 	}
 }
 ```
-
-## Use as Gradle source dependency
-To include the newest version in this repository in your gradle build, you have to add following to your `settings.gradle`:
+If you're planning to use PanelStudio-MC you have to also add this:
 ```
-sourceControl {
-	gitRepository("https://github.com/lukflug/PanelStudio.git") {
-		producesModule("com.lukflug:panelstudio")
-	}
-}
-```
-In addition you have to add following to your `build.gradle`:
-```
-dependencies {
-	compile("com.lukflug:panelstudio") {
-		version {
-			branch='main'
+sourceSets {
+	main {
+		java {
+			srcDir 'src/main/java'
+			srcDir 'build/panelstudio'
 		}
 	}
 }
 
-shadowJar {
-	dependencies {
-		include(dependency('com.lukflug:panelstudio'))
+task downloadPanelstudio {
+	new URL("https://github.com/lukflug/PanelStudio/releases/download/v0.1.1/panelstudio-mc-0.1.1.jar").withInputStream{i->new File("${buildDir}/panelstudio-mc-0.1.1.jar").withOutputStream{it<<i}}
+}
+
+task unpackPanelstudio(dependsOn: downloadPanelstudio, type: Copy) {
+    from zipTree("${buildDir}/panelstudio-mc-0.1.1.jar")
+    into "${buildDir}/panelstudio"
+}
+```
+Run the task `unpackPanelstudio` (which downloads and extracts the PanelStudio-MC source library for you) once before building.
+
+### ClickGUI
+The precise way PanelStudio is used in an utility mod depends on the module and setting manager. However the implementation should roughly follow follwing scheme. The main ClickGUI class should extend `MinecraftGUI` (if using PanelStudio-MC):
+```
+public class CoolGUI extends MinecraftGUI {
+	private final Toggleable colorToggle;
+	private final GUIInterface guiInterface;
+	private final Theme theme;
+	private final ClickGUI gui;
+
+	public CoolGUI() {
+		// Intialize necessary fields
+		colorToggle=CoolSettings.colorModel // <-- Toggleable indicating whether to use the RGB or HSB model for color settings
+		guiInterface=new GuiInterface() {
+			@Override
+			protected String getResourcePrefix() {
+				return "coolhack:gui/";
+			}
+			
+			@Override
+			public void drawString(Point pos, String s, Color c) {
+				end();
+				CoolFont.drawString(s,pos.x,pos.y,c);
+				begin();
+			}
+			
+			@Override
+			public int getFontWidth(String s) {
+				return CoolFont.getFontWidth(s);
+			}
+
+			@Override
+			public int getFontHeight() {
+				return CoolFont.getFontHeight();
+			}
+		};
+		theme=new GameSenseTheme(new SettingsColorScheme(CoolSettings.activeColor,CoolSettings.inactiveColor,CoolSettings.backgroundColor,CoolSettings.outlineColor,CoolSettings.fontColor,CoolSettings.opacity),height,2); // <-- Can be replaced by another theme (could be a custom one)
+		gui=new ClickGUI(guiInterface);
+		// Populate the ClickGUI with modules and settings
+		for (CoolCategory category: categories) {
+			DraggableContainer panel=new DraggableContainer(category.name,theme.getPanelRenderer(),new SimpleToggleable(false),new SettingsAnimation(CoolSettings.animationSpeed),new Point(x,y),width); // <-- Width and default position of the panels needs to be defined
+			gui.addComponent(panel);
+			for (CoolModule module: category) {
+				CollapsibleContainer container=new ToggleableContainer(module.name,theme.getContainerRenderer(),new SimpleToggleable(false),new SettingsAnimation(CoolSettings.animationSpeed),module); // <-- It is recommended that the module-class implements Toggleable
+				panel.addComponent(container);
+				for (CoolSetting setting: module) {
+					if (setting instanceof Toggleable) cotainer.addComponent(setting.name,theme.getComponentRenderer(),setting);
+					else if (setting instanceof NumberSetting) cotainer.addComponent(setting.name,theme.getComponentRenderer(),setting,setting.min,setting.max);
+					else if (setting instanceof EnumSetting) cotainer.addComponent(setting.name,theme.getComponentRenderer(),setting);
+					else if (setting instanceof ColorSetting) cotainer.addComponent(setting.name,theme.getComponentRenderer(),new SettingsAnimation(CoolSettings.animationSpeed),setting,setting.alpha,setting.rainbowEnabled,colorToggle);
+				}
+			}
+		}
+	}
+
+	@Override
+	protected ClickGUI getGUI() {
+		return gui;
+	}
+
+	@Override
+	protected GUIInterface getInterface() {
+		return guiInterface;
+	}
+
+	@Override
+	protected int getScrollSpeed() {
+		return CoolSettings.scrollSpeed;
 	}
 }
 ```
-**Warning: the code in this repository may be subject to change and may cause your code to become incompatible, so fork this repo and include the fork in your project. The binaries in  the Maven repository are recommended for regular use.**
+The loops and methods involving `CoolCategory`, `CoolModule` and `CoolSetting` have to be replaced with the appropriate components of your module and settings manager. The fields in `CoolSettings` have to be replaced by appropriate settings object implementing the required PanelStudio interfaces. The methods in `CoolFont` have to be replaced by methods in your font manager.
+
+In addition, if you want to save the GUI panel positions, the `gui.loadConfig` should be called after initializing the ClickGUI and `gui.saveConfig` should be called before closing the game. The `ConfigList` interface will need to be implemented.
+
+To allow the user to open the GUI, a ClickGUI module can be created, which calls the `enterGUI` method when enabled.
+
+### HUD
+Use `MinecraftHUDGUI` instead of `MinecraftGUI` and `HUDClickGUI` instead of `ClickGUI` (override `getHUDGUI` instead of `getGUI`). Requries calling `render` and `handleKeyEvent` (provided HUD components have to react to keystrokes) when the ClickGUI is closed. HUD components have to be `FixedComponent` (use `HUDComponent` as base class) and have to be added to `HUDClickGUI` via a `HUDPanel`. This will make the HUD component a draggable panel when the ClickGUI is open. PanelStudio provides `TabGUI` as a stock HUD component.
+
+It is recommended to have hud modules with a function that intitializes and returns a `FixedComponent` which is added in the constructor of the ClickGUI, just before populating the settings panels:
+```
+for (HUDModule hudModule: hudModules) {
+	gui.addHUDComponent(new HUDPanel(hudModule.getComponent(),theme.getPanelRenderer(),module,new SettingsAnimation(CoolSettings.animationSpeed),hudToggle,border));
+	
+}
+```
+The `hudToggle` toggleable can be the `gui` (instance of `HUDClickGUI`) or, if you want to disable showing the HUD panel frames when the GUI is open you can have something like this:
+```
+Toggleable hudToggle=new Toggleable() {
+	@Override
+	public void toggle() {
+	}
+
+	@Override
+	public boolean isOn() {
+		return gui.isOn() && CoolSettings.showHUDPanels.isOn();
+	}
+}
+```
+
+## Reference
+For a list of classes and methods, consult the [javadoc](https://lukflug.github.io/javadoc/panelstudio/0.1.1/). For an example implementation, consult the GameSense source code.
+
+## Creating custom themes
+The components provided by PanelStudio use the methods in the `Renderer` interface to render. A `Theme` consist of three renderers: one for the single components (settings), one for the containers (modules) and one for the panels (categories). To see how themes are implemented, consult the package `com.lukflug.panelstudio.theme`.

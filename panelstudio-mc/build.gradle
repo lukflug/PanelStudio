@@ -1,11 +1,9 @@
 
-allprojects {
-	apply plugin: 'java-library'
-	group = 'com.lukflug'
-	version = '0.1.1'
-}
-
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 compileJava {
 	sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+task packageDistribution(type: Jar) {
+    from "$projectDir/src/main/java"
 }

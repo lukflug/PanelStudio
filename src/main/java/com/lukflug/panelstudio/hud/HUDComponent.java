@@ -5,6 +5,7 @@ import java.awt.Point;
 import com.lukflug.panelstudio.Context;
 import com.lukflug.panelstudio.FixedComponent;
 import com.lukflug.panelstudio.Interface;
+import com.lukflug.panelstudio.PanelConfig;
 import com.lukflug.panelstudio.theme.Renderer;
 
 /**
@@ -97,5 +98,16 @@ public abstract class HUDComponent implements FixedComponent {
 	@Override
 	public void setPosition(Interface inter, Point position) {
 		this.position=position;
+	}
+
+	@Override
+	public void saveConfig(Interface inter, PanelConfig config) {
+		config.savePositon(position);
+	}
+
+	@Override
+	public void loadConfig(Interface inter, PanelConfig config) {
+		Point pos=config.loadPosition();
+		if (pos!=null) position=pos;
 	}
 }
