@@ -22,6 +22,7 @@ This library contains following packages:
 * `com.lukflug.panelstudio.theme`: contains base classes for themes and GameSense themes.
 * `com.lukflug.panelstudio.tabgui`: TabGUI.
 * `com.lukflug.panelstudio.hud`: HUD panels.
+
 In addition to the core PanelStudio library, there is the PanelStudio-MC library (`com.lukflug.panelstudio.mc` package), which is a source code library that includes Minecraft depedencies. It was tested on Minecraft Forge 1.12.2, but probably works on Fabric and may or may not work on other Minecraft versions. The PanelStudio core library works on any Minecraft version (and even on any non-Minecraft application).
 
 ## Features
@@ -149,7 +150,7 @@ The loops and methods involving `CoolCategory`, `CoolModule` and `CoolSetting` h
 
 In addition, if you want to save the GUI panel positions, the `gui.loadConfig` should be called after initializing the ClickGUI and `gui.saveConfig` should be called before closing the game. The `ConfigList` interface will need to be implemented.
 
-To allow the user to open the GUI, a ClickGUI module can be created, which calls the `enterGUI` method when called.
+To allow the user to open the GUI, a ClickGUI module can be created, which calls the `enterGUI` method when enabled.
 
 ### HUD
 Use `MinecraftHUDGUI` instead of `MinecraftGUI` and `HUDClickGUI` instead of `ClickGUI` (override `getHUDGUI` instead of `getGUI`). Requries calling `render` and `handleKeyEvent` (provided HUD components have to react to keystrokes) when the ClickGUI is closed. HUD components have to be `FixedComponent` (use `HUDComponent` as base class) and have to be added to `HUDClickGUI` via a `HUDPanel`. This will make the HUD component a draggable panel when the ClickGUI is open. PanelStudio provides `TabGUI` as a stock HUD component.
@@ -176,7 +177,7 @@ Toggleable hudToggle=new Toggleable() {
 ```
 
 ## Reference
-For a list of classes and methods, consult the [javadoc](https://lukflug.github.io/javadoc/panelstudio/0.1.0/). For an example implementation, consult the GameSense source code.
+For a list of classes and methods, consult the [javadoc](https://lukflug.github.io/javadoc/panelstudio/0.1.1/). For an example implementation, consult the GameSense source code.
 
 ## Creating custom themes
 The components provided by PanelStudio use the methods in the `Renderer` interface to render. A `Theme` consist of three renderers: one for the single components (settings), one for the containers (modules) and one for the panels (categories). To see how themes are implemented, consult the package `com.lukflug.panelstudio.theme`.
