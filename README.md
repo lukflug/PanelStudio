@@ -56,25 +56,24 @@ shadowJar {
 ```
 If you're planning to use PanelStudio-MC you have to also add this:
 ```
-sourceSets {
-	main {
-		java {
-			srcDir 'src/main/java'
-			srcDir 'build/panelstudio'
-		}
+task downloadPanelstudio {
+	doLast {
+		new URL("https://github.com/lukflug/PanelStudio/releases/download/v0.1.1/panelstudio-mc-0.1.1.jar").withInputStream{i->new File("${buildDir}/panelstudio-mc-0.1.1.jar").withOutputStream{it<<i}}
 	}
 }
 
-task downloadPanelstudio {
-	new URL("https://github.com/lukflug/PanelStudio/releases/download/v0.1.1/panelstudio-mc-0.1.1.jar").withInputStream{i->new File("${buildDir}/panelstudio-mc-0.1.1.jar").withOutputStream{it<<i}}
+task unpackPanelstudio(dependsOn: downloadPanelstudio, type: Copy) {
+	from zipTree("${buildDir}/panelstudio-mc-0.1.1.jar")
+	into "src/main/java"
 }
 
-task unpackPanelstudio(dependsOn: downloadPanelstudio, type: Copy) {
-    from zipTree("${buildDir}/panelstudio-mc-0.1.1.jar")
-    into "${buildDir}/panelstudio"
-}
+setupDecompWorkspace.dependsOn(unpackPanelstudio)
 ```
-Run the task `unpackPanelstudio` (which downloads and extracts the PanelStudio-MC source library for you) once before building.
+Run the task `unpackPanelstudio` (which downloads and extracts the PanelStudio-MC source library for you) once before building. If you're using git you may also want to ignore the PanelStudio-MC source in `.gitignore`:
+```
+src/main/java/com/lukflug/panelstudio
+src/main/java/META-INF
+```
 
 ### ClickGUI
 The precise way PanelStudio is used in an utility mod depends on the module and setting manager. However the implementation should roughly follow follwing scheme. The main ClickGUI class should extend `MinecraftGUI` (if using PanelStudio-MC):
