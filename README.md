@@ -23,7 +23,7 @@ This library contains following packages:
 * `com.lukflug.panelstudio.tabgui`: TabGUI.
 * `com.lukflug.panelstudio.hud`: HUD panels.
 
-In addition to the core PanelStudio library, there is the PanelStudio-MC library (`com.lukflug.panelstudio.mc` package), which is a source code library that includes Minecraft depedencies. It was tested on Minecraft Forge 1.12.2, but probably works on Fabric and may or may not work on other Minecraft versions. The PanelStudio core library works on any Minecraft version (and even on any non-Minecraft application).
+In addition to the core PanelStudio library, there is the PanelStudio-MC library (`com.lukflug.panelstudio.mc` package), which is a source code library that includes Minecraft depedencies. It was tested on Minecraft Forge 1.12.2, but may or may not work on Fabric or other Minecraft versions. The PanelStudio core library works on any Minecraft version (and even on any non-Minecraft application).
 
 ## Features
 * Ability to easily create new themes/skins.
