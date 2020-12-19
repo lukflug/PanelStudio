@@ -45,7 +45,7 @@ repositories {
 }
 
 dependencies {
-	compile("com.lukflug:panelstudio:0.1.1")
+	compile("com.lukflug:panelstudio:0.1.2")
 }
 
 shadowJar {
@@ -58,7 +58,7 @@ If you're planning to use PanelStudio-MC you have to also add this:
 ```
 task downloadPanelstudio {
 	doLast {
-		new URL("https://github.com/lukflug/PanelStudio/releases/download/v0.1.1/panelstudio-mc-0.1.1.jar").withInputStream{i->new File("${buildDir}/panelstudio-mc-0.1.1.jar").withOutputStream{it<<i}}
+		new URL("https://github.com/lukflug/PanelStudio/releases/download/v0.1.2/panelstudio-mc-0.1.1.jar").withInputStream{i->new File("${buildDir}/panelstudio-mc-0.1.1.jar").withOutputStream{it<<i}}
 	}
 }
 
@@ -66,13 +66,15 @@ task unpackPanelstudio(dependsOn: downloadPanelstudio, type: Copy) {
 	from zipTree("${buildDir}/panelstudio-mc-0.1.1.jar")
 	into "src/main/java"
 }
-
-setupDecompWorkspace.dependsOn(unpackPanelstudio)
 ```
 Run the task `unpackPanelstudio` (which downloads and extracts the PanelStudio-MC source library for you) once before building. If you're using git you may also want to ignore the PanelStudio-MC source in `.gitignore`:
 ```
 src/main/java/com/lukflug/panelstudio
 src/main/java/META-INF
+```
+You can also do the `unpackPanelstudio` automatically when running `setupDecompWorkspace`, by adding:
+```
+setupDecompWorkspace.dependsOn(unpackPanelstudio)
 ```
 
 ### ClickGUI
@@ -176,7 +178,7 @@ Toggleable hudToggle=new Toggleable() {
 ```
 
 ## Reference
-For a list of classes and methods, consult the [javadoc](https://lukflug.github.io/javadoc/panelstudio/0.1.1/). For an example implementation, consult the GameSense source code.
+For a list of classes and methods, consult the [javadoc](https://lukflug.github.io/javadoc/panelstudio/0.1.2/). For an example implementation, consult the GameSense source code.
 
 ## Creating custom themes
 The components provided by PanelStudio use the methods in the `Renderer` interface to render. A `Theme` consist of three renderers: one for the single components (settings), one for the containers (modules) and one for the panels (categories). To see how themes are implemented, consult the package `com.lukflug.panelstudio.theme`.
