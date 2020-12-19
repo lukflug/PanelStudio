@@ -20,6 +20,10 @@ public class ListComponent extends HUDComponent {
 	 * Flag saving the state of whether to sort up.
 	 */
 	protected boolean lastUp=false;
+	/**
+	 * Flag saving the state of whether to sort right.
+	 */
+	protected boolean lastRight=false;
 	
 	/**
 	 * Constructor.
@@ -53,21 +57,38 @@ public class ListComponent extends HUDComponent {
 	
 	@Override
 	public Point getPosition (Interface inter) {
+		int width=getWidth(inter);
 		int height=renderer.getHeight()+(list.getSize()-1)*inter.getFontHeight();
 		if (lastUp!=list.sortUp()) {
 			if (list.sortUp()) position.translate(0,height);
 			else position.translate(0,-height);
 			lastUp=list.sortUp();
 		}
-		if (list.sortUp()) return new Point(position.x,position.y-height);
-		else return new Point(position);
+		if (lastRight!=list.sortRight()) {
+			if (list.sortRight()) position.translate(width,0);
+			else position.translate(-width,0);
+			lastRight=list.sortRight();
+		}
+		if (list.sortUp()) {
+			if (list.sortRight()) return new Point(position.x-width,position.y-height);
+			else return new Point(position.x-width,position.y-height);
+		} else {
+			if (list.sortRight()) return new Point(new Point(position.x-width,position.y));
+			else return new Point(position);
+		}
 	}
 	
 	@Override
 	public void setPosition (Interface inter, Point position) {
+		int width=getWidth(inter);
 		int height=renderer.getHeight()+(list.getSize()-1)*inter.getFontHeight();
-		if (list.sortUp()) this.position=new Point(position.x,position.y+height);
-		else this.position=new Point(position);
+		if (list.sortUp()) {
+			if (list.sortRight()) this.position=new Point(position.x+width,position.y+height);
+			else this.position=new Point(position.x,position.y+height);
+		} else {
+			if (list.sortRight()) this.position=new Point(position.x+width,position.y);
+			else this.position=new Point(position);
+		}
 	}
 
 	@Override
@@ -89,5 +110,6 @@ public class ListComponent extends HUDComponent {
 	public void loadConfig (Interface inter, PanelConfig config) {
 		super.loadConfig(inter,config);
 		this.lastUp=list.sortUp();
+		this.lastRight=list.sortRight();
 	}
 }
