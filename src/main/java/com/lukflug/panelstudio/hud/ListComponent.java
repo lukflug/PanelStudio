@@ -71,7 +71,7 @@ public class ListComponent extends HUDComponent {
 		}
 		if (list.sortUp()) {
 			if (list.sortRight()) return new Point(position.x-width,position.y-height);
-			else return new Point(position.x-width,position.y-height);
+			else return new Point(position.x,position.y-height);
 		} else {
 			if (list.sortRight()) return new Point(new Point(position.x-width,position.y));
 			else return new Point(position);
