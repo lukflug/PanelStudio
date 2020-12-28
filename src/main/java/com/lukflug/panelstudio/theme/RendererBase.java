@@ -69,7 +69,7 @@ public abstract class RendererBase implements Renderer {
 	 */
 	@Override
 	public int getRightBorder (boolean scroll) {
-		if (scroll) return left;
+		if (scroll) return right;
 		else return 0;
 	}
 
