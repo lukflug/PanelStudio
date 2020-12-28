@@ -42,7 +42,7 @@ public class GameSenseTheme implements Theme {
 		protected final int level,border;
 		
 		public ComponentRenderer (int level, int height, int border) {
-			super(height+2*border,0,0);
+			super(height+2*border,0,0,0);
 			this.level=level;
 			this.border=border;
 		}

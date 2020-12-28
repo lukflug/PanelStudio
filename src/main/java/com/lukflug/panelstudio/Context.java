@@ -47,11 +47,11 @@ public final class Context {
 	 * @param focus focus state of the parent
 	 * @param onTop whether component is in the front
 	 */
-	public Context (Context context, int border, int offset, boolean focus, boolean onTop) {
+	public Context (Context context, int left, int right, int offset, boolean focus, boolean onTop) {
 		inter=context.getInterface();
-		size=new Dimension(context.getSize().width-border*2,0);
+		size=new Dimension(context.getSize().width-left-right,0);
 		position=new Point(context.getPos());
-		position.translate(border,offset);
+		position.translate(left,offset);
 		this.focus=context.hasFocus()&&focus;
 		this.onTop=context.onTop()&&onTop;
 	}

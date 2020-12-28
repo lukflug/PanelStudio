@@ -228,6 +228,6 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	 * @return the context for the container
 	 */
 	protected Context getSubContext (Context context, boolean onTop) {
-		return new Context(context,0,getContainerOffset(),hasFocus(context),true);
+		return new Context(context,0,0,getContainerOffset(),hasFocus(context),true);
 	}
 }

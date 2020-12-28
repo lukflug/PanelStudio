@@ -148,6 +148,6 @@ public class Container extends FocusableComponent {
 	 * @return the context for the child component
 	 */
 	protected Context getSubContext (Context context, int posy) {
-		return new Context(context,renderer.getBorder(),posy,hasFocus(context),true);
+		return new Context(context,renderer.getLeftBorder(),renderer.getRightBorder(),posy,hasFocus(context),true);
 	}
 }

@@ -23,10 +23,16 @@ public interface Renderer {
 	public int getOffset();
 	
 	/**
-	 * Returns the horizontal border around a component in a container.
+	 * Returns the left horizontal border around a component in a container.
 	 * @return the horizontal border
 	 */
-	public int getBorder();
+	public int getLeftBorder();
+	
+	/**
+	 * Returns the right horizontal border around a component in a container.
+	 * @return the horizontal border
+	 */
+	public int getRightBorder();
 	
 	/**
 	 * Render the title bar for a component, while deciding whether to render an active or inactive title bar.
