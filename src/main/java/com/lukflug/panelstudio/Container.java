@@ -43,7 +43,7 @@ public class Container extends FocusableComponent {
 	public void render (Context context) {
 		int posy=renderer.getOffset();
 		for (Component component: components) {
-			Context subContext=new Context(context,renderer.getBorder(),posy,hasFocus(context));
+			Context subContext=getSubContext(context,posy);
 			component.render(subContext);
 			posy+=subContext.getSize().height+renderer.getOffset();
 		}
@@ -59,7 +59,7 @@ public class Container extends FocusableComponent {
 		getHeight(context);
 		updateFocus(context,button);
 		for (Component component: components) {
-			Context subContext=new Context(context,renderer.getBorder(),posy,hasFocus(context));
+			Context subContext=getSubContext(context,posy);
 			component.handleButton(subContext,button);
 			posy+=subContext.getSize().height+renderer.getOffset();
 		}
@@ -73,7 +73,7 @@ public class Container extends FocusableComponent {
 	public void handleKey (Context context, int scancode) {
 		int posy=renderer.getOffset();
 		for (Component component: components) {
-			Context subContext=new Context(context,renderer.getBorder(),posy,hasFocus(context));
+			Context subContext=getSubContext(context,posy);
 			component.handleKey(subContext,scancode);
 			posy+=subContext.getSize().height+renderer.getOffset();
 		}
@@ -87,7 +87,7 @@ public class Container extends FocusableComponent {
 	public void handleScroll (Context context, int diff) {
 		int posy=renderer.getOffset();
 		for (Component component: components) {
-			Context subContext=new Context(context,renderer.getBorder(),posy,hasFocus(context));
+			Context subContext=getSubContext(context,posy);
 			component.handleKey(subContext,diff);
 			posy+=subContext.getSize().height+renderer.getOffset();
 		}
@@ -101,7 +101,7 @@ public class Container extends FocusableComponent {
 	public void getHeight (Context context) {
 		int posy=renderer.getOffset();
 		for (Component component: components) {
-			Context subContext=new Context(context,renderer.getBorder(),posy,hasFocus(context));
+			Context subContext=getSubContext(context,posy);
 			component.getHeight(subContext);
 			posy+=subContext.getSize().height+renderer.getOffset();
 		}
@@ -115,7 +115,7 @@ public class Container extends FocusableComponent {
 	public void exit (Context context) {
 		int posy=renderer.getOffset();
 		for (Component component: components) {
-			Context subContext=new Context(context,renderer.getBorder(),posy,hasFocus(context));
+			Context subContext=getSubContext(context,posy);
 			component.exit(subContext);
 			posy+=subContext.getSize().height+renderer.getOffset();
 		}
@@ -138,5 +138,16 @@ public class Container extends FocusableComponent {
 	 */
 	protected void handleFocus (Context context, boolean focus) {
 		if (!focus) releaseFocus();
+	}
+	
+	
+	/**
+	 * Create sub-context for child component.
+	 * @param context the current context
+	 * @param posy the vertical position of the child component
+	 * @return the context for the child component
+	 */
+	protected Context getSubContext (Context context, int posy) {
+		return new Context(context,renderer.getBorder(),posy,hasFocus(context),true);
 	}
 }

@@ -64,7 +64,7 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 		renderer.renderTitle(context,title,hasFocus(context),isActive(),open.getValue()!=0);
 		if (open.getValue()!=0) {
 			// Pre-calculate clipping rectangle
-			Context subContext=new Context(context,0,getContainerOffset(),hasFocus(context),open.getValue()==1);
+			Context subContext=getSubContext(context,open.getValue()==1);
 			container.getHeight(subContext);
 			Rectangle rect=getClipRect(context,subContext.getSize().height);
 			if (rect!=null) context.getInterface().window(rect);
@@ -83,7 +83,7 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	public void handleButton (Context context, int button) {
 		if (open.getValue()==1) {
 			// Pre-calculate clipping rectangle and update focus state
-			Context subContext=new Context(context,0,getContainerOffset(),hasFocus(context));
+			Context subContext=getSubContext(context,true);
 			container.getHeight(subContext);
 			context.setHeight(getRenderHeight(subContext.getSize().height));
 			updateFocus(context,button);
@@ -91,7 +91,7 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 			boolean onTop=true;
 			Rectangle rect=getClipRect(context,subContext.getSize().height);
 			if (rect!=null) onTop=rect.contains(context.getInterface().getMouse());
-			subContext=new Context(context,0,getContainerOffset(),hasFocus(context),onTop);
+			subContext=getSubContext(context,onTop);
 			container.handleButton(subContext,button);
 			context.setHeight(getRenderHeight(subContext.getSize().height));
 		} else super.handleButton(context,button);
@@ -106,7 +106,7 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	@Override
 	public void handleKey (Context context, int scancode) {
 		if (open.getValue()==1) {
-			Context subContext=new Context(context,0,getContainerOffset(),hasFocus(context));
+			Context subContext=getSubContext(context,true);
 			container.handleKey(subContext,scancode);
 			context.setHeight(getRenderHeight(subContext.getSize().height));
 		} else super.handleKey(context,scancode);
@@ -118,7 +118,7 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	@Override
 	public void handleScroll (Context context, int diff) {
 		if (open.getValue()==1) {
-			Context subContext=new Context(context,0,getContainerOffset(),hasFocus(context));
+			Context subContext=getSubContext(context,true);
 			container.handleKey(subContext,diff);
 			context.setHeight(getRenderHeight(subContext.getSize().height));
 			if (subContext.isHovered()) {
@@ -135,7 +135,7 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	@Override
 	public void getHeight (Context context) {
 		if (open.getValue()!=0) {
-			Context subContext=new Context(context,0,getContainerOffset(),hasFocus(context));
+			Context subContext=getSubContext(context,true);
 			container.getHeight(subContext);
 			context.setHeight(getRenderHeight(subContext.getSize().height));
 		} else super.getHeight(context);
@@ -147,7 +147,7 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	@Override
 	public void exit (Context context) {
 		if (open.getValue()==1) {
-			Context subContext=new Context(context,0,getContainerOffset(),hasFocus(context));
+			Context subContext=getSubContext(context,true);
 			container.exit(subContext);
 			context.setHeight(getRenderHeight(subContext.getSize().height));
 		} else super.exit(context);
@@ -218,5 +218,16 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	@Override
 	public boolean isOn() {
 		return open.isOn();
+	}
+	
+
+	/**
+	 * Create sub-context for container.
+	 * @param context the current context
+	 * @param onTop whether the context should be on top
+	 * @return the context for the container
+	 */
+	protected Context getSubContext (Context context, boolean onTop) {
+		return new Context(context,0,getContainerOffset(),hasFocus(context),true);
 	}
 }
