@@ -210,6 +210,12 @@ public class HUDPanel extends DraggableContainer {
 		public void renderBorder(Context context, boolean focus, boolean active, boolean open) {
 			if (guiOpen.isOn()) renderer.renderBorder(context,focus,active,open);
 		}
+		
+		@Override
+		public int renderScrollBar (Context context, boolean focus, boolean active, boolean scroll, int childHeight, int scrollPosition) {
+			if (guiOpen.isOn()) return renderer.renderScrollBar(context,focus,active,scroll,childHeight,scrollPosition);
+			else return scrollPosition;
+		}
 
 		/**
 		 * Returns invisible color, if GUI is off.

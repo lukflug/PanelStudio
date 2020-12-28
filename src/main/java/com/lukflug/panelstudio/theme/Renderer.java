@@ -97,6 +97,18 @@ public interface Renderer {
 	public void renderBorder (Context context, boolean focus, boolean active, boolean open);
 	
 	/**
+	 * Renders the scroll bar for a container
+	 * @param context context the {@link Context} for the component
+	 * @param focus the focus state for the component
+	 * @param active whether the component is active or inactive
+	 * @param scroll whether the container has scrolling active
+	 * @param childHeight the total height of the children
+	 * @param scrollPosition the current scroll position
+	 * @return the new scroll position
+	 */
+	public int renderScrollBar (Context context, boolean focus, boolean active, boolean scroll, int childHeight, int scrollPosition);
+	
+	/**
 	 * Returns the main color of a title bar.
 	 * @param focus the focus state for the component
 	 * @param active whether the component is active or inactive

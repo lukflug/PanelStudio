@@ -96,6 +96,14 @@ public abstract class RendererBase implements Renderer {
 	public void renderTitle(Context context, String text, boolean focus, boolean active, boolean open) {
 		renderTitle(context,text,focus,active);
 	}
+	
+	/**
+	 * Does nothing.
+	 */
+	@Override
+	public int renderScrollBar (Context context, boolean focus, boolean active, boolean scroll, int childHeight, int scrollPosition) {
+		return scrollPosition;
+	}
 
 	/**
 	 * Returns the font color specified by the color scheme.

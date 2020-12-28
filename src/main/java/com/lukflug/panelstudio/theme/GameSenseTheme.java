@@ -82,6 +82,18 @@ public class GameSenseTheme implements Theme {
 				context.getInterface().fillRect(new Rectangle(new Point(context.getPos().x,context.getPos().y+getHeight()-1),new Dimension(context.getSize().width,1)),color,color,color,color);
 			}
 		}
+		
+		@Override
+		public int renderScrollBar (Context context, boolean focus, boolean active, boolean scroll, int childHeight, int scrollPosition) {
+			if (scroll) {
+				int containerHeight=context.getSize().height-getHeight();
+				int a=(int)(scrollPosition/(double)childHeight*containerHeight)+context.getPos().y+getHeight();
+				int b=(int)((scrollPosition+containerHeight)/(double)childHeight*containerHeight)+context.getPos().y+getHeight();
+				Color color=getDefaultColorScheme().getOutlineColor();
+				context.getInterface().fillRect(new Rectangle(new Point(context.getPos().x+context.getSize().width-getRightBorder(true)-1,context.getPos().y),new Dimension(1,context.getSize().height)),color,color,color,color);
+			}
+			return scrollPosition;
+		}
 
 		@Override
 		public Color getMainColor (boolean focus, boolean active) {
