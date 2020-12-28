@@ -28,6 +28,10 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	 */
 	protected int containerHeight=0;
 	/**
+	 * Cached value of whether scrolling is happening.
+	 */
+	protected boolean scroll=false;
+	/**
 	 * Current scroll offset.
 	 */
 	protected int scrollPosition=0;
@@ -188,6 +192,7 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	protected int getRenderHeight (int childHeight) {
 		this.childHeight=childHeight;
 		containerHeight=getScrollHeight(childHeight);
+		scroll=childHeight>containerHeight;
 		if (scrollPosition>childHeight-containerHeight) scrollPosition=childHeight-containerHeight;
 		if (scrollPosition<0) scrollPosition=0;
 		return (int)(containerHeight*open.getValue()+renderer.getHeight());
@@ -219,7 +224,6 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	public boolean isOn() {
 		return open.isOn();
 	}
-	
 
 	/**
 	 * Create sub-context for container.
@@ -228,6 +232,6 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	 * @return the context for the container
 	 */
 	protected Context getSubContext (Context context, boolean onTop) {
-		return new Context(context,0,0,getContainerOffset(),hasFocus(context),true);
+		return new Context(context,renderer.getLeftBorder(scroll),renderer.getRightBorder(scroll),getContainerOffset(),hasFocus(context),true);
 	}
 }

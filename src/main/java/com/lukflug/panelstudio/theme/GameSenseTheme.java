@@ -15,11 +15,11 @@ public class GameSenseTheme implements Theme {
 	protected ColorScheme scheme;
 	protected Renderer componentRenderer,containerRenderer,panelRenderer;
 	
-	public GameSenseTheme (ColorScheme scheme, int height, int border) {
+	public GameSenseTheme (ColorScheme scheme, int height, int border, int scroll) {
 		this.scheme=scheme;
-		panelRenderer=new ComponentRenderer(0,height,border);
-		containerRenderer=new ComponentRenderer(1,height,border);
-		componentRenderer=new ComponentRenderer(2,height,border);
+		panelRenderer=new ComponentRenderer(0,height,border,scroll);
+		containerRenderer=new ComponentRenderer(1,height,border,scroll);
+		componentRenderer=new ComponentRenderer(2,height,border,scroll);
 	}
 	
 	@Override
@@ -41,8 +41,8 @@ public class GameSenseTheme implements Theme {
 	protected class ComponentRenderer extends RendererBase {
 		protected final int level,border;
 		
-		public ComponentRenderer (int level, int height, int border) {
-			super(height+2*border,0,0,5);
+		public ComponentRenderer (int level, int height, int border, int scroll) {
+			super(height+2*border,0,0,0,scroll);
 			this.level=level;
 			this.border=border;
 		}

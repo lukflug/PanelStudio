@@ -43,7 +43,7 @@ public class ClearTheme implements Theme {
 		protected final boolean panel;
 		
 		public ComponentRenderer (boolean panel, int height, int border) {
-			super(height+2*border,border,0,0);
+			super(height+2*border,border,0,0,0);
 			this.panel=panel;
 		}
 		

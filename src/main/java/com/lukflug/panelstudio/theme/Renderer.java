@@ -23,16 +23,24 @@ public interface Renderer {
 	public int getOffset();
 	
 	/**
-	 * Returns the left horizontal border around a component in a container.
-	 * @return the horizontal border
-	 */
-	public int getLeftBorder();
-	
-	/**
 	 * Returns the right horizontal border around a component in a container.
 	 * @return the horizontal border
 	 */
-	public int getRightBorder();
+	public int getBorder();
+	
+	/**
+	 * Returns the left horizontal border around an entire container.
+	 * @param scroll whether the container was restricted due to scrolling
+	 * @return the horizontal border
+	 */
+	public int getLeftBorder (boolean scroll);
+	
+	/**
+	 * Returns the right horizontal border around an entire container.
+	 * @param scroll whether the container was restricted due to scrolling
+	 * @return the horizontal border
+	 */
+	public int getRightBorder (boolean scroll);
 	
 	/**
 	 * Render the title bar for a component, while deciding whether to render an active or inactive title bar.

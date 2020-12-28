@@ -84,7 +84,7 @@ public class HUDPanel extends DraggableContainer {
 	 */
 	@Override
 	public int getWidth (Interface inter) {
-		return component.getWidth(inter)+renderer.getLeftBorder()+renderer.getRightBorder();
+		return component.getWidth(inter)+renderer.getBorder()*2+renderer.getLeftBorder(scroll)+renderer.getRightBorder(scroll);
 	}
 	
 	/**
@@ -161,17 +161,24 @@ public class HUDPanel extends DraggableContainer {
 		 * Otherwise it will return {@link #minBorder}.
 		 */
 		@Override
-		public int getLeftBorder() {
-			return Math.max(renderer.getLeftBorder(),minBorder);
+		public int getBorder() {
+			return Math.max(renderer.getBorder(),minBorder);
+		}
+
+		/**
+		 * Returns the border defined by the base renderer.
+		 */
+		@Override
+		public int getLeftBorder (boolean scroll) {
+			return renderer.getLeftBorder(scroll);
 		}
 		
 		/**
-		 * Returns the border defined by the base renderer, if it is larger than {@link #minBorder}.
-		 * Otherwise it will return {@link #minBorder}.
+		 * Returns the border defined by the base renderer.
 		 */
 		@Override
-		public int getRightBorder() {
-			return Math.max(renderer.getRightBorder(),minBorder);
+		public int getRightBorder (boolean scroll) {
+			return renderer.getRightBorder(scroll);
 		}
 
 		@Override

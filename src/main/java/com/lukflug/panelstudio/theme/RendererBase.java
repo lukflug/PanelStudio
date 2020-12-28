@@ -12,7 +12,7 @@ public abstract class RendererBase implements Renderer {
 	/**
 	 * Field to store default component dimensions.
 	 */
-	protected final int height,offset,left,right;
+	protected final int height,offset,border,left,right;
 	/**
 	 * Custom color scheme.
 	 */
@@ -24,9 +24,10 @@ public abstract class RendererBase implements Renderer {
 	 * @param offset default vertical offset
 	 * @param border default horizontal border
 	 */
-	public RendererBase (int height, int offset, int left, int right) {
+	public RendererBase (int height, int offset, int border, int left, int right) {
 		this.height=height;
 		this.offset=offset;
+		this.border=border;
 		this.left=left;
 		this.right=right;
 	}
@@ -46,21 +47,30 @@ public abstract class RendererBase implements Renderer {
 	public int getOffset() {
 		return offset;
 	}
-
+	
 	/**
 	 * Get default component horizontal border.
 	 */
-	@Override
-	public int getLeftBorder() {
-		return left;
+	public int getBorder() {
+		return border;
 	}
 
 	/**
-	 * Get default component horizontal border.
+	 * Get default container left horizontal border.
 	 */
 	@Override
-	public int getRightBorder() {
-		return right;
+	public int getLeftBorder (boolean scroll) {
+		if (scroll) return left;
+		else return 0;
+	}
+
+	/**
+	 * Get default container right horizontal border.
+	 */
+	@Override
+	public int getRightBorder (boolean scroll) {
+		if (scroll) return left;
+		else return 0;
 	}
 
 	/**
