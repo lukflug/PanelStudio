@@ -214,7 +214,7 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	 * @return the clipping rectangle
 	 */
 	protected Rectangle getClipRect (Context context, int height) {
-		return new Rectangle(context.getPos().x,context.getPos().y+renderer.getHeight(),context.getSize().width,getRenderHeight(height)-renderer.getHeight());
+		return new Rectangle(context.getPos().x+renderer.getLeftBorder(scroll),context.getPos().y+renderer.getHeight(),context.getSize().width-renderer.getLeftBorder(scroll)-renderer.getRightBorder(scroll),getRenderHeight(height)-renderer.getHeight());
 	}
 
 	/**
