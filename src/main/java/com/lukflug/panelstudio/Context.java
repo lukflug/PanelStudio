@@ -37,6 +37,10 @@ public final class Context {
 	 * Used to indicate that the focus within the parent should be given to the child component.
 	 */
 	private boolean focusRequested=false;
+	/**
+	 * Description set by the child to be displayed when hovered.
+	 */
+	private String description=null;
 	
 	/**
 	 * Constructor that should be used when a parent is calling a method by the child.
@@ -157,5 +161,21 @@ public final class Context {
 	 */
 	public Rectangle getRect() {
 		return new Rectangle(position,size);
+	}
+	
+	/**
+	 * Get the description set by the child.
+	 * @return the current description
+	 */
+	public String getDescription() {
+		return description;
+	}
+	
+	/**
+	 * Set the description when rendering.
+	 * @param description the new description
+	 */
+	public void setDescription (String description) {
+		this.description=description;
 	}
 }

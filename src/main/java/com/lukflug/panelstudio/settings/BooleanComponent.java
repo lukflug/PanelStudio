@@ -21,8 +21,8 @@ public class BooleanComponent extends FocusableComponent {
 	 * @param renderer {@link Renderer} for the component
 	 * @param setting the setting in question
 	 */
-	public BooleanComponent(String title, Renderer renderer, Toggleable setting) {
-		super(title,renderer);
+	public BooleanComponent(String title, String description, Renderer renderer, Toggleable setting) {
+		super(title,description,renderer);
 		this.setting=setting;
 	}
 	

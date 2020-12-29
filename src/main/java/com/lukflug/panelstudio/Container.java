@@ -20,8 +20,8 @@ public class Container extends FocusableComponent {
 	 * @param title the caption of the container
 	 * @param renderer the renderer used by the container
 	 */
-	public Container (String title, Renderer renderer) {
-		super(title,renderer);
+	public Container (String title, String description, Renderer renderer) {
+		super(title,description,renderer);
 		components=new ArrayList<Component>();
 	}
 	
@@ -41,12 +41,16 @@ public class Container extends FocusableComponent {
 	 */
 	@Override
 	public void render (Context context) {
+		String description=null;
 		int posy=renderer.getOffset();
 		for (Component component: components) {
 			Context subContext=getSubContext(context,posy);
 			component.render(subContext);
+			if (subContext.isHovered() && subContext.getDescription()!=null) description=subContext.getDescription();
 			posy+=subContext.getSize().height+renderer.getOffset();
 		}
+		if (description==null) description=this.description;
+		context.setDescription(description);
 		context.setHeight(posy);
 	}
 

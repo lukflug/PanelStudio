@@ -26,8 +26,8 @@ public class NumberComponent extends Slider {
 	 * @param min minimum value for the setting
 	 * @param max maximum value for the setting
 	 */
-	public NumberComponent(String text, Renderer renderer, NumberSetting setting, double min, double max) {
-		super("",renderer);
+	public NumberComponent(String text, String description, Renderer renderer, NumberSetting setting, double min, double max) {
+		super("",description,renderer);
 		this.setting=setting;
 		this.text=text;
 	}

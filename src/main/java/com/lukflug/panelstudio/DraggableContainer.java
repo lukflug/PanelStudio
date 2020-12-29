@@ -40,8 +40,8 @@ public class DraggableContainer extends CollapsibleContainer implements FixedCom
 	 * @param position the initial position of the container
 	 * @param width the width of the container
 	 */
-	public DraggableContainer(String title, Renderer renderer, Toggleable open, Animation animation, Point position, int width) {
-		super(title,renderer,open,animation);
+	public DraggableContainer(String title, String description, Renderer renderer, Toggleable open, Animation animation, Point position, int width) {
+		super(title,description,renderer,open,animation);
 		this.position=position;
 		this.width=width;
 	}

@@ -20,7 +20,7 @@ public class KeybindComponent extends FocusableComponent {
 	 * @param keybind the keybind in question
 	 */
 	public KeybindComponent(Renderer renderer, KeybindSetting keybind) {
-		super("Keybind: \u00A77",renderer);
+		super("Keybind: \u00A77",null,renderer);
 		this.keybind=keybind;
 	}
 	

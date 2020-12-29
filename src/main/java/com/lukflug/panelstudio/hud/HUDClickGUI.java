@@ -9,6 +9,7 @@ import com.lukflug.panelstudio.ClickGUI;
 import com.lukflug.panelstudio.FixedComponent;
 import com.lukflug.panelstudio.Interface;
 import com.lukflug.panelstudio.settings.Toggleable;
+import com.lukflug.panelstudio.theme.DescriptionRenderer;
 
 /**
  * ClickGUI that only renders HUD components when closed.
@@ -32,8 +33,8 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 	 * Constructor.
 	 * @param inter the interface for the ClickGUI
 	 */
-	public HUDClickGUI(Interface inter) {
-		super(inter);
+	public HUDClickGUI (Interface inter, DescriptionRenderer renderer) {
+		super(inter,renderer);
 		allComponents=new ArrayList<FixedComponent>();
 		hudComponents=new HashSet<FixedComponent>();
 	}

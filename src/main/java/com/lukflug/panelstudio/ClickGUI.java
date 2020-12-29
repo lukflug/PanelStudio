@@ -3,6 +3,8 @@ package com.lukflug.panelstudio;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lukflug.panelstudio.theme.DescriptionRenderer;
+
 /**
  * Object representing the entire GUI.
  * All components should be a direct or indirect child of this objects.
@@ -18,13 +20,18 @@ public class ClickGUI {
 	 * The {@link Interface} to be used by the GUI.
 	 */
 	protected Interface inter;
+	/**
+	 * The {@link DescriptionRenderer} to be used by the GUI.
+	 */
+	protected DescriptionRenderer descriptionRenderer;
 	
 	/**
 	 * Constructor for the GUI.
 	 * @param inter the {@link Interface} to be used by the GUI
 	 */
-	public ClickGUI (Interface inter) {
+	public ClickGUI (Interface inter, DescriptionRenderer descriptionRenderer) {
 		this.inter=inter;
+		this.descriptionRenderer=descriptionRenderer;
 		components=new ArrayList<FixedComponent>();
 	}
 	
@@ -48,6 +55,7 @@ public class ClickGUI {
 	 * Render the GUI (lowest component first, highest component last).
 	 */
 	public void render() {
+		Context descriptionContext=null;
 		int highest=0;
 		FixedComponent focusComponent=null;
 		for (int i=components.size()-1;i>=0;i--) {
@@ -64,10 +72,16 @@ public class ClickGUI {
 			Context context=getContext(component,i>=highest);
 			component.render(context);
 			if (context.foucsRequested()) focusComponent=component;
+			if (context.isHovered() && context.getDescription()!=null) {
+				descriptionContext=context;
+			}
 		}
 		if (focusComponent!=null) {
 			components.remove(focusComponent);
 			components.add(focusComponent);
+		}
+		if (descriptionContext!=null && descriptionRenderer!=null) {
+			descriptionRenderer.renderDescription(descriptionContext);
 		}
 	}
 	

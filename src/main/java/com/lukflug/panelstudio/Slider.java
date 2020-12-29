@@ -16,8 +16,8 @@ public abstract class Slider extends FocusableComponent {
 	 * @param title caption of the slider
 	 * @param renderer renderer for the slider
 	 */
-	public Slider(String title, Renderer renderer) {
-		super(title, renderer);
+	public Slider(String title, String description, Renderer renderer) {
+		super(title,description,renderer);
 	}
 
 	/**

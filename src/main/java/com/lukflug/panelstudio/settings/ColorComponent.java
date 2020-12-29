@@ -48,8 +48,8 @@ public class ColorComponent extends CollapsibleContainer {
 	 * @param rainbow whether to render a rainbow slider
 	 * @param colorModel {@link Toggleable} indicating whether to use RGB (false) or HSB (true)
 	 */
-	public ColorComponent(String title, Renderer renderer, Animation animation, Renderer componentRenderer, ColorSetting setting, boolean alpha, boolean rainbow, Toggleable colorModel) {
-		super(title,renderer,new SimpleToggleable(false),animation);
+	public ColorComponent(String title, String description, Renderer renderer, Animation animation, Renderer componentRenderer, ColorSetting setting, boolean alpha, boolean rainbow, Toggleable colorModel) {
+		super(title,description,renderer,new SimpleToggleable(false),animation);
 		this.setting=setting;
 		this.alpha=alpha;
 		this.rainbow=rainbow;
@@ -84,7 +84,7 @@ public class ColorComponent extends CollapsibleContainer {
 		 * @param renderer the {@link Renderer} for the component
 		 */
 		public ColorButton(Renderer renderer) {
-			super("Rainbow",renderer);
+			super("Rainbow",null,renderer);
 		}
 		
 		/**
@@ -127,7 +127,7 @@ public class ColorComponent extends CollapsibleContainer {
 		 * @param value index of slider
 		 */
 		public ColorSlider(Renderer renderer, int value) {
-			super("",renderer);
+			super("",null,renderer);
 			this.value=value;
 		}
 		

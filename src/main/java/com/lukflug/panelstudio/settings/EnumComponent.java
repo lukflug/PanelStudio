@@ -21,8 +21,8 @@ public class EnumComponent extends FocusableComponent {
 	 * @param renderer {@link Renderer} for the component
 	 * @param setting the setting in question
 	 */
-	public EnumComponent(String title, Renderer renderer, EnumSetting setting) {
-		super(title,renderer);
+	public EnumComponent(String title, String description, Renderer renderer, EnumSetting setting) {
+		super(title,description,renderer);
 		this.setting=setting;
 	}
 

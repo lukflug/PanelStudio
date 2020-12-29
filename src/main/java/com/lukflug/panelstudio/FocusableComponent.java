@@ -12,6 +12,10 @@ public class FocusableComponent implements Component {
 	 */
 	protected String title;
 	/**
+	 * The description for this component.
+	 */
+	protected String description;
+	/**
 	 * The {@link Renderer} for this component.
 	 */
 	protected Renderer renderer;
@@ -25,9 +29,10 @@ public class FocusableComponent implements Component {
 	 * @param title the caption for this component
 	 * @param renderer the {@link Renderer} for this component
 	 */
-	public FocusableComponent (String title, Renderer renderer) {
+	public FocusableComponent (String title, String description, Renderer renderer) {
 		this.title=title;
 		this.renderer=renderer;
+		this.description=description;
 	}
 	
 	/**
@@ -44,6 +49,7 @@ public class FocusableComponent implements Component {
 	@Override
 	public void render(Context context) {
 		context.setHeight(renderer.getHeight());
+		context.setDescription(description);
 	}
 
 	/**

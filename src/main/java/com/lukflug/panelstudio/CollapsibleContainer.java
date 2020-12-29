@@ -43,9 +43,9 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	 * @param open the {@link Toggleable} for {@link #open}
 	 * @param animation the animation for this container
 	 */
-	public CollapsibleContainer (String title, Renderer renderer, Toggleable open, Animation animation) {
-		super(title,renderer);
-		container=new Container(title,renderer);
+	public CollapsibleContainer (String title, String description, Renderer renderer, Toggleable open, Animation animation) {
+		super(title,description,renderer);
+		container=new Container(title,null,renderer);
 		this.open=new AnimatedToggleable(open,animation);
 	}
 	
@@ -75,6 +75,7 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 			// Render component
 			container.render(subContext);
 			if (rect!=null) context.getInterface().restore();
+			if (subContext.getDescription()!=null) context.setDescription(subContext.getDescription());
 			context.setHeight(getRenderHeight(subContext.getSize().height));
 		}
 		scrollPosition=renderer.renderScrollBar(context,hasFocus(context),isActive(),scroll,childHeight,scrollPosition);

@@ -13,7 +13,7 @@ A simple yet flexible library to create ClickGUIs designed for use in Minecraft 
 * Future Theme:
 ![future](https://cdn.discordapp.com/attachments/747111616407011389/779996632334073896/2020-11-21_20.25.30.png)
 
-This repostiory only includes the GameSense themes, however, since Cyber didn't want me to publish the other themes. The library has no depedencies (aside from the JRE itself), so it can be easily used for other purposes, aside from Minecraft utility mods. Thanks to Go_Hoosiers, for suggesting the name of this library. If you use this library, some attribution would be greatly appreciated. Consider visiting the PanelStudio discord server: (https://discord.gg/E3DrF4XvUE).
+This repostiory only includes the GameSense themes, however, since Cyber didn't want me to publish the other themes. The library has no depedencies (aside from the JRE itself), so it can be easily used for other purposes, aside from Minecraft utility mods. Thanks to Go_Hoosiers, for suggesting the name of this library. If you use this library, some attribution would be greatly appreciated. Consider visiting the PanelStudio discord server: https://discord.gg/E3DrF4XvUE.
 
 ## Structure
 This library contains following packages:
@@ -36,7 +36,7 @@ A jar of this library is available in the Maven repository at https://lukflug.gi
 
 ### Use in Gradle
 Add following to your `build.gradle`:
-```
+```groovy
 repositories {
 	maven {
 		name = 'lukflug'
@@ -55,7 +55,7 @@ shadowJar {
 }
 ```
 If you're planning to use PanelStudio-MC you have to also add this:
-```
+```groovy
 task downloadPanelstudio {
 	doLast {
 		new URL("https://github.com/lukflug/PanelStudio/releases/download/v0.1.2/panelstudio-mc-0.1.1.jar").withInputStream{i->new File("${buildDir}/panelstudio-mc-0.1.1.jar").withOutputStream{it<<i}}
@@ -68,18 +68,18 @@ task unpackPanelstudio(dependsOn: downloadPanelstudio, type: Copy) {
 }
 ```
 Run the task `unpackPanelstudio` (which downloads and extracts the PanelStudio-MC source library for you) once before building. If you're using git you may also want to ignore the PanelStudio-MC source in `.gitignore`:
-```
+```groovy
 src/main/java/com/lukflug/panelstudio
 src/main/java/META-INF
 ```
 You can also do the `unpackPanelstudio` automatically when running `setupDecompWorkspace`, by adding:
-```
+```groovy
 setupDecompWorkspace.dependsOn(unpackPanelstudio)
 ```
 
 ### ClickGUI
 The precise way PanelStudio is used in an utility mod depends on the module and setting manager. However the implementation should roughly follow follwing scheme. The main ClickGUI class should extend `MinecraftGUI` (if using PanelStudio-MC):
-```
+```java
 public class CoolGUI extends MinecraftGUI {
 	private final Toggleable colorToggle;
 	private final GUIInterface guiInterface;
@@ -113,20 +113,21 @@ public class CoolGUI extends MinecraftGUI {
 			}
 		};
 		theme=new GameSenseTheme(new SettingsColorScheme(CoolSettings.activeColor,CoolSettings.inactiveColor,CoolSettings.backgroundColor,CoolSettings.outlineColor,CoolSettings.fontColor,CoolSettings.opacity),height,2); // <-- Can be replaced by another theme (could be a custom one)
-		gui=new ClickGUI(guiInterface);
+		gui=new ClickGUI(guiInterface,null);
 		// Populate the ClickGUI with modules and settings
 		for (CoolCategory category: categories) {
-			DraggableContainer panel=new DraggableContainer(category.name,theme.getPanelRenderer(),new SimpleToggleable(false),new SettingsAnimation(CoolSettings.animationSpeed),new Point(x,y),width); // <-- Width and default position of the panels needs to be defined
+			DraggableContainer panel=new DraggableContainer(category.name,null,theme.getPanelRenderer(),new SimpleToggleable(false),new SettingsAnimation(CoolSettings.animationSpeed),new Point(x,y),width); // <-- Width and default position of the panels needs to be defined
 			gui.addComponent(panel);
 			for (CoolModule module: category) {
 				CollapsibleContainer container=new ToggleableContainer(module.name,theme.getContainerRenderer(),new SimpleToggleable(false),new SettingsAnimation(CoolSettings.animationSpeed),module); // <-- It is recommended that the module-class implements Toggleable
 				panel.addComponent(container);
 				for (CoolSetting setting: module) {
-					if (setting instanceof Toggleable) cotainer.addComponent(setting.name,theme.getComponentRenderer(),setting);
-					else if (setting instanceof NumberSetting) cotainer.addComponent(setting.name,theme.getComponentRenderer(),setting,setting.min,setting.max);
-					else if (setting instanceof EnumSetting) cotainer.addComponent(setting.name,theme.getComponentRenderer(),setting);
-					else if (setting instanceof ColorSetting) cotainer.addComponent(setting.name,theme.getComponentRenderer(),new SettingsAnimation(CoolSettings.animationSpeed),setting,setting.alpha,setting.rainbowEnabled,colorToggle);
+					if (setting instanceof Toggleable) container.addComponent(new BooleanComponent(setting.name,null,theme.getComponentRenderer(),(Toggleable)setting));
+					else if (setting instanceof NumberSetting) container.addComponent(new NumberComponent(setting.name,null,theme.getComponentRenderer(),(NumberSetting)setting,setting.min,setting.max));
+					else if (setting instanceof EnumSetting) container.addComponent(new EnumComponent(setting.name,null,theme.getComponentRenderer(),(EnumSetting)setting));
+					else if (setting instanceof ColorSetting) container.addComponent(new ColorComponent(setting.name,null,theme.getComponentRenderer(),new SettingsAnimation(CoolSettings.animationSpeed),(ColorSetting)setting,setting.alpha,setting.rainbowEnabled,colorToggle));
 				}
+				container.addComponent(new KeybindComponent(theme.getComponentRenderer(),module.getKeybind()));
 			}
 		}
 	}
@@ -154,17 +155,17 @@ In addition, if you want to save the GUI panel positions, the `gui.loadConfig` s
 To allow the user to open the GUI, a ClickGUI module can be created, which calls the `enterGUI` method when enabled.
 
 ### HUD
-Use `MinecraftHUDGUI` instead of `MinecraftGUI` and `HUDClickGUI` instead of `ClickGUI` (override `getHUDGUI` instead of `getGUI`). Requries calling `render` and `handleKeyEvent` (provided HUD components have to react to keystrokes) when the ClickGUI is closed. HUD components have to be `FixedComponent` (use `HUDComponent` as base class) and have to be added to `HUDClickGUI` via a `HUDPanel`. This will make the HUD component a draggable panel when the ClickGUI is open. PanelStudio provides `TabGUI` as a stock HUD component.
+Use `MinecraftHUDGUI` instead of `MinecraftGUI` and `HUDClickGUI` instead of `ClickGUI` (override `getHUDGUI` instead of `getGUI`). Requires calling `render` and `handleKeyEvent` (provided HUD components have to react to keystrokes) when the ClickGUI is closed. HUD components have to be `FixedComponent` (use `HUDComponent` as base class) and have to be added to `HUDClickGUI` via a `HUDPanel`. This will make the HUD component a draggable panel when the ClickGUI is open. PanelStudio provides `TabGUI` as a stock HUD component.
 
-It is recommended to have hud modules with a function that intitializes and returns a `FixedComponent` which is added in the constructor of the ClickGUI, just before populating the settings panels:
-```
+It is recommended to have HUD modules with a function that initializes and returns a `FixedComponent` which is added in the constructor of the ClickGUI, just before populating the settings panels:
+```java
 for (HUDModule hudModule: hudModules) {
 	gui.addHUDComponent(new HUDPanel(hudModule.getComponent(),theme.getPanelRenderer(),module,new SettingsAnimation(CoolSettings.animationSpeed),hudToggle,border));
 	
 }
 ```
 The `hudToggle` toggleable can be the `gui` (instance of `HUDClickGUI`) or, if you want to disable showing the HUD panel frames when the GUI is open you can have something like this:
-```
+```java
 Toggleable hudToggle=new Toggleable() {
 	@Override
 	public void toggle() {
