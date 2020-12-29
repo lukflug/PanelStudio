@@ -92,8 +92,8 @@ public class GameSenseTheme implements Theme {
 				Color background=getMainColor(focus,false);
 				Color slider=getMainColor(focus,true);
 				context.getInterface().fillRect(new Rectangle(new Point(context.getPos().x+context.getSize().width-getRightBorder(true),context.getPos().y+getHeight()),new Dimension(getRightBorder(true),a)),background,background,background,background);
-				context.getInterface().fillRect(new Rectangle(new Point(context.getPos().x+context.getSize().width-getRightBorder(true),context.getPos().y+getHeight()),new Dimension(getRightBorder(true),b-a)),slider,slider,slider,slider);
-				context.getInterface().fillRect(new Rectangle(new Point(context.getPos().x+context.getSize().width-getRightBorder(true),context.getPos().y+getHeight()),new Dimension(getRightBorder(true),context.getSize().height-getHeight()-b)),background,background,background,background);
+				context.getInterface().fillRect(new Rectangle(new Point(context.getPos().x+context.getSize().width-getRightBorder(true),context.getPos().y+getHeight()+a),new Dimension(getRightBorder(true),b-a)),slider,slider,slider,slider);
+				context.getInterface().fillRect(new Rectangle(new Point(context.getPos().x+context.getSize().width-getRightBorder(true),context.getPos().y+getHeight()+b),new Dimension(getRightBorder(true),context.getSize().height-getHeight()-b)),background,background,background,background);
 				Color color=getDefaultColorScheme().getOutlineColor();
 				context.getInterface().fillRect(new Rectangle(new Point(context.getPos().x+context.getSize().width-getRightBorder(true)-1,context.getPos().y+getHeight()),new Dimension(1,context.getSize().height-getHeight())),color,color,color,color);
 			}
