@@ -71,11 +71,16 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 			Context subContext=getSubContext(context,open.getValue()==1);
 			container.getHeight(subContext);
 			Rectangle rect=getClipRect(context,subContext.getSize().height);
-			if (rect!=null) context.getInterface().window(rect);
+			boolean onTop=open.getValue()==1;
+			if (rect!=null) {
+				onTop=rect.contains(context.getInterface().getMouse());
+				context.getInterface().window(rect);
+			}
+			subContext=getSubContext(context,onTop);
 			// Render component
 			container.render(subContext);
 			if (rect!=null) context.getInterface().restore();
-			if (subContext.getDescription()!=null) context.setDescription(subContext.getDescription());
+			if (subContext.isHovered()) context.setDescription(subContext.getDescription());
 			context.setHeight(getRenderHeight(subContext.getSize().height));
 		}
 		scrollPosition=renderer.renderScrollBar(context,hasFocus(context),isActive(),scroll,childHeight,scrollPosition);

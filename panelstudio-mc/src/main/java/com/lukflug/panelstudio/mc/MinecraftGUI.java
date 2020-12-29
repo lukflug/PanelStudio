@@ -133,6 +133,10 @@ public abstract class MinecraftGUI extends GuiScreen {
 	 * @author lukflug
 	 */
 	public abstract class GUIInterface extends GLInterface {
+		public GUIInterface (boolean clipX) {
+			super(clipX);
+		}
+		
 		@Override
 		public boolean getButton(int button) {
 			switch (button) {

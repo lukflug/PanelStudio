@@ -51,6 +51,11 @@ public abstract class GLInterface implements Interface {
 	 * Clipping rectangle stack.
 	 */
 	private Stack<Rectangle> clipRect=new Stack<Rectangle>();
+	protected boolean clipX;
+	
+	public GLInterface (boolean clipX) {
+		this.clipX=clipX;
+	}
 
 	@Override
 	public void fillTriangle(Point pos1, Point pos2, Point pos3, Color c1, Color c2, Color c3) {
@@ -170,6 +175,10 @@ public abstract class GLInterface implements Interface {
 		GLU.gluProject(r.x+r.width,r.y+r.height,getZLevel(),MODELVIEW,PROJECTION,VIEWPORT,COORDS);
 		x2=COORDS.get(0);
 		y2=COORDS.get(1);
+		if (!clipX) {
+			x1=VIEWPORT.get(0);
+			x2=x1+VIEWPORT.get(2);
+		}
 		GL11.glScissor(Math.round(Math.min(x1,x2)),Math.round(Math.min(y1,y2)),Math.round(Math.abs(x2-x1)),Math.round(Math.abs(y2-y1)));
 		GL11.glEnable(GL11.GL_SCISSOR_TEST);
 	}
