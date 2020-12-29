@@ -96,6 +96,9 @@ public class GameSenseTheme implements Theme {
 				context.getInterface().fillRect(new Rectangle(new Point(context.getPos().x+context.getSize().width-getRightBorder(true),context.getPos().y+getHeight()+b),new Dimension(getRightBorder(true),context.getSize().height-getHeight()-b)),background,background,background,background);
 				Color color=getDefaultColorScheme().getOutlineColor();
 				context.getInterface().fillRect(new Rectangle(new Point(context.getPos().x+context.getSize().width-getRightBorder(true)-1,context.getPos().y+getHeight()),new Dimension(1,context.getSize().height-getHeight())),color,color,color,color);
+				if (context.isClicked() && context.getInterface().getMouse().x>=context.getPos().x+context.getSize().width-getRightBorder(true)) {
+					return (int)((context.getInterface().getMouse().y-context.getPos().y-getHeight())*childHeight/(double)containerHeight-containerHeight/2.0);
+				}
 			}
 			return scrollPosition;
 		}
