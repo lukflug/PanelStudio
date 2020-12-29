@@ -68,7 +68,7 @@ task unpackPanelstudio(dependsOn: downloadPanelstudio, type: Copy) {
 }
 ```
 Run the task `unpackPanelstudio` (which downloads and extracts the PanelStudio-MC source library for you) once before building. If you're using git you may also want to ignore the PanelStudio-MC source in `.gitignore`:
-```groovy
+```gitignore
 src/main/java/com/lukflug/panelstudio
 src/main/java/META-INF
 ```
