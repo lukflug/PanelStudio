@@ -28,7 +28,7 @@ public abstract class Slider extends FocusableComponent {
 	@Override
 	public void render (Context context) {
 		super.render(context);
-		if (context.isClicked() && attached) {
+		if (attached) {
 			double value=(context.getInterface().getMouse().x-context.getPos().x)/(double)(context.getSize().width-1);
 			if (value<0) value=0;
 			else if (value>1) value=1;
