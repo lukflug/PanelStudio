@@ -40,20 +40,27 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 	}
 	
 	/**
-	 * Returns all components.
-	 */
-	@Override
-	public List<FixedComponent> getComponents() {
-		return allComponents;
-	}
-	
-	/**
 	 * Add component to {@link #allComponents} instead of the {@link ClickGUI} list.
 	 */
 	@Override
 	public void addComponent (FixedComponent component) {
 		allComponents.add(component);
-		if (guiOpen) super.addComponent(component);
+		if (guiOpen) components.add(component);
+		permanentComponents.add(component);
+	}
+
+	@Override
+	public void showComponent(FixedComponent component) {
+		allComponents.add(component);
+		if (guiOpen) components.add(component);
+	}
+
+	@Override
+	public void hideComponent(FixedComponent component) {
+		if (!permanentComponents.contains(component)) {
+			allComponents.remove(component);
+			components.remove(component);
+		}
 	}
 	
 	/**
@@ -62,8 +69,9 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 	 */
 	public void addHUDComponent (FixedComponent component) {
 		hudComponents.add(component);
-		addComponent(component);
-		if (!guiOpen) super.addComponent(component);
+		allComponents.add(component);
+		components.add(component);
+		permanentComponents.add(component);
 	}
 
 	/**
@@ -92,5 +100,21 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 		for (FixedComponent component: allComponents) {
 			if (hudComponents.contains(component)) components.add(component);
 		}
+	}
+
+	@Override
+	public Toggleable getComponentToggleable(FixedComponent component) {
+		return new Toggleable() {
+			@Override
+			public void toggle() {
+				if (isOn()) hideComponent(component);
+				else showComponent(component);
+			}
+
+			@Override
+			public boolean isOn() {
+				return allComponents.contains(component);
+			}
+		};
 	}
 }

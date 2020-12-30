@@ -3,6 +3,7 @@ package com.lukflug.panelstudio;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lukflug.panelstudio.settings.Toggleable;
 import com.lukflug.panelstudio.theme.DescriptionRenderer;
 
 /**
@@ -10,12 +11,16 @@ import com.lukflug.panelstudio.theme.DescriptionRenderer;
  * All components should be a direct or indirect child of this objects.
  * @author lukflug
  */
-public class ClickGUI {
+public class ClickGUI implements PanelManager {
 	/**
 	 * List of direct child components (i.e. panels).
 	 * The must all be {@link FixedComponent}.
 	 */
 	protected List<FixedComponent> components;
+	/**
+	 * List of permanent components.
+	 */
+	protected List<FixedComponent> permanentComponents;
 	/**
 	 * The {@link Interface} to be used by the GUI.
 	 */
@@ -37,10 +42,10 @@ public class ClickGUI {
 	
 	/**
 	 * Get a list of panels in the GUI.
-	 * @return list of all panels (direct children)
+	 * @return list of all permanent panels (direct children)
 	 */
 	public List<FixedComponent> getComponents() {
-		return components;
+		return permanentComponents;
 	}
 	
 	/**
@@ -49,6 +54,17 @@ public class ClickGUI {
 	 */
 	public void addComponent (FixedComponent component) {
 		components.add(component);
+		permanentComponents.add(component);
+	}
+
+	@Override
+	public void showComponent(FixedComponent component) {
+		components.add(component);
+	}
+
+	@Override
+	public void hideComponent(FixedComponent component) {
+		if (!permanentComponents.contains(component)) components.remove(component);
 	}
 	
 	/**
@@ -189,7 +205,6 @@ public class ClickGUI {
 		config.end(true);
 	}
 	
-	
 	/**
 	 * Create a context for a component.
 	 * @param component the component
@@ -198,5 +213,21 @@ public class ClickGUI {
 	 */
 	protected Context getContext (FixedComponent component, boolean highest) {
 		return new Context(inter,component.getWidth(inter),component.getPosition(inter),true,highest);
+	}
+
+	@Override
+	public Toggleable getComponentToggleable(FixedComponent component) {
+		return new Toggleable() {
+			@Override
+			public void toggle() {
+				if (isOn()) hideComponent(component);
+				else showComponent(component);
+			}
+
+			@Override
+			public boolean isOn() {
+				return components.contains(component);
+			}
+		};
 	}
 }
