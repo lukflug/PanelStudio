@@ -11,6 +11,8 @@ import com.lukflug.panelstudio.theme.Renderer;
  * @author lukflug
  */
 public abstract class Slider extends FocusableComponent {
+	protected boolean attached=false; 
+	
 	/**
 	 * Constructor.
 	 * @param title caption of the slider
@@ -21,19 +23,33 @@ public abstract class Slider extends FocusableComponent {
 	}
 
 	/**
-	 * Renderers the slider.
+	 * Renders the slider.
 	 */
 	@Override
 	public void render (Context context) {
 		super.render(context);
-		if (context.isClicked()) {
+		if (context.isClicked() && attached) {
 			double value=(context.getInterface().getMouse().x-context.getPos().x)/(double)(context.getSize().width-1);
 			if (value<0) value=0;
 			else if (value>1) value=1;
 			setValue(value);
 		}
+		if (!context.getInterface().getButton(Interface.LBUTTON)) {
+			attached=false;
+		}
 		renderer.renderRect(context,"",hasFocus(context),false,new Rectangle(new Point(context.getPos().x+(int)(context.getSize().width*getValue()),context.getPos().y),new Dimension((int)(context.getSize().width*(1-getValue())),renderer.getHeight())),false);
 		renderer.renderRect(context,title,hasFocus(context),true,new Rectangle(context.getPos(),new Dimension((int)(context.getSize().width*getValue()),renderer.getHeight())),true);
+	}
+	
+	/**
+	 * Sets {@link #attached}, when clicked.
+	 */
+	@Override
+	public void handleButton (Context context, int button) {
+		super.handleButton(context,button);
+		if (button==Interface.LBUTTON && context.isClicked()) {
+			attached=true;
+		}
 	}
 
 	/**
