@@ -20,11 +20,11 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 	/**
 	 * List of all components.
 	 */
-	protected List<FixedComponent> allComponents;
+	protected List<FixedComponent> allComponents=new ArrayList<FixedComponent>();
 	/**
 	 * List of HUD components.
 	 */
-	protected Set<FixedComponent> hudComponents;
+	protected Set<FixedComponent> hudComponents=new HashSet<FixedComponent>();
 	/**
 	 * Whether the GUI components are shown or not.
 	 */
@@ -36,8 +36,6 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 	 */
 	public HUDClickGUI (Interface inter, DescriptionRenderer renderer) {
 		super(inter,renderer);
-		allComponents=new ArrayList<FixedComponent>();
-		hudComponents=new HashSet<FixedComponent>();
 	}
 	
 	/**
@@ -46,14 +44,20 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 	@Override
 	public void addComponent (FixedComponent component) {
 		allComponents.add(component);
-		if (guiOpen) components.add(component);
 		permanentComponents.add(component);
+		if (guiOpen) {
+			components.add(component);
+			component.enter(getContext(component,false));
+		}
 	}
 
 	@Override
 	public void showComponent(FixedComponent component) {
 		allComponents.add(component);
-		if (guiOpen) components.add(component);
+		if (guiOpen) {
+			components.add(component);
+			component.enter(getContext(component,false));
+		}
 	}
 
 	@Override
@@ -61,6 +65,7 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 		if (!permanentComponents.contains(component)) {
 			allComponents.remove(component);
 			components.remove(component);
+			component.exit(getContext(component,false));
 		}
 	}
 	

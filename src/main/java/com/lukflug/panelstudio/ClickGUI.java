@@ -16,11 +16,11 @@ public class ClickGUI implements PanelManager {
 	 * List of direct child components (i.e. panels).
 	 * The must all be {@link FixedComponent}.
 	 */
-	protected List<FixedComponent> components;
+	protected List<FixedComponent> components=new ArrayList<FixedComponent>();
 	/**
 	 * List of permanent components.
 	 */
-	protected List<FixedComponent> permanentComponents;
+	protected List<FixedComponent> permanentComponents=new ArrayList<FixedComponent>();
 	/**
 	 * The {@link Interface} to be used by the GUI.
 	 */
@@ -37,7 +37,6 @@ public class ClickGUI implements PanelManager {
 	public ClickGUI (Interface inter, DescriptionRenderer descriptionRenderer) {
 		this.inter=inter;
 		this.descriptionRenderer=descriptionRenderer;
-		components=new ArrayList<FixedComponent>();
 	}
 	
 	/**
