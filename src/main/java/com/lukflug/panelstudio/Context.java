@@ -38,6 +38,10 @@ public final class Context {
 	 */
 	private boolean focusRequested=false;
 	/**
+	 * Set to true by the child, if focus should not be requested.
+	 */
+	private boolean focusOverride=false;
+	/**
 	 * Description set by the child to be displayed when hovered.
 	 */
 	private String description=null;
@@ -132,10 +136,11 @@ public final class Context {
 	}
 
 	/**
-	 * Reverse {@link #requestFocus()}.
+	 * Reverses {@link #requestFocus()} and ask parent not to request focus.
 	 */
-	public void unrequestFocus() {
+	public void releaseFocus() {
 		focusRequested=false;
+		focusOverride=false;
 	}
 
 	/**
@@ -144,6 +149,14 @@ public final class Context {
 	 */
 	public boolean foucsRequested() {
 		return focusRequested;
+	}
+	
+	/**
+	 * Returns {@link #focusOverride}.
+	 * @return whether the parent may request focus.
+	 */
+	public boolean focusReleased() {
+		return focusOverride;
 	}
 	
 	/**

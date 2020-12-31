@@ -14,6 +14,10 @@ public class Container extends FocusableComponent {
 	 * List of child component.
 	 */
 	protected List<Component> components;
+	/**
+	 * Temporary storage for child description.
+	 */
+	private String tempDescription;
 	
 	/**
 	 * Constructor for a container.
@@ -41,17 +45,13 @@ public class Container extends FocusableComponent {
 	 */
 	@Override
 	public void render (Context context) {
-		String description=null;
-		int posy=renderer.getOffset();
-		for (Component component: components) {
-			Context subContext=getSubContext(context,posy);
+		tempDescription=null;
+		doComponentLoop(context,(subContext,component)->{
 			component.render(subContext);
-			if (subContext.isHovered() && subContext.getDescription()!=null) description=subContext.getDescription();
-			posy+=subContext.getSize().height+renderer.getOffset();
-		}
-		if (description==null) description=this.description;
-		context.setDescription(description);
-		context.setHeight(posy);
+			if (subContext.isHovered() && subContext.getDescription()!=null) tempDescription=subContext.getDescription();
+		});
+		if (tempDescription==null) tempDescription=this.description;
+		context.setDescription(tempDescription);
 	}
 
 	/**
@@ -59,15 +59,12 @@ public class Container extends FocusableComponent {
 	 */
 	@Override
 	public void handleButton (Context context, int button) {
-		int posy=renderer.getOffset();
 		getHeight(context);
 		updateFocus(context,button);
-		for (Component component: components) {
-			Context subContext=getSubContext(context,posy);
+		doComponentLoop(context,(subContext,component)->{
 			component.handleButton(subContext,button);
-			posy+=subContext.getSize().height+renderer.getOffset();
-		}
-		context.setHeight(posy);
+			if (subContext.focusReleased()) context.releaseFocus();
+		});
 	}
 
 	/**
@@ -75,13 +72,7 @@ public class Container extends FocusableComponent {
 	 */
 	@Override
 	public void handleKey (Context context, int scancode) {
-		int posy=renderer.getOffset();
-		for (Component component: components) {
-			Context subContext=getSubContext(context,posy);
-			component.handleKey(subContext,scancode);
-			posy+=subContext.getSize().height+renderer.getOffset();
-		}
-		context.setHeight(posy);
+		doComponentLoop(context,(subContext,component)->component.handleKey(subContext,scancode));
 	}
 
 	/**
@@ -89,13 +80,7 @@ public class Container extends FocusableComponent {
 	 */
 	@Override
 	public void handleScroll (Context context, int diff) {
-		int posy=renderer.getOffset();
-		for (Component component: components) {
-			Context subContext=getSubContext(context,posy);
-			component.handleKey(subContext,diff);
-			posy+=subContext.getSize().height+renderer.getOffset();
-		}
-		context.setHeight(posy);
+		doComponentLoop(context,(subContext,component)->component.handleScroll(subContext,diff));
 	}
 	
 	/**
@@ -103,13 +88,7 @@ public class Container extends FocusableComponent {
 	 */
 	@Override
 	public void getHeight (Context context) {
-		int posy=renderer.getOffset();
-		for (Component component: components) {
-			Context subContext=getSubContext(context,posy);
-			component.getHeight(subContext);
-			posy+=subContext.getSize().height+renderer.getOffset();
-		}
-		context.setHeight(posy);
+		doComponentLoop(context,(subContext,component)->component.getHeight(subContext));
 	}
 
 	/**
@@ -117,13 +96,7 @@ public class Container extends FocusableComponent {
 	 */
 	@Override
 	public void enter (Context context) {
-		int posy=renderer.getOffset();
-		for (Component component: components) {
-			Context subContext=getSubContext(context,posy);
-			component.enter(subContext);
-			posy+=subContext.getSize().height+renderer.getOffset();
-		}
-		context.setHeight(posy);
+		doComponentLoop(context,(subContext,component)->component.enter(subContext));
 	}
 
 	/**
@@ -131,13 +104,7 @@ public class Container extends FocusableComponent {
 	 */
 	@Override
 	public void exit (Context context) {
-		int posy=renderer.getOffset();
-		for (Component component: components) {
-			Context subContext=getSubContext(context,posy);
-			component.exit(subContext);
-			posy+=subContext.getSize().height+renderer.getOffset();
-		}
-		context.setHeight(posy);
+		doComponentLoop(context,(subContext,component)->component.exit(subContext));
 	}
 	
 	/**
@@ -166,5 +133,33 @@ public class Container extends FocusableComponent {
 	 */
 	protected Context getSubContext (Context context, int posy) {
 		return new Context(context,renderer.getBorder(),renderer.getBorder(),posy,hasFocus(context),true);
+	}
+	
+	/**
+	 * Loop through all components in reverse order and check for focus requests.
+	 * @param function the function to execute in the loop
+	 */
+	protected void doComponentLoop (Context context, LoopFunction function) {
+		int posy=renderer.getOffset();
+		for (Component component: components) {
+			Context subContext=getSubContext(context,posy);
+			function.loop(subContext,component);
+			posy+=subContext.getSize().height+renderer.getOffset();
+		}
+		context.setHeight(posy);
+	}
+	
+	
+	/**
+	 * Interface used by {@link Container#doComponentLoop(LoopFunction)}.
+	 * @author lukflug
+	 */
+	protected interface LoopFunction {
+		/**
+		 * Function to execute in the loop.
+		 * @param context the context for the component
+		 * @param component the component
+		 */
+		public void loop (Context context, Component component);
 	}
 }

@@ -55,7 +55,7 @@ public class TransientComponent extends FocusableComponent {
 			toggle.toggle();
 		} else if (context.isHovered() && button==Interface.RBUTTON && context.getInterface().getButton(Interface.RBUTTON)) {
 			manager.getComponentToggleable(component).toggle();
-			context.unrequestFocus();
+			context.releaseFocus();
 		}
 	}
 }
