@@ -212,8 +212,7 @@ public class ClickGUI implements PanelManager {
 			if (context.foucsRequested()) focusComponent=component;
 		}
 		if (focusComponent!=null) {
-			components.remove(focusComponent);
-			components.add(focusComponent);
+			if (this.components.remove(focusComponent)) this.components.add(focusComponent);
 		}
 	}
 	
