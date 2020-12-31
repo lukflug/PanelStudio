@@ -116,6 +116,20 @@ public class Container extends FocusableComponent {
 	 * Handle the GUI being closed.
 	 */
 	@Override
+	public void enter (Context context) {
+		int posy=renderer.getOffset();
+		for (Component component: components) {
+			Context subContext=getSubContext(context,posy);
+			component.enter(subContext);
+			posy+=subContext.getSize().height+renderer.getOffset();
+		}
+		context.setHeight(posy);
+	}
+
+	/**
+	 * Handle the GUI being closed.
+	 */
+	@Override
 	public void exit (Context context) {
 		int posy=renderer.getOffset();
 		for (Component component: components) {

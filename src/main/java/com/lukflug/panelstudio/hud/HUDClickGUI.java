@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.lukflug.panelstudio.ClickGUI;
+import com.lukflug.panelstudio.Context;
 import com.lukflug.panelstudio.FixedComponent;
 import com.lukflug.panelstudio.Interface;
 import com.lukflug.panelstudio.settings.Toggleable;
@@ -73,15 +74,58 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 		components.add(component);
 		permanentComponents.add(component);
 	}
+	
+	/**
+	 * Handle the GUI being opened.
+	 */
+	@Override
+	public void enter() {
+		components=allComponents;
+		guiOpen=true;
+		boolean highest=true;
+		FixedComponent focusComponent=null;
+		for (FixedComponent component: components) {
+			if (hudComponents.contains(component)) continue;
+			Context context=getContext(component,highest);
+			component.enter(context);
+			if (context.isHovered()) highest=false;
+			if (context.foucsRequested()) focusComponent=component;
+		}
+		if (focusComponent!=null) {
+			components.remove(focusComponent);
+			components.add(focusComponent);
+		}
+	}
+	
+	/**
+	 * Handle the GUI being closed.
+	 */
+	@Override
+	public void exit() {
+		guiOpen=false;
+		boolean highest=true;
+		FixedComponent focusComponent=null;
+		for (FixedComponent component: components) {
+			if (hudComponents.contains(component)) continue;
+			Context context=getContext(component,highest);
+			component.exit(context);
+			if (context.isHovered()) highest=false;
+			if (context.foucsRequested()) focusComponent=component;
+		}
+		if (focusComponent!=null) {
+			components.remove(focusComponent);
+			components.add(focusComponent);
+		}
+		selectHUDComponents();
+	}
 
 	/**
 	 * Toggles GUI open state and chooses right components to render.
 	 */
 	@Override
 	public void toggle() {
-		guiOpen=!guiOpen;
-		if (guiOpen) components=allComponents;
-		else selectHUDComponents();
+		if (!guiOpen) enter();
+		else exit();
 	}
 
 	/**

@@ -155,6 +155,18 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	}
 	
 	/**
+	 * Handle the GUI being opened.
+	 */
+	@Override
+	public void enter (Context context) {
+		if (open.getValue()==1) {
+			Context subContext=getSubContext(context,true);
+			container.enter(subContext);
+			context.setHeight(getRenderHeight(subContext.getSize().height));
+		} else super.enter(context);
+	}
+	
+	/**
 	 * Handle the GUI being closed.
 	 */
 	@Override

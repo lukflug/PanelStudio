@@ -73,6 +73,14 @@ public abstract class HUDComponent implements FixedComponent {
 	 * Do nothing.
 	 */
 	@Override
+	public void enter(Context context) {
+		getHeight(context);
+	}
+
+	/**
+	 * Do nothing.
+	 */
+	@Override
 	public void exit(Context context) {
 		getHeight(context);
 	}

@@ -67,14 +67,21 @@ public class TabGUIItem implements TabGUIComponent {
 	 * Does nothing.
 	 */
 	@Override
-	public void getHeight(Context context) {
+	public void getHeight (Context context) {
 	}
 
 	/**
 	 * Does nothing.
 	 */
 	@Override
-	public void exit(Context context) {
+	public void enter (Context context) {
+	}
+
+	/**
+	 * Does nothing.
+	 */
+	@Override
+	public void exit (Context context) {
 	}
 
 	/**

@@ -60,11 +60,15 @@ public class ClickGUI implements PanelManager {
 	@Override
 	public void showComponent(FixedComponent component) {
 		components.add(component);
+		component.enter(getContext(component,false));
 	}
 
 	@Override
 	public void hideComponent(FixedComponent component) {
-		if (!permanentComponents.contains(component)) components.remove(component);
+		if (!permanentComponents.contains(component)) {
+			components.remove(component);
+			component.exit(getContext(component,false));
+		}
 	}
 	
 	/**
@@ -152,6 +156,24 @@ public class ClickGUI implements PanelManager {
 		for (FixedComponent component: components) {
 			Context context=getContext(component,highest);
 			component.handleScroll(context,diff);
+			if (context.isHovered()) highest=false;
+			if (context.foucsRequested()) focusComponent=component;
+		}
+		if (focusComponent!=null) {
+			components.remove(focusComponent);
+			components.add(focusComponent);
+		}
+	}
+	
+	/**
+	 * Handle the GUI being opened.
+	 */
+	public void enter() {
+		boolean highest=true;
+		FixedComponent focusComponent=null;
+		for (FixedComponent component: components) {
+			Context context=getContext(component,highest);
+			component.enter(context);
 			if (context.isHovered()) highest=false;
 			if (context.foucsRequested()) focusComponent=component;
 		}

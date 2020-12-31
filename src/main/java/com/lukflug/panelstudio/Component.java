@@ -52,7 +52,14 @@ public interface Component {
 	public void getHeight (Context context);
 	
 	/**
-	 * Should be called by the parent when the GUI is closed.
+	 * Should be called by the parent when the panel is shown.
+	 * The current height of the component should be set by this method via {@link Context#setHeight(int)}.
+	 * @param context the {@link Context} for the component
+	 */
+	public void enter (Context context);
+	
+	/**
+	 * Should be called by the parent when the panel is hidden.
 	 * The current height of the component should be set by this method via {@link Context#setHeight(int)}.
 	 * @param context the {@link Context} for the component
 	 */

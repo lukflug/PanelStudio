@@ -8,12 +8,6 @@ import com.lukflug.panelstudio.hud.HUDClickGUI;
  * @author lukflug
  */
 public abstract class MinecraftHUDGUI extends MinecraftGUI {
-	@Override
-	public void enterGUI() {
-		super.enterGUI();
-		if (!getHUDGUI().isOn()) getHUDGUI().toggle();
-	}
-	
 	/**
 	 * Render function to be called when the GUI is closed to render the HUD.
 	 */
@@ -27,12 +21,6 @@ public abstract class MinecraftHUDGUI extends MinecraftGUI {
 	 */
 	public void handleKeyEvent (int scancode) {
 		if (scancode!=1 && !getHUDGUI().isOn()) getHUDGUI().handleKey(scancode);
-	}
-	
-	@Override
-	protected void keyTyped(final char typedChar, final int keyCode) {
-		super.keyTyped(typedChar,keyCode);
-		if (keyCode==1 && getHUDGUI().isOn()) getHUDGUI().toggle();
 	}
 	
 	/**

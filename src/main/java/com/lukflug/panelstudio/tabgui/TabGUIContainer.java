@@ -131,7 +131,7 @@ public class TabGUIContainer implements TabGUIComponent {
 	 * Returns the container height.
 	 */
 	@Override
-	public void getHeight(Context context) {
+	public void getHeight (Context context) {
 		context.setHeight(renderer.getHeight()*components.size());
 	}
 
@@ -139,7 +139,15 @@ public class TabGUIContainer implements TabGUIComponent {
 	 * Do nothing.
 	 */
 	@Override
-	public void exit(Context context) {
+	public void enter (Context context) {
+		getHeight(context);
+	}
+
+	/**
+	 * Do nothing.
+	 */
+	@Override
+	public void exit (Context context) {
 		getHeight(context);
 	}
 

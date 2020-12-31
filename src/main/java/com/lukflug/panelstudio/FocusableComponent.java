@@ -85,6 +85,14 @@ public class FocusableComponent implements Component {
 	public void handleScroll (Context context, int diff) {
 		context.setHeight(renderer.getHeight());
 	}
+	
+	/**
+	 * Set the height of this component to the height specified by {@link Renderer}.
+	 */
+	@Override
+	public void enter (Context context) {
+		context.setHeight(renderer.getHeight());
+	}
 
 	/**
 	 * Set the height of this component to the height specified by {@link Renderer}.
