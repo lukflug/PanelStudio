@@ -197,9 +197,13 @@ public class ClickGUI implements PanelManager {
 		};
 	}
 	
+	/**
+	 * Loop through all components in reverse order and check for focus requests.
+	 * @param function the function to execute in the loop
+	 */
 	protected void doComponentLoop (LoopFunction function) {
 		List<FixedComponent> components=new ArrayList<FixedComponent>();
-		for (FixedComponent component: this.components ) {
+		for (FixedComponent component: this.components) {
 			components.add(component);
 		}
 		boolean highest=true;
@@ -217,7 +221,16 @@ public class ClickGUI implements PanelManager {
 	}
 	
 	
+	/**
+	 * Interface used by {@link ClickGUI#doComponentLoop(LoopFunction)}.
+	 * @author lukflug
+	 */
 	protected interface LoopFunction {
+		/**
+		 * Function to execute in the loop.
+		 * @param context the context for the component
+		 * @param component the component
+		 */
 		public void loop (Context context, FixedComponent component);
 	}
 }

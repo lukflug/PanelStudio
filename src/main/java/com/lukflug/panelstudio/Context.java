@@ -132,6 +132,13 @@ public final class Context {
 	}
 
 	/**
+	 * Reverse {@link #requestFocus()}.
+	 */
+	public void unrequestFocus() {
+		focusRequested=false;
+	}
+
+	/**
 	 * Returns {@link #focusRequested}.
 	 * @return whether the child is requesting focus.
 	 */

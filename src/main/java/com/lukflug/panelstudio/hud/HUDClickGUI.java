@@ -1,9 +1,7 @@
 package com.lukflug.panelstudio.hud;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.lukflug.panelstudio.ClickGUI;
 import com.lukflug.panelstudio.FixedComponent;
@@ -23,7 +21,7 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 	/**
 	 * List of HUD components.
 	 */
-	protected Set<FixedComponent> hudComponents=new HashSet<FixedComponent>();
+	protected List<FixedComponent> hudComponents=new ArrayList<FixedComponent>();
 	/**
 	 * Whether the GUI components are shown or not.
 	 */
@@ -44,25 +42,20 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 	public void addComponent (FixedComponent component) {
 		allComponents.add(component);
 		permanentComponents.add(component);
-		if (guiOpen) components.add(component);
 	}
 
 	@Override
 	public void showComponent(FixedComponent component) {
 		if (!allComponents.contains(component)) {
 			allComponents.add(component);
-			if (guiOpen) {
-				components.add(component);
-				component.enter(getContext(component,false));
-			}
+			if (guiOpen) component.enter(getContext(component,false));
 		}
 	}
 
 	@Override
 	public void hideComponent(FixedComponent component) {
 		if (!permanentComponents.contains(component)) {
-			allComponents.remove(component);
-			if (components.remove(component)) component.exit(getContext(component,false));
+			if (allComponents.remove(component) && guiOpen) component.exit(getContext(component,false));
 		}
 	}
 	
@@ -73,7 +66,6 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 	public void addHUDComponent (FixedComponent component) {
 		hudComponents.add(component);
 		allComponents.add(component);
-		components.add(component);
 		permanentComponents.add(component);
 	}
 	
@@ -98,7 +90,7 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 		doComponentLoop((context,component)->{
 			if (!hudComponents.contains(component)) component.exit(context);
 		});
-		selectHUDComponents();
+		components=hudComponents;
 	}
 
 	/**
@@ -116,16 +108,6 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 	@Override
 	public boolean isOn() {
 		return guiOpen;
-	}
-	
-	/**
-	 * Add only HUD components to component list.
-	 */
-	protected void selectHUDComponents() {
-		components=new ArrayList<FixedComponent>();
-		for (FixedComponent component: allComponents) {
-			if (hudComponents.contains(component)) components.add(component);
-		}
 	}
 
 	@Override
