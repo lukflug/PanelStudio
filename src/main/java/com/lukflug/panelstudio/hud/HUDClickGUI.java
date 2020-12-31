@@ -45,10 +45,7 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 	public void addComponent (FixedComponent component) {
 		allComponents.add(component);
 		permanentComponents.add(component);
-		if (guiOpen) {
-			components.add(component);
-			component.enter(getContext(component,false));
-		}
+		if (guiOpen) components.add(component);
 	}
 
 	@Override

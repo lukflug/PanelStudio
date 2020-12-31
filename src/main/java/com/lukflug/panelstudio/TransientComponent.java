@@ -28,8 +28,9 @@ public class TransientComponent extends FocusableComponent {
 	 * @param renderer the renderer for this component
 	 * @param component component to be opened when clicked
 	 */
-	public TransientComponent (String title, String description, Renderer renderer, FixedComponent component, PanelManager manager) {
+	public TransientComponent (String title, String description, Renderer renderer, Toggleable toggle, FixedComponent component, PanelManager manager) {
 		super(title,description,renderer);
+		this.toggle=toggle;
 		this.component=component;
 		this.manager=manager;
 	}
