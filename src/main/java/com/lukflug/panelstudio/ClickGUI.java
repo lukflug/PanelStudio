@@ -67,8 +67,7 @@ public class ClickGUI implements PanelManager {
 	@Override
 	public void hideComponent(FixedComponent component) {
 		if (!permanentComponents.contains(component)) {
-			components.remove(component);
-			component.exit(getContext(component,false));
+			if (components.remove(component)) component.exit(getContext(component,false));
 		}
 	}
 	

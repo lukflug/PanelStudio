@@ -49,10 +49,12 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 
 	@Override
 	public void showComponent(FixedComponent component) {
-		allComponents.add(component);
-		if (guiOpen) {
-			components.add(component);
-			component.enter(getContext(component,false));
+		if (!allComponents.contains(component)) {
+			allComponents.add(component);
+			if (guiOpen) {
+				components.add(component);
+				component.enter(getContext(component,false));
+			}
 		}
 	}
 
@@ -60,8 +62,7 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 	public void hideComponent(FixedComponent component) {
 		if (!permanentComponents.contains(component)) {
 			allComponents.remove(component);
-			components.remove(component);
-			component.exit(getContext(component,false));
+			if (components.remove(component)) component.exit(getContext(component,false));
 		}
 	}
 	
