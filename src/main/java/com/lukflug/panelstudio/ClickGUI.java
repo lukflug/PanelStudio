@@ -133,7 +133,8 @@ public class ClickGUI implements PanelManager {
 	public void handleKey (int scancode) {
 		boolean highest=true;
 		FixedComponent focusComponent=null;
-		for (FixedComponent component: components) {
+		for (int i=components.size()-1;i>=0;i--) {
+			FixedComponent component=components.get(i);
 			Context context=getContext(component,highest);
 			component.handleKey(context,scancode);
 			if (context.isHovered()) highest=false;
@@ -152,7 +153,8 @@ public class ClickGUI implements PanelManager {
 	public void handleScroll (int diff) {
 		boolean highest=true;
 		FixedComponent focusComponent=null;
-		for (FixedComponent component: components) {
+		for (int i=components.size()-1;i>=0;i--) {
+			FixedComponent component=components.get(i);
 			Context context=getContext(component,highest);
 			component.handleScroll(context,diff);
 			if (context.isHovered()) highest=false;
