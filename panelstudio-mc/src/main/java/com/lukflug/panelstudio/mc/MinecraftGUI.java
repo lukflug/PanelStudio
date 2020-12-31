@@ -33,6 +33,7 @@ public abstract class MinecraftGUI extends GuiScreen {
 	 */
 	public void enterGUI() {
 		Minecraft.getMinecraft().displayGuiScreen(this);
+		getGUI().enter();
 	}
 	
 	/**
