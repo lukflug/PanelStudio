@@ -58,8 +58,10 @@ public class ClickGUI implements PanelManager {
 
 	@Override
 	public void showComponent(FixedComponent component) {
-		components.add(component);
-		component.enter(getContext(component,false));
+		if (!components.contains(component)) {
+			components.add(component);
+			component.enter(getContext(component,false));
+		}
 	}
 
 	@Override
@@ -111,19 +113,7 @@ public class ClickGUI implements PanelManager {
 	 * @see Interface#RBUTTON
 	 */
 	public void handleButton (int button) {
-		boolean highest=true;
-		FixedComponent focusComponent=null;
-		for (int i=components.size()-1;i>=0;i--) {
-			FixedComponent component=components.get(i);
-			Context context=getContext(component,highest);
-			component.handleButton(context,button);
-			if (context.isHovered()) highest=false;
-			if (context.foucsRequested()) focusComponent=component;
-		}
-		if (focusComponent!=null) {
-			components.remove(focusComponent);
-			components.add(focusComponent);
-		}
+		doComponentLoop((context,component)->component.handleButton(context,button));
 	}
 	
 	/**
@@ -131,19 +121,7 @@ public class ClickGUI implements PanelManager {
 	 * @param scancode the scancode of the key being typed
 	 */
 	public void handleKey (int scancode) {
-		boolean highest=true;
-		FixedComponent focusComponent=null;
-		for (int i=components.size()-1;i>=0;i--) {
-			FixedComponent component=components.get(i);
-			Context context=getContext(component,highest);
-			component.handleKey(context,scancode);
-			if (context.isHovered()) highest=false;
-			if (context.foucsRequested()) focusComponent=component;
-		}
-		if (focusComponent!=null) {
-			components.remove(focusComponent);
-			components.add(focusComponent);
-		}
+		doComponentLoop((context,component)->component.handleKey(context,scancode));
 	}
 	
 	/**
@@ -151,55 +129,21 @@ public class ClickGUI implements PanelManager {
 	 * @param diff the amount by which the wheel was moved
 	 */
 	public void handleScroll (int diff) {
-		boolean highest=true;
-		FixedComponent focusComponent=null;
-		for (int i=components.size()-1;i>=0;i--) {
-			FixedComponent component=components.get(i);
-			Context context=getContext(component,highest);
-			component.handleScroll(context,diff);
-			if (context.isHovered()) highest=false;
-			if (context.foucsRequested()) focusComponent=component;
-		}
-		if (focusComponent!=null) {
-			components.remove(focusComponent);
-			components.add(focusComponent);
-		}
+		doComponentLoop((context,component)->component.handleScroll(context,diff));
 	}
 	
 	/**
 	 * Handle the GUI being opened.
 	 */
 	public void enter() {
-		boolean highest=true;
-		FixedComponent focusComponent=null;
-		for (FixedComponent component: components) {
-			Context context=getContext(component,highest);
-			component.enter(context);
-			if (context.isHovered()) highest=false;
-			if (context.foucsRequested()) focusComponent=component;
-		}
-		if (focusComponent!=null) {
-			components.remove(focusComponent);
-			components.add(focusComponent);
-		}
+		doComponentLoop((context,component)->component.enter(context));
 	}
 	
 	/**
 	 * Handle the GUI being closed.
 	 */
 	public void exit() {
-		boolean highest=true;
-		FixedComponent focusComponent=null;
-		for (FixedComponent component: components) {
-			Context context=getContext(component,highest);
-			component.exit(context);
-			if (context.isHovered()) highest=false;
-			if (context.foucsRequested()) focusComponent=component;
-		}
-		if (focusComponent!=null) {
-			components.remove(focusComponent);
-			components.add(focusComponent);
-		}
+		doComponentLoop((context,component)->component.exit(context));
 	}
 	
 	/**
@@ -252,5 +196,30 @@ public class ClickGUI implements PanelManager {
 				return components.contains(component);
 			}
 		};
+	}
+	
+	protected void doComponentLoop (LoopFunction function) {
+		List<FixedComponent> components=new ArrayList<FixedComponent>();
+		for (FixedComponent component: this.components ) {
+			components.add(component);
+		}
+		boolean highest=true;
+		FixedComponent focusComponent=null;
+		for (int i=components.size()-1;i>=0;i--) {
+			FixedComponent component=components.get(i);
+			Context context=getContext(component,highest);
+			function.loop(context,component);
+			if (context.isHovered()) highest=false;
+			if (context.foucsRequested()) focusComponent=component;
+		}
+		if (focusComponent!=null) {
+			components.remove(focusComponent);
+			components.add(focusComponent);
+		}
+	}
+	
+	
+	protected interface LoopFunction {
+		public void loop (Context context, FixedComponent component);
 	}
 }
