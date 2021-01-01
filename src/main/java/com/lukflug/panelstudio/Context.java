@@ -140,7 +140,7 @@ public final class Context {
 	 */
 	public void releaseFocus() {
 		focusRequested=false;
-		focusOverride=false;
+		focusOverride=true;
 	}
 
 	/**
