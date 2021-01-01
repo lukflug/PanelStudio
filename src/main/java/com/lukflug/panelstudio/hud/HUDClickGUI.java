@@ -30,9 +30,10 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 	/**
 	 * Constructor.
 	 * @param inter the interface for the ClickGUI
+	 * @param descriptionRenderer the {@link DescriptionRenderer} used by the GUI
 	 */
-	public HUDClickGUI (Interface inter, DescriptionRenderer renderer) {
-		super(inter,renderer);
+	public HUDClickGUI (Interface inter, DescriptionRenderer descriptionRenderer) {
+		super(inter,descriptionRenderer);
 		components=hudComponents;
 	}
 	

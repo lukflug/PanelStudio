@@ -43,6 +43,7 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	/**
 	 * Constructor.
 	 * @param title the caption for the container
+	 * @param description the description for this component
 	 * @param renderer the {@link Renderer} for the container
 	 * @param open the {@link Toggleable} for {@link #open}
 	 * @param animation the animation for this container

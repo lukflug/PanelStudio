@@ -23,6 +23,8 @@ public abstract class RendererBase implements Renderer {
 	 * @param height default component height
 	 * @param offset default vertical offset
 	 * @param border default horizontal border
+	 * @param left default left border
+	 * @param right default right border
 	 */
 	public RendererBase (int height, int offset, int border, int left, int right) {
 		this.height=height;

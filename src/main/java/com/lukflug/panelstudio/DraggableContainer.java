@@ -34,6 +34,7 @@ public class DraggableContainer extends CollapsibleContainer implements FixedCom
 	/**
 	 * Constructor.
 	 * @param title caption of the container
+	 * @param description the description for this component
 	 * @param renderer {@link Renderer} for the container
 	 * @param open {@link Toggleable} to indicate whether the container is open or closed
 	 * @param animation the animation for opening and closing the container

@@ -22,6 +22,7 @@ public class Container extends FocusableComponent {
 	/**
 	 * Constructor for a container.
 	 * @param title the caption of the container
+	 * @param description the description for this component
 	 * @param renderer the renderer used by the container
 	 */
 	public Container (String title, String description, Renderer renderer) {
@@ -137,6 +138,7 @@ public class Container extends FocusableComponent {
 	
 	/**
 	 * Loop through all components in reverse order and check for focus requests.
+	 * @param context for the container
 	 * @param function the function to execute in the loop
 	 */
 	protected void doComponentLoop (Context context, LoopFunction function) {
@@ -151,7 +153,7 @@ public class Container extends FocusableComponent {
 	
 	
 	/**
-	 * Interface used by {@link Container#doComponentLoop(LoopFunction)}.
+	 * Interface used by the loop.
 	 * @author lukflug
 	 */
 	protected interface LoopFunction {

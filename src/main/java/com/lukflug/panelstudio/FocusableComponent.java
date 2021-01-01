@@ -27,6 +27,7 @@ public class FocusableComponent implements Component {
 	/**
 	 * Constructor.
 	 * @param title the caption for this component
+	 * @param description the description for this component
 	 * @param renderer the {@link Renderer} for this component
 	 */
 	public FocusableComponent (String title, String description, Renderer renderer) {

@@ -50,7 +50,8 @@ public final class Context {
 	 * Constructor that should be used when a parent is calling a method by the child.
 	 * {@link #inter} and {@link #onTop} are inherited without modification.
 	 * @param context the context of the parent
-	 * @param border the horizontal border (left and right) for the child
+	 * @param left the left horizontal border for the child
+	 * @param right the right horizontal border for the child
 	 * @param offset the vertical position of the child relative to the parent's position
 	 * @param focus focus state of the parent
 	 * @param onTop whether component is in the front

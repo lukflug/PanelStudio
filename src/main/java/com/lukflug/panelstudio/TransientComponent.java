@@ -26,7 +26,9 @@ public class TransientComponent extends FocusableComponent {
 	 * @param title the title for this component
 	 * @param description the description for this component
 	 * @param renderer the renderer for this component
+	 * @param toggle the {@link Toggleable} to be used by the user
 	 * @param component component to be opened when clicked
+	 * @param manager the {@link PanelManager} to be used by this component
 	 */
 	public TransientComponent (String title, String description, Renderer renderer, Toggleable toggle, FixedComponent component, PanelManager manager) {
 		super(title,description,renderer);

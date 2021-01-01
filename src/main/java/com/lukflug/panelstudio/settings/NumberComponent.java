@@ -21,6 +21,7 @@ public class NumberComponent extends Slider {
 	/**
 	 * Constructor.
 	 * @param text name of the setting
+	 * @param description the description for this component
 	 * @param renderer {@link Renderer} for the component
 	 * @param setting the setting in question
 	 * @param min minimum value for the setting

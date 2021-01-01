@@ -33,6 +33,7 @@ public class ClickGUI implements PanelManager {
 	/**
 	 * Constructor for the GUI.
 	 * @param inter the {@link Interface} to be used by the GUI
+	 * @param descriptionRenderer the {@link DescriptionRenderer} used by the GUI
 	 */
 	public ClickGUI (Interface inter, DescriptionRenderer descriptionRenderer) {
 		this.inter=inter;
