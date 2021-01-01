@@ -20,6 +20,10 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	 */
 	protected AnimatedToggleable open;
 	/**
+	 * {@link Toggleable} that can be toggled by the user.
+	 */
+	protected Toggleable toggle;
+	/**
 	 * Cached combined height of children.
 	 */
 	protected int childHeight=0;
@@ -42,11 +46,13 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	 * @param renderer the {@link Renderer} for the container
 	 * @param open the {@link Toggleable} for {@link #open}
 	 * @param animation the animation for this container
+	 * @param toggle the {@link Toggleable} to be toggled by the user
 	 */
-	public CollapsibleContainer (String title, String description, Renderer renderer, Toggleable open, Animation animation) {
+	public CollapsibleContainer (String title, String description, Renderer renderer, Toggleable open, Animation animation, Toggleable toggle) {
 		super(title,description,renderer);
 		container=new Container(title,null,renderer);
 		this.open=new AnimatedToggleable(open,animation);
+		this.toggle=toggle;
 	}
 	
 	/**
@@ -94,6 +100,12 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	 */
 	@Override
 	public void handleButton (Context context, int button) {
+		context.setHeight(renderer.getHeight());
+		if (context.isClicked() && button==Interface.LBUTTON) {
+			if (toggle!=null) toggle.toggle();
+		} else if (context.isHovered() && button==Interface.RBUTTON && context.getInterface().getButton(Interface.RBUTTON)) {
+			open.toggle();
+		}
 		if (open.getValue()==1) {
 			// Pre-calculate clipping rectangle and update focus state
 			Context subContext=getSubContext(context,true);
@@ -109,9 +121,6 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 			context.setHeight(getRenderHeight(subContext.getSize().height));
 			if (subContext.focusReleased()) context.releaseFocus();
 		} else super.handleButton(context,button);
-		if (context.isHovered() && context.getInterface().getMouse().y<=context.getPos().y+renderer.getHeight() && button==Interface.RBUTTON && context.getInterface().getButton(Interface.RBUTTON)) {
-			open.toggle();
-		}
 	}
 	
 	/**
@@ -184,7 +193,8 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	 * @return set to true, if title bar is active
 	 */
 	protected boolean isActive() {
-		return true;
+		if (toggle==null) return true;
+		return toggle.isOn();
 	}
 	
 	/**

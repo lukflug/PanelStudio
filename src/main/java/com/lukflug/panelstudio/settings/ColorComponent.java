@@ -49,7 +49,7 @@ public class ColorComponent extends CollapsibleContainer {
 	 * @param colorModel {@link Toggleable} indicating whether to use RGB (false) or HSB (true)
 	 */
 	public ColorComponent(String title, String description, Renderer renderer, Animation animation, Renderer componentRenderer, ColorSetting setting, boolean alpha, boolean rainbow, Toggleable colorModel) {
-		super(title,description,renderer,new SimpleToggleable(false),animation);
+		super(title,description,renderer,new SimpleToggleable(false),animation,null);
 		this.setting=setting;
 		this.alpha=alpha;
 		this.rainbow=rainbow;

@@ -38,7 +38,7 @@ public class HUDPanel extends DraggableContainer {
 	 * @param minBorder the minimum border for the container
 	 */
 	public HUDPanel(FixedComponent component, Renderer renderer, Toggleable open, Animation animation, Toggleable guiOpen, int minBorder) {
-		super(component.getTitle(),null,new HUDRenderer(renderer,guiOpen,minBorder),open,animation,new Point(0,0),0);
+		super(component.getTitle(),null,new HUDRenderer(renderer,guiOpen,minBorder),open,animation,null,new Point(0,0),0);
 		addComponent(component);
 		this.guiOpen=guiOpen;
 		this.component=component;

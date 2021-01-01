@@ -37,11 +37,12 @@ public class DraggableContainer extends CollapsibleContainer implements FixedCom
 	 * @param renderer {@link Renderer} for the container
 	 * @param open {@link Toggleable} to indicate whether the container is open or closed
 	 * @param animation the animation for opening and closing the container
+	 * @param toggle the {@link Toggleable} to be toggled by the user
 	 * @param position the initial position of the container
 	 * @param width the width of the container
 	 */
-	public DraggableContainer(String title, String description, Renderer renderer, Toggleable open, Animation animation, Point position, int width) {
-		super(title,description,renderer,open,animation);
+	public DraggableContainer(String title, String description, Renderer renderer, Toggleable open, Animation animation, Toggleable toggle, Point position, int width) {
+		super(title,description,renderer,open,animation,toggle);
 		this.position=position;
 		this.width=width;
 	}
