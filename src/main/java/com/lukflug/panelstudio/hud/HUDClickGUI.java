@@ -33,6 +33,7 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 	 */
 	public HUDClickGUI (Interface inter, DescriptionRenderer renderer) {
 		super(inter,renderer);
+		components=hudComponents;
 	}
 	
 	/**

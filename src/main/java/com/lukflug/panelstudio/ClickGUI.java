@@ -75,6 +75,10 @@ public class ClickGUI implements PanelManager {
 	 * Render the GUI (lowest component first, highest component last).
 	 */
 	public void render() {
+		List<FixedComponent> components=new ArrayList<FixedComponent>();
+		for (FixedComponent component: this.components) {
+			components.add(component);
+		}
 		Context descriptionContext=null;
 		int highest=0;
 		FixedComponent focusComponent=null;
@@ -97,8 +101,7 @@ public class ClickGUI implements PanelManager {
 			}
 		}
 		if (focusComponent!=null) {
-			components.remove(focusComponent);
-			components.add(focusComponent);
+			if (this.components.remove(focusComponent)) this.components.add(focusComponent);
 		}
 		if (descriptionContext!=null && descriptionRenderer!=null) {
 			descriptionRenderer.renderDescription(descriptionContext);
