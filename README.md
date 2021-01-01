@@ -13,7 +13,7 @@ A simple yet flexible library to create ClickGUIs designed for use in Minecraft 
 * Future Theme:
 ![future](https://cdn.discordapp.com/attachments/747111616407011389/779996632334073896/2020-11-21_20.25.30.png)
 
-This repostiory only includes the GameSense themes, however, since Cyber didn't want me to publish the other themes. The library has no depedencies (aside from the JRE itself), so it can be easily used for other purposes, aside from Minecraft utility mods. Thanks to Go_Hoosiers, for suggesting the name of this library. If you use this library, some attribution would be greatly appreciated. Consider visiting the PanelStudio discord server: https://discord.gg/E3DrF4XvUE.
+This repostiory only includes the GameSense themes, however, since Cyber didn't want me to publish the other themes. The library has no depedencies (aside from Java 8), so it can be easily used for other purposes, aside from Minecraft utility mods. Thanks to Go_Hoosiers, for suggesting the name of this library. If you use this library, some attribution would be greatly appreciated. Consider visiting the PanelStudio discord server: https://discord.gg/E3DrF4XvUE.
 
 ## Structure
 This library contains following packages:
@@ -45,7 +45,7 @@ repositories {
 }
 
 dependencies {
-	compile("com.lukflug:panelstudio:0.1.2")
+	compile("com.lukflug:panelstudio:0.1.5")
 }
 
 shadowJar {
@@ -58,12 +58,12 @@ If you're planning to use PanelStudio-MC you have to also add this:
 ```groovy
 task downloadPanelstudio {
 	doLast {
-		new URL("https://github.com/lukflug/PanelStudio/releases/download/v0.1.2/panelstudio-mc-0.1.1.jar").withInputStream{i->new File("${buildDir}/panelstudio-mc-0.1.1.jar").withOutputStream{it<<i}}
+		new URL("https://github.com/lukflug/PanelStudio/releases/download/v0.1.5/panelstudio-mc-0.1.1.jar").withInputStream{i->new File("${buildDir}/panelstudio-mc-0.1.5.jar").withOutputStream{it<<i}}
 	}
 }
 
 task unpackPanelstudio(dependsOn: downloadPanelstudio, type: Copy) {
-	from zipTree("${buildDir}/panelstudio-mc-0.1.1.jar")
+	from zipTree("${buildDir}/panelstudio-mc-0.1.5.jar")
 	into "src/main/java"
 }
 ```
@@ -116,10 +116,10 @@ public class CoolGUI extends MinecraftGUI {
 		gui=new ClickGUI(guiInterface,null);
 		// Populate the ClickGUI with modules and settings
 		for (CoolCategory category: categories) {
-			DraggableContainer panel=new DraggableContainer(category.name,null,theme.getPanelRenderer(),new SimpleToggleable(false),new SettingsAnimation(CoolSettings.animationSpeed),new Point(x,y),width); // <-- Width and default position of the panels needs to be defined
+			DraggableContainer panel=new DraggableContainer(category.name,null,theme.getPanelRenderer(),new SimpleToggleable(false),new SettingsAnimation(CoolSettings.animationSpeed),null,new Point(x,y),width); // <-- Width and default position of the panels needs to be defined
 			gui.addComponent(panel);
 			for (CoolModule module: category) {
-				CollapsibleContainer container=new ToggleableContainer(module.name,theme.getContainerRenderer(),new SimpleToggleable(false),new SettingsAnimation(CoolSettings.animationSpeed),module); // <-- It is recommended that the module-class implements Toggleable
+				CollapsibleContainer container=new CollapsibleContainer(module.name,null,theme.getContainerRenderer(),new SimpleToggleable(false),new SettingsAnimation(CoolSettings.animationSpeed),module); // <-- It is recommended that the module-class implements Toggleable
 				panel.addComponent(container);
 				for (CoolSetting setting: module) {
 					if (setting instanceof Toggleable) container.addComponent(new BooleanComponent(setting.name,null,theme.getComponentRenderer(),(Toggleable)setting));
@@ -179,7 +179,7 @@ Toggleable hudToggle=new Toggleable() {
 ```
 
 ## Reference
-For a list of classes and methods, consult the [javadoc](https://lukflug.github.io/javadoc/panelstudio/0.1.2/). For an example implementation, consult the GameSense source code.
+For a list of classes and methods, consult the [javadoc](https://lukflug.github.io/javadoc/panelstudio/0.1.5/). For an example implementation, consult the GameSense source code.
 
 ## Creating custom themes
 The components provided by PanelStudio use the methods in the `Renderer` interface to render. A `Theme` consist of three renderers: one for the single components (settings), one for the containers (modules) and one for the panels (categories). To see how themes are implemented, consult the package `com.lukflug.panelstudio.theme`.
