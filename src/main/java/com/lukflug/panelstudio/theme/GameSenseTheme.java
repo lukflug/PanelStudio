@@ -79,25 +79,25 @@ public class GameSenseTheme implements Theme {
 			}
 			if (level==0 || open) {
 				context.getInterface().fillRect(new Rectangle(new Point(context.getPos().x,context.getPos().y+context.getSize().height-1),new Dimension(context.getSize().width,1)),color,color,color,color);
-				context.getInterface().fillRect(new Rectangle(new Point(context.getPos().x,context.getPos().y+getHeight()-1),new Dimension(context.getSize().width,1)),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(new Point(context.getPos().x,context.getPos().y+getHeight(open)-1),new Dimension(context.getSize().width,1)),color,color,color,color);
 			}
 		}
 		
 		@Override
 		public int renderScrollBar (Context context, boolean focus, boolean active, boolean scroll, int childHeight, int scrollPosition) {
 			if (scroll) {
-				int containerHeight=context.getSize().height-getHeight();
+				int containerHeight=context.getSize().height-getHeight(true);
 				int a=(int)(scrollPosition/(double)childHeight*containerHeight);
 				int b=(int)((scrollPosition+containerHeight)/(double)childHeight*containerHeight);
 				Color background=getMainColor(focus,false);
 				Color slider=getMainColor(focus,true);
-				context.getInterface().fillRect(new Rectangle(new Point(context.getPos().x+context.getSize().width-getRightBorder(true),context.getPos().y+getHeight()),new Dimension(getRightBorder(true),a)),background,background,background,background);
-				context.getInterface().fillRect(new Rectangle(new Point(context.getPos().x+context.getSize().width-getRightBorder(true),context.getPos().y+getHeight()+a),new Dimension(getRightBorder(true),b-a)),slider,slider,slider,slider);
-				context.getInterface().fillRect(new Rectangle(new Point(context.getPos().x+context.getSize().width-getRightBorder(true),context.getPos().y+getHeight()+b),new Dimension(getRightBorder(true),context.getSize().height-getHeight()-b)),background,background,background,background);
+				context.getInterface().fillRect(new Rectangle(new Point(context.getPos().x+context.getSize().width-getRightBorder(true),context.getPos().y+getHeight(true)),new Dimension(getRightBorder(true),a)),background,background,background,background);
+				context.getInterface().fillRect(new Rectangle(new Point(context.getPos().x+context.getSize().width-getRightBorder(true),context.getPos().y+getHeight(true)+a),new Dimension(getRightBorder(true),b-a)),slider,slider,slider,slider);
+				context.getInterface().fillRect(new Rectangle(new Point(context.getPos().x+context.getSize().width-getRightBorder(true),context.getPos().y+getHeight(true)+b),new Dimension(getRightBorder(true),context.getSize().height-getHeight(true)-b)),background,background,background,background);
 				Color color=getDefaultColorScheme().getOutlineColor();
-				context.getInterface().fillRect(new Rectangle(new Point(context.getPos().x+context.getSize().width-getRightBorder(true)-1,context.getPos().y+getHeight()),new Dimension(1,context.getSize().height-getHeight())),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(new Point(context.getPos().x+context.getSize().width-getRightBorder(true)-1,context.getPos().y+getHeight(true)),new Dimension(1,context.getSize().height-getHeight(true))),color,color,color,color);
 				if (context.isClicked() && context.getInterface().getMouse().x>=context.getPos().x+context.getSize().width-getRightBorder(true)) {
-					return (int)((context.getInterface().getMouse().y-context.getPos().y-getHeight())*childHeight/(double)containerHeight-containerHeight/2.0);
+					return (int)((context.getInterface().getMouse().y-context.getPos().y-getHeight(true))*childHeight/(double)containerHeight-containerHeight/2.0);
 				}
 			}
 			return scrollPosition;

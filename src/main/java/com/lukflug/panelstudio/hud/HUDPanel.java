@@ -67,7 +67,7 @@ public class HUDPanel extends DraggableContainer {
 	@Override
 	public Point getPosition (Interface inter) {
 		position=component.getPosition(inter);
-		position.translate(0,-renderer.getHeight()-renderer.getOffset());
+		position.translate(0,-renderer.getHeight(open.getValue()!=0)-renderer.getOffset());
 		return super.getPosition(inter);
 	}
 
@@ -76,7 +76,7 @@ public class HUDPanel extends DraggableContainer {
 	 */
 	@Override
 	public void setPosition (Interface inter, Point position) {
-		component.setPosition(inter,new Point(position.x,position.y+renderer.getHeight()+renderer.getOffset()));
+		component.setPosition(inter,new Point(position.x,position.y+renderer.getHeight(open.getValue()!=0)+renderer.getOffset()));
 	}
 	
 	/**
@@ -143,8 +143,8 @@ public class HUDPanel extends DraggableContainer {
 		 * Returns the height defined by the base renderer.
 		 */
 		@Override
-		public int getHeight() {
-			return renderer.getHeight();
+		public int getHeight (boolean open) {
+			return renderer.getHeight(open);
 		}
 
 		/**
@@ -163,6 +163,14 @@ public class HUDPanel extends DraggableContainer {
 		@Override
 		public int getBorder() {
 			return Math.max(renderer.getBorder(),minBorder);
+		}
+		
+		/**
+		 * Returns the border defined by the base renderer.
+		 */
+		@Override
+		public int getBottomBorder() {
+			return renderer.getBottomBorder();
 		}
 
 		/**

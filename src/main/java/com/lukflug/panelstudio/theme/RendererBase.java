@@ -38,7 +38,7 @@ public abstract class RendererBase implements Renderer {
 	 * Get default component height.
 	 */
 	@Override
-	public int getHeight() {
+	public int getHeight (boolean open) {
 		return height;
 	}
 
@@ -53,8 +53,17 @@ public abstract class RendererBase implements Renderer {
 	/**
 	 * Get default component horizontal border.
 	 */
+	@Override
 	public int getBorder() {
 		return border;
+	}
+	
+	/**
+	 * Returns zero.
+	 */
+	@Override
+	public int getBottomBorder() {
+		return 0;
 	}
 
 	/**

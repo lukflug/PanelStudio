@@ -58,7 +58,7 @@ public class ListComponent extends HUDComponent {
 	@Override
 	public Point getPosition (Interface inter) {
 		int width=getWidth(inter);
-		int height=renderer.getHeight()+(list.getSize()-1)*inter.getFontHeight();
+		int height=renderer.getHeight(false)+(list.getSize()-1)*inter.getFontHeight();
 		if (lastUp!=list.sortUp()) {
 			if (list.sortUp()) position.translate(0,height);
 			else position.translate(0,-height);
@@ -81,7 +81,7 @@ public class ListComponent extends HUDComponent {
 	@Override
 	public void setPosition (Interface inter, Point position) {
 		int width=getWidth(inter);
-		int height=renderer.getHeight()+(list.getSize()-1)*inter.getFontHeight();
+		int height=renderer.getHeight(false)+(list.getSize()-1)*inter.getFontHeight();
 		if (list.sortUp()) {
 			if (list.sortRight()) this.position=new Point(position.x+width,position.y+height);
 			else this.position=new Point(position.x,position.y+height);
@@ -103,7 +103,7 @@ public class ListComponent extends HUDComponent {
 
 	@Override
 	public void getHeight (Context context) {
-		context.setHeight(renderer.getHeight()+(list.getSize()-1)*context.getInterface().getFontHeight());
+		context.setHeight(renderer.getHeight(false)+(list.getSize()-1)*context.getInterface().getFontHeight());
 	}
 	
 	@Override

@@ -12,9 +12,10 @@ import com.lukflug.panelstudio.Context;
 public interface Renderer {
 	/**
 	 * Returns the default height for components.
+	 * @param open true if the component in question the the title bar for an open container
 	 * @return the component height
 	 */
-	public int getHeight();
+	public int getHeight (boolean open);
 	
 	/**
 	 * Returns the vertical space between two components in a container.
@@ -23,10 +24,16 @@ public interface Renderer {
 	public int getOffset();
 	
 	/**
-	 * Returns the right horizontal border around a component in a container.
+	 * Returns the horizontal border around a component in a container.
 	 * @return the horizontal border
 	 */
 	public int getBorder();
+	
+	/**
+	 * Returns the border below a container.
+	 * @return the bottom border
+	 */
+	public int getBottomBorder();
 	
 	/**
 	 * Returns the left horizontal border around an entire container.

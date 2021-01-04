@@ -32,7 +32,7 @@ public class KeybindComponent extends FocusableComponent {
 		super.render(context);
 		String text=title+keybind.getKeyName();
 		if (hasFocus(context)) text=title+"...";
-		renderer.renderTitle(context,text,hasFocus(context),hasFocus(context));
+		renderer.renderTitle(context,text,hasFocus(context));
 	}
 	
 	/**
@@ -41,7 +41,7 @@ public class KeybindComponent extends FocusableComponent {
 	@Override
 	public void handleButton (Context context, int button) {
 		super.handleButton(context,button);
-		context.setHeight(renderer.getHeight());
+		context.setHeight(renderer.getHeight(false));
 		boolean isSelected=hasFocus(context);
 		super.handleButton(context,button);
 		if (isSelected && !hasFocus(context)) keybind.setKey(0);

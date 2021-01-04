@@ -54,7 +54,7 @@ public class DraggableContainer extends CollapsibleContainer implements FixedCom
 	@Override
 	public void handleButton (Context context, int button) {
 		if (bodyDrag) super.handleButton(context, button);
-		else context.setHeight(renderer.getHeight());
+		else context.setHeight(renderer.getHeight(open.getValue()!=0));
 		if (context.isClicked() && button==Interface.LBUTTON) {
 			dragging=true;
 			attachPoint=context.getInterface().getMouse();

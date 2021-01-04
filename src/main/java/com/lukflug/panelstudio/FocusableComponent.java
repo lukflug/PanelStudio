@@ -49,7 +49,7 @@ public class FocusableComponent implements Component {
 	 */
 	@Override
 	public void render(Context context) {
-		context.setHeight(renderer.getHeight());
+		context.setHeight(renderer.getHeight(false));
 		context.setDescription(description);
 	}
 
@@ -58,7 +58,7 @@ public class FocusableComponent implements Component {
 	 */
 	@Override
 	public void handleKey(Context context, int scancode) {
-		context.setHeight(renderer.getHeight());
+		context.setHeight(renderer.getHeight(false));
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class FocusableComponent implements Component {
 	 */
 	@Override
 	public void handleButton (Context context, int button) {
-		context.setHeight(renderer.getHeight());
+		context.setHeight(renderer.getHeight(false));
 		updateFocus(context,button);
 	}
 
@@ -76,7 +76,7 @@ public class FocusableComponent implements Component {
 	 */
 	@Override
 	public void getHeight(Context context) {
-		context.setHeight(renderer.getHeight());
+		context.setHeight(renderer.getHeight(false));
 	}
 	
 	/**
@@ -84,7 +84,7 @@ public class FocusableComponent implements Component {
 	 */
 	@Override
 	public void handleScroll (Context context, int diff) {
-		context.setHeight(renderer.getHeight());
+		context.setHeight(renderer.getHeight(false));
 	}
 	
 	/**
@@ -92,7 +92,7 @@ public class FocusableComponent implements Component {
 	 */
 	@Override
 	public void enter (Context context) {
-		context.setHeight(renderer.getHeight());
+		context.setHeight(renderer.getHeight(false));
 	}
 
 	/**
@@ -100,7 +100,7 @@ public class FocusableComponent implements Component {
 	 */
 	@Override
 	public void exit (Context context) {
-		context.setHeight(renderer.getHeight());
+		context.setHeight(renderer.getHeight(false));
 	}
 	
 	/**

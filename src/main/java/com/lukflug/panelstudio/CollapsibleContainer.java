@@ -89,10 +89,10 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 			if (rect!=null) context.getInterface().restore();
 			if (subContext.isHovered()) context.setDescription(subContext.getDescription());
 			context.setHeight(getRenderHeight(subContext.getSize().height));
+			scrollPosition=renderer.renderScrollBar(context,hasFocus(context),isActive(),scroll,childHeight,scrollPosition);
+			if (scrollPosition>childHeight-containerHeight) scrollPosition=childHeight-containerHeight;
+			if (scrollPosition<0) scrollPosition=0;
 		}
-		scrollPosition=renderer.renderScrollBar(context,hasFocus(context),isActive(),scroll,childHeight,scrollPosition);
-		if (scrollPosition>childHeight-containerHeight) scrollPosition=childHeight-containerHeight;
-		if (scrollPosition<0) scrollPosition=0;
 		renderer.renderBorder(context,hasFocus(context),isActive(),open.getValue()!=0);
 	}
 	
@@ -101,7 +101,7 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	 */
 	@Override
 	public void handleButton (Context context, int button) {
-		context.setHeight(renderer.getHeight());
+		context.setHeight(renderer.getHeight(open.getValue()!=0));
 		if (context.isClicked() && button==Interface.LBUTTON) {
 			if (toggle!=null) toggle.toggle();
 		} else if (context.isHovered() && button==Interface.RBUTTON && context.getInterface().getButton(Interface.RBUTTON)) {
@@ -205,7 +205,7 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	protected int getContainerOffset() {
 		if (scrollPosition>childHeight-containerHeight) scrollPosition=childHeight-containerHeight;
 		if (scrollPosition<0) scrollPosition=0;
-		return (int)(renderer.getHeight()-scrollPosition-(1-open.getValue())*containerHeight);
+		return (int)(renderer.getHeight(open.getValue()!=0)-scrollPosition-(1-open.getValue())*containerHeight);
 	}
 	
 	/**
@@ -228,7 +228,7 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 		scroll=childHeight>containerHeight;
 		if (scrollPosition>childHeight-containerHeight) scrollPosition=childHeight-containerHeight;
 		if (scrollPosition<0) scrollPosition=0;
-		return (int)(containerHeight*open.getValue()+renderer.getHeight());
+		return (int)(containerHeight*open.getValue()+renderer.getHeight(open.getValue()!=0)+renderer.getBottomBorder());
 	}
 	
 	/**
@@ -238,7 +238,7 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	 * @return the clipping rectangle
 	 */
 	protected Rectangle getClipRect (Context context, int height) {
-		return new Rectangle(context.getPos().x+renderer.getLeftBorder(scroll),context.getPos().y+renderer.getHeight(),context.getSize().width-renderer.getLeftBorder(scroll)-renderer.getRightBorder(scroll),getRenderHeight(height)-renderer.getHeight());
+		return new Rectangle(context.getPos().x+renderer.getLeftBorder(scroll),context.getPos().y+renderer.getHeight(open.getValue()!=0),context.getSize().width-renderer.getLeftBorder(scroll)-renderer.getRightBorder(scroll),getRenderHeight(height)-renderer.getHeight(open.getValue()!=0)-renderer.getBottomBorder());
 	}
 
 	/**
