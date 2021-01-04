@@ -89,7 +89,7 @@ public class CoolGUI extends MinecraftGUI {
 	public CoolGUI() {
 		// Intialize necessary fields
 		colorToggle=CoolSettings.colorModel // <-- Toggleable indicating whether to use the RGB or HSB model for color settings
-		guiInterface=new GuiInterface() {
+		guiInterface=new GuiInterface(true) {
 			@Override
 			protected String getResourcePrefix() {
 				return "coolhack:gui/";
