@@ -45,7 +45,7 @@ repositories {
 }
 
 dependencies {
-	compile("com.lukflug:panelstudio:0.1.5")
+	compile("com.lukflug:panelstudio:0.1.6")
 }
 
 shadowJar {
@@ -58,7 +58,7 @@ If you're planning to use PanelStudio-MC you have to also add this:
 ```groovy
 task downloadPanelstudio {
 	doLast {
-		new URL("https://github.com/lukflug/PanelStudio/releases/download/v0.1.5/panelstudio-mc-0.1.5.jar").withInputStream{i->new File("${buildDir}/panelstudio-mc-0.1.5.jar").withOutputStream{it<<i}}
+		new URL("https://github.com/lukflug/PanelStudio/releases/download/v0.1.6/panelstudio-mc-0.1.5.jar").withInputStream{i->new File("${buildDir}/panelstudio-mc-0.1.5.jar").withOutputStream{it<<i}}
 	}
 }
 
@@ -179,7 +179,7 @@ Toggleable hudToggle=new Toggleable() {
 ```
 
 ## Reference
-For a list of classes and methods, consult the [javadoc](https://lukflug.github.io/javadoc/panelstudio/0.1.5/). For an example implementation, consult the GameSense source code.
+For a list of classes and methods, consult the [javadoc](https://lukflug.github.io/javadoc/panelstudio/0.1.6/). For an example implementation, consult the GameSense source code.
 
 ## Creating custom themes
 The components provided by PanelStudio use the methods in the `Renderer` interface to render. A `Theme` consist of three renderers: one for the single components (settings), one for the containers (modules) and one for the panels (categories). To see how themes are implemented, consult the package `com.lukflug.panelstudio.theme`.
