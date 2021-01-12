@@ -63,12 +63,12 @@ If you're planning to use PanelStudio-MC you have to also add this:
 ```groovy
 task downloadPanelstudio {
 	doLast {
-		new URL("https://github.com/lukflug/PanelStudio/releases/download/v0.1.6/panelstudio-mc-0.1.5.jar").withInputStream{i->new File("${buildDir}/panelstudio-mc-0.1.5.jar").withOutputStream{it<<i}}
+		new URL("https://github.com/lukflug/PanelStudio/releases/download/v0.1.7/panelstudio-mc12-0.1.7.jar").withInputStream{i->new File("${buildDir}/panelstudio-mc12-0.1.7.jar").withOutputStream{it<<i}}
 	}
 }
 
 task unpackPanelstudio(dependsOn: downloadPanelstudio, type: Copy) {
-	from zipTree("${buildDir}/panelstudio-mc-0.1.5.jar")
+	from zipTree("${buildDir}/panelstudio-mc12-0.1.7.jar")
 	into "src/main/java"
 }
 ```

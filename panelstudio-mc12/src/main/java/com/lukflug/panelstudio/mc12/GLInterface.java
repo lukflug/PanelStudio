@@ -1,4 +1,4 @@
-package com.lukflug.panelstudio.mc;
+package com.lukflug.panelstudio.mc12;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -106,7 +106,7 @@ public abstract class GLInterface implements Interface {
 	public synchronized int loadImage(String name) {
 		try {
 			ResourceLocation rl=new ResourceLocation(getResourcePrefix()+name);
-			InputStream stream=Minecraft.getMinecraft().resourceManager.getResource(rl).getInputStream();
+			InputStream stream=Minecraft.getMinecraft().getResourceManager().getResource(rl).getInputStream();
 			BufferedImage image=ImageIO.read(stream);
 			int texture=TextureUtil.glGenTextures();
 			TextureUtil.uploadTextureImage(texture,image);

@@ -1,4 +1,4 @@
-package com.lukflug.panelstudio.mc;
+package com.lukflug.panelstudio.mc12;
 
 import com.lukflug.panelstudio.ClickGUI;
 import com.lukflug.panelstudio.hud.HUDClickGUI;

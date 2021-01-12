@@ -1,4 +1,4 @@
-package com.lukflug.panelstudio.mc;
+package com.lukflug.panelstudio.mc12;
 
 import java.awt.Point;
 

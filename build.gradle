@@ -2,10 +2,9 @@
 allprojects {
 	apply plugin: 'java-library'
 	group = 'com.lukflug'
-	version = '0.1.6'
-}
-
-sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
-compileJava {
+	version = '0.1.7'
 	sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+	compileJava {
+		sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+	}
 }
