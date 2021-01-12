@@ -17,6 +17,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 minecraft {
 	version='1.12.2-14.23.5.2768'
 	mappings='snapshot_20180814'
+	runDir='run'
 }
 
 repositories {
@@ -24,9 +25,9 @@ repositories {
 }
 
 dependencies {
-	compile files("$projectDir/../bin/main")
+	compile project(':panelstudio')
 }
 
 task packageDistribution(type: Jar) {
-	from "$projectDir/src/main/java"
+	from '$projectDir/src/main/java'
 }

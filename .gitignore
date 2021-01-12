@@ -46,3 +46,4 @@ build/
 gradle/
 gradlew
 gradlew.bat
+*.launch
