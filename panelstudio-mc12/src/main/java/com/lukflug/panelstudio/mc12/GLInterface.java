@@ -258,7 +258,7 @@ public abstract class GLInterface implements Interface {
 	protected abstract float getZLevel();
 	/**
 	 * Get the Minecraft resource location string.
-	 * @return
+	 * @return the resource prefix
 	 */
 	protected abstract String getResourcePrefix();
 }

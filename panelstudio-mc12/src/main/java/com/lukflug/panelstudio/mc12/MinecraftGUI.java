@@ -56,6 +56,9 @@ public abstract class MinecraftGUI extends GuiScreen {
 	
 	/**
 	 * Draws the screen, updates the mouse position and handles scroll events.
+	 * @param mouseX current mouse x position
+	 * @param mouseY current mouse y position
+	 * @param partialTicks partial tick count
 	 */
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
@@ -70,6 +73,9 @@ public abstract class MinecraftGUI extends GuiScreen {
 
 	/**
 	 * Updates {@link #lButton} and {@link #rButton}.
+	 * @param mouseX current mouse x position
+	 * @param mouseY current mouse y position
+	 * @param clickedButton number of button being clicked
 	 */
 	@Override
 	public void mouseClicked(int mouseX, int mouseY, int clickedButton) {
@@ -87,6 +93,9 @@ public abstract class MinecraftGUI extends GuiScreen {
 
 	/**
 	 * Updates {@link #lButton} and {@link #rButton}.
+	 * @param mouseX current mouse x position
+	 * @param mouseY current mouse y position
+	 * @param releaseButton number of button being released
 	 */
 	@Override
 	public void mouseReleased(int mouseX, int mouseY, int releaseButton) {
@@ -104,6 +113,8 @@ public abstract class MinecraftGUI extends GuiScreen {
 	
 	/**
 	 * Handles the current keys being typed.
+	 * @param typedChar character being typed
+	 * @param keyCode scancode of key being typed
 	 */
 	@Override
 	protected void keyTyped(final char typedChar, final int keyCode) {
@@ -113,6 +124,7 @@ public abstract class MinecraftGUI extends GuiScreen {
 
 	/**
 	 * Returns false.
+	 * @return returns false
 	 */
 	@Override
 	public boolean doesGuiPauseGame() {

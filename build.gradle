@@ -12,11 +12,9 @@ subprojects {
 	}
 }
 
-def exportedProjects = [':panelstudio',':panelstudio-mc12']
-
 task alljavadoc(type: Javadoc) {
-	source exportedProjects.collect{project(it).sourceSets.main.allJava}    											  
-	classpath = files(exportedProjects.collect{project(it).sourceSets.main.compileClasspath})
+	source = subprojects.collect{it.sourceSets.main.allJava}    											  
+	classpath = files(subprojects.collect{it.sourceSets.main.runtimeClasspath})
 	destinationDir = file("${buildDir}/docs/javadoc")
 	title = "PanelStudio API Version ${version}"
 }
