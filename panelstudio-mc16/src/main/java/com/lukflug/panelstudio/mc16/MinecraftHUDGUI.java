@@ -1,9 +1,9 @@
-package com.lukflug.panelstudio.mc12;
+package com.lukflug.panelstudio.mc16;
 
 import com.lukflug.panelstudio.ClickGUI;
 import com.lukflug.panelstudio.hud.HUDClickGUI;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 
 /**
  * Class designed for GUIs with HUDs.
@@ -19,18 +19,18 @@ public abstract class MinecraftHUDGUI extends MinecraftGUI {
 	}
 	
 	@Override
-	public void exitGUI() {
+	public void onClose() {
 		hudEditor=false;
-		super.exitGUI();
+		super.onClose();
 	}
-
+	
 	/**
 	 * Open the HUD editor.
 	 */
 	public void enterHUDEditor() {
 		hudEditor=true;
 		if (getHUDGUI().isOn()) getHUDGUI().toggle();
-		Minecraft.getMinecraft().displayGuiScreen(this);
+		MinecraftClient.getInstance().openScreen(this);
 	}
 	
 	/**

@@ -1,0 +1,14 @@
+
+plugins {
+	id 'fabric-loom' version '0.6.18'
+}
+
+dependencies {
+	minecraft 'com.mojang:minecraft:1.16.4'
+	mappings 'net.fabricmc:yarn:1.16.4+build.9:v2'
+	//compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.3'
+}
+
+dependencies {
+	compile project(':panelstudio')
+}

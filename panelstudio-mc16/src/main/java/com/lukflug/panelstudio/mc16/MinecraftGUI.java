@@ -1,20 +1,20 @@
-package com.lukflug.panelstudio.mc12;
+package com.lukflug.panelstudio.mc16;
 
 import java.awt.Point;
-
-import org.lwjgl.input.Mouse;
 
 import com.lukflug.panelstudio.ClickGUI;
 import com.lukflug.panelstudio.Interface;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.LiteralText;
 
 /**
  * Implementation of Minecraft's GuiScreen that renders a PanelStudio GUI.
  * @author lukflug
  */
-public abstract class MinecraftGUI extends GuiScreen {
+public abstract class MinecraftGUI extends Screen {
 	/**
 	 * The current mouse position.
 	 */
@@ -28,20 +28,25 @@ public abstract class MinecraftGUI extends GuiScreen {
 	 */
 	private boolean rButton=false;
 	
+	public MinecraftGUI() {
+		super(new LiteralText("PanelStudio GUI"));
+	}
+	
 	/**
 	 * Displays the GUI.
 	 */
 	public void enterGUI() {
-		Minecraft.getMinecraft().displayGuiScreen(this);
+		MinecraftClient.getInstance().openScreen(this);
 		getGUI().enter();
 	}
 	
 	/**
 	 * Closes the GUI.
 	 */
-	public void exitGUI() {
+	@Override
+	public void onClose() {
 		getGUI().exit();
-		Minecraft.getMinecraft().displayGuiScreen(null);
+		super.onClose();
 	}
 	
 	/**
@@ -61,14 +66,20 @@ public abstract class MinecraftGUI extends GuiScreen {
 	 * @param partialTicks partial tick count
 	 */
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+	public void render (MatrixStack matrices, int mouseX, int mouseY, float partialTicks) {
 		renderGUI();
-		mouse=new Point(mouseX,mouseY);
-		int scroll=Mouse.getDWheel();
-		if (scroll!=0) {
-			if (scroll>0) getGUI().handleScroll(-getScrollSpeed());
-			else getGUI().handleScroll(getScrollSpeed());
+	}
+	
+	@Override
+	public boolean mouseScrolled (double mouseX, double mouseY, double scroll) {
+		if (!super.mouseScrolled(mouseX,mouseY,scroll)) {
+			mouse=new Point((int)Math.round(mouseX),(int)Math.round(mouseY));
+			if (scroll!=0) {
+				if (scroll>0) getGUI().handleScroll(-getScrollSpeed());
+				else getGUI().handleScroll(getScrollSpeed());
+			}
 		}
+		return true;
 	}
 
 	/**
@@ -78,17 +89,20 @@ public abstract class MinecraftGUI extends GuiScreen {
 	 * @param clickedButton number of button being clicked
 	 */
 	@Override
-	public void mouseClicked(int mouseX, int mouseY, int clickedButton) {
-		mouse=new Point(mouseX,mouseY);
-		switch (clickedButton) {
-		case Interface.LBUTTON:
-			lButton=true;
-			break;
-		case Interface.RBUTTON:
-			rButton=true;
-			break;
+	public boolean mouseClicked(double mouseX, double mouseY, int clickedButton) {
+		if (!super.mouseReleased(mouseX,mouseY,clickedButton)) {
+			mouse=new Point((int)Math.round(mouseX),(int)Math.round(mouseY));
+			switch (clickedButton) {
+			case Interface.LBUTTON:
+				lButton=true;
+				break;
+			case Interface.RBUTTON:
+				rButton=true;
+				break;
+			}
+			getGUI().handleButton(clickedButton);
 		}
-		getGUI().handleButton(clickedButton);
+		return true;
 	}
 
 	/**
@@ -98,17 +112,20 @@ public abstract class MinecraftGUI extends GuiScreen {
 	 * @param releaseButton number of button being released
 	 */
 	@Override
-	public void mouseReleased(int mouseX, int mouseY, int releaseButton) {
-		mouse=new Point(mouseX,mouseY);
-		switch (releaseButton) {
-		case Interface.LBUTTON:
-			lButton=false;
-		break;
-		case Interface.RBUTTON:
-			rButton=false;
+	public boolean mouseReleased(double mouseX, double mouseY, int releaseButton) {
+		if (!super.mouseReleased(mouseX,mouseY,releaseButton)) {
+			mouse=new Point((int)Math.round(mouseX),(int)Math.round(mouseY));
+			switch (releaseButton) {
+			case Interface.LBUTTON:
+				lButton=false;
 			break;
+			case Interface.RBUTTON:
+				rButton=false;
+				break;
+			}
+			getGUI().handleButton(releaseButton);
 		}
-		getGUI().handleButton(releaseButton);
+		return true;
 	}
 	
 	/**
@@ -117,18 +134,9 @@ public abstract class MinecraftGUI extends GuiScreen {
 	 * @param keyCode scancode of key being typed
 	 */
 	@Override
-	protected void keyTyped(char typedChar, int keyCode) {
-		if (keyCode == 1) exitGUI();
-		else getGUI().handleKey(keyCode);
-	}
-
-	/**
-	 * Returns false.
-	 * @return returns false
-	 */
-	@Override
-	public boolean doesGuiPauseGame() {
-		return false;
+	public boolean charTyped (char typedChar, int keyCode) {
+		if (!super.charTyped(typedChar,keyCode)) getGUI().handleKey(keyCode);
+		return true;
 	}
 	
 	/**
@@ -174,7 +182,7 @@ public abstract class MinecraftGUI extends GuiScreen {
 
 		@Override
 		protected float getZLevel() {
-			return zLevel;
+			return getZOffset();
 		}
 	}
 }
