@@ -1,10 +1,22 @@
 
 allprojects {
-	apply plugin: 'java-library'
 	group = 'com.lukflug'
 	version = '0.1.7'
+}
+
+subprojects {
+	apply plugin: 'java-library'
 	sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 	compileJava {
 		sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 	}
+}
+
+def exportedProjects = [':panelstudio',':panelstudio-mc12']
+
+task alljavadoc(type: Javadoc) {
+	source exportedProjects.collect{project(it).sourceSets.main.allJava}    											  
+	classpath = files(exportedProjects.collect{project(it).sourceSets.main.compileClasspath})
+	destinationDir = file("${buildDir}/docs/javadoc")
+	title = "PanelStudio API Version ${version}"
 }

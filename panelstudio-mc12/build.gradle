@@ -20,14 +20,6 @@ minecraft {
 	runDir='run'
 }
 
-repositories {
-	mavenCentral()
-}
-
 dependencies {
 	compile project(':panelstudio')
-}
-
-task packageDistribution(type: Jar) {
-	from '$projectDir/src/main/java'
 }
