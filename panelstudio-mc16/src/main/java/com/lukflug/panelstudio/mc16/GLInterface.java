@@ -162,8 +162,37 @@ public abstract class GLInterface implements Interface {
 		GlStateManager.disableTexture();
 	}
 	
-	protected void project (float x, float y, float z, float w) {
-		
+	/**
+	 * Transform {@link #COORDS} with matrix.
+	 * @param matrix matrix to multiply with {@link #COORDS} 
+	 */
+	private void transform (float[] matrix) {
+		float[] coords={0,0,0,0};
+		for (int i=0;i<4;i++) {
+			for (int j=0;j<4;j++) {
+				coords[i]+=matrix[i+4*j]*COORDS[j];
+			}
+		}
+		for (int i=0;i<4;i++) COORDS[i]=coords[i];
+	}
+	
+	/**
+	 * Project vector and store in {@link #COORDS}
+	 * @param x first component
+	 * @param y second component
+	 * @param z fourth component
+	 * @param w fifth component
+	 */
+	private void project (float x, float y, float z, float w) {
+		COORDS[0]=x;
+		COORDS[1]=y;
+		COORDS[2]=z;
+		COORDS[3]=w;
+		transform(MODELVIEW);
+		transform(PROJECTION);
+		for (int i=0;i<4;i++) COORDS[i]=(COORDS[i]/COORDS[3]+1)/2;
+		COORDS[0]=COORDS[0]*VIEWPORT[2]+VIEWPORT[0];
+		COORDS[1]=COORDS[1]*VIEWPORT[3]+VIEWPORT[1];
 	}
 	
 	/**
