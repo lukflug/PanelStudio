@@ -27,7 +27,14 @@ public abstract class MinecraftGUI extends Screen {
 	 * Current right mouse button state.
 	 */
 	private boolean rButton=false;
+	/**
+	 * Saved matrix stack;
+	 */
+	protected MatrixStack matrixStack=null;
 	
+	/**
+	 * Constructor.
+	 */
 	public MinecraftGUI() {
 		super(new LiteralText("PanelStudio GUI"));
 	}
@@ -67,6 +74,8 @@ public abstract class MinecraftGUI extends Screen {
 	 */
 	@Override
 	public void render (MatrixStack matrices, int mouseX, int mouseY, float partialTicks) {
+		matrixStack=matrices;
+		mouse=new Point((int)Math.round(mouseX),(int)Math.round(mouseY));
 		renderGUI();
 	}
 	
@@ -130,13 +139,23 @@ public abstract class MinecraftGUI extends Screen {
 	
 	/**
 	 * Handles the current keys being typed.
-	 * @param typedChar character being typed
-	 * @param keyCode scancode of key being typed
+	 * @param keyCode key code of key being typed
+	 * @param scanCode scancode of the key being typed
+	 * @param modifiers modifiers of the keys
 	 */
 	@Override
-	public boolean charTyped (char typedChar, int keyCode) {
-		if (!super.charTyped(typedChar,keyCode)) getGUI().handleKey(keyCode);
+	public boolean keyPressed (int keyCode, int scanCode, int modifiers) {
+		if (!super.keyPressed(keyCode,scanCode,modifiers)) getGUI().handleKey(keyCode);
 		return true;
+	}
+	
+	/**
+	 * Returns false.
+	 * @return returns false
+	 */
+	@Override
+	public boolean isPauseScreen() {
+		return false;
 	}
 	
 	/**

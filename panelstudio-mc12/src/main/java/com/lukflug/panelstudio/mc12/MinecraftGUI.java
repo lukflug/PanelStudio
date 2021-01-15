@@ -62,8 +62,8 @@ public abstract class MinecraftGUI extends GuiScreen {
 	 */
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		renderGUI();
 		mouse=new Point(mouseX,mouseY);
+		renderGUI();
 		int scroll=Mouse.getDWheel();
 		if (scroll!=0) {
 			if (scroll>0) getGUI().handleScroll(-getScrollSpeed());

@@ -94,7 +94,7 @@ public class CoolGUI extends MinecraftGUI {
 	public CoolGUI() {
 		// Intialize necessary fields
 		colorToggle=CoolSettings.colorModel // <-- Toggleable indicating whether to use the RGB or HSB model for color settings
-		guiInterface=new GuiInterface(true) {
+		guiInterface=new GUIInterface(true) {
 			@Override
 			protected String getResourcePrefix() {
 				return "coolhack:gui/";
@@ -117,7 +117,7 @@ public class CoolGUI extends MinecraftGUI {
 				return CoolFont.getFontHeight();
 			}
 		};
-		theme=new GameSenseTheme(new SettingsColorScheme(CoolSettings.activeColor,CoolSettings.inactiveColor,CoolSettings.backgroundColor,CoolSettings.outlineColor,CoolSettings.fontColor,CoolSettings.opacity),height,2); // <-- Can be replaced by another theme (could be a custom one)
+		theme=new GameSenseTheme(new SettingsColorScheme(CoolSettings.activeColor,CoolSettings.inactiveColor,CoolSettings.backgroundColor,CoolSettings.outlineColor,CoolSettings.fontColor,CoolSettings.opacity),height,2,5); // <-- Can be replaced by another theme (could be a custom one)
 		gui=new ClickGUI(guiInterface,null);
 		// Populate the ClickGUI with modules and settings
 		for (CoolCategory category: categories) {
@@ -130,7 +130,7 @@ public class CoolGUI extends MinecraftGUI {
 					if (setting instanceof Toggleable) container.addComponent(new BooleanComponent(setting.name,null,theme.getComponentRenderer(),(Toggleable)setting));
 					else if (setting instanceof NumberSetting) container.addComponent(new NumberComponent(setting.name,null,theme.getComponentRenderer(),(NumberSetting)setting,setting.min,setting.max));
 					else if (setting instanceof EnumSetting) container.addComponent(new EnumComponent(setting.name,null,theme.getComponentRenderer(),(EnumSetting)setting));
-					else if (setting instanceof ColorSetting) container.addComponent(new ColorComponent(setting.name,null,theme.getComponentRenderer(),new SettingsAnimation(CoolSettings.animationSpeed),(ColorSetting)setting,setting.alpha,setting.rainbowEnabled,colorToggle));
+					else if (setting instanceof ColorSetting) container.addComponent(new ColorComponent(setting.name,null,theme.getContainerRenderer(),new SettingsAnimation(CoolSettings.animationSpeed),theme.getComponentRenderer(),(ColorSetting)setting,setting.alpha,setting.rainbowEnabled,colorToggle));
 				}
 				container.addComponent(new KeybindComponent(theme.getComponentRenderer(),module.getKeybind()));
 			}
@@ -149,7 +149,7 @@ public class CoolGUI extends MinecraftGUI {
 
 	@Override
 	protected int getScrollSpeed() {
-		return CoolSettings.scrollSpeed;
+		return CoolSettings.scrollSpeed.getValue();
 	}
 }
 ```
