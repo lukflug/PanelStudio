@@ -190,7 +190,7 @@ public class ColorComponent extends CollapsibleContainer {
 				else setting.setValue(c);
 				break;
 			case 3:
-				setting.setValue(new Color(c.getRed(),c.getGreen(),c.getBlue(),(float)value*255.0f));
+				setting.setValue(new Color(c.getRed(),c.getGreen(),c.getBlue(),(int)(255*value)));
 				break;
 			}
 		}
