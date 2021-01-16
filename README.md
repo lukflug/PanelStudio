@@ -18,17 +18,9 @@ A simple yet flexible library to create ClickGUIs designed for use in Minecraft 
 * Windows Theme:
 ![windows](https://cdn.discordapp.com/attachments/780094001331961901/796061378686615572/2021-01-05_17.57.42.png)
 
-This repostiory only includes the GameSense themes, however, since Cyber didn't want me to publish the other themes. The library has no depedencies (aside from Java 8), so it can be easily used for other purposes, aside from Minecraft utility mods. Thanks to Go_Hoosiers, for suggesting the name of this library. If you use this library, some attribution would be greatly appreciated. Consider visiting the PanelStudio discord server: https://discord.gg/E3DrF4XvUE.
+This repository only includes the GameSense themes, however, since Cyber didn't want me to publish the other themes. The library has no depedencies (aside from Java 8), so it can be easily used for other purposes, aside from Minecraft utility mods. Thanks to Go_Hoosiers, for suggesting the name of this library. If you use this library, some attribution would be greatly appreciated. Consider visiting the PanelStudio discord server: https://discord.gg/E3DrF4XvUE.
 
-## Structure
-This library contains following packages:
-* `com.lukflug.panelstudio`: basic library and ClickGUI.
-* `com.lukflug.panelstudio.settings`: common ClickGUI components and interfaces to mark module setting classes.
-* `com.lukflug.panelstudio.theme`: contains base classes for themes and GameSense themes.
-* `com.lukflug.panelstudio.tabgui`: TabGUI.
-* `com.lukflug.panelstudio.hud`: HUD panels.
-
-In addition to the core PanelStudio library, there is the PanelStudio-MC library (`com.lukflug.panelstudio.mc` package), which is a source code library that includes Minecraft depedencies. It was tested on Minecraft Forge 1.12.2, but may or may not work on Fabric or other Minecraft versions. The PanelStudio core library works on any Minecraft version (and even on any non-Minecraft application).
+In addition to the core PanelStudio library, there are the PanelStudio-MC libraries. The PanelStudio-MC12 library is designed for Minecraft Forge 1.12.2 (it may or may not work for other versions and mods that use MCP only). The PanelStudio-MC16 library is designed for Fabric 1.16.4 and also works on 1.16.5 (works on anything using Fabric's Yarn mappings, it probably works on older versions, this has however not been tested). The PanelStudio core library works on any Minecraft version (and even on any non-Minecraft application).
 
 ## Features
 * Ability to easily create new themes/skins.
@@ -39,7 +31,7 @@ In addition to the core PanelStudio library, there is the PanelStudio-MC library
 ## Implementation in Minecraft clients
 A jar of this library is available in the Maven repository at https://lukflug.github.io/maven/ as `com.lukflug.panelstudio`.
 
-### Use in Gradle
+### Use in Gradle 4.10.3
 Add following to your `build.gradle`:
 ```groovy
 repositories {
@@ -50,7 +42,7 @@ repositories {
 }
 
 dependencies {
-	compile("com.lukflug:panelstudio:0.1.6")
+	compile("com.lukflug:panelstudio:0.1.7")
 }
 
 shadowJar {
@@ -59,27 +51,17 @@ shadowJar {
 	}
 }
 ```
-If you're planning to use PanelStudio-MC you have to also add this:
+If you're planning to use PanelStudio-MC you have to also add this (replace `mc12` by `mc16`, if using PanelStudio-MC16):
 ```groovy
-task downloadPanelstudio {
-	doLast {
-		new URL("https://github.com/lukflug/PanelStudio/releases/download/v0.1.7/panelstudio-mc12-0.1.7.jar").withInputStream{i->new File("${buildDir}/panelstudio-mc12-0.1.7.jar").withOutputStream{it<<i}}
-	}
+dependencies {
+	compile("com.lukflug:panelstudio-mc12:0.1.7")
 }
 
-task unpackPanelstudio(dependsOn: downloadPanelstudio, type: Copy) {
-	from zipTree("${buildDir}/panelstudio-mc12-0.1.7.jar")
-	into "src/main/java"
+shadowJar {
+	dependencies {
+		include(dependency('com.lukflug:panelstudio-mc12'))
+	}
 }
-```
-Run the task `unpackPanelstudio` (which downloads and extracts the PanelStudio-MC source library for you) once before building. If you're using git you may also want to ignore the PanelStudio-MC source in `.gitignore`:
-```gitignore
-src/main/java/com/lukflug/panelstudio
-src/main/java/META-INF
-```
-You can also do the `unpackPanelstudio` automatically when running `setupDecompWorkspace`, by adding:
-```groovy
-setupDecompWorkspace.dependsOn(unpackPanelstudio)
 ```
 
 ### ClickGUI
@@ -184,7 +166,7 @@ Toggleable hudToggle=new Toggleable() {
 ```
 
 ## Reference
-For a list of classes and methods, consult the [javadoc](https://lukflug.github.io/javadoc/panelstudio/0.1.6/). For an example implementation, consult the GameSense source code.
+For a list of classes and methods, consult the [javadoc](https://lukflug.github.io/javadoc/panelstudio/0.1.7/). For an example implementation, consult the GameSense source code.
 
 ## Creating custom themes
 The components provided by PanelStudio use the methods in the `Renderer` interface to render. A `Theme` consist of three renderers: one for the single components (settings), one for the containers (modules) and one for the panels (categories). To see how themes are implemented, consult the package `com.lukflug.panelstudio.theme`.
