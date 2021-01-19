@@ -37,7 +37,7 @@ public abstract class MinecraftHUDGUI extends MinecraftGUI {
 	 * Render function to be called when the GUI is closed to render the HUD.
 	 */
 	public void render() {
-		if (!getHUDGUI().isOn()) renderGUI();
+		if (!getHUDGUI().isOn() && !hudEditor) renderGUI();
 	}
 	
 	/**
@@ -45,7 +45,7 @@ public abstract class MinecraftHUDGUI extends MinecraftGUI {
 	 * @param scancode the key scancode
 	 */
 	public void handleKeyEvent (int scancode) {
-		if (scancode!=1 && !getHUDGUI().isOn()) getHUDGUI().handleKey(scancode);
+		if (scancode!=1 && !getHUDGUI().isOn() && !hudEditor) getHUDGUI().handleKey(scancode);
 	}
 	
 	/**

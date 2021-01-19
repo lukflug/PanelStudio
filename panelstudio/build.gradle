@@ -1,0 +1,11 @@
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			pom {
+				name = 'PanelStudio'
+				description = 'A simple yet flexible library to create ClickGUIs designed for use in Minecraft utility mods.'
+			}
+		}
+	}
+}

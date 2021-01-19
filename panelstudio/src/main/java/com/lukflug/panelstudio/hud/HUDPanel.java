@@ -11,8 +11,8 @@ import com.lukflug.panelstudio.FixedComponent;
 import com.lukflug.panelstudio.Interface;
 import com.lukflug.panelstudio.PanelConfig;
 import com.lukflug.panelstudio.settings.Toggleable;
-import com.lukflug.panelstudio.theme.ColorScheme;
 import com.lukflug.panelstudio.theme.Renderer;
+import com.lukflug.panelstudio.theme.RendererProxy;
 
 /**
  * Panel holding an HUD component.
@@ -113,7 +113,7 @@ public class HUDPanel extends DraggableContainer {
 	 * Proxy for a {@link Renderer}, doesn't display container, when GUI is off.
 	 * @author lukflug
 	 */
-	protected static class HUDRenderer implements Renderer {
+	protected static class HUDRenderer extends RendererProxy {
 		/**
 		 * Base renderer.
 		 */
@@ -138,14 +138,6 @@ public class HUDPanel extends DraggableContainer {
 			this.guiOpen=guiOpen;
 			this.minBorder=minBorder;
 		}
-		
-		/**
-		 * Returns the height defined by the base renderer.
-		 */
-		@Override
-		public int getHeight (boolean open) {
-			return renderer.getHeight(open);
-		}
 
 		/**
 		 * Returns the offset defined by the base renderer, if it is larger than {@link #minBorder}.
@@ -163,30 +155,6 @@ public class HUDPanel extends DraggableContainer {
 		@Override
 		public int getBorder() {
 			return Math.max(renderer.getBorder(),minBorder);
-		}
-		
-		/**
-		 * Returns the border defined by the base renderer.
-		 */
-		@Override
-		public int getBottomBorder() {
-			return renderer.getBottomBorder();
-		}
-
-		/**
-		 * Returns the border defined by the base renderer.
-		 */
-		@Override
-		public int getLeftBorder (boolean scroll) {
-			return renderer.getLeftBorder(scroll);
-		}
-		
-		/**
-		 * Returns the border defined by the base renderer.
-		 */
-		@Override
-		public int getRightBorder (boolean scroll) {
-			return renderer.getRightBorder(scroll);
 		}
 
 		@Override
@@ -253,18 +221,8 @@ public class HUDPanel extends DraggableContainer {
 		}
 
 		@Override
-		public ColorScheme getDefaultColorScheme() {
-			return renderer.getDefaultColorScheme();
-		}
-
-		@Override
-		public void overrideColorScheme(ColorScheme scheme) {
-			renderer.overrideColorScheme(scheme);
-		}
-
-		@Override
-		public void restoreColorScheme() {
-			renderer.restoreColorScheme();
+		protected Renderer getRenderer() {
+			return renderer;
 		}
 	}
 }
