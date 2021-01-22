@@ -42,7 +42,7 @@ repositories {
 }
 
 dependencies {
-	compile("com.lukflug:panelstudio:0.1.8")
+	compile('com.lukflug:panelstudio:0.1.8')
 }
 
 shadowJar {
@@ -54,7 +54,7 @@ shadowJar {
 If you're planning to use PanelStudio-MC12 you have to also add this:
 ```groovy
 dependencies {
-	compile("com.lukflug:panelstudio-mc12:0.1.8")
+	compile('com.lukflug:panelstudio-mc12:0.1.8')
 }
 
 shadowJar {
@@ -66,7 +66,7 @@ shadowJar {
 If you're planning to use PanelStudio-MC16 you have to also add this:
 ```groovy
 dependencies {
-	modCompile("com.lukflug:panelstudio-mc16:0.1.9")
+	modCompile('com.lukflug:panelstudio-mc16:0.1.9')
 }
 
 shadowJar {
