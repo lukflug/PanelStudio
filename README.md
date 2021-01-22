@@ -51,7 +51,7 @@ shadowJar {
 	}
 }
 ```
-If you're planning to use PanelStudio-MC you have to also add this (replace `mc12` by `mc16`, if using PanelStudio-MC16):
+If you're planning to use PanelStudio-MC12 you have to also add this:
 ```groovy
 dependencies {
 	compile("com.lukflug:panelstudio-mc12:0.1.8")
@@ -60,6 +60,18 @@ dependencies {
 shadowJar {
 	dependencies {
 		include(dependency('com.lukflug:panelstudio-mc12'))
+	}
+}
+```
+If you're planning to use PanelStudio-MC16 you have to also add this:
+```groovy
+dependencies {
+	modCompile("com.lukflug:panelstudio-mc16:0.1.9")
+}
+
+shadowJar {
+	dependencies {
+		include(dependency('com.lukflug:panelstudio-mc16'))
 	}
 }
 ```
@@ -166,7 +178,7 @@ Toggleable hudToggle=new Toggleable() {
 ```
 
 ## Reference
-For a list of classes and methods, consult the [javadoc](https://lukflug.github.io/javadoc/panelstudio/0.1.8/overview-summary.html). For an example implementation, consult the GameSense source code.
+For a list of classes and methods, consult the [javadoc](https://lukflug.github.io/javadoc/panelstudio/0.1.9/overview-summary.html). For an example implementation, consult the GameSense source code.
 
 ## Creating custom themes
 The components provided by PanelStudio use the methods in the `Renderer` interface to render. A `Theme` consist of three renderers: one for the single components (settings), one for the containers (modules) and one for the panels (categories). To see how themes are implemented, consult the package `com.lukflug.panelstudio.theme`.
