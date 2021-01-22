@@ -34,3 +34,18 @@ publishing {
 		}
 	}
 }
+
+task alljavadoc(type: Javadoc) {
+	source = rootProject.subprojects.collect{it.sourceSets.main.allJava}
+	classpath = files(rootProject.subprojects.collect{it.sourceSets.main.runtimeClasspath})
+	destinationDir = file("${projectDir}/../build/docs/javadoc")
+	javadoc.title = "PanelStudio API Version ${version}"
+}
+
+task copyJavadoc(type: Copy) {
+	dependsOn alljavadoc
+    from "${projectDir}/../build/docs/javadoc"
+    into "${projectDir}/../../lukflug.github.io/javadoc/panelstudio/${version}"
+}
+
+publish.dependsOn(copyJavadoc)

@@ -1,7 +1,7 @@
 
 allprojects {
 	group = 'com.lukflug'
-	version = '0.1.8'
+	version = '0.1.9'
 }
 
 subprojects {
@@ -41,11 +41,4 @@ subprojects {
 			}
 		}
 	}
-}
-
-task alljavadoc(type: Javadoc) {
-	source = subprojects.collect{it.sourceSets.main.allJava}    											  
-	classpath = files(subprojects.collect{it.sourceSets.main.runtimeClasspath})
-	destinationDir = file("${buildDir}/docs/javadoc")
-	title = "PanelStudio API Version ${version}"
 }
