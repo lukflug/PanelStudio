@@ -1,6 +1,6 @@
 package com.lukflug.panelstudio.tabgui;
 
-import com.lukflug.panelstudio.Context;
+import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.theme.IColorScheme;
 
 /**

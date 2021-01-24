@@ -4,8 +4,8 @@ import java.awt.Point;
 
 import org.lwjgl.input.Mouse;
 
-import com.lukflug.panelstudio.ClickGUI;
-import com.lukflug.panelstudio.IInterface;
+import com.lukflug.panelstudio.base.IInterface;
+import com.lukflug.panelstudio.container.ClickGUI;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;

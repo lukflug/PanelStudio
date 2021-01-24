@@ -2,10 +2,10 @@ package com.lukflug.panelstudio.hud;
 
 import java.awt.Point;
 
-import com.lukflug.panelstudio.Context;
-import com.lukflug.panelstudio.IFixedComponent;
-import com.lukflug.panelstudio.IInterface;
-import com.lukflug.panelstudio.IPanelConfig;
+import com.lukflug.panelstudio.base.Context;
+import com.lukflug.panelstudio.base.IInterface;
+import com.lukflug.panelstudio.component.IFixedComponent;
+import com.lukflug.panelstudio.config.IPanelConfig;
 import com.lukflug.panelstudio.theme.IRenderer;
 
 /**

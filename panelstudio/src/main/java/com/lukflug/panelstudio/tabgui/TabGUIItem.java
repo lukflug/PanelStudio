@@ -1,7 +1,7 @@
 package com.lukflug.panelstudio.tabgui;
 
-import com.lukflug.panelstudio.Context;
-import com.lukflug.panelstudio.settings.IToggleable;
+import com.lukflug.panelstudio.base.Context;
+import com.lukflug.panelstudio.base.IToggleable;
 
 /**
  * Component representing leaf in TabGUI hierarchy.

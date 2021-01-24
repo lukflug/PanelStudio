@@ -3,10 +3,10 @@ package com.lukflug.panelstudio.hud;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lukflug.panelstudio.ClickGUI;
-import com.lukflug.panelstudio.IFixedComponent;
-import com.lukflug.panelstudio.IInterface;
-import com.lukflug.panelstudio.settings.IToggleable;
+import com.lukflug.panelstudio.base.IInterface;
+import com.lukflug.panelstudio.base.IToggleable;
+import com.lukflug.panelstudio.component.IFixedComponent;
+import com.lukflug.panelstudio.container.ClickGUI;
 import com.lukflug.panelstudio.theme.IDescriptionRenderer;
 
 /**

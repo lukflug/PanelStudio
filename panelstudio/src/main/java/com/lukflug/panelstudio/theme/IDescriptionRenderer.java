@@ -1,6 +1,6 @@
 package com.lukflug.panelstudio.theme;
 
-import com.lukflug.panelstudio.Context;
+import com.lukflug.panelstudio.base.Context;
 
 /**
  * Interface used to render descriptions.

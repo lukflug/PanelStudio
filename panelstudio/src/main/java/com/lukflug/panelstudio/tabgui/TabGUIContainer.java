@@ -4,8 +4,8 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lukflug.panelstudio.Animation;
-import com.lukflug.panelstudio.Context;
+import com.lukflug.panelstudio.base.Animation;
+import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.theme.IRenderer;
 
 /**

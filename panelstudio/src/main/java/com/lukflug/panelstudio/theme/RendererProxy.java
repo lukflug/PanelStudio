@@ -3,7 +3,7 @@ package com.lukflug.panelstudio.theme;
 import java.awt.Color;
 import java.awt.Rectangle;
 
-import com.lukflug.panelstudio.Context;
+import com.lukflug.panelstudio.base.Context;
 
 /**
  * Implementation of {@link IRenderer} that simply redirects methods to another renderer.

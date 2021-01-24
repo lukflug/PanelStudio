@@ -4,15 +4,15 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-import com.lukflug.panelstudio.Animation;
-import com.lukflug.panelstudio.Context;
-import com.lukflug.panelstudio.DraggableContainer;
-import com.lukflug.panelstudio.IFixedComponent;
-import com.lukflug.panelstudio.IInterface;
-import com.lukflug.panelstudio.IPanelConfig;
-import com.lukflug.panelstudio.settings.IToggleable;
+import com.lukflug.panelstudio.base.Animation;
+import com.lukflug.panelstudio.base.Context;
+import com.lukflug.panelstudio.base.IInterface;
+import com.lukflug.panelstudio.base.IToggleable;
+import com.lukflug.panelstudio.component.IFixedComponent;
+import com.lukflug.panelstudio.config.IPanelConfig;
 import com.lukflug.panelstudio.theme.IRenderer;
 import com.lukflug.panelstudio.theme.RendererProxy;
+import com.lukflug.panelstudio.widget.DraggableContainer;
 
 /**
  * Panel holding an HUD component.

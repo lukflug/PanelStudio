@@ -5,7 +5,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-import com.lukflug.panelstudio.Context;
+import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.theme.IColorScheme;
 
 /**

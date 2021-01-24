@@ -1,6 +1,6 @@
 package com.lukflug.panelstudio.tabgui;
 
-import com.lukflug.panelstudio.IComponent;
+import com.lukflug.panelstudio.component.IComponent;
 
 /**
  * Interface representing a part of a TabGUI.

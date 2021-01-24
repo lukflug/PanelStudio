@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutionException;
 
 import org.lwjgl.opengl.GL11;
 
-import com.lukflug.panelstudio.IInterface;
+import com.lukflug.panelstudio.base.IInterface;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.minecraft.client.MinecraftClient;

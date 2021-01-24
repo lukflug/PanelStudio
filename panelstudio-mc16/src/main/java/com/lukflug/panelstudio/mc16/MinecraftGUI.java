@@ -2,8 +2,8 @@ package com.lukflug.panelstudio.mc16;
 
 import java.awt.Point;
 
-import com.lukflug.panelstudio.ClickGUI;
-import com.lukflug.panelstudio.IInterface;
+import com.lukflug.panelstudio.base.IInterface;
+import com.lukflug.panelstudio.container.ClickGUI;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;

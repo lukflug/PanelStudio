@@ -2,10 +2,10 @@ package com.lukflug.panelstudio.tabgui;
 
 import java.awt.Point;
 
-import com.lukflug.panelstudio.Animation;
-import com.lukflug.panelstudio.IFixedComponent;
-import com.lukflug.panelstudio.IInterface;
-import com.lukflug.panelstudio.IPanelConfig;
+import com.lukflug.panelstudio.base.Animation;
+import com.lukflug.panelstudio.base.IInterface;
+import com.lukflug.panelstudio.component.IFixedComponent;
+import com.lukflug.panelstudio.config.IPanelConfig;
 
 /**
  * A {@link TabGUIContainer} that is also a {@link IFixedComponent}.

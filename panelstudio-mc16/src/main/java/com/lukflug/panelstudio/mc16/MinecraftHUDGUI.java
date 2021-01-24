@@ -1,6 +1,6 @@
 package com.lukflug.panelstudio.mc16;
 
-import com.lukflug.panelstudio.ClickGUI;
+import com.lukflug.panelstudio.container.ClickGUI;
 import com.lukflug.panelstudio.hud.HUDClickGUI;
 
 import net.minecraft.client.MinecraftClient;

@@ -15,7 +15,7 @@ import javax.imageio.ImageIO;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
-import com.lukflug.panelstudio.IInterface;
+import com.lukflug.panelstudio.base.IInterface;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;

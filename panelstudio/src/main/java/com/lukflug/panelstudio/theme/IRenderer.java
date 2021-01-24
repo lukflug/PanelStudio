@@ -3,7 +3,7 @@ package com.lukflug.panelstudio.theme;
 import java.awt.Color;
 import java.awt.Rectangle;
 
-import com.lukflug.panelstudio.Context;
+import com.lukflug.panelstudio.base.Context;
 
 /**
  * An Interface to standardize the appearance of different components.

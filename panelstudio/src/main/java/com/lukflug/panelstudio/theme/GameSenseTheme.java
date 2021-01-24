@@ -5,7 +5,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-import com.lukflug.panelstudio.Context;
+import com.lukflug.panelstudio.base.Context;
 
 /**
  * Recreates the appearance of GameSense 2.2.0.
