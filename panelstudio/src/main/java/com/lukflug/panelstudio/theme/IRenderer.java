@@ -9,7 +9,7 @@ import com.lukflug.panelstudio.Context;
  * An Interface to standardize the appearance of different components.
  * @author lukflug
  */
-public interface Renderer {
+public interface IRenderer {
 	/**
 	 * Returns the default height for components.
 	 * @param open true if the component in question the the title bar for an open container
@@ -141,14 +141,14 @@ public interface Renderer {
 	 * Returns the default color scheme.
 	 * @return the color scheme
 	 */
-	public ColorScheme getDefaultColorScheme();
+	public IColorScheme getDefaultColorScheme();
 	
 	/**
 	 * Overrides the default color scheme.
 	 * {@link #restoreColorScheme()} should always be called after rendering using a custom color scheme is finished.
 	 * @param scheme the custom color scheme
 	 */
-	public void overrideColorScheme (ColorScheme scheme);
+	public void overrideColorScheme (IColorScheme scheme);
 	
 	/**
 	 * Restores the default color scheme.

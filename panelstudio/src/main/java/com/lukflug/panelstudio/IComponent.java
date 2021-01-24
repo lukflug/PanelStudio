@@ -4,7 +4,7 @@ package com.lukflug.panelstudio;
  * Interface representing a drawable object in the GUI.
  * @author lukflug
  */
-public interface Component {
+public interface IComponent {
 	/**
 	 * Get the caption of the component.
 	 * String may also be empty.

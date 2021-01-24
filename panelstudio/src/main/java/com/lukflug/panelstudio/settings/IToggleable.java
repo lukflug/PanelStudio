@@ -4,7 +4,7 @@ package com.lukflug.panelstudio.settings;
  * Interface representing a boolean value that can be toggled.
  * @author lukflug
  */
-public interface Toggleable {
+public interface IToggleable {
 	/**
 	 * Toggle the boolean value.
 	 */

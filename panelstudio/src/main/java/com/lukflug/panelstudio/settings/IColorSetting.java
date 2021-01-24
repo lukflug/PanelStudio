@@ -6,7 +6,7 @@ import java.awt.Color;
  * Setting representing a color.
  * @author lukflug
  */
-public interface ColorSetting {
+public interface IColorSetting {
 	/**
 	 * Get the current value for the color setting.
 	 * @return the current color

@@ -11,11 +11,11 @@ import com.lukflug.panelstudio.Context;
  * Recreates the appearance of GameSense 2.2.0.
  * @author lukflug
  */
-public class GameSenseTheme implements Theme {
-	protected ColorScheme scheme;
-	protected Renderer componentRenderer,containerRenderer,panelRenderer;
+public class GameSenseTheme implements ITheme {
+	protected IColorScheme scheme;
+	protected IRenderer componentRenderer,containerRenderer,panelRenderer;
 	
-	public GameSenseTheme (ColorScheme scheme, int height, int border, int scroll) {
+	public GameSenseTheme (IColorScheme scheme, int height, int border, int scroll) {
 		this.scheme=scheme;
 		panelRenderer=new ComponentRenderer(0,height,border,scroll);
 		containerRenderer=new ComponentRenderer(1,height,border,scroll);
@@ -23,17 +23,17 @@ public class GameSenseTheme implements Theme {
 	}
 	
 	@Override
-	public Renderer getPanelRenderer() {
+	public IRenderer getPanelRenderer() {
 		return panelRenderer;
 	}
 
 	@Override
-	public Renderer getContainerRenderer() {
+	public IRenderer getContainerRenderer() {
 		return containerRenderer;
 	}
 
 	@Override
-	public Renderer getComponentRenderer() {
+	public IRenderer getComponentRenderer() {
 		return componentRenderer;
 	}
 
@@ -119,7 +119,7 @@ public class GameSenseTheme implements Theme {
 		}
 
 		@Override
-		public ColorScheme getDefaultColorScheme() {
+		public IColorScheme getDefaultColorScheme() {
 			return GameSenseTheme.this.scheme;
 		}
 	}

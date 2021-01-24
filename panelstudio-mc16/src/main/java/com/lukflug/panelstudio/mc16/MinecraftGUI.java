@@ -3,7 +3,7 @@ package com.lukflug.panelstudio.mc16;
 import java.awt.Point;
 
 import com.lukflug.panelstudio.ClickGUI;
-import com.lukflug.panelstudio.Interface;
+import com.lukflug.panelstudio.IInterface;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -102,10 +102,10 @@ public abstract class MinecraftGUI extends Screen {
 		if (!super.mouseReleased(mouseX,mouseY,clickedButton)) {
 			mouse=new Point((int)Math.round(mouseX),(int)Math.round(mouseY));
 			switch (clickedButton) {
-			case Interface.LBUTTON:
+			case IInterface.LBUTTON:
 				lButton=true;
 				break;
-			case Interface.RBUTTON:
+			case IInterface.RBUTTON:
 				rButton=true;
 				break;
 			}
@@ -125,10 +125,10 @@ public abstract class MinecraftGUI extends Screen {
 		if (!super.mouseReleased(mouseX,mouseY,releaseButton)) {
 			mouse=new Point((int)Math.round(mouseX),(int)Math.round(mouseY));
 			switch (releaseButton) {
-			case Interface.LBUTTON:
+			case IInterface.LBUTTON:
 				lButton=false;
 			break;
-			case Interface.RBUTTON:
+			case IInterface.RBUTTON:
 				rButton=false;
 				break;
 			}
@@ -186,9 +186,9 @@ public abstract class MinecraftGUI extends Screen {
 		@Override
 		public boolean getButton(int button) {
 			switch (button) {
-			case Interface.LBUTTON:
+			case IInterface.LBUTTON:
 				return lButton;
-			case Interface.RBUTTON:
+			case IInterface.RBUTTON:
 				return rButton;
 			}
 			return false;

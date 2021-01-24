@@ -4,24 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lukflug.panelstudio.ClickGUI;
-import com.lukflug.panelstudio.FixedComponent;
-import com.lukflug.panelstudio.Interface;
-import com.lukflug.panelstudio.settings.Toggleable;
-import com.lukflug.panelstudio.theme.DescriptionRenderer;
+import com.lukflug.panelstudio.IFixedComponent;
+import com.lukflug.panelstudio.IInterface;
+import com.lukflug.panelstudio.settings.IToggleable;
+import com.lukflug.panelstudio.theme.IDescriptionRenderer;
 
 /**
  * ClickGUI that only renders HUD components when closed.
  * @author lukflug
  */
-public class HUDClickGUI extends ClickGUI implements Toggleable {
+public class HUDClickGUI extends ClickGUI implements IToggleable {
 	/**
 	 * List of all components.
 	 */
-	protected List<FixedComponent> allComponents=new ArrayList<FixedComponent>();
+	protected List<IFixedComponent> allComponents=new ArrayList<IFixedComponent>();
 	/**
 	 * List of HUD components.
 	 */
-	protected List<FixedComponent> hudComponents=new ArrayList<FixedComponent>();
+	protected List<IFixedComponent> hudComponents=new ArrayList<IFixedComponent>();
 	/**
 	 * Whether the GUI components are shown or not.
 	 */
@@ -30,9 +30,9 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 	/**
 	 * Constructor.
 	 * @param inter the interface for the ClickGUI
-	 * @param descriptionRenderer the {@link DescriptionRenderer} used by the GUI
+	 * @param descriptionRenderer the {@link IDescriptionRenderer} used by the GUI
 	 */
-	public HUDClickGUI (Interface inter, DescriptionRenderer descriptionRenderer) {
+	public HUDClickGUI (IInterface inter, IDescriptionRenderer descriptionRenderer) {
 		super(inter,descriptionRenderer);
 		components=hudComponents;
 	}
@@ -41,13 +41,13 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 	 * Add component to {@link #allComponents} instead of the {@link ClickGUI} list.
 	 */
 	@Override
-	public void addComponent (FixedComponent component) {
+	public void addComponent (IFixedComponent component) {
 		allComponents.add(component);
 		permanentComponents.add(component);
 	}
 
 	@Override
-	public void showComponent(FixedComponent component) {
+	public void showComponent(IFixedComponent component) {
 		if (!allComponents.contains(component)) {
 			allComponents.add(component);
 			if (guiOpen) component.enter(getContext(component,false));
@@ -55,7 +55,7 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 	}
 
 	@Override
-	public void hideComponent(FixedComponent component) {
+	public void hideComponent(IFixedComponent component) {
 		if (!permanentComponents.contains(component)) {
 			if (allComponents.remove(component) && guiOpen) component.exit(getContext(component,false));
 		}
@@ -65,7 +65,7 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 	 * Add component to {@link #allComponents} and {@link #hudComponents}.
 	 * @param component the new HUD component
 	 */
-	public void addHUDComponent (FixedComponent component) {
+	public void addHUDComponent (IFixedComponent component) {
 		hudComponents.add(component);
 		allComponents.add(component);
 		permanentComponents.add(component);
@@ -113,8 +113,8 @@ public class HUDClickGUI extends ClickGUI implements Toggleable {
 	}
 
 	@Override
-	public Toggleable getComponentToggleable(FixedComponent component) {
-		return new Toggleable() {
+	public IToggleable getComponentToggleable(IFixedComponent component) {
+		return new IToggleable() {
 			@Override
 			public void toggle() {
 				if (isOn()) hideComponent(component);

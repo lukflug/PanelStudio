@@ -8,7 +8,7 @@ import java.awt.Rectangle;
  * Interface to abstract rendering and input methods.
  * @author lukflug
  */
-public interface Interface {
+public interface IInterface {
 	/**
 	 * ID for the left mouse button.
 	 * @see #getButton(int)

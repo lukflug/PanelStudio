@@ -2,7 +2,7 @@ package com.lukflug.panelstudio.settings;
 
 import com.lukflug.panelstudio.Context;
 import com.lukflug.panelstudio.Slider;
-import com.lukflug.panelstudio.theme.Renderer;
+import com.lukflug.panelstudio.theme.IRenderer;
 
 /**
  * Component that represents a number-valued setting through a {@link Slider}.
@@ -12,7 +12,7 @@ public class NumberComponent extends Slider {
 	/**
 	 * The setting in question.
 	 */
-	protected NumberSetting setting;
+	protected INumberSetting setting;
 	/**
 	 * The name of the setting.
 	 */
@@ -22,12 +22,12 @@ public class NumberComponent extends Slider {
 	 * Constructor.
 	 * @param text name of the setting
 	 * @param description the description for this component
-	 * @param renderer {@link Renderer} for the component
+	 * @param renderer {@link IRenderer} for the component
 	 * @param setting the setting in question
 	 * @param min minimum value for the setting
 	 * @param max maximum value for the setting
 	 */
-	public NumberComponent(String text, String description, Renderer renderer, NumberSetting setting, double min, double max) {
+	public NumberComponent(String text, String description, IRenderer renderer, INumberSetting setting, double min, double max) {
 		super("",description,renderer);
 		this.setting=setting;
 		this.text=text;

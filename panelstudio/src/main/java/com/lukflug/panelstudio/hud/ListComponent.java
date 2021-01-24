@@ -3,9 +3,9 @@ package com.lukflug.panelstudio.hud;
 import java.awt.Point;
 
 import com.lukflug.panelstudio.Context;
-import com.lukflug.panelstudio.Interface;
-import com.lukflug.panelstudio.PanelConfig;
-import com.lukflug.panelstudio.theme.Renderer;
+import com.lukflug.panelstudio.IInterface;
+import com.lukflug.panelstudio.IPanelConfig;
+import com.lukflug.panelstudio.theme.IRenderer;
 
 /**
  * HUD component that consists of a list of strings.
@@ -15,7 +15,7 @@ public class ListComponent extends HUDComponent {
 	/**
 	 * The list to be rendered.
 	 */
-	protected HUDList list;
+	protected IHUDList list;
 	/**
 	 * Flag saving the state of whether to sort up.
 	 */
@@ -32,7 +32,7 @@ public class ListComponent extends HUDComponent {
 	 * @param position the initial position
 	 * @param list the list to be rendered
 	 */
-	public ListComponent (String name, Renderer renderer, Point position, HUDList list) {
+	public ListComponent (String name, IRenderer renderer, Point position, IHUDList list) {
 		super(name,renderer,position);
 		this.list=list;
 	}
@@ -56,7 +56,7 @@ public class ListComponent extends HUDComponent {
 	}
 	
 	@Override
-	public Point getPosition (Interface inter) {
+	public Point getPosition (IInterface inter) {
 		int width=getWidth(inter);
 		int height=renderer.getHeight(false)+(list.getSize()-1)*inter.getFontHeight();
 		if (lastUp!=list.sortUp()) {
@@ -79,7 +79,7 @@ public class ListComponent extends HUDComponent {
 	}
 	
 	@Override
-	public void setPosition (Interface inter, Point position) {
+	public void setPosition (IInterface inter, Point position) {
 		int width=getWidth(inter);
 		int height=renderer.getHeight(false)+(list.getSize()-1)*inter.getFontHeight();
 		if (list.sortUp()) {
@@ -92,7 +92,7 @@ public class ListComponent extends HUDComponent {
 	}
 
 	@Override
-	public int getWidth (Interface inter) {
+	public int getWidth (IInterface inter) {
 		int width=inter.getFontWidth(getTitle());
 		for (int i=0;i<list.getSize();i++) {
 			String s=list.getItem(i);
@@ -107,7 +107,7 @@ public class ListComponent extends HUDComponent {
 	}
 	
 	@Override
-	public void loadConfig (Interface inter, PanelConfig config) {
+	public void loadConfig (IInterface inter, IPanelConfig config) {
 		super.loadConfig(inter,config);
 		this.lastUp=list.sortUp();
 		this.lastRight=list.sortRight();

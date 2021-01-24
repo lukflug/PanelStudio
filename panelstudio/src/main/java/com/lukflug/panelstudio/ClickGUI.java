@@ -3,39 +3,39 @@ package com.lukflug.panelstudio;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lukflug.panelstudio.settings.Toggleable;
-import com.lukflug.panelstudio.theme.DescriptionRenderer;
+import com.lukflug.panelstudio.settings.IToggleable;
+import com.lukflug.panelstudio.theme.IDescriptionRenderer;
 
 /**
  * Object representing the entire GUI.
  * All components should be a direct or indirect child of this objects.
  * @author lukflug
  */
-public class ClickGUI implements PanelManager {
+public class ClickGUI implements IPanelManager {
 	/**
 	 * List of direct child components (i.e. panels).
 	 * The must all be {@link FixedComponent}.
 	 */
-	protected List<FixedComponent> components=new ArrayList<FixedComponent>();
+	protected List<IFixedComponent> components=new ArrayList<IFixedComponent>();
 	/**
 	 * List of permanent components.
 	 */
-	protected List<FixedComponent> permanentComponents=new ArrayList<FixedComponent>();
+	protected List<IFixedComponent> permanentComponents=new ArrayList<IFixedComponent>();
 	/**
 	 * The {@link Interface} to be used by the GUI.
 	 */
-	protected Interface inter;
+	protected IInterface inter;
 	/**
 	 * The {@link DescriptionRenderer} to be used by the GUI.
 	 */
-	protected DescriptionRenderer descriptionRenderer;
+	protected IDescriptionRenderer descriptionRenderer;
 	
 	/**
 	 * Constructor for the GUI.
 	 * @param inter the {@link Interface} to be used by the GUI
 	 * @param descriptionRenderer the {@link DescriptionRenderer} used by the GUI
 	 */
-	public ClickGUI (Interface inter, DescriptionRenderer descriptionRenderer) {
+	public ClickGUI (IInterface inter, IDescriptionRenderer descriptionRenderer) {
 		this.inter=inter;
 		this.descriptionRenderer=descriptionRenderer;
 	}
@@ -44,7 +44,7 @@ public class ClickGUI implements PanelManager {
 	 * Get a list of panels in the GUI.
 	 * @return list of all permanent panels (direct children)
 	 */
-	public List<FixedComponent> getComponents() {
+	public List<IFixedComponent> getComponents() {
 		return permanentComponents;
 	}
 	
@@ -52,13 +52,13 @@ public class ClickGUI implements PanelManager {
 	 * Add a component to the GUI.
 	 * @param component component to be added
 	 */
-	public void addComponent (FixedComponent component) {
+	public void addComponent (IFixedComponent component) {
 		components.add(component);
 		permanentComponents.add(component);
 	}
 
 	@Override
-	public void showComponent(FixedComponent component) {
+	public void showComponent(IFixedComponent component) {
 		if (!components.contains(component)) {
 			components.add(component);
 			component.enter(getContext(component,false));
@@ -66,7 +66,7 @@ public class ClickGUI implements PanelManager {
 	}
 
 	@Override
-	public void hideComponent(FixedComponent component) {
+	public void hideComponent(IFixedComponent component) {
 		if (!permanentComponents.contains(component)) {
 			if (components.remove(component)) component.exit(getContext(component,false));
 		}
@@ -76,15 +76,15 @@ public class ClickGUI implements PanelManager {
 	 * Render the GUI (lowest component first, highest component last).
 	 */
 	public void render() {
-		List<FixedComponent> components=new ArrayList<FixedComponent>();
-		for (FixedComponent component: this.components) {
+		List<IFixedComponent> components=new ArrayList<IFixedComponent>();
+		for (IFixedComponent component: this.components) {
 			components.add(component);
 		}
 		Context descriptionContext=null;
 		int highest=0;
-		FixedComponent focusComponent=null;
+		IFixedComponent focusComponent=null;
 		for (int i=components.size()-1;i>=0;i--) {
-			FixedComponent component=components.get(i);
+			IFixedComponent component=components.get(i);
 			Context context=getContext(component,true);
 			component.getHeight(context);
 			if (context.isHovered()) {
@@ -93,7 +93,7 @@ public class ClickGUI implements PanelManager {
 			}
 		}
 		for (int i=0;i<components.size();i++) {
-			FixedComponent component=components.get(i);
+			IFixedComponent component=components.get(i);
 			Context context=getContext(component,i>=highest);
 			component.render(context);
 			if (context.foucsRequested()) focusComponent=component;
@@ -153,10 +153,10 @@ public class ClickGUI implements PanelManager {
 	 * Store the GUI state.
 	 * @param config the configuration list to be used
 	 */
-	public void saveConfig (ConfigList config) {
+	public void saveConfig (IConfigList config) {
 		config.begin(false);
-		for (FixedComponent component: getComponents()) {
-			PanelConfig cf=config.addPanel(component.getTitle());
+		for (IFixedComponent component: getComponents()) {
+			IPanelConfig cf=config.addPanel(component.getTitle());
 			if (cf!=null) component.saveConfig(inter,cf);
 		}
 		config.end(false);
@@ -166,10 +166,10 @@ public class ClickGUI implements PanelManager {
 	 * Load the GUI state.
 	 * @param config the configuration list to be used
 	 */
-	public void loadConfig (ConfigList config) {
+	public void loadConfig (IConfigList config) {
 		config.begin(true);
-		for (FixedComponent component: getComponents()) {
-			PanelConfig cf=config.getPanel(component.getTitle());
+		for (IFixedComponent component: getComponents()) {
+			IPanelConfig cf=config.getPanel(component.getTitle());
 			if (cf!=null) component.loadConfig(inter,cf);
 		}
 		config.end(true);
@@ -181,13 +181,13 @@ public class ClickGUI implements PanelManager {
 	 * @param highest whether this component is on top
 	 * @return the context
 	 */
-	protected Context getContext (FixedComponent component, boolean highest) {
+	protected Context getContext (IFixedComponent component, boolean highest) {
 		return new Context(inter,component.getWidth(inter),component.getPosition(inter),true,highest);
 	}
 
 	@Override
-	public Toggleable getComponentToggleable(FixedComponent component) {
-		return new Toggleable() {
+	public IToggleable getComponentToggleable(IFixedComponent component) {
+		return new IToggleable() {
 			@Override
 			public void toggle() {
 				if (isOn()) hideComponent(component);
@@ -206,14 +206,14 @@ public class ClickGUI implements PanelManager {
 	 * @param function the function to execute in the loop
 	 */
 	protected void doComponentLoop (LoopFunction function) {
-		List<FixedComponent> components=new ArrayList<FixedComponent>();
-		for (FixedComponent component: this.components) {
+		List<IFixedComponent> components=new ArrayList<IFixedComponent>();
+		for (IFixedComponent component: this.components) {
 			components.add(component);
 		}
 		boolean highest=true;
-		FixedComponent focusComponent=null;
+		IFixedComponent focusComponent=null;
 		for (int i=components.size()-1;i>=0;i--) {
-			FixedComponent component=components.get(i);
+			IFixedComponent component=components.get(i);
 			Context context=getContext(component,highest);
 			function.loop(context,component);
 			if (context.isHovered()) highest=false;
@@ -235,6 +235,6 @@ public class ClickGUI implements PanelManager {
 		 * @param context the context for the component
 		 * @param component the component
 		 */
-		public void loop (Context context, FixedComponent component);
+		public void loop (Context context, IFixedComponent component);
 	}
 }

@@ -6,25 +6,25 @@ import java.util.List;
 
 import com.lukflug.panelstudio.Animation;
 import com.lukflug.panelstudio.Context;
-import com.lukflug.panelstudio.theme.Renderer;
+import com.lukflug.panelstudio.theme.IRenderer;
 
 /**
  * Element of TabGUI. Renders a list of child components.
  * @author lukflug
  */
-public class TabGUIContainer implements TabGUIComponent {
+public class TabGUIContainer implements ITabGUIComponent {
 	/**
 	 * The caption of this component.
 	 */
 	protected String title;
 	/**
-	 * The {@link Renderer} for this component.
+	 * The {@link IRenderer} for this component.
 	 */
-	protected TabGUIRenderer renderer;
+	protected ITabGUIRenderer renderer;
 	/**
 	 * Child components.
 	 */
-	protected List<TabGUIComponent> components;
+	protected List<ITabGUIComponent> components;
 	/**
 	 * Whether child component having focus.
 	 */
@@ -44,10 +44,10 @@ public class TabGUIContainer implements TabGUIComponent {
 	 * @param renderer the {@link TabGUIRenderer} for this container
 	 * @param animation the animation for {@link #selectedAnimation}, may be null
 	 */
-	public TabGUIContainer (String title, TabGUIRenderer renderer, Animation animation) {
+	public TabGUIContainer (String title, ITabGUIRenderer renderer, Animation animation) {
 		this.title=title;
 		this.renderer=renderer;
-		components=new ArrayList<TabGUIComponent>();
+		components=new ArrayList<ITabGUIComponent>();
 		if (animation!=null) {
 			animation.initValue(selected);
 			selectedAnimation=animation;
@@ -58,7 +58,7 @@ public class TabGUIContainer implements TabGUIComponent {
 	 * Add a component to this container.
 	 * @param component the new component
 	 */
-	public void addComponent (TabGUIComponent component) {
+	public void addComponent (ITabGUIComponent component) {
 		components.add(component);
 	}
 	
@@ -80,7 +80,7 @@ public class TabGUIContainer implements TabGUIComponent {
 		if (selectedAnimation!=null) offset=(int)(selectedAnimation.getValue()*renderer.getHeight());
 		renderer.renderBackground(context,offset,renderer.getHeight());
 		for (int i=0;i<components.size();i++) {
-			TabGUIComponent component=components.get(i);
+			ITabGUIComponent component=components.get(i);
 			renderer.renderCaption(context,component.getTitle(),i,renderer.getHeight(),component.isActive());
 		}
 		if (childOpen) {

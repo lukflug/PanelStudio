@@ -6,7 +6,7 @@ import java.awt.Color;
  * Interface to provide a means for GUI methods to access color setting set by the user.
  * @author lukflug
  */
-public interface ColorScheme {
+public interface IColorScheme {
 	/**
 	 * Returns the color that should be used to indicate that a component is active.
 	 * @return the active color

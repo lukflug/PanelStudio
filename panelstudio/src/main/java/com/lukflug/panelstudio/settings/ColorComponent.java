@@ -6,10 +6,10 @@ import com.lukflug.panelstudio.Animation;
 import com.lukflug.panelstudio.CollapsibleContainer;
 import com.lukflug.panelstudio.Context;
 import com.lukflug.panelstudio.FocusableComponent;
-import com.lukflug.panelstudio.Interface;
+import com.lukflug.panelstudio.IInterface;
 import com.lukflug.panelstudio.Slider;
-import com.lukflug.panelstudio.theme.ColorScheme;
-import com.lukflug.panelstudio.theme.Renderer;
+import com.lukflug.panelstudio.theme.IColorScheme;
+import com.lukflug.panelstudio.theme.IRenderer;
 
 /**
  * Component representing a color-valued setting.
@@ -19,7 +19,7 @@ public class ColorComponent extends CollapsibleContainer {
 	/**
 	 * The setting in question.
 	 */
-	protected ColorSetting setting;
+	protected IColorSetting setting;
 	/**
 	 * Whether to render an alpha slider.
 	 */
@@ -29,13 +29,13 @@ public class ColorComponent extends CollapsibleContainer {
 	 */
 	protected final boolean rainbow;
 	/**
-	 * Custom {@link ColorScheme} that set the active color to the value of the setting.
+	 * Custom {@link IColorScheme} that set the active color to the value of the setting.
 	 */
-	protected ColorScheme scheme,overrideScheme;
+	protected IColorScheme scheme,overrideScheme;
 	/**
-	 * {@link Toggleable} indicating whether to use RGB (false) or HSB (true).
+	 * {@link IToggleable} indicating whether to use RGB (false) or HSB (true).
 	 */
-	protected Toggleable colorModel;
+	protected IToggleable colorModel;
 	
 	/**
 	 * Constructor.
@@ -47,9 +47,9 @@ public class ColorComponent extends CollapsibleContainer {
 	 * @param setting the setting in question
 	 * @param alpha whether to render an alpha slider
 	 * @param rainbow whether to render a rainbow slider
-	 * @param colorModel {@link Toggleable} indicating whether to use RGB (false) or HSB (true)
+	 * @param colorModel {@link IToggleable} indicating whether to use RGB (false) or HSB (true)
 	 */
-	public ColorComponent(String title, String description, Renderer renderer, Animation animation, Renderer componentRenderer, ColorSetting setting, boolean alpha, boolean rainbow, Toggleable colorModel) {
+	public ColorComponent(String title, String description, IRenderer renderer, Animation animation, IRenderer componentRenderer, IColorSetting setting, boolean alpha, boolean rainbow, IToggleable colorModel) {
 		super(title,description,renderer,new SimpleToggleable(false),animation,null);
 		this.setting=setting;
 		this.alpha=alpha;
@@ -65,7 +65,7 @@ public class ColorComponent extends CollapsibleContainer {
 	}
 	
 	/**
-	 * Override the {@link ColorScheme} and render the container.
+	 * Override the {@link IColorScheme} and render the container.
 	 */
 	@Override
 	public void render (Context context) {
@@ -82,14 +82,14 @@ public class ColorComponent extends CollapsibleContainer {
 	protected class ColorButton extends FocusableComponent {
 		/**
 		 * Constructor.
-		 * @param renderer the {@link Renderer} for the component
+		 * @param renderer the {@link IRenderer} for the component
 		 */
-		public ColorButton(Renderer renderer) {
+		public ColorButton(IRenderer renderer) {
 			super("Rainbow",null,renderer);
 		}
 		
 		/**
-		 * Override the {@link ColorScheme} and render the component.
+		 * Override the {@link IColorScheme} and render the component.
 		 */
 		@Override
 		public void render (Context context) {
@@ -105,7 +105,7 @@ public class ColorComponent extends CollapsibleContainer {
 		@Override
 		public void handleButton (Context context, int button) {
 			super.handleButton(context,button);
-			if (button==Interface.LBUTTON && context.isClicked()) {
+			if (button==IInterface.LBUTTON && context.isClicked()) {
 				setting.setRainbow(!setting.getRainbow());
 			}
 		}
@@ -124,10 +124,10 @@ public class ColorComponent extends CollapsibleContainer {
 		
 		/**
 		 * Constructor.
-		 * @param renderer the {@link Renderer} for the component
+		 * @param renderer the {@link IRenderer} for the component
 		 * @param value index of slider
 		 */
-		public ColorSlider(Renderer renderer, int value) {
+		public ColorSlider(IRenderer renderer, int value) {
 			super("",null,renderer);
 			this.value=value;
 		}
@@ -224,20 +224,20 @@ public class ColorComponent extends CollapsibleContainer {
 	
 	
 	/**
-	 * {@link ColorScheme} to override the active color to the current value of the color setting.
+	 * {@link IColorScheme} to override the active color to the current value of the color setting.
 	 * @author lukflug
 	 */
-	protected class ColorSettingScheme implements ColorScheme {
+	protected class ColorSettingScheme implements IColorScheme {
 		/**
-		 * {@link ColorScheme} to be overridden.
+		 * {@link IColorScheme} to be overridden.
 		 */
-		ColorScheme scheme;
+		IColorScheme scheme;
 		
 		/**
 		 * Constructor.
-		 * @param renderer the {@link Renderer} to override
+		 * @param renderer the {@link IRenderer} to override
 		 */
-		public ColorSettingScheme (Renderer renderer) {
+		public ColorSettingScheme (IRenderer renderer) {
 			scheme=renderer.getDefaultColorScheme();
 		}
 		

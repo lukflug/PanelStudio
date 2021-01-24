@@ -11,12 +11,12 @@ import com.lukflug.panelstudio.Context;
  * The parameter gradient in the constructor determines, if it appears like GameSense 2.0-2.1.1 (false) or like GameSense 2.1.2-2.1.5 (true).
  * @author lukflug
  */
-public class ClearTheme implements Theme {
-	protected ColorScheme scheme;
-	protected Renderer componentRenderer,panelRenderer;
+public class ClearTheme implements ITheme {
+	protected IColorScheme scheme;
+	protected IRenderer componentRenderer,panelRenderer;
 	protected final boolean gradient;
 	
-	public ClearTheme (ColorScheme scheme, boolean gradient, int height, int border) {
+	public ClearTheme (IColorScheme scheme, boolean gradient, int height, int border) {
 		this.scheme=scheme;
 		this.gradient=gradient;
 		panelRenderer=new ComponentRenderer(true,height,border);
@@ -24,17 +24,17 @@ public class ClearTheme implements Theme {
 	}
 	
 	@Override
-	public Renderer getPanelRenderer() {
+	public IRenderer getPanelRenderer() {
 		return panelRenderer;
 	}
 
 	@Override
-	public Renderer getContainerRenderer() {
+	public IRenderer getContainerRenderer() {
 		return componentRenderer;
 	}
 
 	@Override
-	public Renderer getComponentRenderer() {
+	public IRenderer getComponentRenderer() {
 		return componentRenderer;
 	}
 
@@ -132,7 +132,7 @@ public class ClearTheme implements Theme {
 		}
 
 		@Override
-		public ColorScheme getDefaultColorScheme() {
+		public IColorScheme getDefaultColorScheme() {
 			return ClearTheme.this.scheme;
 		}
 	}

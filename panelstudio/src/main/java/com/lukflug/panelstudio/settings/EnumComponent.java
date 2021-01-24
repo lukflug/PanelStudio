@@ -2,8 +2,8 @@ package com.lukflug.panelstudio.settings;
 
 import com.lukflug.panelstudio.Context;
 import com.lukflug.panelstudio.FocusableComponent;
-import com.lukflug.panelstudio.Interface;
-import com.lukflug.panelstudio.theme.Renderer;
+import com.lukflug.panelstudio.IInterface;
+import com.lukflug.panelstudio.theme.IRenderer;
 
 /**
  * Component representing an enumeration-valued setting.
@@ -13,16 +13,16 @@ public class EnumComponent extends FocusableComponent {
 	/**
 	 * The setting in question.
 	 */
-	protected EnumSetting setting;
+	protected IEnumSetting setting;
 	
 	/**
 	 * Constructor.
 	 * @param title name of the setting
 	 * @param description the description for this component
-	 * @param renderer {@link Renderer} for the component
+	 * @param renderer {@link IRenderer} for the component
 	 * @param setting the setting in question
 	 */
-	public EnumComponent(String title, String description, Renderer renderer, EnumSetting setting) {
+	public EnumComponent(String title, String description, IRenderer renderer, IEnumSetting setting) {
 		super(title,description,renderer);
 		this.setting=setting;
 	}
@@ -42,7 +42,7 @@ public class EnumComponent extends FocusableComponent {
 	@Override
 	public void handleButton (Context context, int button) {
 		super.handleButton(context,button);
-		if (button==Interface.LBUTTON && context.isClicked()) {
+		if (button==IInterface.LBUTTON && context.isClicked()) {
 			setting.increment();
 		}
 	}

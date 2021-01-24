@@ -2,25 +2,25 @@ package com.lukflug.panelstudio.theme;
 
 /**
  * Interface representing a GUI theme (i.e. skin).
- * Consists of three {@link Renderer}, that can be the same or different.
+ * Consists of three {@link IRenderer}, that can be the same or different.
  * @author lukflug
  */
-public interface Theme {
+public interface ITheme {
 	/**
-	 * Returns the renderer that should be used by the root components (i.e. {@link com.lukflug.panelstudio.FixedComponent}).
+	 * Returns the renderer that should be used by the root components (i.e. {@link com.lukflug.panelstudio.IFixedComponent}).
 	 * @return the panel renderer
 	 */
-	public Renderer getPanelRenderer();
+	public IRenderer getPanelRenderer();
 	
 	/**
 	 * Returns the renderer that should be used by containers.
 	 * @return the container renderer
 	 */
-	public Renderer getContainerRenderer();
+	public IRenderer getContainerRenderer();
 	
 	/**
 	 * Returns the renderer that should be used by components.
 	 * @return the component renderer
 	 */
-	public Renderer getComponentRenderer();
+	public IRenderer getComponentRenderer();
 }

@@ -1,12 +1,12 @@
 package com.lukflug.panelstudio.tabgui;
 
-import com.lukflug.panelstudio.Component;
+import com.lukflug.panelstudio.IComponent;
 
 /**
  * Interface representing a part of a TabGUI.
  * @author lukflug
  */
-public interface TabGUIComponent extends Component {
+public interface ITabGUIComponent extends IComponent {
 	/**
 	 * Boolean indicating to the parent whether to render this component highlighted.
 	 * @return whether this component is active

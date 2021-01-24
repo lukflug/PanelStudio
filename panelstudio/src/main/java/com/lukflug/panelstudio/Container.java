@@ -3,7 +3,7 @@ package com.lukflug.panelstudio;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lukflug.panelstudio.theme.Renderer;
+import com.lukflug.panelstudio.theme.IRenderer;
 
 /**
  * Base class for components containing other components (i.e. containers).
@@ -13,7 +13,7 @@ public class Container extends FocusableComponent {
 	/**
 	 * List of child component.
 	 */
-	protected List<Component> components;
+	protected List<IComponent> components;
 	/**
 	 * Temporary storage for child description.
 	 */
@@ -25,24 +25,24 @@ public class Container extends FocusableComponent {
 	 * @param description the description for this component
 	 * @param renderer the renderer used by the container
 	 */
-	public Container (String title, String description, Renderer renderer) {
+	public Container (String title, String description, IRenderer renderer) {
 		super(title,description,renderer);
-		components=new ArrayList<Component>();
+		components=new ArrayList<IComponent>();
 	}
 	
 	/**
 	 * Add a component to the container.
 	 * @param component the component to be added
 	 */
-	public void addComponent (Component component) {
+	public void addComponent (IComponent component) {
 		components.add(component);
 	}
 	
 	/**
 	 * Render the container.
 	 * Components are rendered in a column based on the height they specify via {@link Context#setHeight(int)}.
-	 * The horizontal border is defined by {@link Renderer#getBorder()}.
-	 * The vertical space between to components is defined by {@link Renderer#getOffset()}. 
+	 * The horizontal border is defined by {@link IRenderer#getBorder()}.
+	 * The vertical space between to components is defined by {@link IRenderer#getOffset()}. 
 	 */
 	@Override
 	public void render (Context context) {
@@ -114,7 +114,7 @@ public class Container extends FocusableComponent {
 	@Override
 	public void releaseFocus() {
 		super.releaseFocus();
-		for (Component component: components) {
+		for (IComponent component: components) {
 			component.releaseFocus();
 		}
 	}
@@ -143,7 +143,7 @@ public class Container extends FocusableComponent {
 	 */
 	protected void doComponentLoop (Context context, LoopFunction function) {
 		int posy=renderer.getOffset();
-		for (Component component: components) {
+		for (IComponent component: components) {
 			Context subContext=getSubContext(context,posy);
 			function.loop(subContext,component);
 			posy+=subContext.getSize().height+renderer.getOffset();
@@ -162,6 +162,6 @@ public class Container extends FocusableComponent {
 		 * @param context the context for the component
 		 * @param component the component
 		 */
-		public void loop (Context context, Component component);
+		public void loop (Context context, IComponent component);
 	}
 }

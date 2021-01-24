@@ -6,7 +6,7 @@ import java.awt.Color;
  * Interface representing a list for {@link ListComponent}
  * @author lukas_ghdqwsr
  */
-public interface HUDList {
+public interface IHUDList {
 	/**
 	 * Get the number of elements in the list
 	 * @return list size

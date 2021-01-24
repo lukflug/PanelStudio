@@ -6,10 +6,10 @@ import java.awt.Rectangle;
 import com.lukflug.panelstudio.Context;
 
 /**
- * Implementation of {@link Renderer} that simply redirects methods to another renderer.
+ * Implementation of {@link IRenderer} that simply redirects methods to another renderer.
  * @author lukflug
  */
-public abstract class RendererProxy implements Renderer {
+public abstract class RendererProxy implements IRenderer {
 	/**
 	 * Redirects the method to renderer in {@link #getRenderer()}.
 	 */
@@ -142,7 +142,7 @@ public abstract class RendererProxy implements Renderer {
 	 * Redirects the method to renderer in {@link #getRenderer()}.
 	 */
 	@Override
-	public ColorScheme getDefaultColorScheme() {
+	public IColorScheme getDefaultColorScheme() {
 		return getRenderer().getDefaultColorScheme();
 	}
 
@@ -150,7 +150,7 @@ public abstract class RendererProxy implements Renderer {
 	 * Redirects the method to renderer in {@link #getRenderer()}.
 	 */
 	@Override
-	public void overrideColorScheme(ColorScheme scheme) {
+	public void overrideColorScheme(IColorScheme scheme) {
 		getRenderer().overrideColorScheme(scheme);
 	}
 
@@ -166,5 +166,5 @@ public abstract class RendererProxy implements Renderer {
 	 * Abstract method to get the renderer that is the target of the redirect.
 	 * @return target renderer
 	 */
-	protected abstract Renderer getRenderer();
+	protected abstract IRenderer getRenderer();
 }

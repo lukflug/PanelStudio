@@ -7,7 +7,7 @@ import java.awt.Rectangle;
 
 import com.lukflug.panelstudio.Context;
 
-public class MouseDescription implements DescriptionRenderer {
+public class MouseDescription implements IDescriptionRenderer {
 	protected Point offset;
 	
 	public MouseDescription (Point offset) {

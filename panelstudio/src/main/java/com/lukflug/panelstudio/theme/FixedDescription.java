@@ -11,7 +11,7 @@ import com.lukflug.panelstudio.Context;
  * Renders a description at a fixed position.
  * @author lukflug
  */
-public class FixedDescription implements DescriptionRenderer {
+public class FixedDescription implements IDescriptionRenderer {
 	protected Point pos;
 	
 	public FixedDescription (Point pos) {

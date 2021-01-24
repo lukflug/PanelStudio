@@ -1,12 +1,12 @@
 package com.lukflug.panelstudio;
 
-import com.lukflug.panelstudio.theme.Renderer;
+import com.lukflug.panelstudio.theme.IRenderer;
 
 /**
  * Base class for all components included in this library.
  * @author lukflug
  */
-public class FocusableComponent implements Component {
+public class FocusableComponent implements IComponent {
 	/**
 	 * The caption of this component.
 	 */
@@ -16,9 +16,9 @@ public class FocusableComponent implements Component {
 	 */
 	protected String description;
 	/**
-	 * The {@link Renderer} for this component.
+	 * The {@link IRenderer} for this component.
 	 */
-	protected Renderer renderer;
+	protected IRenderer renderer;
 	/**
 	 * The focus state for this component.
 	 */
@@ -28,9 +28,9 @@ public class FocusableComponent implements Component {
 	 * Constructor.
 	 * @param title the caption for this component
 	 * @param description the description for this component
-	 * @param renderer the {@link Renderer} for this component
+	 * @param renderer the {@link IRenderer} for this component
 	 */
-	public FocusableComponent (String title, String description, Renderer renderer) {
+	public FocusableComponent (String title, String description, IRenderer renderer) {
 		this.title=title;
 		this.renderer=renderer;
 		this.description=description;
@@ -45,7 +45,7 @@ public class FocusableComponent implements Component {
 	}
 	
 	/**
-	 * Set the height of this component to the height specified by {@link Renderer}.
+	 * Set the height of this component to the height specified by {@link IRenderer}.
 	 */
 	@Override
 	public void render(Context context) {
@@ -54,7 +54,7 @@ public class FocusableComponent implements Component {
 	}
 
 	/**
-	 * Set the height of this component to the height specified by {@link Renderer}.
+	 * Set the height of this component to the height specified by {@link IRenderer}.
 	 */
 	@Override
 	public void handleKey(Context context, int scancode) {
@@ -63,7 +63,7 @@ public class FocusableComponent implements Component {
 
 	/**
 	 * Updates the focus state.
-	 * Set the height of this component to the height specified by {@link Renderer}.
+	 * Set the height of this component to the height specified by {@link IRenderer}.
 	 */
 	@Override
 	public void handleButton (Context context, int button) {
@@ -72,7 +72,7 @@ public class FocusableComponent implements Component {
 	}
 
 	/**
-	 * Set the height of this component to the height specified by {@link Renderer}.
+	 * Set the height of this component to the height specified by {@link IRenderer}.
 	 */
 	@Override
 	public void getHeight(Context context) {
@@ -80,7 +80,7 @@ public class FocusableComponent implements Component {
 	}
 	
 	/**
-	 * Set the height of this component to the height specified by {@link Renderer}.
+	 * Set the height of this component to the height specified by {@link IRenderer}.
 	 */
 	@Override
 	public void handleScroll (Context context, int diff) {
@@ -88,7 +88,7 @@ public class FocusableComponent implements Component {
 	}
 	
 	/**
-	 * Set the height of this component to the height specified by {@link Renderer}.
+	 * Set the height of this component to the height specified by {@link IRenderer}.
 	 */
 	@Override
 	public void enter (Context context) {
@@ -96,7 +96,7 @@ public class FocusableComponent implements Component {
 	}
 
 	/**
-	 * Set the height of this component to the height specified by {@link Renderer}.
+	 * Set the height of this component to the height specified by {@link IRenderer}.
 	 */
 	@Override
 	public void exit (Context context) {

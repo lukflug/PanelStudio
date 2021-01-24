@@ -6,11 +6,11 @@ import com.lukflug.panelstudio.Animation;
  * Animation that is also a toggle.
  * @author lukflug
  */
-public final class AnimatedToggleable implements Toggleable {
+public final class AnimatedToggleable implements IToggleable {
 	/**
 	 * The toggleable.
 	 */
-	private final Toggleable toggle;
+	private final IToggleable toggle;
 	/**
 	 * The animation.
 	 */
@@ -21,7 +21,7 @@ public final class AnimatedToggleable implements Toggleable {
 	 * @param toggle the toggleable
 	 * @param animation the animation
 	 */
-	public AnimatedToggleable (Toggleable toggle, Animation animation) {
+	public AnimatedToggleable (IToggleable toggle, Animation animation) {
 		this.toggle=toggle;
 		this.animation=animation;
 		if (toggle.isOn()) animation.initValue(1);

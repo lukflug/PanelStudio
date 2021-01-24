@@ -6,7 +6,7 @@ import java.awt.Point;
  * Interface representing a single panel configuration state.
  * @author lukflug
  */
-public interface PanelConfig {
+public interface IPanelConfig {
 	/**
 	 * Store the position of the panel.
 	 * @param position the current position of the panel

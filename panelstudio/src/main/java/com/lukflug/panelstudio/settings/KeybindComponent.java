@@ -2,7 +2,7 @@ package com.lukflug.panelstudio.settings;
 
 import com.lukflug.panelstudio.Context;
 import com.lukflug.panelstudio.FocusableComponent;
-import com.lukflug.panelstudio.theme.Renderer;
+import com.lukflug.panelstudio.theme.IRenderer;
 
 /**
  * Component representing a keybind.
@@ -12,14 +12,14 @@ public class KeybindComponent extends FocusableComponent {
 	/**
 	 * The keybind in question.
 	 */
-	protected KeybindSetting keybind;
+	protected IKeybindSetting keybind;
 	
 	/**
 	 * Constructor.
-	 * @param renderer the {@link Renderer} for the component
+	 * @param renderer the {@link IRenderer} for the component
 	 * @param keybind the keybind in question
 	 */
-	public KeybindComponent(Renderer renderer, KeybindSetting keybind) {
+	public KeybindComponent(IRenderer renderer, IKeybindSetting keybind) {
 		super("Keybind: \u00A77",null,renderer);
 		this.keybind=keybind;
 	}

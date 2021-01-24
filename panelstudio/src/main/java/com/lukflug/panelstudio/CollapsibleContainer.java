@@ -3,26 +3,26 @@ package com.lukflug.panelstudio;
 import java.awt.Rectangle;
 
 import com.lukflug.panelstudio.settings.AnimatedToggleable;
-import com.lukflug.panelstudio.settings.Toggleable;
-import com.lukflug.panelstudio.theme.Renderer;
+import com.lukflug.panelstudio.settings.IToggleable;
+import com.lukflug.panelstudio.theme.IRenderer;
 
 /**
  * Container that can be closed and scrolled, so that its children can be hidden.
  * @author lukflug
  */
-public class CollapsibleContainer extends FocusableComponent implements Toggleable {
+public class CollapsibleContainer extends FocusableComponent implements IToggleable {
 	/**
 	 * {@link Container} containing the children.
 	 */
 	protected Container container;
 	/**
-	 * {@link Toggleable} indicating whether the container is open or closed. 
+	 * {@link IToggleable} indicating whether the container is open or closed. 
 	 */
 	protected AnimatedToggleable open;
 	/**
-	 * {@link Toggleable} that can be toggled by the user.
+	 * {@link IToggleable} that can be toggled by the user.
 	 */
-	protected Toggleable toggle;
+	protected IToggleable toggle;
 	/**
 	 * Cached combined height of children.
 	 */
@@ -44,12 +44,12 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	 * Constructor.
 	 * @param title the caption for the container
 	 * @param description the description for this component
-	 * @param renderer the {@link Renderer} for the container
-	 * @param open the {@link Toggleable} for {@link #open}
+	 * @param renderer the {@link IRenderer} for the container
+	 * @param open the {@link IToggleable} for {@link #open}
 	 * @param animation the animation for this container
-	 * @param toggle the {@link Toggleable} to be toggled by the user
+	 * @param toggle the {@link IToggleable} to be toggled by the user
 	 */
-	public CollapsibleContainer (String title, String description, Renderer renderer, Toggleable open, Animation animation, Toggleable toggle) {
+	public CollapsibleContainer (String title, String description, IRenderer renderer, IToggleable open, Animation animation, IToggleable toggle) {
 		super(title,description,renderer);
 		container=new Container(title,null,renderer);
 		this.open=new AnimatedToggleable(open,animation);
@@ -60,7 +60,7 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	 * Add a component to the container.
 	 * @param component the component to be added
 	 */
-	public void addComponent (Component component) {
+	public void addComponent (IComponent component) {
 		container.addComponent(component);
 	}
 	
@@ -102,9 +102,9 @@ public class CollapsibleContainer extends FocusableComponent implements Toggleab
 	@Override
 	public void handleButton (Context context, int button) {
 		context.setHeight(renderer.getHeight(open.getValue()!=0));
-		if (context.isClicked() && button==Interface.LBUTTON) {
+		if (context.isClicked() && button==IInterface.LBUTTON) {
 			if (toggle!=null) toggle.toggle();
-		} else if (context.isHovered() && button==Interface.RBUTTON && context.getInterface().getButton(Interface.RBUTTON)) {
+		} else if (context.isHovered() && button==IInterface.RBUTTON && context.getInterface().getButton(IInterface.RBUTTON)) {
 			open.toggle();
 		}
 		if (open.getValue()==1) {

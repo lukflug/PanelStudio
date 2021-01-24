@@ -1,12 +1,12 @@
 package com.lukflug.panelstudio.settings;
 
 /**
- * Basic implementation of {@link Toggleable}, where the boolean is a field.
+ * Basic implementation of {@link IToggleable}, where the boolean is a field.
  * @author lukflug
  */
-public class SimpleToggleable implements Toggleable {
+public class SimpleToggleable implements IToggleable {
 	/**
-	 * Field storing the state of the {@link Toggleable}.
+	 * Field storing the state of the {@link IToggleable}.
 	 */
 	private boolean value;
 	

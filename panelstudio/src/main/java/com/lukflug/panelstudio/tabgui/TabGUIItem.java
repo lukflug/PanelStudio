@@ -1,13 +1,13 @@
 package com.lukflug.panelstudio.tabgui;
 
 import com.lukflug.panelstudio.Context;
-import com.lukflug.panelstudio.settings.Toggleable;
+import com.lukflug.panelstudio.settings.IToggleable;
 
 /**
  * Component representing leaf in TabGUI hierarchy.
  * @author lukflug
  */
-public class TabGUIItem implements TabGUIComponent {
+public class TabGUIItem implements ITabGUIComponent {
 	/**
 	 * Caption of the component.
 	 */
@@ -15,14 +15,14 @@ public class TabGUIItem implements TabGUIComponent {
 	/**
 	 * Toggle indicating whether this component is active.
 	 */
-	protected Toggleable toggle;
+	protected IToggleable toggle;
 	
 	/**
 	 * Constructor.
 	 * @param title caption of the component
 	 * @param toggle toggle for {@link #isActive()} state
 	 */
-	public TabGUIItem (String title, Toggleable toggle) {
+	public TabGUIItem (String title, IToggleable toggle) {
 		this.title=title;
 		this.toggle=toggle;
 	}

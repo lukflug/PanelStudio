@@ -6,18 +6,18 @@ import java.awt.Point;
 import java.awt.Rectangle;
 
 import com.lukflug.panelstudio.Context;
-import com.lukflug.panelstudio.theme.ColorScheme;
+import com.lukflug.panelstudio.theme.IColorScheme;
 
 /**
  * Standard TabGUI look.
  * @author lukflug
  */
-public class DefaultRenderer implements TabGUIRenderer {
-	protected ColorScheme scheme;
+public class DefaultRenderer implements ITabGUIRenderer {
+	protected IColorScheme scheme;
 	protected int height,border;
 	protected int up,down,left,right,enter;
 	
-	public DefaultRenderer (ColorScheme scheme, int height, int border, int up, int down, int left, int right, int enter) {
+	public DefaultRenderer (IColorScheme scheme, int height, int border, int up, int down, int left, int right, int enter) {
 		this.scheme=scheme;
 		this.border=border;
 		this.height=height;
@@ -64,7 +64,7 @@ public class DefaultRenderer implements TabGUIRenderer {
 	}
 
 	@Override
-	public ColorScheme getColorScheme() {
+	public IColorScheme getColorScheme() {
 		return scheme;
 	}
 

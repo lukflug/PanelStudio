@@ -7,11 +7,11 @@ import java.awt.Rectangle;
 import com.lukflug.panelstudio.Animation;
 import com.lukflug.panelstudio.Context;
 import com.lukflug.panelstudio.DraggableContainer;
-import com.lukflug.panelstudio.FixedComponent;
-import com.lukflug.panelstudio.Interface;
-import com.lukflug.panelstudio.PanelConfig;
-import com.lukflug.panelstudio.settings.Toggleable;
-import com.lukflug.panelstudio.theme.Renderer;
+import com.lukflug.panelstudio.IFixedComponent;
+import com.lukflug.panelstudio.IInterface;
+import com.lukflug.panelstudio.IPanelConfig;
+import com.lukflug.panelstudio.settings.IToggleable;
+import com.lukflug.panelstudio.theme.IRenderer;
 import com.lukflug.panelstudio.theme.RendererProxy;
 
 /**
@@ -22,11 +22,11 @@ public class HUDPanel extends DraggableContainer {
 	/**
 	 * Whether GUI is open.
 	 */
-	protected Toggleable guiOpen;
+	protected IToggleable guiOpen;
 	/**
 	 * The HUD component.
 	 */
-	protected FixedComponent component;
+	protected IFixedComponent component;
 	
 	/**
 	 * Constructor.
@@ -37,7 +37,7 @@ public class HUDPanel extends DraggableContainer {
 	 * @param guiOpen whether to accept input and render container itself or not
 	 * @param minBorder the minimum border for the container
 	 */
-	public HUDPanel(FixedComponent component, Renderer renderer, Toggleable open, Animation animation, Toggleable guiOpen, int minBorder) {
+	public HUDPanel(IFixedComponent component, IRenderer renderer, IToggleable open, Animation animation, IToggleable guiOpen, int minBorder) {
 		super(component.getTitle(),null,new HUDRenderer(renderer,guiOpen,minBorder),open,animation,null,new Point(0,0),0);
 		addComponent(component);
 		this.guiOpen=guiOpen;
@@ -65,7 +65,7 @@ public class HUDPanel extends DraggableContainer {
 	 * Gets position from child component.
 	 */
 	@Override
-	public Point getPosition (Interface inter) {
+	public Point getPosition (IInterface inter) {
 		position=component.getPosition(inter);
 		position.translate(0,-renderer.getHeight(open.getValue()!=0)-renderer.getOffset());
 		return super.getPosition(inter);
@@ -75,7 +75,7 @@ public class HUDPanel extends DraggableContainer {
 	 * Sets position of child component.
 	 */
 	@Override
-	public void setPosition (Interface inter, Point position) {
+	public void setPosition (IInterface inter, Point position) {
 		component.setPosition(inter,new Point(position.x,position.y+renderer.getHeight(open.getValue()!=0)+renderer.getOffset()));
 	}
 	
@@ -83,7 +83,7 @@ public class HUDPanel extends DraggableContainer {
 	 * Get the child component width.
 	 */
 	@Override
-	public int getWidth (Interface inter) {
+	public int getWidth (IInterface inter) {
 		return component.getWidth(inter)+renderer.getBorder()*2+renderer.getLeftBorder(scroll)+renderer.getRightBorder(scroll);
 	}
 	
@@ -97,31 +97,31 @@ public class HUDPanel extends DraggableContainer {
 	}
 
 	@Override
-	public void saveConfig(Interface inter, PanelConfig config) {
+	public void saveConfig(IInterface inter, IPanelConfig config) {
 		component.saveConfig(inter,config);
 		config.saveState(open.isOn());
 	}
 
 	@Override
-	public void loadConfig(Interface inter, PanelConfig config) {
+	public void loadConfig(IInterface inter, IPanelConfig config) {
 		component.loadConfig(inter,config);
 		if (open.isOn()!=config.loadState()) open.toggle();
 	}
 	
 	
 	/**
-	 * Proxy for a {@link Renderer}, doesn't display container, when GUI is off.
+	 * Proxy for a {@link IRenderer}, doesn't display container, when GUI is off.
 	 * @author lukflug
 	 */
 	protected static class HUDRenderer extends RendererProxy {
 		/**
 		 * Base renderer.
 		 */
-		Renderer renderer;
+		protected IRenderer renderer;
 		/**
 		 * Whether GUI is open.
 		 */
-		protected Toggleable guiOpen;
+		protected IToggleable guiOpen;
 		/**
 		 * Minimum border.
 		 */
@@ -133,7 +133,7 @@ public class HUDPanel extends DraggableContainer {
 		 * @param guiOpen whether to accept input and render container itself or not
 	 * @param minBorder the minimum border for the container
 		 */
-		public HUDRenderer (Renderer renderer, Toggleable guiOpen, int minBorder) {
+		public HUDRenderer (IRenderer renderer, IToggleable guiOpen, int minBorder) {
 			this.renderer=renderer;
 			this.guiOpen=guiOpen;
 			this.minBorder=minBorder;
@@ -221,7 +221,7 @@ public class HUDPanel extends DraggableContainer {
 		}
 
 		@Override
-		protected Renderer getRenderer() {
+		protected IRenderer getRenderer() {
 			return renderer;
 		}
 	}

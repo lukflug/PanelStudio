@@ -2,14 +2,14 @@ package com.lukflug.panelstudio;
 
 import java.awt.Point;
 
-import com.lukflug.panelstudio.settings.Toggleable;
-import com.lukflug.panelstudio.theme.Renderer;
+import com.lukflug.panelstudio.settings.IToggleable;
+import com.lukflug.panelstudio.theme.IRenderer;
 
 /**
- * Class for a {@link FixedComponent} that is also a {@link CollapsibleContainer} (i.e. a Panel), that can be dragged by the user using the mouse.
+ * Class for a {@link IFixedComponent} that is also a {@link CollapsibleContainer} (i.e. a Panel), that can be dragged by the user using the mouse.
  * @author lukflug
  */
-public class DraggableContainer extends CollapsibleContainer implements FixedComponent {
+public class DraggableContainer extends CollapsibleContainer implements IFixedComponent {
 	/**
 	 * Flag indicating whether the user is dragging the component with the mouse.
 	 */
@@ -35,14 +35,14 @@ public class DraggableContainer extends CollapsibleContainer implements FixedCom
 	 * Constructor.
 	 * @param title caption of the container
 	 * @param description the description for this component
-	 * @param renderer {@link Renderer} for the container
-	 * @param open {@link Toggleable} to indicate whether the container is open or closed
+	 * @param renderer {@link IRenderer} for the container
+	 * @param open {@link IToggleable} to indicate whether the container is open or closed
 	 * @param animation the animation for opening and closing the container
-	 * @param toggle the {@link Toggleable} to be toggled by the user
+	 * @param toggle the {@link IToggleable} to be toggled by the user
 	 * @param position the initial position of the container
 	 * @param width the width of the container
 	 */
-	public DraggableContainer(String title, String description, Renderer renderer, Toggleable open, Animation animation, Toggleable toggle, Point position, int width) {
+	public DraggableContainer(String title, String description, IRenderer renderer, IToggleable open, Animation animation, IToggleable toggle, Point position, int width) {
 		super(title,description,renderer,open,animation,toggle);
 		this.position=position;
 		this.width=width;
@@ -55,10 +55,10 @@ public class DraggableContainer extends CollapsibleContainer implements FixedCom
 	public void handleButton (Context context, int button) {
 		if (bodyDrag) super.handleButton(context, button);
 		else context.setHeight(renderer.getHeight(open.getValue()!=0));
-		if (context.isClicked() && button==Interface.LBUTTON) {
+		if (context.isClicked() && button==IInterface.LBUTTON) {
 			dragging=true;
 			attachPoint=context.getInterface().getMouse();
-		} else if (!context.getInterface().getButton(Interface.LBUTTON) && dragging) {
+		} else if (!context.getInterface().getButton(IInterface.LBUTTON) && dragging) {
 			Point mouse=context.getInterface().getMouse();
 			dragging=false;
 			Point p=getPosition(context.getInterface());
@@ -72,7 +72,7 @@ public class DraggableContainer extends CollapsibleContainer implements FixedCom
 	 * Get the current position of the panel.
 	 */
 	@Override
-	public Point getPosition (Interface inter) {
+	public Point getPosition (IInterface inter) {
 		if (dragging) {
 			Point point=new Point(position);
 			point.translate(inter.getMouse().x-attachPoint.x,inter.getMouse().y-attachPoint.y);
@@ -85,12 +85,12 @@ public class DraggableContainer extends CollapsibleContainer implements FixedCom
 	 * Set the position of the panel.
 	 */
 	@Override
-	public void setPosition(Interface inter, Point position) {
+	public void setPosition(IInterface inter, Point position) {
 		this.position=new Point(position);
 	}
 
 	@Override
-	public int getWidth (Interface inter) {
+	public int getWidth (IInterface inter) {
 		return width;
 	}
 
@@ -103,13 +103,13 @@ public class DraggableContainer extends CollapsibleContainer implements FixedCom
 	}
 
 	@Override
-	public void saveConfig(Interface inter, PanelConfig config) {
+	public void saveConfig(IInterface inter, IPanelConfig config) {
 		config.savePositon(position);
 		config.saveState(open.isOn());
 	}
 
 	@Override
-	public void loadConfig(Interface inter, PanelConfig config) {
+	public void loadConfig(IInterface inter, IPanelConfig config) {
 		Point pos=config.loadPosition();
 		if (pos!=null) position=pos;
 		if (open.isOn()!=config.loadState()) open.toggle();

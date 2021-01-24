@@ -8,7 +8,7 @@ import com.lukflug.panelstudio.Context;
  * Base class for constructing renderers.
  * @author lukflug
  */
-public abstract class RendererBase implements Renderer {
+public abstract class RendererBase implements IRenderer {
 	/**
 	 * Field to store default component dimensions.
 	 */
@@ -16,7 +16,7 @@ public abstract class RendererBase implements Renderer {
 	/**
 	 * Custom color scheme.
 	 */
-	protected ColorScheme scheme=null;
+	protected IColorScheme scheme=null;
 	
 	/**
 	 * Constructor.
@@ -128,7 +128,7 @@ public abstract class RendererBase implements Renderer {
 	 * Overwrites the default color scheme, by setting {@link #scheme}.
 	 */
 	@Override
-	public void overrideColorScheme(ColorScheme scheme) {
+	public void overrideColorScheme(IColorScheme scheme) {
 		this.scheme=scheme;
 	}
 
@@ -144,7 +144,7 @@ public abstract class RendererBase implements Renderer {
 	 * Returns the default color scheme, if {@link #scheme} is null, otherwise returns {@link #scheme}.
 	 * @return the current color scheme
 	 */
-	protected ColorScheme getColorScheme() {
+	protected IColorScheme getColorScheme() {
 		if (scheme==null) return getDefaultColorScheme();
 		return scheme;
 	}

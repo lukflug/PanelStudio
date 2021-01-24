@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutionException;
 
 import org.lwjgl.opengl.GL11;
 
-import com.lukflug.panelstudio.Interface;
+import com.lukflug.panelstudio.IInterface;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.minecraft.client.MinecraftClient;
@@ -23,7 +23,7 @@ import net.minecraft.util.Identifier;
  * Implementation of Interface for OpenGL in minecraft.
  * @author lukflug
  */
-public abstract class GLInterface implements Interface {
+public abstract class GLInterface implements IInterface {
 	/**
 	 * Buffer to store current modelview matrix.
 	 */

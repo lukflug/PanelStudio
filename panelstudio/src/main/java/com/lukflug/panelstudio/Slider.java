@@ -4,7 +4,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-import com.lukflug.panelstudio.theme.Renderer;
+import com.lukflug.panelstudio.theme.IRenderer;
 
 /**
  * Base class for components that are sliders.
@@ -19,7 +19,7 @@ public abstract class Slider extends FocusableComponent {
 	 * @param description the description for this component
 	 * @param renderer renderer for the slider
 	 */
-	public Slider(String title, String description, Renderer renderer) {
+	public Slider(String title, String description, IRenderer renderer) {
 		super(title,description,renderer);
 	}
 
@@ -35,7 +35,7 @@ public abstract class Slider extends FocusableComponent {
 			else if (value>1) value=1;
 			setValue(value);
 		}
-		if (!context.getInterface().getButton(Interface.LBUTTON)) {
+		if (!context.getInterface().getButton(IInterface.LBUTTON)) {
 			attached=false;
 		}
 		renderer.renderRect(context,"",hasFocus(context),false,new Rectangle(new Point(context.getPos().x+(int)(context.getSize().width*getValue()),context.getPos().y),new Dimension((int)(context.getSize().width*(1-getValue())),renderer.getHeight(false))),false);
@@ -48,7 +48,7 @@ public abstract class Slider extends FocusableComponent {
 	@Override
 	public void handleButton (Context context, int button) {
 		super.handleButton(context,button);
-		if (button==Interface.LBUTTON && context.isClicked()) {
+		if (button==IInterface.LBUTTON && context.isClicked()) {
 			attached=true;
 		}
 	}

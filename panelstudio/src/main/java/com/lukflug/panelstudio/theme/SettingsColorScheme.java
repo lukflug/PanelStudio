@@ -2,38 +2,38 @@ package com.lukflug.panelstudio.theme;
 
 import java.awt.Color;
 
-import com.lukflug.panelstudio.settings.ColorSetting;
-import com.lukflug.panelstudio.settings.NumberSetting;
+import com.lukflug.panelstudio.settings.IColorSetting;
+import com.lukflug.panelstudio.settings.INumberSetting;
 
 /**
- * Implementation of {@link ColorScheme} using {@link ColorSetting} and {@link NumberSetting}.
+ * Implementation of {@link IColorScheme} using {@link IColorSetting} and {@link INumberSetting}.
  * @author lukflug
  */
-public class SettingsColorScheme implements ColorScheme {
+public class SettingsColorScheme implements IColorScheme {
 	/**
 	 * Setting to be used for {@link #getActiveColor()}.
 	 */
-	protected final ColorSetting activeColor;
+	protected final IColorSetting activeColor;
 	/**
 	 * Setting to be used for {@link #getInactiveColor()}.
 	 */
-	protected final ColorSetting inactiveColor;
+	protected final IColorSetting inactiveColor;
 	/**
 	 * Setting to be used for {@link #getBackgroundColor()}.
 	 */
-	protected final ColorSetting backgroundColor;
+	protected final IColorSetting backgroundColor;
 	/**
 	 * Setting to be used for {@link #getOutlineColor()}.
 	 */
-	protected final ColorSetting outlineColor;
+	protected final IColorSetting outlineColor;
 	/**
 	 * Setting to be used for {@link #getFontColor()}.
 	 */
-	protected final ColorSetting fontColor;
+	protected final IColorSetting fontColor;
 	/**
 	 * Setting to be used for {@link #getOpacity()}.
 	 */
-	protected final NumberSetting opacity;
+	protected final INumberSetting opacity;
 	
 	/**
 	 * Constructor.
@@ -44,7 +44,7 @@ public class SettingsColorScheme implements ColorScheme {
 	 * @param fontColor font color setting
 	 * @param opacity opacity setting
 	 */
-	public SettingsColorScheme (ColorSetting activeColor, ColorSetting inactiveColor, ColorSetting backgroundColor, ColorSetting outlineColor, ColorSetting fontColor, NumberSetting opacity) {
+	public SettingsColorScheme (IColorSetting activeColor, IColorSetting inactiveColor, IColorSetting backgroundColor, IColorSetting outlineColor, IColorSetting fontColor, INumberSetting opacity) {
 		this.activeColor=activeColor;
 		this.inactiveColor=inactiveColor;
 		this.backgroundColor=backgroundColor;

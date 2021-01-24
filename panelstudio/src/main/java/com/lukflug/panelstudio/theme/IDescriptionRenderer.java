@@ -6,7 +6,7 @@ import com.lukflug.panelstudio.Context;
  * Interface used to render descriptions.
  * @author lukflug
  */
-public interface DescriptionRenderer {
+public interface IDescriptionRenderer {
 	/**
 	 * Render a description
 	 * @param context the context for the panel creating the description

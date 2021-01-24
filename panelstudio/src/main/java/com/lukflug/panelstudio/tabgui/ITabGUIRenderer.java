@@ -1,13 +1,13 @@
 package com.lukflug.panelstudio.tabgui;
 
 import com.lukflug.panelstudio.Context;
-import com.lukflug.panelstudio.theme.ColorScheme;
+import com.lukflug.panelstudio.theme.IColorScheme;
 
 /**
  * An Interface to abstract the rendering of TabGUI containers.
  * @author lukflug
  */
-public interface TabGUIRenderer {
+public interface ITabGUIRenderer {
 	/**
 	 * Get the default component height.
 	 * @return component height
@@ -42,7 +42,7 @@ public interface TabGUIRenderer {
 	 * Returns the default color scheme.
 	 * @return the color scheme
 	 */
-	public ColorScheme getColorScheme();
+	public IColorScheme getColorScheme();
 	
 	/**
 	 * Check whether key scancode is up key.

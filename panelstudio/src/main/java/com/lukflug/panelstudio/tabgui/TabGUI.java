@@ -3,16 +3,16 @@ package com.lukflug.panelstudio.tabgui;
 import java.awt.Point;
 
 import com.lukflug.panelstudio.Animation;
-import com.lukflug.panelstudio.FixedComponent;
-import com.lukflug.panelstudio.Interface;
-import com.lukflug.panelstudio.PanelConfig;
+import com.lukflug.panelstudio.IFixedComponent;
+import com.lukflug.panelstudio.IInterface;
+import com.lukflug.panelstudio.IPanelConfig;
 
 /**
- * A {@link TabGUIContainer} that is also a {@link FixedComponent}.
+ * A {@link TabGUIContainer} that is also a {@link IFixedComponent}.
  * Should be used as root element.
  * @author lukflug
  */
-public class TabGUI extends TabGUIContainer implements FixedComponent {
+public class TabGUI extends TabGUIContainer implements IFixedComponent {
 	/**
 	 * Current position of the TabGUI.
 	 */
@@ -30,7 +30,7 @@ public class TabGUI extends TabGUIContainer implements FixedComponent {
 	 * @param position the initial position for the TabGUI
 	 * @param width the width of the TabGUI
 	 */
-	public TabGUI(String title, TabGUIRenderer renderer, Animation animation, Point position, int width) {
+	public TabGUI(String title, ITabGUIRenderer renderer, Animation animation, Point position, int width) {
 		super(title, renderer,animation);
 		this.position=position;
 		this.width=width;
@@ -40,7 +40,7 @@ public class TabGUI extends TabGUIContainer implements FixedComponent {
 	 * Get the current position.
 	 */
 	@Override
-	public Point getPosition(Interface inter) {
+	public Point getPosition(IInterface inter) {
 		return new Point(position);
 	}
 
@@ -48,22 +48,22 @@ public class TabGUI extends TabGUIContainer implements FixedComponent {
 	 * Update the position.
 	 */
 	@Override
-	public void setPosition(Interface inter, Point position) {
+	public void setPosition(IInterface inter, Point position) {
 		this.position=position;
 	}
 
 	@Override
-	public int getWidth (Interface inter) {
+	public int getWidth (IInterface inter) {
 		return width;
 	}
 
 	@Override
-	public void saveConfig(Interface inter, PanelConfig config) {
+	public void saveConfig(IInterface inter, IPanelConfig config) {
 		config.savePositon(position);
 	}
 
 	@Override
-	public void loadConfig(Interface inter, PanelConfig config) {
+	public void loadConfig(IInterface inter, IPanelConfig config) {
 		Point pos=config.loadPosition();
 		if (pos!=null) position=pos;
 	}

@@ -6,11 +6,11 @@ package com.lukflug.panelstudio.theme;
  * In this way, the renderers can effectively be switched, without changing the field in {@link com.lukflug.panelstudio.FocusableComponent#renderer}.
  * @author lukflug
  */
-public abstract class ThemeMultiplexer implements Theme {
+public abstract class ThemeMultiplexer implements ITheme {
 	/**
 	 * {@link RendererProxy} for the components.
 	 */
-	protected final Renderer panelRenderer,containerRenderer,componentRenderer;
+	protected final IRenderer panelRenderer,containerRenderer,componentRenderer;
 	
 	/**
 	 * Initializes the renderer fields.
@@ -25,7 +25,7 @@ public abstract class ThemeMultiplexer implements Theme {
 	 * Returns the renderer for panels.
 	 */
 	@Override
-	public Renderer getPanelRenderer() {
+	public IRenderer getPanelRenderer() {
 		return panelRenderer;
 	}
 
@@ -33,7 +33,7 @@ public abstract class ThemeMultiplexer implements Theme {
 	 * Returns the renderer for containers.
 	 */
 	@Override
-	public Renderer getContainerRenderer() {
+	public IRenderer getContainerRenderer() {
 		return containerRenderer;
 	}
 
@@ -41,7 +41,7 @@ public abstract class ThemeMultiplexer implements Theme {
 	 * Returns the renderer for components.
 	 */
 	@Override
-	public Renderer getComponentRenderer() {
+	public IRenderer getComponentRenderer() {
 		return componentRenderer;
 	}
 	
@@ -49,7 +49,7 @@ public abstract class ThemeMultiplexer implements Theme {
 	 * Abstract method that returns the current theme.
 	 * @return the current theme
 	 */
-	protected abstract Theme getTheme();
+	protected abstract ITheme getTheme();
 	
 	
 	/**
@@ -61,7 +61,7 @@ public abstract class ThemeMultiplexer implements Theme {
 		 * Returns the current panel renderer.
 		 */
 		@Override
-		protected Renderer getRenderer() {
+		protected IRenderer getRenderer() {
 			return getTheme().getPanelRenderer();
 		}
 	}
@@ -77,7 +77,7 @@ public abstract class ThemeMultiplexer implements Theme {
 		 * Returns the current container renderer.
 		 */
 		@Override
-		protected Renderer getRenderer() {
+		protected IRenderer getRenderer() {
 			return getTheme().getContainerRenderer();
 		}
 	}
@@ -92,7 +92,7 @@ public abstract class ThemeMultiplexer implements Theme {
 		 * Returns the current component renderer.
 		 */
 		@Override
-		protected Renderer getRenderer() {
+		protected IRenderer getRenderer() {
 			return getTheme().getComponentRenderer();
 		}
 	}

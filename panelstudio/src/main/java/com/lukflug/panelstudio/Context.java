@@ -12,7 +12,7 @@ public final class Context {
 	/**
 	 * The current {@link Interface}.
 	 */
-	private Interface inter;
+	private IInterface inter;
 	/**
 	 * The size of the component.
 	 * The width is decided by the parent, while the height is decided by the component.
@@ -73,7 +73,7 @@ public final class Context {
 	 * @param focus set to false, to disable the component from having focus
 	 * @param onTop set to false, if a component is above another component at the current cursor position
 	 */
-	public Context (Interface inter, int width, Point position, boolean focus, boolean onTop) {
+	public Context (IInterface inter, int width, Point position, boolean focus, boolean onTop) {
 		this.inter=inter;
 		size=new Dimension(width,0);
 		this.position=new Point(position);
@@ -85,7 +85,7 @@ public final class Context {
 	 * Returns the current {@link Interface}.
 	 * @return the current {@link Interface}
 	 */
-	public Interface getInterface() {
+	public IInterface getInterface() {
 		return inter;
 	}
 	
@@ -173,7 +173,7 @@ public final class Context {
 	 * @return set to true, if {@link #isHovered()} is true and the left mouse button is clicked
 	 */
 	public boolean isClicked() {
-		return isHovered() && inter.getButton(Interface.LBUTTON);
+		return isHovered() && inter.getButton(IInterface.LBUTTON);
 	}
 	
 	/**

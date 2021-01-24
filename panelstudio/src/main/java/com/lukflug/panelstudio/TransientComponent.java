@@ -1,7 +1,7 @@
 package com.lukflug.panelstudio;
 
-import com.lukflug.panelstudio.settings.Toggleable;
-import com.lukflug.panelstudio.theme.Renderer;
+import com.lukflug.panelstudio.settings.IToggleable;
+import com.lukflug.panelstudio.theme.IRenderer;
 
 /**
  * A button that displays a component when clicked.
@@ -9,28 +9,28 @@ import com.lukflug.panelstudio.theme.Renderer;
  */
 public class TransientComponent extends FocusableComponent {
 	/**
-	 * {@link Toggleable} that can be toggled by the user.
+	 * {@link IToggleable} that can be toggled by the user.
 	 */
-	protected Toggleable toggle;
+	protected IToggleable toggle;
 	/**
 	 * Component to be displayed when clicked.
 	 */
-	protected FixedComponent component;
+	protected IFixedComponent component;
 	/**
 	 * Panel manager to be used.
 	 */
-	protected PanelManager manager;
+	protected IPanelManager manager;
 	
 	/**
 	 * Constructor.
 	 * @param title the title for this component
 	 * @param description the description for this component
 	 * @param renderer the renderer for this component
-	 * @param toggle the {@link Toggleable} to be used by the user
+	 * @param toggle the {@link IToggleable} to be used by the user
 	 * @param component component to be opened when clicked
-	 * @param manager the {@link PanelManager} to be used by this component
+	 * @param manager the {@link IPanelManager} to be used by this component
 	 */
-	public TransientComponent (String title, String description, Renderer renderer, Toggleable toggle, FixedComponent component, PanelManager manager) {
+	public TransientComponent (String title, String description, IRenderer renderer, IToggleable toggle, IFixedComponent component, IPanelManager manager) {
 		super(title,description,renderer);
 		this.toggle=toggle;
 		this.component=component;
@@ -53,9 +53,9 @@ public class TransientComponent extends FocusableComponent {
 	@Override
 	public void handleButton (Context context, int button) {
 		super.handleButton(context,button);
-		if (button==Interface.LBUTTON && context.isClicked()) {
+		if (button==IInterface.LBUTTON && context.isClicked()) {
 			toggle.toggle();
-		} else if (context.isHovered() && button==Interface.RBUTTON && context.getInterface().getButton(Interface.RBUTTON)) {
+		} else if (context.isHovered() && button==IInterface.RBUTTON && context.getInterface().getButton(IInterface.RBUTTON)) {
 			manager.getComponentToggleable(component).toggle();
 			context.releaseFocus();
 		}
