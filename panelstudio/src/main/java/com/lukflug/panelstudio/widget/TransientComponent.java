@@ -1,4 +1,4 @@
-package com.lukflug.panelstudio.component;
+package com.lukflug.panelstudio.widget;
 
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IInterface;

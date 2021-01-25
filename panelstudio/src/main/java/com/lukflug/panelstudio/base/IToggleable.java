@@ -4,15 +4,9 @@ package com.lukflug.panelstudio.base;
  * Interface representing a boolean value that can be toggled.
  * @author lukflug
  */
-public interface IToggleable {
+public interface IToggleable extends IBoolean {
 	/**
 	 * Toggle the boolean value.
 	 */
 	public void toggle();
-	
-	/**
-	 * Get the boolean value.
-	 * @return the value
-	 */
-	public boolean isOn();
 }

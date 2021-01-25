@@ -54,21 +54,27 @@ public interface IComponent {
 	public void getHeight (Context context);
 	
 	/**
-	 * Should be called by the parent when the panel is shown.
-	 * The current height of the component should be set by this method via {@link Context#setHeight(int)}.
-	 * @param context the {@link Context} for the component
+	 * Should be called by the parent when the component is shown.
 	 */
-	public void enter (Context context);
+	public void enter();
 	
 	/**
-	 * Should be called by the parent when the panel is hidden.
-	 * The current height of the component should be set by this method via {@link Context#setHeight(int)}.
-	 * @param context the {@link Context} for the component
+	 * Should be called by the parent when the component is hidden.
 	 */
-	public void exit (Context context);
+	public void exit();
 	
 	/**
 	 * Called when a parent loses focus.
 	 */
 	public void releaseFocus();
+	
+	/**
+	 * Check if component should be visible.
+	 */
+	public boolean isVisible();
+	
+	/**
+	 * Whether enter or exit was last called.
+	 */
+	public boolean lastVisible();
 }

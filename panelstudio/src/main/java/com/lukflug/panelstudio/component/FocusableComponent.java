@@ -1,13 +1,14 @@
 package com.lukflug.panelstudio.component;
 
 import com.lukflug.panelstudio.base.Context;
+import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.theme.IRenderer;
 
 /**
  * Base class for all components included in this library.
  * @author lukflug
  */
-public class FocusableComponent implements IComponent {
+public abstract class FocusableComponent extends BaseComponent {
 	/**
 	 * The caption of this component.
 	 */
@@ -24,84 +25,31 @@ public class FocusableComponent implements IComponent {
 	 * The focus state for this component.
 	 */
 	private boolean focus=false;
-	
+
 	/**
 	 * Constructor.
 	 * @param title the caption for this component
 	 * @param description the description for this component
-	 * @param renderer the {@link IRenderer} for this component
+	 * @param renderer whether this component is visible
 	 */
-	public FocusableComponent (String title, String description, IRenderer renderer) {
-		this.title=title;
-		this.renderer=renderer;
-		this.description=description;
+	public FocusableComponent (String title, String description, IBoolean visible) {
+		super(title,description,visible);
 	}
 	
-	/**
-	 * Returns the caption of this component.
-	 */
 	@Override
 	public String getTitle() {
 		return title;
 	}
 	
-	/**
-	 * Set the height of this component to the height specified by {@link IRenderer}.
-	 */
-	@Override
-	public void render(Context context) {
-		context.setHeight(renderer.getHeight(false));
-		context.setDescription(description);
-	}
-
-	/**
-	 * Set the height of this component to the height specified by {@link IRenderer}.
-	 */
-	@Override
-	public void handleKey(Context context, int scancode) {
-		context.setHeight(renderer.getHeight(false));
-	}
-
-	/**
-	 * Updates the focus state.
-	 * Set the height of this component to the height specified by {@link IRenderer}.
-	 */
 	@Override
 	public void handleButton (Context context, int button) {
 		context.setHeight(renderer.getHeight(false));
 		updateFocus(context,button);
 	}
-
-	/**
-	 * Set the height of this component to the height specified by {@link IRenderer}.
-	 */
-	@Override
-	public void getHeight(Context context) {
-		context.setHeight(renderer.getHeight(false));
-	}
 	
-	/**
-	 * Set the height of this component to the height specified by {@link IRenderer}.
-	 */
 	@Override
-	public void handleScroll (Context context, int diff) {
-		context.setHeight(renderer.getHeight(false));
-	}
-	
-	/**
-	 * Set the height of this component to the height specified by {@link IRenderer}.
-	 */
-	@Override
-	public void enter (Context context) {
-		context.setHeight(renderer.getHeight(false));
-	}
-
-	/**
-	 * Set the height of this component to the height specified by {@link IRenderer}.
-	 */
-	@Override
-	public void exit (Context context) {
-		context.setHeight(renderer.getHeight(false));
+	public void releaseFocus() {
+		focus=false;
 	}
 	
 	/**
@@ -111,14 +59,6 @@ public class FocusableComponent implements IComponent {
 	 */
 	public boolean hasFocus (Context context) {
 		return context.hasFocus()&&focus;
-	}
-	
-	/**
-	 * Reset focus state.
-	 */
-	@Override
-	public void releaseFocus() {
-		focus=false;
 	}
 	
 	/**

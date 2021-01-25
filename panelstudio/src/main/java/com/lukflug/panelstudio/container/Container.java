@@ -4,167 +4,139 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lukflug.panelstudio.base.Context;
-import com.lukflug.panelstudio.component.FocusableComponent;
+import com.lukflug.panelstudio.base.IBoolean;
+import com.lukflug.panelstudio.base.IToggleable;
+import com.lukflug.panelstudio.base.SimpleToggleable;
 import com.lukflug.panelstudio.component.IComponent;
-import com.lukflug.panelstudio.theme.IRenderer;
 
 /**
- * Base class for components containing other components (i.e. containers).
+ * Base class for containers.
  * @author lukflug
+ * @param <T> the type of components that are members of this container
  */
-public class Container extends FocusableComponent {
-	/**
-	 * List of child component.
-	 */
-	protected List<IComponent> components;
-	/**
-	 * Temporary storage for child description.
-	 */
-	private String tempDescription;
-	
-	/**
-	 * Constructor for a container.
-	 * @param title the caption of the container
-	 * @param description the description for this component
-	 * @param renderer the renderer used by the container
-	 */
-	public Container (String title, String description, IRenderer renderer) {
-		super(title,description,renderer);
-		components=new ArrayList<IComponent>();
-	}
-	
-	/**
-	 * Add a component to the container.
-	 * @param component the component to be added
-	 */
-	public void addComponent (IComponent component) {
-		components.add(component);
-	}
-	
-	/**
-	 * Render the container.
-	 * Components are rendered in a column based on the height they specify via {@link Context#setHeight(int)}.
-	 * The horizontal border is defined by {@link IRenderer#getBorder()}.
-	 * The vertical space between to components is defined by {@link IRenderer#getOffset()}. 
-	 */
+public class Container<T extends IComponent> implements IComponent,IComponentManager {
+	protected List<ComponentState> components=new ArrayList<ComponentState>();
+	protected String title;
+	private boolean lastVisible=false;
+
 	@Override
-	public void render (Context context) {
-		tempDescription=null;
-		doComponentLoop(context,(subContext,component)->{
-			component.render(subContext);
-			if (subContext.isHovered() && subContext.getDescription()!=null) tempDescription=subContext.getDescription();
-		});
-		if (tempDescription==null) tempDescription=this.description;
-		context.setDescription(tempDescription);
+	public String getTitle() {
+		return title;
 	}
 
-	/**
-	 * Handle a mouse button state change.
-	 */
 	@Override
-	public void handleButton (Context context, int button) {
-		getHeight(context);
-		updateFocus(context,button);
-		doComponentLoop(context,(subContext,component)->{
-			component.handleButton(subContext,button);
-			if (subContext.focusReleased()) context.releaseFocus();
-		});
+	public void render(Context context) {
+		// TODO Auto-generated method stub
+		
 	}
 
-	/**
-	 * Handle a key being typed.
-	 */
 	@Override
-	public void handleKey (Context context, int scancode) {
-		doComponentLoop(context,(subContext,component)->component.handleKey(subContext,scancode));
+	public void handleButton(Context context, int button) {
+		// TODO Auto-generated method stub
+		
 	}
 
-	/**
-	 * Handle mouse wheel being scrolled.
-	 */
 	@Override
-	public void handleScroll (Context context, int diff) {
-		doComponentLoop(context,(subContext,component)->component.handleScroll(subContext,diff));
-	}
-	
-	/**
-	 * Returns the total height of the container, accounting for the height of its child components.
-	 */
-	@Override
-	public void getHeight (Context context) {
-		doComponentLoop(context,(subContext,component)->component.getHeight(subContext));
+	public void handleKey(Context context, int scancode) {
+		// TODO Auto-generated method stub
+		
 	}
 
-	/**
-	 * Handle the GUI being closed.
-	 */
 	@Override
-	public void enter (Context context) {
-		doComponentLoop(context,(subContext,component)->component.enter(subContext));
+	public void handleScroll(Context context, int diff) {
+		// TODO Auto-generated method stub
+		
 	}
 
-	/**
-	 * Handle the GUI being closed.
-	 */
 	@Override
-	public void exit (Context context) {
-		doComponentLoop(context,(subContext,component)->component.exit(subContext));
+	public void getHeight(Context context) {
+		// TODO Auto-generated method stub
+		
 	}
-	
-	/**
-	 * Reset focus state of self and children.
-	 */
+
+	@Override
+	public void enter() {
+		lastVisible=true;
+	}
+
+	@Override
+	public void exit() {
+		lastVisible=false;
+	}
+
 	@Override
 	public void releaseFocus() {
-		super.releaseFocus();
-		for (IComponent component: components) {
-			component.releaseFocus();
-		}
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean isVisible() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
-	/**
-	 * Releases focus of children when called.
-	 */
-	protected void handleFocus (Context context, boolean focus) {
-		if (!focus) releaseFocus();
+	@Override
+	public boolean lastVisible() {
+		return lastVisible;
 	}
-	
-	/**
-	 * Create sub-context for child component.
-	 * @param context the current context
-	 * @param posy the vertical position of the child component
-	 * @return the context for the child component
-	 */
-	protected Context getSubContext (Context context, int posy) {
-		return new Context(context,renderer.getBorder(),renderer.getBorder(),posy,hasFocus(context),true);
+
+	@Override
+	public IToggleable getComponentToggleable(IComponent component) {
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
-	/**
-	 * Loop through all components in reverse order and check for focus requests.
-	 * @param context for the container
-	 * @param function the function to execute in the loop
-	 */
-	protected void doComponentLoop (Context context, LoopFunction function) {
-		int posy=renderer.getOffset();
-		for (IComponent component: components) {
-			Context subContext=getSubContext(context,posy);
-			function.loop(subContext,component);
-			posy+=subContext.getSize().height+renderer.getOffset();
-		}
-		context.setHeight(posy);
+
+	@Override
+	public void disposeComponent(IComponent component) {
+		ComponentState state=components.get(component);
+		if (state.transientVisibility.isOn()) state.transientVisibility.toggle();
+		components.remove(component);
 	}
 	
 	
 	/**
-	 * Interface used by the loop.
+	 * Class for the visibility state of a component.
 	 * @author lukflug
 	 */
-	protected interface LoopFunction {
+	protected class ComponentState {
 		/**
-		 * Function to execute in the loop.
-		 * @param context the context for the component
-		 * @param component the component
+		 * The component.
 		 */
-		public void loop (Context context, IComponent component);
+		protected final IComponent component;
+		/**
+		 * The visibility defined by thing outside the component.
+		 */
+		protected final IBoolean externalVisibility;
+		/**
+		 * The visibility defined via {@link IComponentManager}.
+		 */
+		protected final IToggleable transientVisibility;
+		
+		/**
+		 * Constructor.
+		 * @param component the component
+		 * @param externalVisibility the external visibility
+		 * @param visible initial transient visbility
+		 */
+		public ComponentState (IComponent component, IBoolean externalVisibility, boolean visible) {
+			this.component=component;
+			this.externalVisibility=externalVisibility;
+			transientVisibility=new SimpleToggleable(visible) {
+				@Override
+				public void toggle() {
+					super.toggle();
+					update();
+				}
+			};
+			update();
+		}
+		
+		public void update() {
+			if (component.isVisible()&&externalVisibility.isOn()&&transientVisibility.isOn()!=component.lastVisible()) {
+				if (component.lastVisible()) component.exit();
+				else component.enter();
+			}
+		}
 	}
 }

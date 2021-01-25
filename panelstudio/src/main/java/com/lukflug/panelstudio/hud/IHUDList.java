@@ -4,7 +4,7 @@ import java.awt.Color;
 
 /**
  * Interface representing a list for {@link ListComponent}
- * @author lukas_ghdqwsr
+ * @author lukflug
  */
 public interface IHUDList {
 	/**
