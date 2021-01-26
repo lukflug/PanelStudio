@@ -50,17 +50,16 @@ public final class Context {
 	 * Constructor that should be used when a parent is calling a method by the child.
 	 * {@link #inter} and {@link #onTop} are inherited without modification.
 	 * @param context the context of the parent
-	 * @param left the left horizontal border for the child
-	 * @param right the right horizontal border for the child
-	 * @param offset the vertical position of the child relative to the parent's position
+	 * @param width the width of the component
+	 * @param offset the relative position of the component
 	 * @param focus focus state of the parent
 	 * @param onTop whether component is in the front
 	 */
-	public Context (Context context, int left, int right, int offset, boolean focus, boolean onTop) {
+	public Context (Context context, int width, Point offset, boolean focus, boolean onTop) {
 		inter=context.getInterface();
-		size=new Dimension(context.getSize().width-left-right,0);
-		position=new Point(context.getPos());
-		position.translate(left,offset);
+		size=new Dimension(width,0);
+		this.position=context.getPos();
+		position.translate(offset.x,offset.y);
 		this.focus=context.hasFocus()&&focus;
 		this.onTop=context.onTop()&&onTop;
 	}

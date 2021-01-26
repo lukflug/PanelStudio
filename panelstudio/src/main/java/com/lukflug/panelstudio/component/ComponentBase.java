@@ -7,7 +7,7 @@ import com.lukflug.panelstudio.base.IBoolean;
  * Base class for components.
  * @author lukflug
  */
-public abstract class BaseComponent implements IComponent {
+public abstract class ComponentBase implements IComponent {
 	/**
 	 * The title of the component.
 	 */
@@ -29,9 +29,9 @@ public abstract class BaseComponent implements IComponent {
 	 * Constructor.
 	 * @param title the caption for this component
 	 * @param description the description for this component
-	 * @param renderer whether this component is visible
+	 * @param visible whether this component is visible
 	 */
-	public BaseComponent (String title, String description, IBoolean visible) {
+	public ComponentBase (String title, String description, IBoolean visible) {
 		this.title=title;
 		this.description=description;
 		this.visible=visible;

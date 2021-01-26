@@ -2,25 +2,12 @@ package com.lukflug.panelstudio.component;
 
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IBoolean;
-import com.lukflug.panelstudio.theme.IRenderer;
 
 /**
  * Base class for all components included in this library.
  * @author lukflug
  */
-public abstract class FocusableComponent extends BaseComponent {
-	/**
-	 * The caption of this component.
-	 */
-	protected String title;
-	/**
-	 * The description for this component.
-	 */
-	protected String description;
-	/**
-	 * The {@link IRenderer} for this component.
-	 */
-	protected IRenderer renderer;
+public abstract class FocusableComponent extends ComponentBase {
 	/**
 	 * The focus state for this component.
 	 */
@@ -37,13 +24,8 @@ public abstract class FocusableComponent extends BaseComponent {
 	}
 	
 	@Override
-	public String getTitle() {
-		return title;
-	}
-	
-	@Override
 	public void handleButton (Context context, int button) {
-		context.setHeight(renderer.getHeight(false));
+		super.handleButton(context,button);
 		updateFocus(context,button);
 	}
 	
