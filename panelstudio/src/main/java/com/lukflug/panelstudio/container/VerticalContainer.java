@@ -1,8 +1,6 @@
 package com.lukflug.panelstudio.container;
 
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IBoolean;
@@ -15,11 +13,6 @@ import com.lukflug.panelstudio.theme.ContainerRenderer;
  */
 public class VerticalContainer extends Container<IComponent> {
 	/**
-	 * List of child component.
-	 */
-	protected List<IComponent> components;
-	
-	/**
 	 * Constructor.
 	 * @param title the caption for this component
 	 * @param description the description for this component
@@ -28,15 +21,6 @@ public class VerticalContainer extends Container<IComponent> {
 	 */
 	public VerticalContainer (String title, String description, IBoolean visible, ContainerRenderer renderer) {
 		super(title,description,visible,renderer);
-		components=new ArrayList<IComponent>();
-	}
-	
-	/**
-	 * Add a component to the container.
-	 * @param component the component to be added
-	 */
-	public void addComponent (IComponent component) {
-		components.add(component);
 	}
 	
 	@Override
@@ -45,8 +29,11 @@ public class VerticalContainer extends Container<IComponent> {
 		doContextlessLoop(component->{
 			Context subContext=getSubContext(context,posy[0]);
 			function.accept(context,component);
-			posy[0]+=subContext.getSize().height;
+			if (subContext.focusReleased()) context.releaseFocus();
+			else if (subContext.foucsRequested()) context.requestFocus();
+			posy[0]+=subContext.getSize().height+renderer.getBorder();
 		});
+		context.setHeight(posy[0]-renderer.getBorder()+renderer.getBottom());
 	}
 	
 	/**
@@ -56,6 +43,6 @@ public class VerticalContainer extends Container<IComponent> {
 	 * @return the context for the child component
 	 */
 	protected Context getSubContext (Context context, int posy) {
-		return new Context(context,context.getSize().width-renderer.getLeft()-renderer.getRight(),new Point(renderer.getTop(),posy),context.hasFocus(),true);
+		return new Context(context,context.getSize().width-renderer.getLeft()-renderer.getRight(),new Point(renderer.getLeft(),posy),context.hasFocus(),true);
 	}
 }

@@ -6,8 +6,6 @@ import java.util.function.Consumer;
 
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IBoolean;
-import com.lukflug.panelstudio.base.IToggleable;
-import com.lukflug.panelstudio.base.SimpleToggleable;
 import com.lukflug.panelstudio.component.ComponentBase;
 import com.lukflug.panelstudio.component.IComponent;
 import com.lukflug.panelstudio.theme.ContainerRenderer;
@@ -17,7 +15,7 @@ import com.lukflug.panelstudio.theme.ContainerRenderer;
  * @author lukflug
  * @param <T> the type of components that are members of this container
  */
-public abstract class Container<T extends IComponent> extends ComponentBase implements IComponentManager<T> {
+public abstract class Container<T extends IComponent> extends ComponentBase {
 	/**
 	 * List of components.
 	 */
@@ -39,6 +37,27 @@ public abstract class Container<T extends IComponent> extends ComponentBase impl
 		this.renderer=renderer;
 	}
 	
+	/**
+	 * Add component to GUI.
+	 * @param component the component to be added
+	 */
+	public void addComponent (T component) {
+		if (getComponentState(component)==null) {
+			components.add(new ComponentState(component,getDefaultVisibility()));
+		}
+	}
+	
+	/**
+	 * Remove component from GUI.
+	 * @param component the component to be removed
+	 */
+	public void removeComponent (T component) {
+		ComponentState state=getComponentState(component);
+		if (state!=null) {
+			components.remove(state);
+		}
+	}
+	
 	@Override
 	public void render (Context context) {
 		String tempDescription[]={null};
@@ -54,7 +73,6 @@ public abstract class Container<T extends IComponent> extends ComponentBase impl
 	public void handleButton (Context context, int button) {
 		doContextSensitiveLoop(context,(subContext,component)->{
 			component.handleButton(subContext,button);
-			if (subContext.focusReleased()) context.releaseFocus();
 		});
 	}
 
@@ -94,24 +112,6 @@ public abstract class Container<T extends IComponent> extends ComponentBase impl
 	protected int getHeight() {
 		return 0;
 	}
-
-	@Override
-	public IToggleable getComponentToggleable(T component) {
-		ComponentState state=getComponentState(component);
-		if (state==null) {
-			state=new ComponentState(component,getDefaultVisibility(),false);
-			components.add(state);
-		}
-		return state.transientVisibility;
-	}
-
-	@Override
-	public void disposeComponent(T component) {
-		ComponentState state=getComponentState(component);
-		if (state==null) return;
-		if (state.transientVisibility.isOn()) state.transientVisibility.toggle();
-		components.remove(state);
-	}
 	
 	/**
 	 * Find component state.
@@ -145,9 +145,7 @@ public abstract class Container<T extends IComponent> extends ComponentBase impl
 	 * @param context the context to use
 	 * @param function the payload function to execute
 	 */
-	protected void doContextSensitiveLoop (Context context, ContextSensitiveConsumer<T> function) {
-		doContextlessLoop(component->function.accept(context,component));
-	}
+	protected abstract void doContextSensitiveLoop (Context context, ContextSensitiveConsumer<T> function);
 	
 	/**
 	 * Get the default external visibility boolean.
@@ -171,32 +169,20 @@ public abstract class Container<T extends IComponent> extends ComponentBase impl
 		 * The visibility defined by thing outside the component.
 		 */
 		public final IBoolean externalVisibility;
-		/**
-		 * The visibility defined via {@link IComponentManager}.
-		 */
-		public final IToggleable transientVisibility;
 		
 		/**
 		 * Constructor.
 		 * @param component the component
 		 * @param externalVisibility the external visibility
-		 * @param visible initial transient visibility
 		 */
-		public ComponentState (T component, IBoolean externalVisibility, boolean visible) {
+		public ComponentState (T component, IBoolean externalVisibility) {
 			this.component=component;
 			this.externalVisibility=externalVisibility;
-			transientVisibility=new SimpleToggleable(visible) {
-				@Override
-				public void toggle() {
-					super.toggle();
-					update();
-				}
-			};
 			update();
 		}
 		
 		public void update() {
-			if (component.isVisible()&&externalVisibility.isOn()&&transientVisibility.isOn()!=component.lastVisible()) {
+			if (component.isVisible()&&externalVisibility.isOn()!=component.lastVisible()) {
 				if (component.lastVisible()) component.exit();
 				else component.enter();
 			}
