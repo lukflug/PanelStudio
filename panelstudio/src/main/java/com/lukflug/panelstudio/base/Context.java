@@ -132,7 +132,7 @@ public final class Context {
 	 * Used to indicate to the parent that the current component has to have focus within the parent.
 	 */
 	public void requestFocus() {
-		focusRequested=true;
+		if (!focusOverride) focusRequested=true;
 	}
 
 	/**
@@ -148,7 +148,7 @@ public final class Context {
 	 * @return whether the child is requesting focus.
 	 */
 	public boolean foucsRequested() {
-		return focusRequested;
+		return focusRequested && !focusOverride;
 	}
 	
 	/**

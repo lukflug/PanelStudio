@@ -40,22 +40,28 @@ public abstract class Container<T extends IComponent> extends ComponentBase {
 	/**
 	 * Add component to GUI.
 	 * @param component the component to be added
+	 * @return whether the component was added
 	 */
-	public void addComponent (T component) {
+	public boolean addComponent (T component) {
 		if (getComponentState(component)==null) {
 			components.add(new ComponentState(component,getDefaultVisibility()));
+			return true;
 		}
+		return false;
 	}
 	
 	/**
 	 * Remove component from GUI.
 	 * @param component the component to be removed
+	 * @return whether the component was removed
 	 */
-	public void removeComponent (T component) {
+	public boolean removeComponent (T component) {
 		ComponentState state=getComponentState(component);
 		if (state!=null) {
 			components.remove(state);
+			return true;
 		}
+		return false;
 	}
 	
 	@Override
@@ -181,6 +187,9 @@ public abstract class Container<T extends IComponent> extends ComponentBase {
 			update();
 		}
 		
+		/**
+		 * Updates the visibility state of the component.
+		 */
 		public void update() {
 			if (component.isVisible()&&externalVisibility.isOn()!=component.lastVisible()) {
 				if (component.lastVisible()) component.exit();

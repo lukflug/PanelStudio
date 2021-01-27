@@ -35,6 +35,12 @@ public interface IFixedComponent extends IComponent {
 	public int getWidth (IInterface inter);
 	
 	/**
+	 * Returns whether this component allows its state to be saved.
+	 * @return true, if this component saves its state
+	 */
+	public boolean savesState();
+	
+	/**
 	 * Saves the component state
 	 * @param inter current interface
 	 * @param config configuration to use

@@ -13,19 +13,14 @@ import com.lukflug.panelstudio.theme.IDescriptionRenderer;
 
 /**
  * Object representing the entire GUI.
- * All components should be a direct or indirect child of this objects.
+ * All components should be a direct or indirect child of this object.
  * @author lukflug
  */
-public class ClickGUI implements IPanelManager {
+public class GUI {
 	/**
-	 * List of direct child components (i.e. panels).
-	 * The must all be {@link FixedComponent}.
+	 * Container containing all components.
 	 */
-	protected List<IFixedComponent> components=new ArrayList<IFixedComponent>();
-	/**
-	 * List of permanent components.
-	 */
-	protected List<IFixedComponent> permanentComponents=new ArrayList<IFixedComponent>();
+	FixedContainer container;
 	/**
 	 * The {@link Interface} to be used by the GUI.
 	 */
@@ -40,7 +35,7 @@ public class ClickGUI implements IPanelManager {
 	 * @param inter the {@link Interface} to be used by the GUI
 	 * @param descriptionRenderer the {@link DescriptionRenderer} used by the GUI
 	 */
-	public ClickGUI (IInterface inter, IDescriptionRenderer descriptionRenderer) {
+	public GUI (IInterface inter, IDescriptionRenderer descriptionRenderer) {
 		this.inter=inter;
 		this.descriptionRenderer=descriptionRenderer;
 	}
@@ -188,58 +183,5 @@ public class ClickGUI implements IPanelManager {
 	 */
 	protected Context getContext (IFixedComponent component, boolean highest) {
 		return new Context(inter,component.getWidth(inter),component.getPosition(inter),true,highest);
-	}
-
-	@Override
-	public IToggleable getComponentToggleable(IFixedComponent component) {
-		return new IToggleable() {
-			@Override
-			public void toggle() {
-				if (isOn()) hideComponent(component);
-				else showComponent(component);
-			}
-
-			@Override
-			public boolean isOn() {
-				return components.contains(component);
-			}
-		};
-	}
-	
-	/**
-	 * Loop through all components in reverse order and check for focus requests.
-	 * @param function the function to execute in the loop
-	 */
-	protected void doComponentLoop (LoopFunction function) {
-		List<IFixedComponent> components=new ArrayList<IFixedComponent>();
-		for (IFixedComponent component: this.components) {
-			components.add(component);
-		}
-		boolean highest=true;
-		IFixedComponent focusComponent=null;
-		for (int i=components.size()-1;i>=0;i--) {
-			IFixedComponent component=components.get(i);
-			Context context=getContext(component,highest);
-			function.loop(context,component);
-			if (context.isHovered()) highest=false;
-			if (context.foucsRequested()) focusComponent=component;
-		}
-		if (focusComponent!=null) {
-			if (this.components.remove(focusComponent)) this.components.add(focusComponent);
-		}
-	}
-	
-	
-	/**
-	 * Interface used by {@link ClickGUI#doComponentLoop(LoopFunction)}.
-	 * @author lukflug
-	 */
-	protected interface LoopFunction {
-		/**
-		 * Function to execute in the loop.
-		 * @param context the context for the component
-		 * @param component the component
-		 */
-		public void loop (Context context, IFixedComponent component);
 	}
 }
