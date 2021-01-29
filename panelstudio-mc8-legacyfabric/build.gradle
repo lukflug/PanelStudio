@@ -1,0 +1,78 @@
+plugins {
+    id 'maven-publish'
+    id 'fabric-loom' version "0.4-SNAPSHOT"
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven {
+        name = 'Fabric'
+        url = 'http://maven.fabricmc.net/'
+    }
+    maven {
+        name = 'SpongePowered'
+        url = 'http://repo.spongepowered.org/maven'
+    }
+    maven {
+        name = 'mojang'
+        url = 'https://libraries.minecraft.net/'
+    }
+    maven {
+        name = 'legacy-fabric'
+        url = 'https://dl.bintray.com/legacy-fabric/Legacy-Fabric-Maven'
+    }
+    maven {
+        name = 'jitpack'
+        url = 'https://jitpack.io'
+    }
+}
+
+
+minecraft {
+    intermediaryUrl = {
+        return "https://dl.bintray.com/legacy-fabric/Legacy-Fabric-Maven/net/fabricmc/intermediary/" + it + "/intermediary-" + it + "-v2.jar";
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:1.8.9"
+    mappings "net.fabricmc:yarn:1.8.9+build.202101242232:v2"
+    compile project(':panelstudio')
+    modImplementation ("net.fabricmc:fabric-loader-1.8.9:0.9.3+build.202009100647") {
+        exclude module: "guava"
+    }
+}
+
+processResources {
+    inputs.property 'version', project.version
+    filesMatching('fabric.mod.json') {
+        expand 'version': project.version
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            pom {
+                name = 'PanelStudio-MC8-LegacyFabric'
+                description = 'A supplement to PanelStudio desgined for Minecraft Legacy Fabric 1.8.9.'
+            }
+        }
+    }
+}
+
+task alljavadoc(type: Javadoc) {
+    source = rootProject.subprojects.collect{it.sourceSets.main.allJava}
+    classpath = files(rootProject.subprojects.collect{it.sourceSets.main.runtimeClasspath})
+    destinationDir = file("${projectDir}/../build/docs/javadoc")
+    javadoc.title = "PanelStudio API Version ${version}"
+}
+
+task copyJavadoc(type: Copy) {
+    dependsOn alljavadoc
+    from "${projectDir}/../build/docs/javadoc"
+    into "${projectDir}/../../lukflug.github.io/javadoc/panelstudio/${version}"
+}
+
+publish.dependsOn(copyJavadoc)
