@@ -10,7 +10,7 @@ pluginManagement {
 	}
 }
 
-include 'panelstudio'
-include 'panelstudio-mc12'
-include 'panelstudio-mc16'
-include 'panelstudio-mc8-legacyfabric'
+include "panelstudio"
+include "panelstudio-mc12"
+include "panelstudio-mc16"
+include "panelstudio-mc8-legacyfabric"

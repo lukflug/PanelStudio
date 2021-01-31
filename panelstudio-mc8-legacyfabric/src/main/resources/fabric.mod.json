@@ -1,18 +1,18 @@
 {
-  "schemaVersion": 1,
-  "id": "panelstudio",
-  "version": "${version}",
-  "name": "PanelStudio-MC8-FabricLegacy",
-  "description": "A simple yet flexible library to create ClickGUIs designed for use in Minecraft utility mods.",
-  "authors": ["lukflug"],
-  "contact": {
-    "homepage": "https://lukflug.github.io",
-    "sources": "https://github.com/lukflug/PanelStudio"
-  },
-  "license": "MIT",
-  "environment": "*",
-  "depends": {
-    "minecraft": "1.8.x"
-  }
+	"schemaVersion": 1,
+	"id": "panelstudio",
+	"version": "${version}",
+	"name": "PanelStudio-MC8-FabricLegacy",
+	"description": "A simple yet flexible library to create ClickGUIs designed for use in Minecraft utility mods.",
+	"authors": ["NirvanaNevermind","lukflug"],
+	"contact": {
+		"homepage": "https://lukflug.github.io",
+		"sources": "https://github.com/lukflug/PanelStudio"
+	},
+	"license": "MIT",
+	"environment": "*",
+	"depends": {
+		"minecraft": "1.8.x"
+	}
 }
 
