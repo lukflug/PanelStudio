@@ -1,25 +1,30 @@
 package com.lukflug.panelstudio.mc8legacyfabric;
 
-import com.lukflug.panelstudio.Interface;
-import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormats;
-import net.minecraft.client.texture.TextureUtils;
-import net.minecraft.util.Identifier;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.GLU;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.Stack;
+
+import javax.imageio.ImageIO;
+
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
+
+import com.lukflug.panelstudio.Interface;
+import com.mojang.blaze3d.platform.GlStateManager;
+
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.texture.TextureUtils;
+import net.minecraft.util.Identifier;
 
 /**
  * Implementation of Interface for OpenGL in minecraft.
@@ -66,9 +71,9 @@ public abstract class GLInterface implements Interface {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		bufferbuilder.begin(GL11.GL_TRIANGLES, VertexFormats.POSITION_COLOR);
-			bufferbuilder.vertex(pos1.x,pos1.y,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).end();
-			bufferbuilder.vertex(pos2.x,pos2.y,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).end();
-			bufferbuilder.vertex(pos3.x,pos3.y,getZLevel()).color(c3.getRed()/255.0f,c3.getGreen()/255.0f,c3.getBlue()/255.0f,c3.getAlpha()/255.0f).end();
+			bufferbuilder.vertex(pos1.x,pos1.y,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).next();
+			bufferbuilder.vertex(pos2.x,pos2.y,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).next();
+			bufferbuilder.vertex(pos3.x,pos3.y,getZLevel()).color(c3.getRed()/255.0f,c3.getGreen()/255.0f,c3.getBlue()/255.0f,c3.getAlpha()/255.0f).next();
 		tessellator.draw();
 	}
 
@@ -77,8 +82,8 @@ public abstract class GLInterface implements Interface {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		bufferbuilder.begin(GL11.GL_LINES, VertexFormats.POSITION_COLOR);
-			bufferbuilder.vertex(a.x,a.y,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).end();
-			bufferbuilder.vertex(b.x,b.y,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).end();
+			bufferbuilder.vertex(a.x,a.y,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).next();
+			bufferbuilder.vertex(b.x,b.y,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).next();
 		tessellator.draw();
 	}
 
@@ -87,10 +92,10 @@ public abstract class GLInterface implements Interface {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		bufferbuilder.begin(GL11.GL_QUADS, VertexFormats.POSITION_COLOR);
-			bufferbuilder.vertex(r.x,r.y+r.height,getZLevel()).color(c4.getRed()/255.0f,c4.getGreen()/255.0f,c4.getBlue()/255.0f,c4.getAlpha()/255.0f).end();
-			bufferbuilder.vertex(r.x+r.width,r.y+r.height,getZLevel()).color(c3.getRed()/255.0f,c3.getGreen()/255.0f,c3.getBlue()/255.0f,c3.getAlpha()/255.0f).end();
-			bufferbuilder.vertex(r.x+r.width,r.y,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).end();
-			bufferbuilder.vertex(r.x,r.y,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).end();
+			bufferbuilder.vertex(r.x,r.y+r.height,getZLevel()).color(c4.getRed()/255.0f,c4.getGreen()/255.0f,c4.getBlue()/255.0f,c4.getAlpha()/255.0f).next();
+			bufferbuilder.vertex(r.x+r.width,r.y+r.height,getZLevel()).color(c3.getRed()/255.0f,c3.getGreen()/255.0f,c3.getBlue()/255.0f,c3.getAlpha()/255.0f).next();
+			bufferbuilder.vertex(r.x+r.width,r.y,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).next();
+			bufferbuilder.vertex(r.x,r.y,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).next();
 		tessellator.draw();
 	}
 
@@ -99,10 +104,10 @@ public abstract class GLInterface implements Interface {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		bufferbuilder.begin(GL11.GL_LINE_LOOP, VertexFormats.POSITION_COLOR);
-			bufferbuilder.vertex(r.x,r.y+r.height,getZLevel()).color(c4.getRed()/255.0f,c4.getGreen()/255.0f,c4.getBlue()/255.0f,c4.getAlpha()/255.0f).end();
-			bufferbuilder.vertex(r.x+r.width,r.y+r.height,getZLevel()).color(c3.getRed()/255.0f,c3.getGreen()/255.0f,c3.getBlue()/255.0f,c3.getAlpha()/255.0f).end();
-			bufferbuilder.vertex(r.x+r.width,r.y,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).end();
-			bufferbuilder.vertex(r.x,r.y,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).end();
+			bufferbuilder.vertex(r.x,r.y+r.height,getZLevel()).color(c4.getRed()/255.0f,c4.getGreen()/255.0f,c4.getBlue()/255.0f,c4.getAlpha()/255.0f).next();
+			bufferbuilder.vertex(r.x+r.width,r.y+r.height,getZLevel()).color(c3.getRed()/255.0f,c3.getGreen()/255.0f,c3.getBlue()/255.0f,c3.getAlpha()/255.0f).next();
+			bufferbuilder.vertex(r.x+r.width,r.y,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).next();
+			bufferbuilder.vertex(r.x,r.y,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).next();
 		tessellator.draw();
 	}
 	
@@ -154,10 +159,10 @@ public abstract class GLInterface implements Interface {
 		GlStateManager.bindTexture(image);
 		GlStateManager.enableTexture();
 		bufferbuilder.begin(GL11.GL_QUADS, VertexFormats.POSITION_TEXTURE);
-			bufferbuilder.vertex(r.x,r.y+r.height,getZLevel()).tex2(texCoords[0][0],texCoords[0][1]).end();
-			bufferbuilder.vertex(r.x+r.width,r.y+r.height,getZLevel()).tex2(texCoords[1][0],texCoords[1][1]).end();
-			bufferbuilder.vertex(r.x+r.width,r.y,getZLevel()).tex2(texCoords[2][0],texCoords[2][1]).end();
-			bufferbuilder.vertex(r.x,r.y,getZLevel()).tex2(texCoords[3][0],texCoords[3][1]).end();
+			bufferbuilder.vertex(r.x,r.y+r.height,getZLevel()).tex2(texCoords[0][0],texCoords[0][1]).next();
+			bufferbuilder.vertex(r.x+r.width,r.y+r.height,getZLevel()).tex2(texCoords[1][0],texCoords[1][1]).next();
+			bufferbuilder.vertex(r.x+r.width,r.y,getZLevel()).tex2(texCoords[2][0],texCoords[2][1]).next();
+			bufferbuilder.vertex(r.x,r.y,getZLevel()).tex2(texCoords[3][0],texCoords[3][1]).next();
 		tessellator.draw();
 		GlStateManager.disableTexture();
 	}
@@ -240,7 +245,7 @@ public abstract class GLInterface implements Interface {
 	public static void begin() {
 		GlStateManager.enableBlend();
 		GlStateManager.disableTexture();
-		GlStateManager.blendFuncSeparate(SourceFactor.SRC_ALPHA.factor, DestFactor.ONE_MINUS_SRC_ALPHA.factor, SourceFactor.ONE.factor, DestFactor.ZERO.factor);
+		GlStateManager.blendFuncSeparate(GL11.GL_SRC_ALPHA,GL11.GL_ONE_MINUS_SRC_ALPHA,GL11.GL_ONE,GL11.GL_ZERO);
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		GL11.glLineWidth(2);
 	}
@@ -265,56 +270,4 @@ public abstract class GLInterface implements Interface {
 	 * @return the resource prefix
 	 */
 	protected abstract String getResourcePrefix();
-
-	public enum SourceFactor
-	{
-		CONSTANT_ALPHA(32771),
-		CONSTANT_COLOR(32769),
-		DST_ALPHA(772),
-		DST_COLOR(774),
-		ONE(1),
-		ONE_MINUS_CONSTANT_ALPHA(32772),
-		ONE_MINUS_CONSTANT_COLOR(32770),
-		ONE_MINUS_DST_ALPHA(773),
-		ONE_MINUS_DST_COLOR(775),
-		ONE_MINUS_SRC_ALPHA(771),
-		ONE_MINUS_SRC_COLOR(769),
-		SRC_ALPHA(770),
-		SRC_ALPHA_SATURATE(776),
-		SRC_COLOR(768),
-		ZERO(0);
-
-		public final int factor;
-
-		SourceFactor(int factorIn)
-		{
-			this.factor = factorIn;
-		}
-	}
-
-	public enum DestFactor
-	{
-		CONSTANT_ALPHA(32771),
-		CONSTANT_COLOR(32769),
-		DST_ALPHA(772),
-		DST_COLOR(774),
-		ONE(1),
-		ONE_MINUS_CONSTANT_ALPHA(32772),
-		ONE_MINUS_CONSTANT_COLOR(32770),
-		ONE_MINUS_DST_ALPHA(773),
-		ONE_MINUS_DST_COLOR(775),
-		ONE_MINUS_SRC_ALPHA(771),
-		ONE_MINUS_SRC_COLOR(769),
-		SRC_ALPHA(770),
-		SRC_COLOR(768),
-		ZERO(0);
-
-		public final int factor;
-
-		DestFactor(int factorIn)
-		{
-			this.factor = factorIn;
-		}
-	}
-
 }
