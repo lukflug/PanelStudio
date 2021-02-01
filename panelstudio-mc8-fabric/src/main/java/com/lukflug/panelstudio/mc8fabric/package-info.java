@@ -6,4 +6,4 @@
  * @author NirvanaNevermind
  * @author lukflug
  */
-package com.lukflug.panelstudio.mc8legacyfabric;
+package com.lukflug.panelstudio.mc8fabric;

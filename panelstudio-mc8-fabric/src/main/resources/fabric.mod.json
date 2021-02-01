@@ -2,7 +2,7 @@
 	"schemaVersion": 1,
 	"id": "panelstudio",
 	"version": "${version}",
-	"name": "PanelStudio-MC8-FabricLegacy",
+	"name": "PanelStudio-MC8-Fabric",
 	"description": "A simple yet flexible library to create ClickGUIs designed for use in Minecraft utility mods.",
 	"authors": ["NirvanaNevermind","lukflug"],
 	"contact": {

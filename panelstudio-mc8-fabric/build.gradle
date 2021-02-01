@@ -40,7 +40,7 @@ publishing {
 	publications {
 		mavenJava(MavenPublication) {
 			pom {
-				name = "PanelStudio-MC8-LegacyFabric"
+				name = "PanelStudio-MC8-Fabric"
 				description = "A supplement to PanelStudio desgined for Legacy Fabric 1.8.9."
 			}
 		}

@@ -1,4 +1,4 @@
-package com.lukflug.panelstudio.mc8legacyfabric;
+package com.lukflug.panelstudio.mc8fabric;
 
 import java.awt.Color;
 import java.awt.Point;

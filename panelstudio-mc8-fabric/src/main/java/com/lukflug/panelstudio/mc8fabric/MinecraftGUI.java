@@ -1,4 +1,4 @@
-package com.lukflug.panelstudio.mc8legacyfabric;
+package com.lukflug.panelstudio.mc8fabric;
 
 import com.lukflug.panelstudio.ClickGUI;
 import com.lukflug.panelstudio.Interface;
