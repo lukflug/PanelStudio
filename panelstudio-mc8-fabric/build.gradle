@@ -3,13 +3,24 @@ plugins {
 	id "fabric-loom" version "0.5.9"
 }
 
+repositories {
+	maven {
+		name = "legacy-fabric"
+		url = "https://dl.bintray.com/legacy-fabric/Legacy-Fabric-Maven"
+	}
+}
+
+
 minecraft {
+	intermediaryUrl = {
+		return "https://dl.bintray.com/legacy-fabric/Legacy-Fabric-Maven/net/fabricmc/intermediary/" + it + "/intermediary-" + it + "-v2.jar";
+	}
 	remapMod=false
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:1.16.5"
-	mappings "net.fabricmc:yarn:1.16.5+build.3:v2"
+	minecraft "com.mojang:minecraft:1.8.9"
+	mappings "net.fabricmc:yarn:1.8.9+build.202101242232:v2"
 	annotationProcessor "org.ow2.asm:asm:9.0"
 	annotationProcessor "org.ow2.asm:asm-analysis:9.0"
 	annotationProcessor "org.ow2.asm:asm-commons:9.0"
@@ -29,8 +40,8 @@ publishing {
 	publications {
 		mavenJava(MavenPublication) {
 			pom {
-				name = "PanelStudio-MC16"
-				description = "A supplement to PanelStudio desgined for FabricMC 1.16.5."
+				name = "PanelStudio-MC8-Fabric"
+				description = "A supplement to PanelStudio desgined for Legacy Fabric 1.8.9."
 			}
 		}
 	}

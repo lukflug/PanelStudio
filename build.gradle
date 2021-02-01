@@ -1,17 +1,17 @@
 
 allprojects {
-	group = 'com.lukflug'
-	version = '0.1.9'
+	group = "com.lukflug"
+	version = "0.1.10"
 }
 
 subprojects {
-	apply plugin: 'java-library'
-	apply plugin: 'maven-publish'
+	apply plugin: "java-library"
+	apply plugin: "maven-publish"
 	sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 	
 	task sourcesJar(type: Jar) {
 		from sourceSets.main.allJava
-		classifier = 'sources'
+		classifier = "sources"
 	}
 	
 	publishing {
@@ -20,16 +20,16 @@ subprojects {
 				artifact jar
 				artifact sourcesJar
 				pom {
-					url = 'https://github.com/lukflug/PanelStudio'
+					url = "https://github.com/lukflug/PanelStudio"
 					licenses {
 						license {
-							name = 'MIT License'
-							url = 'https://raw.githubusercontent.com/lukflug/PanelStudio/main/LICENSE'
+							name = "MIT License"
+							url = "https://raw.githubusercontent.com/lukflug/PanelStudio/main/LICENSE"
 						}
 					}
 					developers {
 						developer {
-							id = 'lukflug'
+							id = "lukflug"
 						}
 					}
 				}
