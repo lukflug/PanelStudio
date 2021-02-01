@@ -3,33 +3,33 @@ buildscript {
 	repositories {
 		jcenter()
 		maven {
-			name = 'forge'
-			url = 'http://files.minecraftforge.net/maven'
+			name = "forge"
+			url = "http://files.minecraftforge.net/maven"
 		}
 	}
 	dependencies {
-		classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+		classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
 	}
 }
 
-apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: "net.minecraftforge.gradle.forge"
 
 minecraft {
-	version='1.12.2-14.23.5.2768'
-	mappings='snapshot_20180814'
-	runDir='run'
+	version="1.12.2-14.23.5.2768"
+	mappings="snapshot_20180814"
+	runDir="run"
 }
 
 dependencies {
-	compile project(':panelstudio')
+	compile project(":panelstudio")
 }
 
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
 			pom {
-				name = 'PanelStudio-MC12'
-				description = 'A supplement to PanelStudio desgined for Minecraft Forge 1.12.2.'
+				name = "PanelStudio-MC12"
+				description = "A supplement to PanelStudio desgined for Minecraft Forge 1.12.2."
 			}
 		}
 	}
