@@ -20,7 +20,9 @@ A simple yet flexible library to create ClickGUIs designed for use in Minecraft 
 
 This repository only includes the GameSense themes, however, since Cyber didn't want me to publish the other themes. The library has no depedencies (aside from Java 8), so it can be easily used for other purposes, aside from Minecraft utility mods. Thanks to Go_Hoosiers, for suggesting the name of this library. If you use this library, some attribution would be greatly appreciated. Consider visiting the PanelStudio discord server: https://discord.gg/E3DrF4XvUE.
 
-In addition to the core PanelStudio library, there are the PanelStudio-MC libraries. The PanelStudio-MC12 library is designed for Minecraft Forge 1.12.2 (it may or may not work for other versions and mods that use MCP only). The PanelStudio-MC16 library is designed for Fabric 1.16.5 and also works on 1.16.4 (works on anything using Fabric's Yarn mappings, it probably works on older versions, this has however not been tested). The PanelStudio core library works on any Minecraft version (and even on any non-Minecraft application).
+In addition to the core PanelStudio library, there are the PanelStudio-MC libraries. The PanelStudio-MC12 library is designed for Minecraft Forge 1.12.2 (it may or may not work for other versions and mods that use MCP only). The PanelStudio-MC16 library is designed for Fabric 1.16.5 and also works on 1.16.4 (works on anything using Fabric's Yarn mappings, it probably works on older versions, this has however not been tested). The PanelStudio-MC8-Fabric library is designed for Legacy Fabric 1.8.9 (as with MC16, it only requires Yarn) and the PanelStudio-MC8-Forge library is designed for Minecraft Forge 1.8.9 (as with MC12, it may also work on MCP-only projects). The PanelStudio core library works on any Minecraft version (and even on any non-Minecraft application).
+
+**Thanks to NirvanaNevermind for porting PanelStudio-MC to Fabric 1.8.9!**
 
 ## Features
 * Ability to easily create new themes/skins.
@@ -72,6 +74,30 @@ dependencies {
 shadowJar {
 	dependencies {
 		include(dependency('com.lukflug:panelstudio-mc16'))
+	}
+}
+```
+If you're planning to use PanelStudio-MC8-Fabric you have to also add this:
+```groovy
+dependencies {
+	modCompile('com.lukflug:panelstudio-mc8-fabric:0.1.10')
+}
+
+shadowJar {
+	dependencies {
+		include(dependency('com.lukflug:panelstudio-mc8-fabric'))
+	}
+}
+```
+If you're planning to use PanelStudio-MC8-Forge you have to also add this:
+```groovy
+dependencies {
+	compile('com.lukflug:panelstudio-mc8-forge:0.1.10')
+}
+
+shadowJar {
+	dependencies {
+		include(dependency('com.lukflug:panelstudio-mc8-forge'))
 	}
 }
 ```
@@ -178,7 +204,7 @@ Toggleable hudToggle=new Toggleable() {
 ```
 
 ## Reference
-For a list of classes and methods, consult the [javadoc](https://lukflug.github.io/javadoc/panelstudio/0.1.9/overview-summary.html). For an example implementation, consult the GameSense source code.
+For a list of classes and methods, consult the [javadoc](https://lukflug.github.io/javadoc/panelstudio/0.1.10/overview-summary.html). For an example implementation, consult the GameSense source code.
 
 ## Creating custom themes
 The components provided by PanelStudio use the methods in the `Renderer` interface to render. A `Theme` consist of three renderers: one for the single components (settings), one for the containers (modules) and one for the panels (categories). To see how themes are implemented, consult the package `com.lukflug.panelstudio.theme`.
