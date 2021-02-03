@@ -6,7 +6,7 @@ import com.lukflug.panelstudio.base.Context;
  * Interface to describe the appearance of a container.
  * @author lukflug
  */
-public interface ContainerRenderer {
+public interface IContainerRenderer {
 	/**
 	 * Render the container background.
 	 * @param context the context of the container

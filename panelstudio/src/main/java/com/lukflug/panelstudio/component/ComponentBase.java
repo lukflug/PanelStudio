@@ -1,6 +1,7 @@
 package com.lukflug.panelstudio.component;
 
 import com.lukflug.panelstudio.base.Context;
+import com.lukflug.panelstudio.base.Description;
 import com.lukflug.panelstudio.base.IBoolean;
 
 /**
@@ -45,7 +46,7 @@ public abstract class ComponentBase implements IComponent {
 	@Override
 	public void render(Context context) {
 		context.setHeight(getHeight());
-		context.setDescription(description);
+		if (context.isHovered() && description!=null) context.setDescription(new Description(context.getRect(),description));
 	}
 
 	@Override

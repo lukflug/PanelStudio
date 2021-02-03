@@ -44,7 +44,7 @@ public final class Context {
 	/**
 	 * Description set by the child to be displayed when hovered.
 	 */
-	private String description=null;
+	private Description description=null;
 	
 	/**
 	 * Constructor that should be used when a parent is calling a method by the child.
@@ -187,7 +187,7 @@ public final class Context {
 	 * Get the description set by the child.
 	 * @return the current description
 	 */
-	public String getDescription() {
+	public Description getDescription() {
 		return description;
 	}
 	
@@ -195,7 +195,7 @@ public final class Context {
 	 * Set the description when rendering.
 	 * @param description the new description
 	 */
-	public void setDescription (String description) {
+	public void setDescription (Description description) {
 		this.description=description;
 	}
 }

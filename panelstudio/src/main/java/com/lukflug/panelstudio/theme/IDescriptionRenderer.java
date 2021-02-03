@@ -1,6 +1,8 @@
 package com.lukflug.panelstudio.theme;
 
-import com.lukflug.panelstudio.base.Context;
+import java.awt.Point;
+
+import com.lukflug.panelstudio.base.IInterface;
 
 /**
  * Interface used to render descriptions.
@@ -8,8 +10,10 @@ import com.lukflug.panelstudio.base.Context;
  */
 public interface IDescriptionRenderer {
 	/**
-	 * Render a description
-	 * @param context the context for the panel creating the description
+	 * Render a description.
+	 * @param inter the interface to be used
+	 * @param pos the position of the description
+	 * @param text the text to be renderered
 	 */
-	public void renderDescription (Context context);
+	public void renderDescription (IInterface inter, Point pos, String text);
 }

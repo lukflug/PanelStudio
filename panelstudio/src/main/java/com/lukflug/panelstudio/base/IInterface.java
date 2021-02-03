@@ -1,6 +1,7 @@
 package com.lukflug.panelstudio.base;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -127,6 +128,11 @@ public interface IInterface {
 	 * @see #loadImage(String)
 	 */
 	public void drawImage (Rectangle r, int rotation, boolean parity, int image);
+	
+	/**
+	 * Get size of display.
+	 */
+	public Dimension getWindowSize();
 	
 	/**
 	 * Clip all rendering on screen outside the intersection of the specified rectangle and the current clipping rectangle.

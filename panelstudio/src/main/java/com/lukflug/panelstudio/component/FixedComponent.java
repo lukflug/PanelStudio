@@ -23,6 +23,10 @@ public class FixedComponent extends ComponentProxy implements IFixedComponent {
 	 * The state boolean of the fixed component.
 	 */
 	protected IToggleable state;
+	/**
+	 * Whether the components state is stored.
+	 */
+	protected boolean savesState;
 	
 	/**
 	 * Constructor.
@@ -30,12 +34,14 @@ public class FixedComponent extends ComponentProxy implements IFixedComponent {
 	 * @param position the position of the component
 	 * @param width the width of the component
 	 * @param boolean to save as state
+	 * @param boolean whether state is saved
 	 */
-	public FixedComponent (IComponent component, Point position, int width, IToggleable state) {
+	public FixedComponent (IComponent component, Point position, int width, IToggleable state, boolean savesState) {
 		super(component);
 		this.position=position;
 		this.width=width;
 		this.state=state;
+		this.savesState=savesState;
 	}
 
 	@Override
@@ -51,6 +57,11 @@ public class FixedComponent extends ComponentProxy implements IFixedComponent {
 	@Override
 	public int getWidth(IInterface inter) {
 		return width;
+	}
+
+	@Override
+	public boolean savesState() {
+		return savesState;
 	}
 
 	@Override

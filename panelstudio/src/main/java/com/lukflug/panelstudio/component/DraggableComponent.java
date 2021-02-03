@@ -28,6 +28,11 @@ public class DraggableComponent extends ComponentProxy implements IFixedComponen
 	 */
 	protected Point attachPoint;
 
+	/**
+	 * Constructor.
+	 * @param fixedComponent fixed component to be dragged
+	 * @param dragComponent component that is used to drag the panel
+	 */
 	public DraggableComponent (IFixedComponent fixedComponent, IComponent dragComponent) {
 		super(fixedComponent);
 		this.fixedComponent=fixedComponent;
@@ -36,12 +41,9 @@ public class DraggableComponent extends ComponentProxy implements IFixedComponen
 
 	@Override
 	public Point getPosition(IInterface inter) {
-		if (dragging) {
-			Point point=fixedComponent.getPosition(inter);
-			point.translate(inter.getMouse().x-attachPoint.x,inter.getMouse().y-attachPoint.y);
-			return point;
-		}
-		return fixedComponent.getPosition(inter);
+		Point point=fixedComponent.getPosition(inter);
+		if (dragging) point.translate(inter.getMouse().x-attachPoint.x,inter.getMouse().y-attachPoint.y);
+		return point;
 	}
 
 	@Override
@@ -52,6 +54,11 @@ public class DraggableComponent extends ComponentProxy implements IFixedComponen
 	@Override
 	public int getWidth(IInterface inter) {
 		return fixedComponent.getWidth(inter);
+	}
+
+	@Override
+	public boolean savesState() {
+		return fixedComponent.savesState();
 	}
 
 	@Override
@@ -98,6 +105,12 @@ public class DraggableComponent extends ComponentProxy implements IFixedComponen
 				p.translate(mouse.x-attachPoint.x,mouse.y-attachPoint.y);
 				fixedComponent.setPosition(context.getInterface(),p);
 			}
+		}
+		
+		@Override
+		public void exit() {
+			dragging=false;
+			super.exit();
 		}
 	}
 }

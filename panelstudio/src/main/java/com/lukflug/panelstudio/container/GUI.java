@@ -1,14 +1,12 @@
 package com.lukflug.panelstudio.container;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.Point;
 
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IInterface;
-import com.lukflug.panelstudio.base.IToggleable;
 import com.lukflug.panelstudio.component.IFixedComponent;
 import com.lukflug.panelstudio.config.IConfigList;
-import com.lukflug.panelstudio.config.IPanelConfig;
+import com.lukflug.panelstudio.layout.IPopupPositioner;
 import com.lukflug.panelstudio.theme.IDescriptionRenderer;
 
 /**
@@ -29,23 +27,22 @@ public class GUI {
 	 * The {@link DescriptionRenderer} to be used by the GUI.
 	 */
 	protected IDescriptionRenderer descriptionRenderer;
+	/**
+	 * The {@link IPopupPositioner} to be used to position the descriptions.
+	 */
+	protected IPopupPositioner descriptionPosition;
 	
 	/**
 	 * Constructor for the GUI.
 	 * @param inter the {@link Interface} to be used by the GUI
 	 * @param descriptionRenderer the {@link DescriptionRenderer} used by the GUI
+	 * @param descriptionPosition the {@link IPopupPositioner} to be used to position the descriptions
 	 */
-	public GUI (IInterface inter, IDescriptionRenderer descriptionRenderer) {
+	public GUI (IInterface inter, IDescriptionRenderer descriptionRenderer, IPopupPositioner descriptionPosition) {
 		this.inter=inter;
 		this.descriptionRenderer=descriptionRenderer;
-	}
-	
-	/**
-	 * Get a list of panels in the GUI.
-	 * @return list of all permanent panels (direct children)
-	 */
-	public List<IFixedComponent> getComponents() {
-		return permanentComponents;
+		this.descriptionPosition=descriptionPosition;
+		container=new FixedContainer("GUI",null,()->true,null,false);
 	}
 	
 	/**
@@ -53,60 +50,14 @@ public class GUI {
 	 * @param component component to be added
 	 */
 	public void addComponent (IFixedComponent component) {
-		components.add(component);
-		permanentComponents.add(component);
-	}
-
-	@Override
-	public void showComponent(IFixedComponent component) {
-		if (!components.contains(component)) {
-			components.add(component);
-			component.enter(getContext(component,false));
-		}
-	}
-
-	@Override
-	public void hideComponent(IFixedComponent component) {
-		if (!permanentComponents.contains(component)) {
-			if (components.remove(component)) component.exit(getContext(component,false));
-		}
+		container.addComponent(component);
 	}
 	
 	/**
 	 * Render the GUI (lowest component first, highest component last).
 	 */
 	public void render() {
-		List<IFixedComponent> components=new ArrayList<IFixedComponent>();
-		for (IFixedComponent component: this.components) {
-			components.add(component);
-		}
-		Context descriptionContext=null;
-		int highest=0;
-		IFixedComponent focusComponent=null;
-		for (int i=components.size()-1;i>=0;i--) {
-			IFixedComponent component=components.get(i);
-			Context context=getContext(component,true);
-			component.getHeight(context);
-			if (context.isHovered()) {
-				highest=i;
-				break;
-			}
-		}
-		for (int i=0;i<components.size();i++) {
-			IFixedComponent component=components.get(i);
-			Context context=getContext(component,i>=highest);
-			component.render(context);
-			if (context.foucsRequested()) focusComponent=component;
-			if (context.isHovered() && context.getDescription()!=null) {
-				descriptionContext=context;
-			}
-		}
-		if (focusComponent!=null) {
-			if (this.components.remove(focusComponent)) this.components.add(focusComponent);
-		}
-		if (descriptionContext!=null && descriptionRenderer!=null) {
-			descriptionRenderer.renderDescription(descriptionContext);
-		}
+		container.render(getContext());
 	}
 	
 	/**
@@ -116,7 +67,7 @@ public class GUI {
 	 * @see Interface#RBUTTON
 	 */
 	public void handleButton (int button) {
-		doComponentLoop((context,component)->component.handleButton(context,button));
+		container.handleButton(getContext(),button);
 	}
 	
 	/**
@@ -124,7 +75,7 @@ public class GUI {
 	 * @param scancode the scancode of the key being typed
 	 */
 	public void handleKey (int scancode) {
-		doComponentLoop((context,component)->component.handleKey(context,scancode));
+		container.handleButton(getContext(),scancode);
 	}
 	
 	/**
@@ -132,21 +83,21 @@ public class GUI {
 	 * @param diff the amount by which the wheel was moved
 	 */
 	public void handleScroll (int diff) {
-		doComponentLoop((context,component)->component.handleScroll(context,diff));
+		container.handleScroll(getContext(),diff);
 	}
 	
 	/**
 	 * Handle the GUI being opened.
 	 */
 	public void enter() {
-		doComponentLoop((context,component)->component.enter(context));
+		container.enter();
 	}
 	
 	/**
 	 * Handle the GUI being closed.
 	 */
 	public void exit() {
-		doComponentLoop((context,component)->component.exit(context));
+		container.exit();
 	}
 	
 	/**
@@ -154,12 +105,7 @@ public class GUI {
 	 * @param config the configuration list to be used
 	 */
 	public void saveConfig (IConfigList config) {
-		config.begin(false);
-		for (IFixedComponent component: getComponents()) {
-			IPanelConfig cf=config.addPanel(component.getTitle());
-			if (cf!=null) component.saveConfig(inter,cf);
-		}
-		config.end(false);
+		container.saveConfig(inter,config);
 	}
 	
 	/**
@@ -167,21 +113,14 @@ public class GUI {
 	 * @param config the configuration list to be used
 	 */
 	public void loadConfig (IConfigList config) {
-		config.begin(true);
-		for (IFixedComponent component: getComponents()) {
-			IPanelConfig cf=config.getPanel(component.getTitle());
-			if (cf!=null) component.loadConfig(inter,cf);
-		}
-		config.end(true);
+		container.loadConfig(inter,config);
 	}
 	
 	/**
-	 * Create a context for a component.
-	 * @param component the component
-	 * @param highest whether this component is on top
+	 * Create a context for the container.
 	 * @return the context
 	 */
-	protected Context getContext (IFixedComponent component, boolean highest) {
-		return new Context(inter,component.getWidth(inter),component.getPosition(inter),true,highest);
+	protected Context getContext() {
+		return new Context(inter,0,new Point(0,0),true,true);
 	}
 }

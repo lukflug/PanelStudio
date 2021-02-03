@@ -5,10 +5,11 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import com.lukflug.panelstudio.base.Context;
+import com.lukflug.panelstudio.base.Description;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.component.ComponentBase;
 import com.lukflug.panelstudio.component.IComponent;
-import com.lukflug.panelstudio.theme.ContainerRenderer;
+import com.lukflug.panelstudio.theme.IContainerRenderer;
 
 /**
  * Base class for containers.
@@ -23,7 +24,7 @@ public abstract class Container<T extends IComponent> extends ComponentBase {
 	/**
 	 * The renderer to use.
 	 */
-	protected ContainerRenderer renderer;
+	protected IContainerRenderer renderer;
 	
 	/**
 	 * Constructor.
@@ -32,7 +33,7 @@ public abstract class Container<T extends IComponent> extends ComponentBase {
 	 * @param visible whether this component is visible
 	 * @param renderer the renderer for this container
 	 */
-	public Container(String title, String description, IBoolean visible, ContainerRenderer renderer) {
+	public Container(String title, String description, IBoolean visible, IContainerRenderer renderer) {
 		super(title,description,visible);
 		this.renderer=renderer;
 	}
@@ -66,13 +67,13 @@ public abstract class Container<T extends IComponent> extends ComponentBase {
 	
 	@Override
 	public void render (Context context) {
-		String tempDescription[]={null};
+		getHeight(context);
+		if (renderer!=null) renderer.renderBackground(context,context.hasFocus());
 		doContextSensitiveLoop(context,(subContext,component)->{
 			component.render(subContext);
-			if (subContext.isHovered() && subContext.getDescription()!=null) tempDescription[0]=subContext.getDescription();
+			if (subContext.isHovered() && subContext.getDescription()!=null) context.setDescription(new Description(subContext.getDescription(),subContext.getRect()));
 		});
-		if (tempDescription[0]==null) tempDescription[0]=description;
-		context.setDescription(tempDescription[0]);
+		if (context.getDescription()==null && description!=null) context.setDescription(new Description(context.getRect(),description));
 	}
 
 	@Override

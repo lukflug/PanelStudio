@@ -2,15 +2,18 @@ package com.lukflug.panelstudio.container;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 import com.lukflug.panelstudio.base.Context;
+import com.lukflug.panelstudio.base.Description;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.component.IFixedComponent;
 import com.lukflug.panelstudio.config.IConfigList;
 import com.lukflug.panelstudio.config.IPanelConfig;
-import com.lukflug.panelstudio.theme.ContainerRenderer;
+import com.lukflug.panelstudio.theme.IContainerRenderer;
 
 /**
  * Container with contents arranged at will.
@@ -18,9 +21,9 @@ import com.lukflug.panelstudio.theme.ContainerRenderer;
  */
 public class FixedContainer extends Container<IFixedComponent> {
 	/**
-	 * The height of the container.
+	 * Whether to clip container.
 	 */
-	protected int height;
+	protected boolean clip;
 	
 	/**
 	 * Constructor.
@@ -28,54 +31,52 @@ public class FixedContainer extends Container<IFixedComponent> {
 	 * @param description the description for this component
 	 * @param visible whether this component is visible
 	 * @param renderer the renderer for this container
-	 * @param height the height of the container
+	 * @param clip whether to clip container
 	*/
-	public FixedContainer(String title, String description, IBoolean visible, ContainerRenderer renderer, int height) {
+	public FixedContainer(String title, String description, IBoolean visible, IContainerRenderer renderer, boolean clip) {
 		super(title, description, visible, renderer);
-		this.height=height;
+		this.clip=clip;
 	}
 	
 	@Override
 	public void render (Context context) {
-		// Clip rectangle
-		context.getInterface().window(context.getRect());
 		// Set context height
-		context.setHeight(height);
+		context.setHeight(getHeight());
+		// Clip rectangle
+		if (clip) context.getInterface().window(context.getRect());
 		// Find highest component
-		IFixedComponent highest[]={null};
+		AtomicReference<IFixedComponent> highest=new AtomicReference<IFixedComponent>(null);
 		doContextlessLoop(component->{
 			Context subContext=getSubContext(context,component,true);
 			component.getHeight(subContext);
-			if (subContext.isHovered() && highest[0]==null) highest[0]=component;
+			if (subContext.isHovered() && highest.get()==null) highest.set(component);
 		});
 		// Render loop in right order (lowest panel first)
-		String tempDescription[]={null};
-		boolean highestReached[]={false};
-		IFixedComponent focusComponent[]={null};
+		AtomicBoolean highestReached=new AtomicBoolean(false);
+		AtomicReference<IFixedComponent> focusComponent=new AtomicReference<IFixedComponent>(null);
 		super.doContextlessLoop(component->{
 			// Render component
-			Context subContext=getSubContext(context,component,!highestReached[0]);
+			Context subContext=getSubContext(context,component,!highestReached.get());
 			component.render(subContext);
 			// Check focus state
 			if (subContext.focusReleased()) context.releaseFocus();
 			else if (subContext.foucsRequested()) {
-				focusComponent[0]=component;
+				focusComponent.set(component);
 				context.requestFocus();
 			}
 			// Check description state
-			if (subContext.isHovered() && subContext.getDescription()!=null) tempDescription[0]=subContext.getDescription();
+			if (subContext.isHovered() && subContext.getDescription()!=null) context.setDescription(new Description(subContext.getDescription(),subContext.getRect()));
 			// Check onTop state
-			if (component==highest[0]) highestReached[0]=true;
+			if (component==highest.get()) highestReached.set(true);
 		});
 		// Update focus state
-		if (focusComponent[0]!=null) {
-			if (removeComponent(focusComponent[0])) addComponent(focusComponent[0]);
+		if (focusComponent.get()!=null) {
+			if (removeComponent(focusComponent.get())) addComponent(focusComponent.get());
 		}
-		// Pass description
-		if (tempDescription[0]==null) tempDescription[0]=description;
-		context.setDescription(tempDescription[0]);
+		// Use container description, if necessary
+		if (context.getDescription()==null && description!=null) context.setDescription(new Description(context.getRect(),description));
 		// Restore clipping
-		context.getInterface().restore();
+		if (clip) context.getInterface().restore();
 	}
 	
 	@Override
@@ -94,7 +95,7 @@ public class FixedContainer extends Container<IFixedComponent> {
 	@Override
 	protected void doContextSensitiveLoop(Context context, ContextSensitiveConsumer<IFixedComponent> function) {
 		// Set context height
-		context.setHeight(height);
+		context.setHeight(getHeight());
 		// Do loop in inverse order
 		boolean highest[]= {true};
 		IFixedComponent focusComponent[]={null};
