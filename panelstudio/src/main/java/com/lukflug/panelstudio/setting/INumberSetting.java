@@ -4,7 +4,7 @@ package com.lukflug.panelstudio.setting;
  * Setting representing an adjustable number.
  * @author lukflug
  */
-public interface INumberSetting {
+public interface INumberSetting extends ISetting {
 	/**
 	 * Get the number as double.
 	 * @return the current setting

@@ -4,7 +4,7 @@ package com.lukflug.panelstudio.setting;
  * Interface representing a keybind.
  * @author lukflug
  */
-public interface IKeybindSetting {
+public interface IKeybindSetting extends ISetting {
 	/**
 	 * Get the value of the keybind.
 	 * @return the scancode of the key

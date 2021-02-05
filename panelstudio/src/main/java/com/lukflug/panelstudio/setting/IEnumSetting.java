@@ -4,7 +4,7 @@ package com.lukflug.panelstudio.setting;
  * A setting representing an enumeration.
  * @author lukflug
  */
-public interface IEnumSetting {
+public interface IEnumSetting extends ISetting {
 	/**
 	 * Cycle through the values of the enumeration.
 	 */

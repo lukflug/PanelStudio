@@ -17,7 +17,7 @@ public abstract class FocusableComponent extends ComponentBase {
 	 * Constructor.
 	 * @param title the caption for this component
 	 * @param description the description for this component
-	 * @param renderer whether this component is visible
+	 * @param visible whether this component is visible
 	 */
 	public FocusableComponent (String title, String description, IBoolean visible) {
 		super(title,description,visible);
