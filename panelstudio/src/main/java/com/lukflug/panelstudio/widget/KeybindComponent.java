@@ -3,10 +3,10 @@ package com.lukflug.panelstudio.widget;
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.component.FocusableComponent;
 import com.lukflug.panelstudio.setting.IKeybindSetting;
-import com.lukflug.panelstudio.theme.IRenderer;
+import com.lukflug.panelstudio.theme.IButtonRenderer;
 
 /**
- * Component representing a keybind.
+ * Button representing a keybind.
  * @author lukflug
  */
 public class KeybindComponent extends FocusableComponent {
@@ -14,61 +14,55 @@ public class KeybindComponent extends FocusableComponent {
 	 * The keybind in question.
 	 */
 	protected IKeybindSetting keybind;
+	/**
+	 * The renderer to be used.
+	 */
+	protected IButtonRenderer<String> renderer;
 	
 	/**
 	 * Constructor.
-	 * @param renderer the {@link IRenderer} for the component
 	 * @param keybind the keybind in question
+	 * @param renderer the renderer for this component
 	 */
-	public KeybindComponent(IRenderer renderer, IKeybindSetting keybind) {
-		super("Keybind: \u00A77",null,renderer);
+	public KeybindComponent (IKeybindSetting keybind, IButtonRenderer<String> renderer) {
+		super(keybind.getDescription(),keybind.getDescription(),keybind.isVisible());
 		this.keybind=keybind;
+		this.renderer=renderer;
 	}
 	
-	/**
-	 * Renders the keybind component.
-	 */
 	@Override
 	public void render (Context context) {
 		super.render(context);
-		String text=title+keybind.getKeyName();
-		if (hasFocus(context)) text=title+"...";
-		renderer.renderTitle(context,text,hasFocus(context));
+		renderer.renderButton(context,title,hasFocus(context),keybind.getKeyName());
 	}
 	
-	/**
-	 * The keybind is reset, if focus is lost.
-	 */
-	@Override
-	public void handleButton (Context context, int button) {
-		super.handleButton(context,button);
-		context.setHeight(renderer.getHeight(false));
-		boolean isSelected=hasFocus(context);
-		super.handleButton(context,button);
-		if (isSelected && !hasFocus(context)) keybind.setKey(0);
-	}
-	
-	/**
-	 * If the keybind has focus and a key is pressed, the keybind is set and foucs is released.
-	 */
 	@Override
 	public void handleKey (Context context, int scancode) {
 		super.handleKey(context,scancode);
 		if (hasFocus(context)) {
-			keybind.setKey(scancode);
+			keybind.setKey(transformKey(scancode));
 			releaseFocus();
 		}
 	}
 
-	/**
-	 * Reset the keybind, if the GUI is closed.
-	 */
 	@Override
-	public void exit (Context context) {
-		super.exit(context);
-		if (hasFocus(context)) {
-			keybind.setKey(0);
-			releaseFocus();
-		}
+	public void exit() {
+		super.exit();
+		releaseFocus();
+	}
+
+	@Override
+	protected int getHeight() {
+		return renderer.getDefaultHeight();
+	}
+	
+	/**
+	 * Method used to transform input key on keybind assign.
+	 * Returns same key by default.
+	 * @param scancode the input key
+	 * @return the resulting key
+	 */
+	protected int transformKey (int scancode) {
+		return scancode;
 	}
 }

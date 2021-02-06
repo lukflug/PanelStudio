@@ -9,7 +9,7 @@ import com.lukflug.panelstudio.base.Context;
  */
 public interface IButtonRenderer<T> {
 	/**
-	 * Render a button without active state.
+	 * Render a button.
 	 * @param context the context to be used
 	 * @param title the title of the button
 	 * @param hasFocus the focus state of the button

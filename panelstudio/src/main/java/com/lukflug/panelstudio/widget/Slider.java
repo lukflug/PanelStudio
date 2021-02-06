@@ -1,39 +1,45 @@
 package com.lukflug.panelstudio.widget;
 
-import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.Rectangle;
 
 import com.lukflug.panelstudio.base.Context;
+import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.component.FocusableComponent;
-import com.lukflug.panelstudio.theme.IRenderer;
+import com.lukflug.panelstudio.theme.ISliderRenderer;
 
 /**
  * Base class for components that are sliders.
  * @author lukflug
  */
 public abstract class Slider extends FocusableComponent {
-	protected boolean attached=false; 
+	/**
+	 * Whether slider was clicked and is sliding.
+	 */
+	protected boolean attached=false;
+	/**
+	 * The renderer to be used.
+	 */
+	protected ISliderRenderer renderer;
 	
 	/**
 	 * Constructor.
 	 * @param title caption of the slider
 	 * @param description the description for this component
+	 * @param visible whether this component is visible
 	 * @param renderer renderer for the slider
 	 */
-	public Slider(String title, String description, IRenderer renderer) {
-		super(title,description,renderer);
+	public Slider(String title, String description, IBoolean visible, ISliderRenderer renderer) {
+		super(title,description,visible);
+		this.renderer=renderer;
 	}
 
-	/**
-	 * Renders the slider.
-	 */
 	@Override
 	public void render (Context context) {
 		super.render(context);
 		if (attached) {
-			double value=(context.getInterface().getMouse().x-context.getPos().x)/(double)(context.getSize().width-1);
+			Rectangle rect=renderer.getSlideArea(context);
+			double value=(context.getInterface().getMouse().x-rect.x)/(double)(rect.width-1);
 			if (value<0) value=0;
 			else if (value>1) value=1;
 			setValue(value);
@@ -41,19 +47,26 @@ public abstract class Slider extends FocusableComponent {
 		if (!context.getInterface().getButton(IInterface.LBUTTON)) {
 			attached=false;
 		}
-		renderer.renderRect(context,"",hasFocus(context),false,new Rectangle(new Point(context.getPos().x+(int)(context.getSize().width*getValue()),context.getPos().y),new Dimension((int)(context.getSize().width*(1-getValue())),renderer.getHeight(false))),false);
-		renderer.renderRect(context,title,hasFocus(context),true,new Rectangle(context.getPos(),new Dimension((int)(context.getSize().width*getValue()),renderer.getHeight(false))),true);
+		renderer.renderSlider(context,title,getDisplayState(),hasFocus(context),getValue());
 	}
 	
-	/**
-	 * Sets {@link #attached}, when clicked.
-	 */
 	@Override
 	public void handleButton (Context context, int button) {
 		super.handleButton(context,button);
-		if (button==IInterface.LBUTTON && context.isClicked()) {
+		if (button==IInterface.LBUTTON && context.isClicked() && renderer.getSlideArea(context).contains(context.getInterface().getMouse())) {
 			attached=true;
 		}
+	}
+	
+	@Override
+	public void exit() {
+		super.exit();
+		attached=false;
+	}
+
+	@Override
+	protected int getHeight() {
+		return renderer.getDefaultHeight();
 	}
 
 	/**
@@ -61,9 +74,16 @@ public abstract class Slider extends FocusableComponent {
 	 * @return the slider value between 0 (empty) and 1 (full)
 	 */
 	protected abstract double getValue();
+	
 	/**
 	 * Abstract method to update the slider value.
 	 * @param value the slider value between 0 (empty) and 1 (full)
 	 */
 	protected abstract void setValue (double value);
+	
+	/**
+	 * Abstract method to get the displayed slider value.
+	 * @return string to be displayed on slider
+	 */
+	protected abstract String getDisplayState();
 }

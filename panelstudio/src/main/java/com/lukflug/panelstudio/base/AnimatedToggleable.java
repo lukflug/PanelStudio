@@ -22,13 +22,16 @@ public final class AnimatedToggleable implements IToggleable {
 	public AnimatedToggleable (IToggleable toggle, Animation animation) {
 		this.toggle=toggle;
 		this.animation=animation;
+		if (animation==null) animation=new Animation() {
+			@Override
+			protected int getSpeed() {
+				return 0;
+			}
+		};
 		if (toggle.isOn()) animation.initValue(1);
 		else animation.initValue(0);
 	}
 	
-	/**
-	 * Toggle the toggle.
-	 */
 	@Override
 	public void toggle() {
 		toggle.toggle();

@@ -10,7 +10,7 @@ import com.lukflug.panelstudio.setting.IBooleanSetting;
 import com.lukflug.panelstudio.theme.IButtonRenderer;
 
 /**
- * Component representing a boolean-valued setting.
+ * Button with two values that can be toggled, one for the left mouse button and one for the right mouse button.
  * @author lukflug
  */
 public class ToggleComponent extends FocusableComponent {

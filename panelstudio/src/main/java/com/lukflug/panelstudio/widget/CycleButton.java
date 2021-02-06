@@ -4,28 +4,31 @@ import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.component.FocusableComponent;
 import com.lukflug.panelstudio.setting.IEnumSetting;
-import com.lukflug.panelstudio.theme.IRenderer;
+import com.lukflug.panelstudio.theme.IButtonRenderer;
 
 /**
- * Component representing an enumeration-valued setting.
+ * Component representing an enumeration-valued setting which cycles
  * @author lukflug
  */
-public class EnumComponent extends FocusableComponent {
+public class CycleButton extends FocusableComponent {
 	/**
 	 * The setting in question.
 	 */
 	protected IEnumSetting setting;
+	/**
+	 * The renderer to be used.
+	 */
+	protected IButtonRenderer<String> renderer;
 	
 	/**
 	 * Constructor.
-	 * @param title name of the setting
-	 * @param description the description for this component
-	 * @param renderer {@link IRenderer} for the component
 	 * @param setting the setting in question
+	 * @param renderer the renderer for this component
 	 */
-	public EnumComponent(String title, String description, IRenderer renderer, IEnumSetting setting) {
-		super(title,description,renderer);
+	public CycleButton (IEnumSetting setting, IButtonRenderer<String> renderer) {
+		super(setting.getDisplayName(),setting.getDescription(),setting.isVisible());
 		this.setting=setting;
+		this.renderer=renderer;
 	}
 
 	/**
@@ -34,7 +37,7 @@ public class EnumComponent extends FocusableComponent {
 	@Override
 	public void render (Context context) {
 		super.render(context);
-		renderer.renderTitle(context,title+": \u00A77"+setting.getValueName(),hasFocus(context));
+		renderer.renderButton(context,title,isVisible(),setting.getValueName());
 	}
 	
 	/**
@@ -46,5 +49,10 @@ public class EnumComponent extends FocusableComponent {
 		if (button==IInterface.LBUTTON && context.isClicked()) {
 			setting.increment();
 		}
+	}
+
+	@Override
+	protected int getHeight() {
+		return renderer.getDefaultHeight();
 	}
 }

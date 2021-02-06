@@ -57,7 +57,12 @@ public class GUI {
 	 * Render the GUI (lowest component first, highest component last).
 	 */
 	public void render() {
-		container.render(getContext());
+		Context context=getContext();
+		container.render(context);
+		if (context.getDescription()!=null) {
+			Point pos=descriptionPosition.getPosition(inter,context.getDescription().getComponentPos(),context.getDescription().getPanelPos());
+			descriptionRenderer.renderDescription(inter,pos,context.getDescription().getContent());
+		}
 	}
 	
 	/**

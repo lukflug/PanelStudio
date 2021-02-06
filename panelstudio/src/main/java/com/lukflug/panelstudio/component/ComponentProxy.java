@@ -1,5 +1,7 @@
 package com.lukflug.panelstudio.component;
 
+import java.util.function.Consumer;
+
 import com.lukflug.panelstudio.base.Context;
 
 /**
@@ -27,27 +29,27 @@ public class ComponentProxy implements IComponent {
 
 	@Override
 	public void render(Context context) {
-		component.render(context);
+		doOperation(context,component::render);
 	}
 
 	@Override
 	public void handleButton(Context context, int button) {
-		component.handleButton(context,button);
+		doOperation(context,subContext->component.handleButton(subContext,button));
 	}
 
 	@Override
 	public void handleKey(Context context, int scancode) {
-		component.handleKey(context,scancode);
+		doOperation(context,subContext->component.handleKey(subContext,scancode));
 	}
 
 	@Override
 	public void handleScroll(Context context, int diff) {
-		component.handleScroll(context,diff);
+		doOperation(context,subContext->component.handleScroll(subContext,diff));
 	}
 
 	@Override
 	public void getHeight(Context context) {
-		component.getHeight(context);
+		doOperation(context,component::getHeight);
 	}
 
 	@Override
@@ -75,4 +77,28 @@ public class ComponentProxy implements IComponent {
 		return component.lastVisible();
 	}
 
+	/**
+	 * Perform a context-sensitive operation.
+	 * @param context the context to use
+	 * @param operation the operation to perform
+	 */
+	protected Context doOperation (Context context, Consumer<Context> operation) {
+		Context subContext=getContext(context);
+		operation.accept(subContext);
+		if (subContext!=context) {
+			if (subContext.focusReleased()) context.releaseFocus();
+			else if (subContext.foucsRequested()) context.requestFocus();
+			context.setHeight(subContext.getSize().height);
+		}
+		return subContext;
+	}
+	
+	/**
+	 * Get the context for the content component.
+	 * @param context the parent context
+	 * @return the child context
+	 */
+	protected Context getContext (Context context) {
+		return context;
+	}
 }

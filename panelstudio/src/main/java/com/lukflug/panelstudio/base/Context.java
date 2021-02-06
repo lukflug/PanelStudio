@@ -26,12 +26,12 @@ public final class Context {
 	 * The focus state of the parent.
 	 * The component cannot have focus, if the parent doesn't.
 	 */
-	private boolean focus;
+	private final boolean focus;
 	/**
 	 * Set to false, if another component is in front of another component, at the current mouse position.
 	 * Only has meaning if the mouse cursor is hovering over the component.
 	 */
-	private boolean onTop;
+	private final boolean onTop;
 	/**
 	 * Set to true by the child using {@link #requestFocus()}.
 	 * Used to indicate that the focus within the parent should be given to the child component.

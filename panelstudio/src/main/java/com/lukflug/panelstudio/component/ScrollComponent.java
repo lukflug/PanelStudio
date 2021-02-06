@@ -1,7 +1,6 @@
 package com.lukflug.panelstudio.component;
 
 import java.awt.Point;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 import com.lukflug.panelstudio.base.Context;
@@ -33,52 +32,23 @@ public abstract class ScrollComponent extends ComponentProxy {
 	}
 
 	@Override
-	public void handleButton(Context context, int button) {
-		doOperation(context,subContext->component.handleButton(subContext,button));
-	}
-
-	@Override
-	public void handleKey(Context context, int scancode) {
-		doOperation(context,subContext->component.handleKey(subContext,scancode));
-	}
-
-	@Override
 	public void handleScroll(Context context, int diff) {
-		AtomicReference<Context> sContext=new AtomicReference<Context>();
-		doOperation(context,subContext->{
-			component.handleScroll(subContext,diff);
-			sContext.set(subContext);
-		});
+		Context sContext=doOperation(context,subContext->component.handleScroll(subContext,diff));
 		if (context.isHovered()) {
-			if (sContext.get().getSize().height>context.getSize().height) scrollPos.translate(0,diff);
-			else if (sContext.get().getSize().width>context.getSize().width) scrollPos.translate(diff,0);
-			clampScrollPos(context,sContext.get());
+			if (sContext.getSize().height>context.getSize().height) scrollPos.translate(0,diff);
+			else if (sContext.getSize().width>context.getSize().width) scrollPos.translate(diff,0);
+			clampScrollPos(context,sContext);
 		}
 	}
-
+	
 	@Override
-	public void getHeight(Context context) {
-		doOperation(context,component::getHeight);
-	}
-	
-	/**
-	 * Perform a context-sensitive operation.
-	 * @param context the context to use
-	 * @param operation the operation to perform
-	 */
-	protected void doOperation (Context context, Consumer<Context> operation) {
-		Context subContext=getContext(context);
-		operation.accept(subContext);
-		if (subContext.focusReleased()) context.releaseFocus();
-		else if (subContext.foucsRequested()) context.requestFocus();
+	protected Context doOperation (Context context, Consumer<Context> operation) {
+		Context subContext=super.doOperation(context,operation);
 		context.setHeight(getScrollHeight(subContext.getSize().height));
+		return subContext;
 	}
 	
-	/**
-	 * Get the context for the content component.
-	 * @param context the parent context
-	 * @return the child context
-	 */
+	@Override
 	protected Context getContext (Context context) {
 		return new Context(context,getComponentWidth(context.getSize().width),new Point(-scrollPos.x,-scrollPos.y),context.hasFocus(),context.onTop());
 	}

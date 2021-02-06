@@ -1,8 +1,7 @@
 package com.lukflug.panelstudio.layout;
 
 import java.awt.Point;
-
-import org.w3c.dom.css.Rect;
+import java.awt.Rectangle;
 
 import com.lukflug.panelstudio.base.IInterface;
 
@@ -18,5 +17,5 @@ public interface IPopupPositioner {
 	 * @param panel the position of the panel containing the component
 	 * @return the position of the pop-up
 	 */
-	public Point getPosition (IInterface inter, Rect component, Rect panel);
+	public Point getPosition (IInterface inter, Rectangle component, Rectangle panel);
 }
