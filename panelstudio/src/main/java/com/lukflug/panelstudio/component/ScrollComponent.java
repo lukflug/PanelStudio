@@ -1,5 +1,6 @@
 package com.lukflug.panelstudio.component;
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.util.function.Consumer;
 
@@ -11,9 +12,13 @@ import com.lukflug.panelstudio.base.Context;
  */
 public abstract class ScrollComponent extends ComponentProxy {
 	/**
-	 * Current position scrolling position.
+	 * Current scrolling position.
 	 */
 	protected Point scrollPos=new Point(0,0);
+	/**
+	 * The next scroll position.
+	 */
+	protected Point nextScrollPos=null;
 	
 	/**
 	 * Constructor.
@@ -37,14 +42,18 @@ public abstract class ScrollComponent extends ComponentProxy {
 		if (context.isHovered()) {
 			if (sContext.getSize().height>context.getSize().height) scrollPos.translate(0,diff);
 			else if (sContext.getSize().width>context.getSize().width) scrollPos.translate(diff,0);
-			clampScrollPos(context,sContext);
+			clampScrollPos(context.getSize(),sContext.getSize());
 		}
 	}
 	
 	@Override
 	protected Context doOperation (Context context, Consumer<Context> operation) {
 		Context subContext=super.doOperation(context,operation);
-		context.setHeight(getScrollHeight(subContext.getSize().height));
+		if (nextScrollPos!=null) {
+			scrollPos=nextScrollPos;
+			clampScrollPos(context.getSize(),subContext.getSize());
+			nextScrollPos=null;
+		}
 		return subContext;
 	}
 	
@@ -54,14 +63,30 @@ public abstract class ScrollComponent extends ComponentProxy {
 	}
 	
 	/**
-	 * Clamp scroll position.
-	 * @param context the parent context
-	 * @param subContext the child context
+	 * Get the current scroll position.
+	 * @return the current scroll position
 	 */
-	protected void clampScrollPos (Context context, Context subContext) {
-		if (scrollPos.x>subContext.getSize().width-context.getSize().width) scrollPos.x=subContext.getSize().width-context.getSize().width;
+	public Point getScrollPos() {
+		return new Point(scrollPos);
+	}
+	
+	/**
+	 * Set the scroll position;
+	 * @param scrollPos the new scroll position
+	 */
+	public void setScrollPos (Point scrollPos) {
+		nextScrollPos=new Point(scrollPos);
+	}
+	
+	/**
+	 * Clamp scroll position.
+	 * @param scrollSize the dimensions of the scroll component
+	 * @param contentSize the dimensions of the content
+	 */
+	protected void clampScrollPos (Dimension scrollSize, Dimension contentSize) {
+		if (scrollPos.x>contentSize.width-scrollSize.width) scrollPos.x=contentSize.width-scrollSize.width;
 		if (scrollPos.x<0) scrollPos.x=0;
-		if (scrollPos.y>subContext.getSize().height-context.getSize().height) scrollPos.y=subContext.getSize().height-context.getSize().height;
+		if (scrollPos.y>contentSize.height-scrollSize.height) scrollPos.y=contentSize.height-scrollSize.height;
 		if (scrollPos.y<0) scrollPos.y=0;
 	}
 	
@@ -71,11 +96,4 @@ public abstract class ScrollComponent extends ComponentProxy {
 	 * @return the component width
 	 */
 	protected abstract int getComponentWidth (int scrollWidth);
-	
-	/**
-	 * Function to determine visible height.
-	 * @param componentHeight the component height
-	 * @return the visible height
-	 */
-	protected abstract int getScrollHeight (int componentHeight);
 }

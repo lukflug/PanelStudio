@@ -38,13 +38,23 @@ public class CollapsibleComponent extends ComponentProxy {
 	}
 	
 	@Override
+	public boolean isVisible() {
+		return component.isVisible()&&(toggle.getValue()!=0);
+	}
+	
+	@Override
 	protected Context getContext (Context context) {
 		Context subContext=new Context(context,context.getSize().width,new Point(0,0),context.hasFocus(),context.onTop());
 		component.getHeight(subContext);
-		int height=(int)(toggle.getValue()*context.getSize().height);
-		int offset=height-context.getSize().height;
+		int height=getHeight(subContext.getSize().height);
+		int offset=height-subContext.getSize().height;
 		context.setHeight(height);
 		return new Context(context,context.getSize().width,new Point(0,offset),context.hasFocus(),context.onTop());
+	}
+	
+	@Override
+	protected int getHeight (int height) {
+		return (int)(toggle.getValue()*height);
 	}
 	
 	/**

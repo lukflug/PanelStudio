@@ -101,13 +101,13 @@ public abstract class Container<T extends IComponent> extends ComponentBase {
 	@Override
 	public void enter() {
 		super.enter();
-		doContextlessLoop(IComponent::enter);
+		doContextlessLoop(component->{});
 	}
 
 	@Override
 	public void exit() {
 		super.exit();
-		doContextlessLoop(IComponent::exit);
+		doContextlessLoop(component->{});
 	}
 
 	@Override
@@ -192,7 +192,7 @@ public abstract class Container<T extends IComponent> extends ComponentBase {
 		 * Updates the visibility state of the component.
 		 */
 		public void update() {
-			if (component.isVisible()&&externalVisibility.isOn()!=component.lastVisible()) {
+			if (component.isVisible()&&externalVisibility.isOn()&&lastVisible()!=component.lastVisible()) {
 				if (component.lastVisible()) component.exit();
 				else component.enter();
 			}

@@ -34,6 +34,11 @@ public abstract class FocusableComponent extends ComponentBase {
 		focus=false;
 	}
 	
+	@Override
+	public void exit() {
+		focus=false;
+	}
+	
 	/**
 	 * Get current focus state.
 	 * @param context the {@link Context} for the component

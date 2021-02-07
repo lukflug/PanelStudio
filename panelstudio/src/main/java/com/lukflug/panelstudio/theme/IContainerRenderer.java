@@ -12,35 +12,46 @@ public interface IContainerRenderer {
 	 * @param context the context of the container
 	 * @param focus whether this container has focus
 	 */
-	public void renderBackground (Context context, boolean focus);
+	public default void renderBackground (Context context, boolean focus) {
+	}
 	
 	/**
 	 * Get the border between two components.
 	 * @return the border
 	 */
-	public int getBorder();
+	public default int getBorder() {
+		return 0;
+	}
 	
 	/**
 	 * Get left border.
 	 * @return the left border
 	 */
-	public int getLeft();
+	public default int getLeft() {
+		return 0;
+	}
 	
 	/**
 	 * Get right border.
 	 * @return the right border
 	 */
-	public int getRight();
+	public default int getRight() {
+		return 0;
+	}
 	
 	/**
 	 * Get top border.
 	 * @return the top border
 	 */
-	public int getTop();
+	public default int getTop() {
+		return 0;
+	}
 	
 	/**
 	 * Get bottom border.
 	 * @return the bottom border
 	 */
-	public int getBottom();
+	public default int getBottom() {
+		return 0;
+	}
 }

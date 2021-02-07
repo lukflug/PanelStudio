@@ -88,9 +88,18 @@ public class ComponentProxy implements IComponent {
 		if (subContext!=context) {
 			if (subContext.focusReleased()) context.releaseFocus();
 			else if (subContext.foucsRequested()) context.requestFocus();
-			context.setHeight(subContext.getSize().height);
 		}
+		context.setHeight(getHeight(subContext.getSize().height));
 		return subContext;
+	}
+	
+	/**
+	 * Function to determine visible height.
+	 * @param height the component height
+	 * @return the visible height
+	 */
+	protected int getHeight (int height) {
+		return height;
 	}
 	
 	/**
