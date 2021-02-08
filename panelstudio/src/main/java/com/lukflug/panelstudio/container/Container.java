@@ -52,6 +52,20 @@ public abstract class Container<T extends IComponent> extends ComponentBase {
 	}
 	
 	/**
+	 * Add component to GUI.
+	 * @param component the component to be added
+	 * @param visible the external visibility for the component
+	 * @return whether the component was added
+	 */
+	public boolean addComponent (T component, IBoolean visible) {
+		if (getComponentState(component)==null) {
+			components.add(new ComponentState(component,visible));
+			return true;
+		}
+		return false;
+	}
+	
+	/**
 	 * Remove component from GUI.
 	 * @param component the component to be removed
 	 * @return whether the component was removed
@@ -205,6 +219,7 @@ public abstract class Container<T extends IComponent> extends ComponentBase {
 	 * @author lukflug
 	 * @param <T> the type of component
 	 */
+	@FunctionalInterface
 	protected interface ContextSensitiveConsumer<T extends IComponent> {
 		/**
 		 * Accept the context and component.

@@ -19,6 +19,14 @@ public abstract class ScrollComponent extends ComponentProxy {
 	 * The next scroll position.
 	 */
 	protected Point nextScrollPos=null;
+	/**
+	 * Cached content size.
+	 */
+	protected Dimension contentSize=new Dimension(0,0);
+	/**
+	 * Cached scroll size.
+	 */
+	protected Dimension scrollSize=new Dimension(0,0);
 	
 	/**
 	 * Constructor.
@@ -40,8 +48,8 @@ public abstract class ScrollComponent extends ComponentProxy {
 	public void handleScroll(Context context, int diff) {
 		Context sContext=doOperation(context,subContext->component.handleScroll(subContext,diff));
 		if (context.isHovered()) {
-			if (sContext.getSize().height>context.getSize().height) scrollPos.translate(0,diff);
-			else if (sContext.getSize().width>context.getSize().width) scrollPos.translate(diff,0);
+			if (isScrollingY()) scrollPos.translate(0,diff);
+			else if (isScrollingX()) scrollPos.translate(diff,0);
 			clampScrollPos(context.getSize(),sContext.getSize());
 		}
 	}
@@ -54,6 +62,8 @@ public abstract class ScrollComponent extends ComponentProxy {
 			clampScrollPos(context.getSize(),subContext.getSize());
 			nextScrollPos=null;
 		}
+		contentSize=subContext.getSize();
+		scrollSize=context.getSize();
 		return subContext;
 	}
 	
@@ -76,6 +86,38 @@ public abstract class ScrollComponent extends ComponentProxy {
 	 */
 	public void setScrollPos (Point scrollPos) {
 		nextScrollPos=new Point(scrollPos);
+	}
+	
+	/**
+	 * Get cached content size.
+	 * @return the content size from the last operation
+	 */
+	public Dimension getContentSize() {
+		return contentSize;
+	}
+	
+	/**
+	 * Get cached scroll size.
+	 * @return the scroll size from the last operation
+	 */
+	public Dimension getScrollSize() {
+		return scrollSize;
+	}
+	
+	/**
+	 * Returns whether horizontal scrolling is happening.
+	 * @return whether horizontal scrolling is happening
+	 */
+	public boolean isScrollingX() {
+		return contentSize.width>scrollSize.width;
+	}
+	
+	/**
+	 * Returns whether vertical scrolling is happening.
+	 * @return whether vertical scrolling is happening
+	 */
+	public boolean isScrollingY() {
+		return contentSize.height>scrollSize.height;
 	}
 	
 	/**

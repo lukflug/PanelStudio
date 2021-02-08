@@ -20,16 +20,17 @@ public final class AnimatedToggleable implements IToggleable {
 	 * @param animation the animation
 	 */
 	public AnimatedToggleable (IToggleable toggle, Animation animation) {
-		this.toggle=toggle;
-		this.animation=animation;
-		if (animation==null) animation=new Animation() {
+		if (toggle!=null) this.toggle=toggle;
+		else this.toggle=new SimpleToggleable(false);
+		if (animation!=null) this.animation=animation;
+		else this.animation=new Animation() {
 			@Override
 			protected int getSpeed() {
 				return 0;
 			}
 		};
-		if (toggle.isOn()) animation.initValue(1);
-		else animation.initValue(0);
+		if (this.toggle.isOn()) this.animation.initValue(1);
+		else this.animation.initValue(0);
 	}
 	
 	@Override

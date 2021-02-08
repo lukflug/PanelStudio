@@ -10,18 +10,14 @@ import com.lukflug.panelstudio.setting.IBooleanSetting;
 import com.lukflug.panelstudio.theme.IButtonRenderer;
 
 /**
- * Button with two values that can be toggled, one for the left mouse button and one for the right mouse button.
+ * Button with two values that can be toggled by the left mouse button.
  * @author lukflug
  */
 public class ToggleComponent extends FocusableComponent {
 	/**
 	 * Setting to be toggled by left click.
 	 */
-	protected IToggleable left;
-	/**
-	 * Setting to be toggled by right click.
-	 */
-	protected IToggleable right;
+	protected IToggleable toggle;
 	/**
 	 * Renderer for this component.
 	 */
@@ -32,17 +28,14 @@ public class ToggleComponent extends FocusableComponent {
 	 * @param title the caption for this component
 	 * @param description the description for this component
 	 * @param visible whether this component is visible
-	 * @param left the left toggle
-	 * @param right the right toggle
+	 * @param toggle the toggle
 	 * @param renderer the renderer for this component
 	 */
-	public ToggleComponent(String title, String description, IBoolean visible, IToggleable left, IToggleable right, IButtonRenderer<IBoolean> renderer) {
+	public ToggleComponent(String title, String description, IBoolean visible, IToggleable toggle, IButtonRenderer<IBoolean> renderer) {
 		super(title,description,visible);
-		this.left=left;
-		this.right=right;
+		this.toggle=toggle;
 		this.renderer=renderer;
-		if (this.left==null) this.left=new SimpleToggleable(false);
-		if (this.right==null) this.right=new SimpleToggleable(false);
+		if (this.toggle==null) this.toggle=new SimpleToggleable(false);
 	}
 	
 	/**
@@ -51,22 +44,20 @@ public class ToggleComponent extends FocusableComponent {
 	 * @param renderer the renderer for this component
 	 */
 	public ToggleComponent (IBooleanSetting setting, IButtonRenderer<IBoolean> renderer) {
-		this(setting.getDescription(),setting.getDescription(),setting.isVisible(),setting,null,renderer);
+		this(setting.getDescription(),setting.getDescription(),setting.isVisible(),setting,renderer);
 	}
 	
 	@Override
 	public void render (Context context) {
 		super.render(context);
-		renderer.renderButton(context,title,hasFocus(context),left);
+		renderer.renderButton(context,title,hasFocus(context),toggle);
 	}
 	
 	@Override
 	public void handleButton (Context context, int button) {
 		super.handleButton(context,button);
 		if (button==IInterface.LBUTTON && context.isClicked()) {
-			left.toggle();
-		} else if (button==IInterface.RBUTTON && context.getInterface().getButton(IInterface.RBUTTON) && context.isHovered()) {
-			right.toggle();
+			toggle.toggle();
 		}
 	}
 

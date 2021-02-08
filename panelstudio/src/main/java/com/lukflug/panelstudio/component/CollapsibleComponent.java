@@ -29,7 +29,6 @@ public class CollapsibleComponent extends ComponentProxy {
 	
 	@Override
 	public void render(Context context) {
-		getHeight(context);
 		doOperation(context,subContext->{
 			context.getInterface().window(context.getRect());
 			component.render(subContext);
