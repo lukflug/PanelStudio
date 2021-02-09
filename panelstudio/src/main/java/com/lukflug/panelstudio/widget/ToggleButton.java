@@ -13,7 +13,7 @@ import com.lukflug.panelstudio.theme.IButtonRenderer;
  * Button with two values that can be toggled by the left mouse button.
  * @author lukflug
  */
-public class ToggleComponent extends FocusableComponent {
+public class ToggleButton extends FocusableComponent {
 	/**
 	 * Setting to be toggled by left click.
 	 */
@@ -31,7 +31,7 @@ public class ToggleComponent extends FocusableComponent {
 	 * @param toggle the toggle
 	 * @param renderer the renderer for this component
 	 */
-	public ToggleComponent(String title, String description, IBoolean visible, IToggleable toggle, IButtonRenderer<IBoolean> renderer) {
+	public ToggleButton (String title, String description, IBoolean visible, IToggleable toggle, IButtonRenderer<IBoolean> renderer) {
 		super(title,description,visible);
 		this.toggle=toggle;
 		this.renderer=renderer;
@@ -43,7 +43,7 @@ public class ToggleComponent extends FocusableComponent {
 	 * @param setting the setting in question
 	 * @param renderer the renderer for this component
 	 */
-	public ToggleComponent (IBooleanSetting setting, IButtonRenderer<IBoolean> renderer) {
+	public ToggleButton (IBooleanSetting setting, IButtonRenderer<IBoolean> renderer) {
 		this(setting.getDescription(),setting.getDescription(),setting.isVisible(),setting,renderer);
 	}
 	

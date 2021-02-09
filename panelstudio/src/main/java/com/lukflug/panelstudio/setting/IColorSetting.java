@@ -48,4 +48,10 @@ public interface IColorSetting extends ISetting {
 	 * @return whether setting allows rainbow
 	 */
 	public boolean allowsRainbow();
+	
+	/**
+	 * Returns true for HSB model, false for RGB model
+	 * @return returns whether HSB model should be used
+	 */
+	public boolean hasHSBModel();
 }

@@ -4,12 +4,14 @@ import java.awt.Color;
 
 import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.Context;
-import com.lukflug.panelstudio.base.IInterface;
+import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IToggleable;
 import com.lukflug.panelstudio.base.SimpleToggleable;
-import com.lukflug.panelstudio.component.FocusableComponent;
 import com.lukflug.panelstudio.setting.IColorSetting;
+import com.lukflug.panelstudio.theme.IButtonRenderer;
 import com.lukflug.panelstudio.theme.IColorScheme;
+import com.lukflug.panelstudio.theme.IContainerRenderer;
+import com.lukflug.panelstudio.theme.IPanelRenderer;
 import com.lukflug.panelstudio.theme.IRenderer;
 
 /**
@@ -50,15 +52,25 @@ public class ColorComponent extends CollapsibleContainer {
 	 * @param rainbow whether to render a rainbow slider
 	 * @param colorModel {@link IToggleable} indicating whether to use RGB (false) or HSB (true)
 	 */
-	public ColorComponent(String title, String description, IRenderer renderer, Animation animation, IRenderer componentRenderer, IColorSetting setting, boolean alpha, boolean rainbow, IToggleable colorModel) {
-		super(title,description,renderer,new SimpleToggleable(false),animation,null);
+	public ColorComponent(IColorSetting setting, Animation animation, IPanelRenderer panelRenderer, IButtonRenderer<Void> titleRenderer, IButtonRenderer<IBoolean> buttonRenderer, IContainerRenderer sliderRenderer) {
+		super(setting.getDisplayName(),setting.getDescription(),setting.isVisible(),()->true,new SimpleToggleable(false),animation,panelRenderer,titleRenderer,sliderRenderer,null,null);
 		this.setting=setting;
-		this.alpha=alpha;
-		this.rainbow=rainbow;
-		scheme=new ColorSettingScheme(renderer);
-		overrideScheme=new ColorSettingScheme(componentRenderer);
-		this.colorModel=colorModel;
-		if (rainbow) addComponent(new ColorButton(componentRenderer));
+		//this.alpha=alpha;
+		//this.rainbow=rainbow;
+		scheme=new ColorSettingScheme(null);
+		overrideScheme=new ColorSettingScheme(null);
+		//this.colorModel=colorModel;
+		addComponent(new ToggleButton("Rainbow",null,()->setting.allowsRainbow(),new IToggleable() {
+			@Override
+			public boolean isOn() {
+				return setting.getRainbow();
+			}
+
+			@Override
+			public void toggle() {
+				setting.setRainbow(!setting.getRainbow());
+			}
+		},buttonRenderer));
 		addComponent(new ColorSlider(componentRenderer,0));
 		addComponent(new ColorSlider(componentRenderer,1));
 		addComponent(new ColorSlider(componentRenderer,2));
@@ -73,43 +85,6 @@ public class ColorComponent extends CollapsibleContainer {
 		renderer.overrideColorScheme(scheme);
 		super.render(context);
 		renderer.restoreColorScheme();
-	}
-	
-	
-	/**
-	 * Class to render the rainbow button in the color container.
-	 * @author lukflug
-	 */
-	protected class ColorButton extends FocusableComponent {
-		/**
-		 * Constructor.
-		 * @param renderer the {@link IRenderer} for the component
-		 */
-		public ColorButton(IRenderer renderer) {
-			super("Rainbow",null,renderer);
-		}
-		
-		/**
-		 * Override the {@link IColorScheme} and render the component.
-		 */
-		@Override
-		public void render (Context context) {
-			super.render(context);
-			renderer.overrideColorScheme(overrideScheme);
-			renderer.renderTitle(context,title,hasFocus(context),setting.getRainbow());
-			renderer.restoreColorScheme();
-		}
-		
-		/**
-		 * Toggle the setting, if clicked.
-		 */
-		@Override
-		public void handleButton (Context context, int button) {
-			super.handleButton(context,button);
-			if (button==IInterface.LBUTTON && context.isClicked()) {
-				setting.setRainbow(!setting.getRainbow());
-			}
-		}
 	}
 	
 	
@@ -139,9 +114,9 @@ public class ColorComponent extends CollapsibleContainer {
 		@Override
 		public void render (Context context) {
 			title=getTitle(value)+(int)(getMax()*getValue());
-			renderer.overrideColorScheme(overrideScheme);
+			//renderer.overrideColorScheme(overrideScheme);
 			super.render(context);
-			renderer.restoreColorScheme();
+			//renderer.restoreColorScheme();
 		}
 
 		/**
