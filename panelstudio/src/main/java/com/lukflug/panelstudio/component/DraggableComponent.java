@@ -16,10 +16,6 @@ public class DraggableComponent extends ComponentProxy implements IFixedComponen
 	 */
 	protected IFixedComponent fixedComponent;
 	/**
-	 * The component to cause the drag.
-	 */
-	protected IComponent dragComponent;
-	/**
 	 * Flag indicating whether the user is dragging the component with the mouse.
 	 */
 	protected boolean dragging=false;
@@ -31,12 +27,10 @@ public class DraggableComponent extends ComponentProxy implements IFixedComponen
 	/**
 	 * Constructor.
 	 * @param fixedComponent fixed component to be dragged
-	 * @param dragComponent component that is used to drag the panel
 	 */
-	public DraggableComponent (IFixedComponent fixedComponent, IComponent dragComponent) {
+	public DraggableComponent (IFixedComponent fixedComponent) {
 		super(fixedComponent);
 		this.fixedComponent=fixedComponent;
-		this.dragComponent=new DragComponent(dragComponent);
 	}
 
 	@Override
@@ -73,44 +67,30 @@ public class DraggableComponent extends ComponentProxy implements IFixedComponen
 	
 	/**
 	 * Returns the wrapped dragging component.
+	 * @param dragComponent component that is used to drag the panel
 	 */
-	public IComponent getWrappedDragComponent() {
-		return dragComponent;
-	}
-	
-	
-	/**
-	 * Class to wrap drag component.
-	 * @author lukflug
-	 */
-	public class DragComponent extends ComponentProxy {
-		/**
-		 * Constructor.
-		 * @param component drag component
-		 */
-		public DragComponent(IComponent component) {
-			super(component);
-		}
-		
-		@Override
-		public void handleButton (Context context, int button) {
-			super.handleButton(context,button);
-			if (context.isClicked() && button==IInterface.LBUTTON) {
-				dragging=true;
-				attachPoint=context.getInterface().getMouse();
-			} else if (!context.getInterface().getButton(IInterface.LBUTTON) && dragging) {
-				Point mouse=context.getInterface().getMouse();
-				dragging=false;
-				Point p=fixedComponent.getPosition(context.getInterface());
-				p.translate(mouse.x-attachPoint.x,mouse.y-attachPoint.y);
-				fixedComponent.setPosition(context.getInterface(),p);
+	public IComponent getWrappedDragComponent (IComponent dragComponent) {
+		return new ComponentProxy(dragComponent) {
+			@Override
+			public void handleButton (Context context, int button) {
+				super.handleButton(context,button);
+				if (context.isClicked() && button==IInterface.LBUTTON) {
+					dragging=true;
+					attachPoint=context.getInterface().getMouse();
+				} else if (!context.getInterface().getButton(IInterface.LBUTTON) && dragging) {
+					Point mouse=context.getInterface().getMouse();
+					dragging=false;
+					Point p=fixedComponent.getPosition(context.getInterface());
+					p.translate(mouse.x-attachPoint.x,mouse.y-attachPoint.y);
+					fixedComponent.setPosition(context.getInterface(),p);
+				}
 			}
-		}
-		
-		@Override
-		public void exit() {
-			dragging=false;
-			super.exit();
-		}
+			
+			@Override
+			public void exit() {
+				dragging=false;
+				super.exit();
+			}
+		};
 	}
 }

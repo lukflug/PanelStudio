@@ -1,276 +1,115 @@
 package com.lukflug.panelstudio.widget;
 
-import java.awt.Rectangle;
-
-import com.lukflug.panelstudio.base.AnimatedToggleable;
 import com.lukflug.panelstudio.base.Animation;
-import com.lukflug.panelstudio.base.Context;
-import com.lukflug.panelstudio.base.IInterface;
+import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IToggleable;
-import com.lukflug.panelstudio.component.FocusableComponent;
 import com.lukflug.panelstudio.component.IComponent;
-import com.lukflug.panelstudio.container.Container;
-import com.lukflug.panelstudio.theme.IRenderer;
+import com.lukflug.panelstudio.container.VerticalContainer;
+import com.lukflug.panelstudio.theme.IButtonRenderer;
+import com.lukflug.panelstudio.theme.IContainerRenderer;
+import com.lukflug.panelstudio.theme.IEmptySpaceRenderer;
+import com.lukflug.panelstudio.theme.IPanelRenderer;
+import com.lukflug.panelstudio.theme.IScrollBarRenderer;
 
 /**
  * Container that can be closed and scrolled, so that its children can be hidden.
  * @author lukflug
  */
-public class CollapsibleContainer extends FocusableComponent implements IToggleable {
+public class CollapsibleContainer extends Panel {
 	/**
-	 * {@link Container} containing the children.
+	 * The container that is wrapped.
 	 */
-	protected Container container;
-	/**
-	 * {@link IToggleable} indicating whether the container is open or closed. 
-	 */
-	protected AnimatedToggleable open;
-	/**
-	 * {@link IToggleable} that can be toggled by the user.
-	 */
-	protected IToggleable toggle;
-	/**
-	 * Cached combined height of children.
-	 */
-	protected int childHeight=0;
-	/**
-	 * Cached container scroll height.
-	 */
-	protected int containerHeight=0;
-	/**
-	 * Cached value of whether scrolling is happening.
-	 */
-	protected boolean scroll=false;
-	/**
-	 * Current scroll offset.
-	 */
-	protected int scrollPosition=0;
+	protected final VerticalContainer contentContainer;
 	
 	/**
 	 * Constructor.
-	 * @param title the caption for the container
-	 * @param description the description for this component
-	 * @param renderer the {@link IRenderer} for the container
-	 * @param open the {@link IToggleable} for {@link #open}
-	 * @param animation the animation for this container
-	 * @param toggle the {@link IToggleable} to be toggled by the user
+	 * @param title the title of the panel
+	 * @param description the description of the panel
+	 * @param visible the visibility of the panel
+	 * @param active whether the panel is active
+	 * @param open the toggleable to be used to open and close the panel
+	 * @param animation the animation for opening and closing the panel
+	 * @param panelRenderer the renderer for the panel overlay
+	 * @param titleRenderer the renderer for the panel title
+	 * @param containerRenderer the renderer for the panel content container
+	 * @param scrollRenderer the renderer for the scroll bars
+	 * @param emptyRenderer the renderer for the scroll corner
 	 */
-	public CollapsibleContainer (String title, String description, IRenderer renderer, IToggleable open, Animation animation, IToggleable toggle) {
-		super(title,description,renderer);
-		container=new Container(title,null,renderer);
-		this.open=new AnimatedToggleable(open,animation);
-		this.toggle=toggle;
+	public CollapsibleContainer (String title, String description, IBoolean visible, IBoolean active, IToggleable open, Animation animation, IPanelRenderer panelRenderer, IButtonRenderer<Void> titleRenderer, IContainerRenderer containerRenderer, IScrollBarRenderer scrollRenderer, IEmptySpaceRenderer emptyRenderer) {
+		this(new Button(title,description,visible,titleRenderer),new VerticalContainer(title,description,visible,containerRenderer),active,open,animation,panelRenderer,scrollRenderer,emptyRenderer);
 	}
 	
 	/**
-	 * Add a component to the container.
+	 * Constructor.
+	 * @param title the title of the panel
+	 * @param content the content container of the panel
+	 * @param active whether the panel is active
+	 * @param open the toggleable to be used to open and close the panel
+	 * @param animation the animation for opening and closing the panel
+	 * @param panelRenderer the renderer for the panel overlay
+	 * @param scrollRenderer the renderer for the scroll bars
+	 * @param emptyRenderer the renderer for the scroll corner
+	 */
+	public CollapsibleContainer (IComponent title, VerticalContainer content, IBoolean active, IToggleable open, Animation animation, IPanelRenderer panelRenderer, IScrollBarRenderer scrollRenderer, IEmptySpaceRenderer emptyRenderer) {
+		super(title,new ScrollableComponent(content,scrollRenderer,emptyRenderer) {
+			@Override
+			protected int getScrollHeight (int componentHeight) {
+				return getScrollHeight(componentHeight);
+			}
+
+			@Override
+			protected int getComponentWidth (int scrollWidth) {
+				return getComponentWidth(scrollWidth);
+			}
+
+			@Override
+			protected boolean isActive() {
+				return active.isOn();
+			}
+		},active,open,animation,panelRenderer);
+		contentContainer=content;
+	}
+
+	/**
+	 * Add component to container.
 	 * @param component the component to be added
 	 */
 	public void addComponent (IComponent component) {
-		container.addComponent(component);
+		contentContainer.addComponent(component);
 	}
 	
 	/**
-	 * Renders a background, title bar, border and, if the container is open, the components of the container.
+	 * Add component to container with visibility.
+	 * @param component the component to be added
+	 * @param visible the visibility of the component
 	 */
-	@Override
-	public void render (Context context) {
-		getHeight(context);
-		renderer.renderBackground(context,hasFocus(context));
-		super.render(context);
-		renderer.renderTitle(context,title,hasFocus(context),isActive(),open.getValue()!=0);
-		if (open.getValue()!=0) {
-			// Pre-calculate clipping rectangle
-			Context subContext=getSubContext(context,open.getValue()==1);
-			container.getHeight(subContext);
-			Rectangle rect=getClipRect(context,subContext.getSize().height);
-			boolean onTop=open.getValue()==1;
-			if (rect!=null) {
-				onTop=rect.contains(context.getInterface().getMouse());
-				context.getInterface().window(rect);
-			}
-			subContext=getSubContext(context,onTop);
-			// Render component
-			container.render(subContext);
-			if (rect!=null) context.getInterface().restore();
-			if (subContext.isHovered()) context.setDescription(subContext.getDescription());
-			context.setHeight(getRenderHeight(subContext.getSize().height));
-			scrollPosition=renderer.renderScrollBar(context,hasFocus(context),isActive(),scroll,childHeight,scrollPosition);
-			if (scrollPosition>childHeight-containerHeight) scrollPosition=childHeight-containerHeight;
-			if (scrollPosition<0) scrollPosition=0;
-		}
-		renderer.renderBorder(context,hasFocus(context),isActive(),open.getValue()!=0);
+	public void addComponent (IComponent component, IBoolean visible) {
+		contentContainer.addComponent(component,visible);
 	}
 	
 	/**
-	 * Handles a mouse button state change.
+	 * Remove component from container.
+	 * @param component the component to be removed
 	 */
-	@Override
-	public void handleButton (Context context, int button) {
-		context.setHeight(renderer.getHeight(open.getValue()!=0));
-		if (context.isClicked() && button==IInterface.LBUTTON) {
-			if (toggle!=null) toggle.toggle();
-		} else if (context.isHovered() && button==IInterface.RBUTTON && context.getInterface().getButton(IInterface.RBUTTON)) {
-			open.toggle();
-		}
-		if (open.getValue()==1) {
-			// Pre-calculate clipping rectangle and update focus state
-			Context subContext=getSubContext(context,true);
-			container.getHeight(subContext);
-			context.setHeight(getRenderHeight(subContext.getSize().height));
-			updateFocus(context,button);
-			// Handle button click with proper onTop masking
-			boolean onTop=true;
-			Rectangle rect=getClipRect(context,subContext.getSize().height);
-			if (rect!=null) onTop=rect.contains(context.getInterface().getMouse());
-			subContext=getSubContext(context,onTop);
-			container.handleButton(subContext,button);
-			context.setHeight(getRenderHeight(subContext.getSize().height));
-			if (subContext.focusReleased()) context.releaseFocus();
-		} else super.handleButton(context,button);
+	public void removeComponent (IComponent component) {
+		contentContainer.removeComponent(component);
 	}
 	
 	/**
-	 * Handle a key being typed.
-	 */
-	@Override
-	public void handleKey (Context context, int scancode) {
-		if (open.getValue()==1) {
-			Context subContext=getSubContext(context,true);
-			container.handleKey(subContext,scancode);
-			context.setHeight(getRenderHeight(subContext.getSize().height));
-		} else super.handleKey(context,scancode);
-	}
-	
-	/**
-	 * Scroll scroll bar.
-	 */
-	@Override
-	public void handleScroll (Context context, int diff) {
-		if (open.getValue()==1) {
-			Context subContext=getSubContext(context,true);
-			container.handleKey(subContext,diff);
-			context.setHeight(getRenderHeight(subContext.getSize().height));
-			if (subContext.isHovered()) {
-				scrollPosition+=diff;
-				if (scrollPosition>childHeight-containerHeight) scrollPosition=childHeight-containerHeight;
-				if (scrollPosition<0) scrollPosition=0;
-			}
-		} else super.handleKey(context,diff);
-	}
-	
-	/**
-	 * Returns the current height, accounting for whether the container is open or closed.
-	 */
-	@Override
-	public void getHeight (Context context) {
-		if (open.getValue()!=0) {
-			Context subContext=getSubContext(context,true);
-			container.getHeight(subContext);
-			context.setHeight(getRenderHeight(subContext.getSize().height));
-		} else super.getHeight(context);
-	}
-	
-	/**
-	 * Handle the GUI being opened.
-	 */
-	@Override
-	public void enter (Context context) {
-		if (open.getValue()==1) {
-			Context subContext=getSubContext(context,true);
-			container.enter(subContext);
-			context.setHeight(getRenderHeight(subContext.getSize().height));
-		} else super.enter(context);
-	}
-	
-	/**
-	 * Handle the GUI being closed.
-	 */
-	@Override
-	public void exit (Context context) {
-		if (open.getValue()==1) {
-			Context subContext=getSubContext(context,true);
-			container.exit(subContext);
-			context.setHeight(getRenderHeight(subContext.getSize().height));
-		} else super.exit(context);
-	}
-	
-	/**
-	 * Method to determine whether title bar is active or not.
-	 * @return set to true, if title bar is active
-	 */
-	protected boolean isActive() {
-		if (toggle==null) return true;
-		return toggle.isOn();
-	}
-	
-	/**
-	 * Returns the vertical container offset.
-	 * @return vertical offset
-	 */
-	protected int getContainerOffset() {
-		if (scrollPosition>childHeight-containerHeight) scrollPosition=childHeight-containerHeight;
-		if (scrollPosition<0) scrollPosition=0;
-		return (int)(renderer.getHeight(open.getValue()!=0)-scrollPosition-(1-open.getValue())*containerHeight);
-	}
-	
-	/**
-	 * Get the height of the container, accounting for scrolling.
-	 * @param childHeight the total height of the children
+	 * Get visible scroll height based on content container height.
+	 * @param componentHeight the container height
 	 * @return the scroll height
 	 */
-	protected int getScrollHeight (int childHeight) {
-		return childHeight;
-	}
-	
-	/**
-	 * Get the visible container height.
-	 * @param childHeight the total height of the children
-	 * @return the visible height
-	 */
-	protected int getRenderHeight (int childHeight) {
-		this.childHeight=childHeight;
-		containerHeight=getScrollHeight(childHeight);
-		scroll=childHeight>containerHeight;
-		if (scrollPosition>childHeight-containerHeight) scrollPosition=childHeight-containerHeight;
-		if (scrollPosition<0) scrollPosition=0;
-		return (int)(containerHeight*open.getValue()+renderer.getHeight(open.getValue()!=0)+renderer.getBottomBorder());
-	}
-	
-	/**
-	 * Returns the clipping rectangle for the container.
-	 * @param context the context for this component
-	 * @param height the height of the container
-	 * @return the clipping rectangle
-	 */
-	protected Rectangle getClipRect (Context context, int height) {
-		return new Rectangle(context.getPos().x+renderer.getLeftBorder(scroll),context.getPos().y+renderer.getHeight(open.getValue()!=0),context.getSize().width-renderer.getLeftBorder(scroll)-renderer.getRightBorder(scroll),getRenderHeight(height)-renderer.getHeight(open.getValue()!=0)-renderer.getBottomBorder());
+	protected int getScrollHeight (int componentHeight) {
+		return componentHeight;
 	}
 
 	/**
-	 * Toggle the open state. And release focus of children if closing.
+	 * Get content container width based on scroll width.
+	 * @param scrollWidth the scroll width
+	 * @return the container width
 	 */
-	@Override
-	public void toggle() {
-		open.toggle();
-		if (!open.isOn()) container.releaseFocus();
-	}
-
-	/**
-	 * Get the open state.
-	 */
-	@Override
-	public boolean isOn() {
-		return open.isOn();
-	}
-
-	/**
-	 * Create sub-context for container.
-	 * @param context the current context
-	 * @param onTop whether the context should be on top
-	 * @return the context for the container
-	 */
-	protected Context getSubContext (Context context, boolean onTop) {
-		return new Context(context,renderer.getLeftBorder(scroll),renderer.getRightBorder(scroll),getContainerOffset(),hasFocus(context),onTop);
+	protected int getComponentWidth (int scrollWidth) {
+		return scrollWidth;
 	}
 }

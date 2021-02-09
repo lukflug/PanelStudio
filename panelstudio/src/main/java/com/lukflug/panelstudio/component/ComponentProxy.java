@@ -76,6 +76,14 @@ public class ComponentProxy implements IComponent {
 	public boolean lastVisible() {
 		return component.lastVisible();
 	}
+	
+	/**
+	 * Returns the current component being redirected.
+	 * @return the component
+	 */
+	public IComponent getComponent() {
+		return component;
+	}
 
 	/**
 	 * Perform a context-sensitive operation.

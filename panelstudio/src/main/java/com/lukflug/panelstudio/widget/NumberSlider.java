@@ -7,7 +7,7 @@ import com.lukflug.panelstudio.theme.ISliderRenderer;
  * Component that represents a number-valued setting through a {@link Slider}.
  * @author lukflug
  */
-public class NumberComponent extends Slider {
+public class NumberSlider extends Slider {
 	/**
 	 * The setting in question.
 	 */
@@ -18,7 +18,7 @@ public class NumberComponent extends Slider {
 	 * @param setting the setting in question
 	 * @param renderer the renderer for the component
 	 */
-	public NumberComponent(INumberSetting setting, ISliderRenderer renderer) {
+	public NumberSlider (INumberSetting setting, ISliderRenderer renderer) {
 		super(setting.getDisplayName(),setting.getDescription(),setting.isVisible(),renderer);
 	}
 
