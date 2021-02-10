@@ -5,7 +5,7 @@ import java.awt.Point;
 import org.lwjgl.input.Mouse;
 
 import com.lukflug.panelstudio.base.IInterface;
-import com.lukflug.panelstudio.container.ClickGUI;
+import com.lukflug.panelstudio.container.GUI;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -132,10 +132,10 @@ public abstract class MinecraftGUI extends GuiScreen {
 	}
 	
 	/**
-	 * Get the {@link ClickGUI} to be rendered.
+	 * Get the GUI to be rendered.
 	 * @return current ClickGUI
 	 */
-	protected abstract ClickGUI getGUI();
+	protected abstract GUI getGUI();
 	/**
 	 * Get current {@link GUIInterface}.
 	 * @return the current interface

@@ -1,6 +1,6 @@
 package com.lukflug.panelstudio.mc12;
 
-import com.lukflug.panelstudio.container.ClickGUI;
+import com.lukflug.panelstudio.container.GUI;
 import com.lukflug.panelstudio.hud.HUDClickGUI;
 
 import net.minecraft.client.Minecraft;
@@ -55,7 +55,7 @@ public abstract class MinecraftHUDGUI extends MinecraftGUI {
 	protected abstract HUDClickGUI getHUDGUI();
 
 	@Override
-	protected ClickGUI getGUI() {
+	protected GUI getGUI() {
 		return getHUDGUI();
 	}
 }
