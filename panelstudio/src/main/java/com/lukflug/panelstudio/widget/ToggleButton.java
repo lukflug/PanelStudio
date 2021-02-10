@@ -50,7 +50,7 @@ public class ToggleButton extends FocusableComponent {
 	@Override
 	public void render (Context context) {
 		super.render(context);
-		renderer.renderButton(context,title,hasFocus(context),toggle);
+		renderer.renderButton(context,getTitle(),hasFocus(context),toggle);
 	}
 	
 	@Override

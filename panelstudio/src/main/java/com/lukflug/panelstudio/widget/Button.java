@@ -30,7 +30,7 @@ public class Button extends FocusableComponent {
 	@Override
 	public void render (Context context) {
 		super.render(context);
-		renderer.renderButton(context,title,hasFocus(context),null);
+		renderer.renderButton(context,getTitle(),hasFocus(context),null);
 	}
 
 	@Override

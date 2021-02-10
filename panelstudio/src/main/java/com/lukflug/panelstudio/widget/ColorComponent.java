@@ -9,13 +9,13 @@ import com.lukflug.panelstudio.base.IToggleable;
 import com.lukflug.panelstudio.base.SimpleToggleable;
 import com.lukflug.panelstudio.setting.IColorSetting;
 import com.lukflug.panelstudio.theme.IButtonRenderer;
-import com.lukflug.panelstudio.theme.IColorScheme;
 import com.lukflug.panelstudio.theme.IContainerRenderer;
 import com.lukflug.panelstudio.theme.IPanelRenderer;
-import com.lukflug.panelstudio.theme.IRenderer;
+import com.lukflug.panelstudio.theme.ISliderRenderer;
 
 /**
  * Component representing a color-valued setting.
+ * TODO: Override main color!
  * @author lukflug
  */
 public class ColorComponent extends CollapsibleContainer {
@@ -23,22 +23,6 @@ public class ColorComponent extends CollapsibleContainer {
 	 * The setting in question.
 	 */
 	protected IColorSetting setting;
-	/**
-	 * Whether to render an alpha slider.
-	 */
-	protected final boolean alpha;
-	/**
-	 * Whether to render a rainbow button.
-	 */
-	protected final boolean rainbow;
-	/**
-	 * Custom {@link IColorScheme} that set the active color to the value of the setting.
-	 */
-	protected IColorScheme scheme,overrideScheme;
-	/**
-	 * {@link IToggleable} indicating whether to use RGB (false) or HSB (true).
-	 */
-	protected IToggleable colorModel;
 	
 	/**
 	 * Constructor.
@@ -52,14 +36,9 @@ public class ColorComponent extends CollapsibleContainer {
 	 * @param rainbow whether to render a rainbow slider
 	 * @param colorModel {@link IToggleable} indicating whether to use RGB (false) or HSB (true)
 	 */
-	public ColorComponent(IColorSetting setting, Animation animation, IPanelRenderer panelRenderer, IButtonRenderer<Void> titleRenderer, IButtonRenderer<IBoolean> buttonRenderer, IContainerRenderer sliderRenderer) {
-		super(setting.getDisplayName(),setting.getDescription(),setting.isVisible(),()->true,new SimpleToggleable(false),animation,panelRenderer,titleRenderer,sliderRenderer,null,null);
+	public ColorComponent (IColorSetting setting, Animation animation, IPanelRenderer panelRenderer, IButtonRenderer<Void> titleRenderer, IContainerRenderer containerRenderer, IButtonRenderer<IBoolean> buttonRenderer, ISliderRenderer sliderRenderer) {
+		super(setting.getDisplayName(),setting.getDescription(),setting.isVisible(),()->true,new SimpleToggleable(false),animation,panelRenderer,titleRenderer,containerRenderer,null,null);
 		this.setting=setting;
-		//this.alpha=alpha;
-		//this.rainbow=rainbow;
-		scheme=new ColorSettingScheme(null);
-		overrideScheme=new ColorSettingScheme(null);
-		//this.colorModel=colorModel;
 		addComponent(new ToggleButton("Rainbow",null,()->setting.allowsRainbow(),new IToggleable() {
 			@Override
 			public boolean isOn() {
@@ -71,22 +50,16 @@ public class ColorComponent extends CollapsibleContainer {
 				setting.setRainbow(!setting.getRainbow());
 			}
 		},buttonRenderer));
-		addComponent(new ColorSlider(componentRenderer,0));
-		addComponent(new ColorSlider(componentRenderer,1));
-		addComponent(new ColorSlider(componentRenderer,2));
-		if (alpha) addComponent(new ColorSlider(componentRenderer,3));
+		addComponent(new ColorSlider(()->true,sliderRenderer,0));
+		addComponent(new ColorSlider(()->true,sliderRenderer,1));
+		addComponent(new ColorSlider(()->true,sliderRenderer,2));
+		addComponent(new ColorSlider(()->setting.hasAlpha(),sliderRenderer,3));
 	}
 	
-	/**
-	 * Override the {@link IColorScheme} and render the container.
-	 */
 	@Override
 	public void render (Context context) {
-		renderer.overrideColorScheme(scheme);
 		super.render(context);
-		renderer.restoreColorScheme();
 	}
-	
 	
 	/**
 	 * Class to render the sliders in the color container.
@@ -100,33 +73,40 @@ public class ColorComponent extends CollapsibleContainer {
 		
 		/**
 		 * Constructor.
-		 * @param renderer the {@link IRenderer} for the component
-		 * @param value index of slider
+		 * @param visible the visiblity of the component
+		 * @param renderer the renderer to be used
+		 * @param value the index of the slider inside the color component
 		 */
-		public ColorSlider(IRenderer renderer, int value) {
-			super("",null,renderer);
+		public ColorSlider (IBoolean visible, ISliderRenderer renderer, int value) {
+			super("",null,visible,renderer);
 			this.value=value;
 		}
-		
-		/**
-		 * Override the {@link ColorScheme} and render the component with the caption containing the name of the component in the color model and the value for that component.
-		 */
+
 		@Override
 		public void render (Context context) {
-			title=getTitle(value)+(int)(getMax()*getValue());
-			//renderer.overrideColorScheme(overrideScheme);
 			super.render(context);
-			//renderer.restoreColorScheme();
+		}
+		
+		@Override
+		public String getTitle() {
+			switch (value) {
+			case 0:
+				return (setting.hasHSBModel()?"Hue":"Red");
+			case 1:
+				return (setting.hasHSBModel()?"Saturation":"Green");
+			case 2:
+				return (setting.hasHSBModel()?"Brightness":"Blue");
+			case 3:
+				return (setting.hasHSBModel()?"Opacity":"Alpha");
+			}
+			return "";
 		}
 
-		/**
-		 * Implementation for {@link Slider#getValue()}.
-		 */
 		@Override
 		protected double getValue() {
 			Color c=setting.getColor();
 			if (value<3) {
-				if (colorModel.isOn()) return Color.RGBtoHSB(c.getRed(),c.getGreen(),c.getBlue(),null)[value];
+				if (setting.hasHSBModel()) return Color.RGBtoHSB(c.getRed(),c.getGreen(),c.getBlue(),null)[value];
 				switch (value) {
 				case 0:
 					return c.getRed()/255.0;
@@ -139,30 +119,27 @@ public class ColorComponent extends CollapsibleContainer {
 			return c.getAlpha()/255.0;
 		}
 
-		/**
-		 * Implementation for {@link Slider#setValue(double)}.
-		 */
 		@Override
 		protected void setValue(double value) {
 			Color c=setting.getColor();
 			float[] color=Color.RGBtoHSB(c.getRed(),c.getGreen(),c.getBlue(),null);
 			switch (this.value) {
 			case 0:
-				if (colorModel.isOn()) c=Color.getHSBColor((float)value,color[1],color[2]);
+				if (setting.hasHSBModel()) c=Color.getHSBColor((float)value,color[1],color[2]);
 				else c=new Color((int)(255*value),c.getGreen(),c.getBlue());
-				if (alpha) setting.setValue(new Color(c.getRed(),c.getGreen(),c.getBlue(),setting.getColor().getAlpha()));
+				if (setting.hasAlpha()) setting.setValue(new Color(c.getRed(),c.getGreen(),c.getBlue(),setting.getColor().getAlpha()));
 				else setting.setValue(c);
 				break;
 			case 1:
-				if (colorModel.isOn()) c=Color.getHSBColor(color[0],(float)value,color[2]);
+				if (setting.hasHSBModel()) c=Color.getHSBColor(color[0],(float)value,color[2]);
 				else c=new Color(c.getRed(),(int)(255*value),c.getBlue());
-				if (alpha) setting.setValue(new Color(c.getRed(),c.getGreen(),c.getBlue(),setting.getColor().getAlpha()));
+				if (setting.hasAlpha()) setting.setValue(new Color(c.getRed(),c.getGreen(),c.getBlue(),setting.getColor().getAlpha()));
 				else setting.setValue(c);
 				break;
 			case 2:
-				if (colorModel.isOn()) c=Color.getHSBColor(color[0],color[1],(float)value);
+				if (setting.hasHSBModel()) c=Color.getHSBColor(color[0],color[1],(float)value);
 				else c=new Color(c.getRed(),c.getGreen(),(int)(255*value));
-				if (alpha) setting.setValue(new Color(c.getRed(),c.getGreen(),c.getBlue(),setting.getColor().getAlpha()));
+				if (setting.hasAlpha()) setting.setValue(new Color(c.getRed(),c.getGreen(),c.getBlue(),setting.getColor().getAlpha()));
 				else setting.setValue(c);
 				break;
 			case 3:
@@ -170,99 +147,13 @@ public class ColorComponent extends CollapsibleContainer {
 				break;
 			}
 		}
-		
-		/**
-		 * Get the caption of the component based on index and colorModel.
-		 * @param value the index of the slider
-		 * @return caption for the slider
-		 */
-		protected String getTitle (int value) {
-			switch (value) {
-			case 0:
-				return (colorModel.isOn()?"Hue:":"Red:")+" \u00A77";
-			case 1:
-				return (colorModel.isOn()?"Saturation:":"Green:")+" \u00A77";
-			case 2:
-				return (colorModel.isOn()?"Brightness:":"Blue:")+" \u00A77";
-			case 3:
-				return "Alpha: \u00A77";
-			}
-			return "";
-		}
-		
-		protected int getMax() {
-			if (!colorModel.isOn()) return 255;
-			else if (value==0) return 360;
-			else if (value<3) return 100;
-			else return 255;
-		}
-	}
-	
-	
-	/**
-	 * {@link IColorScheme} to override the active color to the current value of the color setting.
-	 * @author lukflug
-	 */
-	protected class ColorSettingScheme implements IColorScheme {
-		/**
-		 * {@link IColorScheme} to be overridden.
-		 */
-		IColorScheme scheme;
-		
-		/**
-		 * Constructor.
-		 * @param renderer the {@link IRenderer} to override
-		 */
-		public ColorSettingScheme (IRenderer renderer) {
-			scheme=renderer.getDefaultColorScheme();
-		}
-		
-		/**
-		 * Return the current color setting, instead of the active color defined by the scheme.
-		 */
-		@Override
-		public Color getActiveColor() {
-			return setting.getValue();
-		}
 
-		/**
-		 * Return the color defined by the scheme.
-		 */
 		@Override
-		public Color getInactiveColor() {
-			return scheme.getInactiveColor();
-		}
-
-		/**
-		 * Return the color defined by the scheme.
-		 */
-		@Override
-		public Color getBackgroundColor() {
-			return scheme.getBackgroundColor();
-		}
-
-		/**
-		 * Return the color defined by the scheme.
-		 */
-		@Override
-		public Color getOutlineColor() {
-			return scheme.getOutlineColor();
-		}
-
-		/**
-		 * Return the color defined by the scheme.
-		 */
-		@Override
-		public Color getFontColor() {
-			return scheme.getFontColor();
-		}
-
-		/**
-		 * Return the value defined by the scheme.
-		 */
-		@Override
-		public int getOpacity() {
-			return scheme.getOpacity();
+		protected String getDisplayState() {
+			int max=100;
+			if (!setting.hasHSBModel()) max=255;
+			else if (value==0) max=360;
+			return ""+(int)(getValue()*max);
 		}
 	}
 }

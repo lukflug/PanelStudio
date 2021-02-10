@@ -33,7 +33,7 @@ public class KeybindComponent extends FocusableComponent {
 	@Override
 	public void render (Context context) {
 		super.render(context);
-		renderer.renderButton(context,title,hasFocus(context),keybind.getKeyName());
+		renderer.renderButton(context,getTitle(),hasFocus(context),keybind.getKeyName());
 	}
 	
 	@Override

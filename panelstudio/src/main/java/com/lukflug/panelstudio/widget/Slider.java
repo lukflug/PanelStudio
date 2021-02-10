@@ -47,7 +47,7 @@ public abstract class Slider extends FocusableComponent {
 		if (!context.getInterface().getButton(IInterface.LBUTTON)) {
 			attached=false;
 		}
-		renderer.renderSlider(context,title,getDisplayState(),hasFocus(context),getValue());
+		renderer.renderSlider(context,getTitle(),getDisplayState(),hasFocus(context),getValue());
 	}
 	
 	@Override
