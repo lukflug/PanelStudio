@@ -4,20 +4,20 @@ buildscript {
 		jcenter()
 		maven {
 			name = "forge"
-			url = "http://files.minecraftforge.net/maven"
+			url = "https://files.minecraftforge.net/maven"
 		}
 	}
 	dependencies {
-		classpath "net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT"
+		classpath "net.minecraftforge.gradle:ForgeGradle:${forgeGradle2}"
 	}
 }
 
 apply plugin: "net.minecraftforge.gradle.forge"
 
 minecraft {
-	version="1.8.9-11.15.1.1722"
-	mappings="stable_22"
-	runDir="run"
+	mappings = project.mappings8forge
+	version = project.minecraft8forge
+	runDir = "run"
 }
 
 dependencies {

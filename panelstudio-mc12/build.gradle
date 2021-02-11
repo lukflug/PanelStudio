@@ -4,23 +4,22 @@ buildscript {
 		jcenter()
 		maven {
 			name = "forge"
-			url = "http://files.minecraftforge.net/maven"
+			url = "https://files.minecraftforge.net/maven"
 		}
 	}
 	dependencies {
-		classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
+		classpath "net.minecraftforge.gradle:ForgeGradle:${forgeGradle3}"
 	}
 }
 
-apply plugin: "net.minecraftforge.gradle.forge"
+apply plugin: "net.minecraftforge.gradle"
 
 minecraft {
-	version="1.12.2-14.23.5.2768"
-	mappings="snapshot_20180814"
-	runDir="run"
+	mappings = project.mappings12
 }
 
 dependencies {
+	minecraft "net.minecraftforge:forge:${minecraft12}"
 	compile project(":panelstudio")
 }
 
