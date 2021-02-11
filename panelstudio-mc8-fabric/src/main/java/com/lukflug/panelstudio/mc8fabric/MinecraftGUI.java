@@ -1,12 +1,15 @@
 package com.lukflug.panelstudio.mc8fabric;
 
-import com.lukflug.panelstudio.ClickGUI;
-import com.lukflug.panelstudio.Interface;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
+import java.awt.Point;
+
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
-import java.awt.*;
+import com.lukflug.panelstudio.base.IInterface;
+import com.lukflug.panelstudio.container.GUI;
+
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 
 /**
  * Implementation of Minecraft's GuiScreen that renders a PanelStudio GUI.
@@ -81,10 +84,10 @@ public abstract class MinecraftGUI extends Screen {
 	public void mouseClicked(int mouseX, int mouseY, int clickedButton) {
 		mouse=new Point(mouseX,mouseY);
 		switch (clickedButton) {
-		case Interface.LBUTTON:
+		case IInterface.LBUTTON:
 			lButton=true;
 			break;
-		case Interface.RBUTTON:
+		case IInterface.RBUTTON:
 			rButton=true;
 			break;
 		}
@@ -101,10 +104,10 @@ public abstract class MinecraftGUI extends Screen {
 	public void mouseReleased(int mouseX, int mouseY, int releaseButton) {
 		mouse=new Point(mouseX,mouseY);
 		switch (releaseButton) {
-		case Interface.LBUTTON:
+		case IInterface.LBUTTON:
 			lButton=false;
 		break;
-		case Interface.RBUTTON:
+		case IInterface.RBUTTON:
 			rButton=false;
 			break;
 		}
@@ -118,7 +121,7 @@ public abstract class MinecraftGUI extends Screen {
 	 */
 	@Override
 	protected void keyPressed(char typedChar, int keyCode) {
-		if (keyCode == 1) exitGUI();
+		if (keyCode == Keyboard.KEY_ESCAPE) exitGUI();
 		else getGUI().handleKey(keyCode);
 	}
 
@@ -132,10 +135,10 @@ public abstract class MinecraftGUI extends Screen {
 	}
 	
 	/**
-	 * Get the {@link ClickGUI} to be rendered.
+	 * Get the GUI to be rendered.
 	 * @return current ClickGUI
 	 */
-	protected abstract ClickGUI getGUI();
+	protected abstract GUI getGUI();
 	/**
 	 * Get current {@link GUIInterface}.
 	 * @return the current interface
@@ -159,9 +162,9 @@ public abstract class MinecraftGUI extends Screen {
 		@Override
 		public boolean getButton(int button) {
 			switch (button) {
-			case Interface.LBUTTON:
+			case IInterface.LBUTTON:
 				return lButton;
-			case Interface.RBUTTON:
+			case IInterface.RBUTTON:
 				return rButton;
 			}
 			return false;

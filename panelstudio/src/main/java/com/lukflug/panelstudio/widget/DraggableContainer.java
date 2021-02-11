@@ -9,20 +9,56 @@ import com.lukflug.panelstudio.component.DraggableComponent;
 import com.lukflug.panelstudio.component.FixedComponent;
 import com.lukflug.panelstudio.component.IComponent;
 import com.lukflug.panelstudio.component.IFixedComponent;
+import com.lukflug.panelstudio.container.IContainer;
 import com.lukflug.panelstudio.container.VerticalContainer;
 import com.lukflug.panelstudio.theme.IButtonRenderer;
 import com.lukflug.panelstudio.theme.IContainerRenderer;
 import com.lukflug.panelstudio.theme.IEmptySpaceRenderer;
 import com.lukflug.panelstudio.theme.IPanelRenderer;
 import com.lukflug.panelstudio.theme.IScrollBarRenderer;
+import com.lukflug.panelstudio.theme.ITheme;
 
 /**
  * Class for a {@link IFixedComponent} that is also a {@link CollapsibleContainer} (i.e. a Panel), that can be dragged by the user using the mouse.
  * @author lukflug
  */
-public class DraggableContainer extends DraggableComponent {
+public class DraggableContainer extends DraggableComponent implements IContainer<IComponent> {
 	protected final CollapsibleContainer panel;
 	
+	/**
+	 * Constructor using theme.
+	 * @param title the title of the panel
+	 * @param description the description of the panel
+	 * @param visible the visibility of the panel
+	 * @param active whether the panel is active
+	 * @param open the toggleable to be used to open and close the panel
+	 * @param animation the animation for opening and closing the panel
+	 * @param theme the theme to be used
+	 * @param position the initial position
+	 * @param width the width of the panel
+	 * @param savesState whether the panel saves the state
+	 */
+	public DraggableContainer (String title, String description, IBoolean visible, IBoolean active, IToggleable open, Animation animation, ITheme theme, Point position, int width, boolean savesState) {
+		this(title,description,visible,active,open,animation,theme.getPanelRenderer(true),theme.getTitleRenderer(true),theme.getContainerRednerer(true),theme.getScrollBarRenderer(),theme.getEmptySpaceRenderer(),position,width,savesState);
+	}
+	
+	/**
+	 * Constructor.
+	 * @param title the title of the panel
+	 * @param description the description of the panel
+	 * @param visible the visibility of the panel
+	 * @param active whether the panel is active
+	 * @param open the toggleable to be used to open and close the panel
+	 * @param animation the animation for opening and closing the panel
+	 * @param panelRenderer the renderer for the panel overlay
+	 * @param titleRenderer the renderer for the panel title
+	 * @param containerRenderer the renderer for the panel content container
+	 * @param scrollRenderer the renderer for the scroll bars
+	 * @param emptyRenderer the renderer for the scroll corner
+	 * @param position
+	 * @param width
+	 * @param savesState
+	 */
 	public DraggableContainer (String title, String description, IBoolean visible, IBoolean active, IToggleable open, Animation animation, IPanelRenderer panelRenderer, IButtonRenderer<Void> titleRenderer, IContainerRenderer containerRenderer, IScrollBarRenderer scrollRenderer, IEmptySpaceRenderer emptyRenderer, Point position, int width, boolean savesState) {
 		super(null);
 		panel=new CollapsibleContainer(getWrappedDragComponent(new Button(title,description,visible,titleRenderer)),new VerticalContainer(title,description,visible,containerRenderer),active,open,animation,panelRenderer,scrollRenderer,emptyRenderer) {
@@ -36,33 +72,23 @@ public class DraggableContainer extends DraggableComponent {
 				return DraggableContainer.this.getComponentWidth(scrollWidth);
 			}
 		};
-		this.fixedComponent=new FixedComponent(panel,position,width,open,savesState);
+		this.fixedComponent=new FixedComponent(panel,position,width,panel.getToggle(),savesState);
 		this.component=fixedComponent;
 	}
 
-	/**
-	 * Add component to container.
-	 * @param component the component to be added
-	 */
-	public void addComponent (IComponent component) {
-		panel.addComponent(component);
+	@Override
+	public boolean addComponent (IComponent component) {
+		return panel.addComponent(component);
 	}
 	
-	/**
-	 * Add component to container with visibility.
-	 * @param component the component to be added
-	 * @param visible the visibility of the component
-	 */
-	public void addComponent (IComponent component, IBoolean visible) {
-		panel.addComponent(component,visible);
+	@Override
+	public boolean addComponent (IComponent component, IBoolean visible) {
+		return panel.addComponent(component,visible);
 	}
 	
-	/**
-	 * Remove component from container.
-	 * @param component the component to be removed
-	 */
-	public void removeComponent (IComponent component) {
-		panel.removeComponent(component);
+	@Override
+	public boolean removeComponent (IComponent component) {
+		return panel.removeComponent(component);
 	}
 	
 	/**

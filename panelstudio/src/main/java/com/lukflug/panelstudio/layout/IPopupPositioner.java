@@ -9,6 +9,7 @@ import com.lukflug.panelstudio.base.IInterface;
  * Interface representing how pop-ups should be positioned.
  * @author lukflug
  */
+@FunctionalInterface
 public interface IPopupPositioner {
 	/**
 	 * Get position.

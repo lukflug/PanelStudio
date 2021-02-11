@@ -3,7 +3,7 @@ package com.lukflug.panelstudio.mc16;
 import java.awt.Point;
 
 import com.lukflug.panelstudio.base.IInterface;
-import com.lukflug.panelstudio.container.ClickGUI;
+import com.lukflug.panelstudio.container.GUI;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -159,10 +159,10 @@ public abstract class MinecraftGUI extends Screen {
 	}
 	
 	/**
-	 * Get the {@link ClickGUI} to be rendered.
+	 * Get the GUI to be rendered.
 	 * @return current ClickGUI
 	 */
-	protected abstract ClickGUI getGUI();
+	protected abstract GUI getGUI();
 	/**
 	 * Get current {@link GUIInterface}.
 	 * @return the current interface

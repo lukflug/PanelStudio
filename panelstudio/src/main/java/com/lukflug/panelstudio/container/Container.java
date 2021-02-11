@@ -16,7 +16,7 @@ import com.lukflug.panelstudio.theme.IContainerRenderer;
  * @author lukflug
  * @param <T> the type of components that are members of this container
  */
-public abstract class Container<T extends IComponent> extends ComponentBase {
+public abstract class Container<T extends IComponent> extends ComponentBase implements IContainer<T> {
 	/**
 	 * List of components.
 	 */
@@ -38,11 +38,7 @@ public abstract class Container<T extends IComponent> extends ComponentBase {
 		this.renderer=renderer;
 	}
 	
-	/**
-	 * Add component to GUI.
-	 * @param component the component to be added
-	 * @return whether the component was added
-	 */
+	@Override
 	public boolean addComponent (T component) {
 		if (getComponentState(component)==null) {
 			components.add(new ComponentState(component,getDefaultVisibility()));
@@ -51,12 +47,7 @@ public abstract class Container<T extends IComponent> extends ComponentBase {
 		return false;
 	}
 	
-	/**
-	 * Add component to GUI.
-	 * @param component the component to be added
-	 * @param visible the external visibility for the component
-	 * @return whether the component was added
-	 */
+	@Override
 	public boolean addComponent (T component, IBoolean visible) {
 		if (getComponentState(component)==null) {
 			components.add(new ComponentState(component,visible));
@@ -65,11 +56,7 @@ public abstract class Container<T extends IComponent> extends ComponentBase {
 		return false;
 	}
 	
-	/**
-	 * Remove component from GUI.
-	 * @param component the component to be removed
-	 * @return whether the component was removed
-	 */
+	@Override
 	public boolean removeComponent (T component) {
 		ComponentState state=getComponentState(component);
 		if (state!=null) {

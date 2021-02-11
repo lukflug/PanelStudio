@@ -16,7 +16,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
-import com.lukflug.panelstudio.Interface;
+import com.lukflug.panelstudio.base.IInterface;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.minecraft.client.MinecraftClient;
@@ -32,7 +32,7 @@ import net.minecraft.util.Identifier;
  * @author NirvanaNevermind
  * @author lukflug
  */
-public abstract class GLInterface implements Interface {
+public abstract class GLInterface implements IInterface {
 	/**
 	 * Buffer to store current modelview matrix.
 	 */

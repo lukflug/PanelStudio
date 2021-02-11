@@ -1,7 +1,6 @@
 package com.lukflug.panelstudio.theme;
 
 import java.awt.Color;
-import java.util.stream.Stream;
 
 /**
  * Interface to provide a means for GUI methods to access color setting set by the user.
@@ -9,11 +8,13 @@ import java.util.stream.Stream;
  */
 public interface IColorScheme {
 	/**
-	 * Called by the theme to provide the list of color settings needed
-	 * @param theme the theme object used
-	 * @param settings
+	 * Called by theme to create a color setting.
+	 * @param theme the theme in question
+	 * @param setting the setting name
+	 * @param allowsRainbow whether this setting should enable rainbows
+	 * @param hasAlpha whether this setting should enable alpha
 	 */
-	public void createSettings (ITheme theme, Stream<String> settings);
+	public void createSetting (ITheme theme, String setting, boolean allowsRainbow, boolean hasAlpha);
 	
 	/**
 	 * Get value of color setting.
@@ -21,10 +22,4 @@ public interface IColorScheme {
 	 * @return the current value for that setting
 	 */
 	public Color getColor (String setting);
-	
-	/**
-	 * Get value of opacity setting.
-	 * @return the current value for opacity
-	 */
-	public int getOpacity();
 }

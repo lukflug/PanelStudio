@@ -15,7 +15,7 @@ import javax.imageio.ImageIO;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
-import com.lukflug.panelstudio.Interface;
+import com.lukflug.panelstudio.base.IInterface;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
@@ -30,7 +30,7 @@ import net.minecraft.util.ResourceLocation;
  * Implementation of Interface for OpenGL in minecraft.
  * @author lukflug
  */
-public abstract class GLInterface implements Interface {
+public abstract class GLInterface implements IInterface {
 	/**
 	 * Buffer to store current modelview matrix.
 	 */

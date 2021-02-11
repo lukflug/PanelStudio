@@ -2,10 +2,11 @@ package com.lukflug.panelstudio.mc8forge;
 
 import java.awt.Point;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
-import com.lukflug.panelstudio.ClickGUI;
-import com.lukflug.panelstudio.Interface;
+import com.lukflug.panelstudio.base.IInterface;
+import com.lukflug.panelstudio.container.GUI;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -81,10 +82,10 @@ public abstract class MinecraftGUI extends GuiScreen {
 	public void mouseClicked(int mouseX, int mouseY, int clickedButton) {
 		mouse=new Point(mouseX,mouseY);
 		switch (clickedButton) {
-		case Interface.LBUTTON:
+		case IInterface.LBUTTON:
 			lButton=true;
 			break;
-		case Interface.RBUTTON:
+		case IInterface.RBUTTON:
 			rButton=true;
 			break;
 		}
@@ -101,10 +102,10 @@ public abstract class MinecraftGUI extends GuiScreen {
 	public void mouseReleased(int mouseX, int mouseY, int releaseButton) {
 		mouse=new Point(mouseX,mouseY);
 		switch (releaseButton) {
-		case Interface.LBUTTON:
+		case IInterface.LBUTTON:
 			lButton=false;
 		break;
-		case Interface.RBUTTON:
+		case IInterface.RBUTTON:
 			rButton=false;
 			break;
 		}
@@ -118,7 +119,7 @@ public abstract class MinecraftGUI extends GuiScreen {
 	 */
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) {
-		if (keyCode == 1) exitGUI();
+		if (keyCode == Keyboard.KEY_ESCAPE) exitGUI();
 		else getGUI().handleKey(keyCode);
 	}
 
@@ -132,10 +133,10 @@ public abstract class MinecraftGUI extends GuiScreen {
 	}
 	
 	/**
-	 * Get the {@link ClickGUI} to be rendered.
+	 * Get the GUI to be rendered.
 	 * @return current ClickGUI
 	 */
-	protected abstract ClickGUI getGUI();
+	protected abstract GUI getGUI();
 	/**
 	 * Get current {@link GUIInterface}.
 	 * @return the current interface
@@ -159,9 +160,9 @@ public abstract class MinecraftGUI extends GuiScreen {
 		@Override
 		public boolean getButton(int button) {
 			switch (button) {
-			case Interface.LBUTTON:
+			case IInterface.LBUTTON:
 				return lButton;
-			case Interface.RBUTTON:
+			case IInterface.RBUTTON:
 				return rButton;
 			}
 			return false;

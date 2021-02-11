@@ -1,5 +1,6 @@
 package com.lukflug.panelstudio.widget;
 
+import com.lukflug.panelstudio.base.AnimatedToggleable;
 import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IBoolean;
@@ -19,6 +20,11 @@ import com.lukflug.panelstudio.theme.IPanelRenderer;
  */
 public class Panel extends FocusableComponentProxy {
 	/**
+	 * The current collapsible component.
+	 */
+	protected CollapsibleComponent collapsible;
+	
+	/**
 	 * Creates a generic panel.
 	 * @param title the title component of the panel
 	 * @param content the content of the panel
@@ -37,7 +43,7 @@ public class Panel extends FocusableComponentProxy {
 				panelRenderer.renderPanelOverlay(context,hasFocus(context),active.isOn());
 			}
 		};
-		CollapsibleComponent collapsible=new CollapsibleComponent(content,open,animation);
+		collapsible=new CollapsibleComponent(content,open,animation);
 		container.addComponent(new ComponentProxy(title) {
 			@Override
 			public void handleButton (Context context, int button) {
@@ -49,5 +55,13 @@ public class Panel extends FocusableComponentProxy {
 		});
 		container.addComponent(collapsible);
 		this.component=container;
+	}
+	
+	/**
+	 * Returns the current toggleable used.
+	 * @return the current toggle
+	 */
+	public AnimatedToggleable getToggle() {
+		return collapsible.getToggle();
 	}
 }

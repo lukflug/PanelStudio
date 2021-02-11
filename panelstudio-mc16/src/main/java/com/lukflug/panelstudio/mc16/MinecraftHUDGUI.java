@@ -1,7 +1,9 @@
 package com.lukflug.panelstudio.mc16;
 
-import com.lukflug.panelstudio.container.ClickGUI;
-import com.lukflug.panelstudio.hud.HUDClickGUI;
+import org.lwjgl.glfw.GLFW;
+import org.lwjgl.input.Keyboard;
+
+import com.lukflug.panelstudio.container.GUI;
 
 import net.minecraft.client.MinecraftClient;
 
@@ -45,7 +47,7 @@ public abstract class MinecraftHUDGUI extends MinecraftGUI {
 	 * @param scancode the key scancode
 	 */
 	public void handleKeyEvent (int scancode) {
-		if (scancode!=1 && !getHUDGUI().isOn() && !hudEditor) getHUDGUI().handleKey(scancode);
+		if (scancode!=GLFW.GLFW_KEY_ESCAPE && !getHUDGUI().isOn() && !hudEditor) getHUDGUI().handleKey(scancode);
 	}
 	
 	/**
@@ -55,7 +57,7 @@ public abstract class MinecraftHUDGUI extends MinecraftGUI {
 	protected abstract HUDClickGUI getHUDGUI();
 
 	@Override
-	protected ClickGUI getGUI() {
+	protected GUI getGUI() {
 		return getHUDGUI();
 	}
 }

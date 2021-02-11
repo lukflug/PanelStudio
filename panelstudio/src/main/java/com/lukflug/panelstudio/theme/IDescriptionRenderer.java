@@ -8,6 +8,7 @@ import com.lukflug.panelstudio.base.IInterface;
  * Interface used to render descriptions.
  * @author lukflug
  */
+@FunctionalInterface
 public interface IDescriptionRenderer {
 	/**
 	 * Render a description.

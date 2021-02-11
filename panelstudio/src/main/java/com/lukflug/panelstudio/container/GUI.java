@@ -3,6 +3,7 @@ package com.lukflug.panelstudio.container;
 import java.awt.Point;
 
 import com.lukflug.panelstudio.base.Context;
+import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.component.IFixedComponent;
 import com.lukflug.panelstudio.config.IConfigList;
@@ -14,7 +15,7 @@ import com.lukflug.panelstudio.theme.IDescriptionRenderer;
  * All components should be a direct or indirect child of this object.
  * @author lukflug
  */
-public class GUI {
+public class GUI implements IContainer<IFixedComponent> {
 	/**
 	 * Container containing all components.
 	 */
@@ -45,12 +46,19 @@ public class GUI {
 		container=new FixedContainer("GUI",null,()->true,null,false);
 	}
 	
-	/**
-	 * Add a component to the GUI.
-	 * @param component component to be added
-	 */
-	public void addComponent (IFixedComponent component) {
-		container.addComponent(component);
+	@Override
+	public boolean addComponent (IFixedComponent component) {
+		return container.addComponent(component);
+	}
+
+	@Override
+	public boolean addComponent(IFixedComponent component, IBoolean visible) {
+		return container.addComponent(component,visible);
+	}
+
+	@Override
+	public boolean removeComponent(IFixedComponent component) {
+		return container.removeComponent(component);
 	}
 	
 	/**

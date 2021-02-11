@@ -1,5 +1,7 @@
 package com.lukflug.panelstudio.theme;
 
+import java.awt.Color;
+
 import com.lukflug.panelstudio.base.IBoolean;
 
 /**
@@ -7,6 +9,12 @@ import com.lukflug.panelstudio.base.IBoolean;
  * @author lukflug
  */
 public interface ITheme {
+	/**
+	 * Returns the renderer for tooltip descriptions.
+	 * @return the description renderer
+	 */
+	public IDescriptionRenderer getDescriptionRenderer();
+	
 	/**
 	 * Returns the renderer for the panel title.
 	 * @param panel whether this is the root panel or not
@@ -69,4 +77,37 @@ public interface ITheme {
 	 * @return the slider renderer
 	 */
 	public ISliderRenderer getSliderRenderer();
+	
+	/**
+	 * Returns the main color of a title bar.
+	 * @param focus the focus state for the component
+	 * @param active whether the component is active or inactive
+	 * @return the main color
+	 */
+	public Color getMainColor (boolean focus, boolean active);
+	
+	/**
+	 * Returns the standard background color.
+	 * @param focus the focus state for the component
+	 * @return the background color
+	 */
+	public Color getBackgroundColor (boolean focus);
+	
+	/**
+	 * Returns the font color.
+	 * @param focus the focus state for the component
+	 * @return the font color
+	 */
+	public Color getFontColor (boolean focus);
+	
+	/**
+	 * Override the main color.
+	 * @param color the color to override
+	 */
+	public void overrideMainColor (Color color);
+	
+	/**
+	 * Restore the main color.
+	 */
+	public void restoreMainColor();
 }

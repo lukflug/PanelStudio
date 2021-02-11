@@ -8,10 +8,8 @@ import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IToggleable;
 import com.lukflug.panelstudio.base.SimpleToggleable;
 import com.lukflug.panelstudio.setting.IColorSetting;
-import com.lukflug.panelstudio.theme.IButtonRenderer;
-import com.lukflug.panelstudio.theme.IContainerRenderer;
-import com.lukflug.panelstudio.theme.IPanelRenderer;
 import com.lukflug.panelstudio.theme.ISliderRenderer;
+import com.lukflug.panelstudio.theme.ITheme;
 
 /**
  * Component representing a color-valued setting.
@@ -23,6 +21,10 @@ public class ColorComponent extends CollapsibleContainer {
 	 * The setting in question.
 	 */
 	protected IColorSetting setting;
+	/**
+	 * The theme to use.
+	 */
+	protected ITheme theme;
 	
 	/**
 	 * Constructor.
@@ -36,9 +38,10 @@ public class ColorComponent extends CollapsibleContainer {
 	 * @param rainbow whether to render a rainbow slider
 	 * @param colorModel {@link IToggleable} indicating whether to use RGB (false) or HSB (true)
 	 */
-	public ColorComponent (IColorSetting setting, Animation animation, IPanelRenderer panelRenderer, IButtonRenderer<Void> titleRenderer, IContainerRenderer containerRenderer, IButtonRenderer<IBoolean> buttonRenderer, ISliderRenderer sliderRenderer) {
-		super(setting.getDisplayName(),setting.getDescription(),setting.isVisible(),()->true,new SimpleToggleable(false),animation,panelRenderer,titleRenderer,containerRenderer,null,null);
+	public ColorComponent (IColorSetting setting, Animation animation, ITheme theme) {
+		super(setting.getDisplayName(),setting.getDescription(),setting.isVisible(),()->true,new SimpleToggleable(false),animation,theme);
 		this.setting=setting;
+		this.theme=theme;
 		addComponent(new ToggleButton("Rainbow",null,()->setting.allowsRainbow(),new IToggleable() {
 			@Override
 			public boolean isOn() {
@@ -49,16 +52,18 @@ public class ColorComponent extends CollapsibleContainer {
 			public void toggle() {
 				setting.setRainbow(!setting.getRainbow());
 			}
-		},buttonRenderer));
-		addComponent(new ColorSlider(()->true,sliderRenderer,0));
-		addComponent(new ColorSlider(()->true,sliderRenderer,1));
-		addComponent(new ColorSlider(()->true,sliderRenderer,2));
-		addComponent(new ColorSlider(()->setting.hasAlpha(),sliderRenderer,3));
+		},theme.getToggleButtonRenderer()));
+		addComponent(new ColorSlider(()->true,theme.getSliderRenderer(),0));
+		addComponent(new ColorSlider(()->true,theme.getSliderRenderer(),1));
+		addComponent(new ColorSlider(()->true,theme.getSliderRenderer(),2));
+		addComponent(new ColorSlider(()->setting.hasAlpha(),theme.getSliderRenderer(),3));
 	}
 	
 	@Override
 	public void render (Context context) {
+		theme.overrideMainColor(setting.getValue());
 		super.render(context);
+		theme.restoreMainColor();
 	}
 	
 	/**
@@ -80,11 +85,6 @@ public class ColorComponent extends CollapsibleContainer {
 		public ColorSlider (IBoolean visible, ISliderRenderer renderer, int value) {
 			super("",null,visible,renderer);
 			this.value=value;
-		}
-
-		@Override
-		public void render (Context context) {
-			super.render(context);
 		}
 		
 		@Override

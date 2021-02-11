@@ -5,7 +5,7 @@ import com.lukflug.panelstudio.base.Context;
 /**
  * Interface abstracting the rendering of a button.
  * @author lukflug
- * @param T type representing state of button
+ * @param <T> type representing state of button
  */
 public interface IButtonRenderer<T> {
 	/**

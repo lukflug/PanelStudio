@@ -2,6 +2,7 @@ package com.lukflug.panelstudio.mc12;
 
 import java.awt.Point;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import com.lukflug.panelstudio.base.IInterface;
@@ -118,7 +119,7 @@ public abstract class MinecraftGUI extends GuiScreen {
 	 */
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) {
-		if (keyCode == 1) exitGUI();
+		if (keyCode == Keyboard.KEY_ESCAPE) exitGUI();
 		else getGUI().handleKey(keyCode);
 	}
 

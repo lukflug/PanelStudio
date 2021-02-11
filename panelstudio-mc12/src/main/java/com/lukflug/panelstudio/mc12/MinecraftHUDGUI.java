@@ -1,5 +1,7 @@
 package com.lukflug.panelstudio.mc12;
 
+import org.lwjgl.input.Keyboard;
+
 import com.lukflug.panelstudio.container.GUI;
 import com.lukflug.panelstudio.hud.HUDClickGUI;
 
@@ -45,7 +47,7 @@ public abstract class MinecraftHUDGUI extends MinecraftGUI {
 	 * @param scancode the key scancode
 	 */
 	public void handleKeyEvent (int scancode) {
-		if (scancode!=1 && !getHUDGUI().isOn() && !hudEditor) getHUDGUI().handleKey(scancode);
+		if (scancode!=Keyboard.KEY_ESCAPE && !getHUDGUI().isOn() && !hudEditor) getHUDGUI().handleKey(scancode);
 	}
 	
 	/**

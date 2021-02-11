@@ -8,6 +8,10 @@ import com.lukflug.panelstudio.base.IBoolean;
  */
 public abstract class ThemeBase implements ITheme {
 	/**
+	 * The description renderer.
+	 */
+	protected IDescriptionRenderer descriptionRenderer;
+	/**
 	 * The title renderers.
 	 */
 	protected IButtonRenderer<Void> titleRenderer,panelTitleRenderer;
@@ -47,6 +51,11 @@ public abstract class ThemeBase implements ITheme {
 	 * The slider renderer.
 	 */
 	protected ISliderRenderer sliderRenderer;
+	
+	@Override
+	public IDescriptionRenderer getDescriptionRenderer() {
+		return descriptionRenderer;
+	}
 	
 	@Override
 	public IButtonRenderer<Void> getTitleRenderer(boolean panel) {
@@ -100,5 +109,4 @@ public abstract class ThemeBase implements ITheme {
 	public ISliderRenderer getSliderRenderer() {
 		return sliderRenderer;
 	}
-
 }
