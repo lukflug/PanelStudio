@@ -30,6 +30,11 @@ publishing {
 			pom {
 				name = "PanelStudio-MC8-Forge"
 				description = "A supplement to PanelStudio desgined for Minecraft Forge 1.8.9."
+				developers {
+					developer {
+						id = "NirvanaNevermind"
+					}
+				}
 			}
 		}
 	}

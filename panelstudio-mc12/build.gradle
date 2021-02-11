@@ -47,4 +47,4 @@ task copyJavadoc(type: Copy) {
     into "${projectDir}/../../lukflug.github.io/javadoc/panelstudio/${version}"
 }
 
-publish.dependsOn(copyJavadoc)
+//publish.dependsOn(copyJavadoc)
