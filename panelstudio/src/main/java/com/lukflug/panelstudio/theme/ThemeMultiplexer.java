@@ -14,7 +14,8 @@ public abstract class ThemeMultiplexer extends ThemeBase {
 	/**
 	 * Initializes the renderer fields.
 	 */
-	public ThemeMultiplexer() {
+	public ThemeMultiplexer (IColorScheme scheme) {
+		super(scheme);
 		IDescriptionRendererProxy descriptionRenderer=()->getTheme().getDescriptionRenderer();
 		IButtonRendererProxy<Void> titleRenderer=()->getTheme().getTitleRenderer(false);
 		IButtonRendererProxy<Void> panelTitleRenderer=()->getTheme().getTitleRenderer(true);

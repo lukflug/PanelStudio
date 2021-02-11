@@ -3,12 +3,19 @@ package com.lukflug.panelstudio.theme;
 import java.awt.Color;
 
 import com.lukflug.panelstudio.base.IBoolean;
+import com.lukflug.panelstudio.base.IInterface;
 
 /**
  * Interface representing a GUI theme (i.e. skin).
  * @author lukflug
  */
 public interface ITheme {
+	/**
+	 * Function to be called in order to load images.
+	 * @param inter the interface to use
+	 */
+	public void loadAssets (IInterface inter);
+	
 	/**
 	 * Returns the renderer for tooltip descriptions.
 	 * @return the description renderer

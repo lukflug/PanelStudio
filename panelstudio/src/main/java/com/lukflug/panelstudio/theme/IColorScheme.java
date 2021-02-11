@@ -10,16 +10,17 @@ public interface IColorScheme {
 	/**
 	 * Called by theme to create a color setting.
 	 * @param theme the theme in question
-	 * @param setting the setting name
-	 * @param allowsRainbow whether this setting should enable rainbows
+	 * @param name the setting name
+	 * @param description the setting description
 	 * @param hasAlpha whether this setting should enable alpha
+	 * @param allowsRainbow whether this setting should enable rainbows
 	 */
-	public void createSetting (ITheme theme, String setting, boolean allowsRainbow, boolean hasAlpha);
+	public void createSetting (ITheme theme, String name, String description, boolean hasAlpha, boolean allowsRainbow);
 	
 	/**
 	 * Get value of color setting.
-	 * @param setting the setting name
+	 * @param name the setting name
 	 * @return the current value for that setting
 	 */
-	public Color getColor (String setting);
+	public Color getColor (String name);
 }

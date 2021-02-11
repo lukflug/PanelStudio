@@ -1,12 +1,23 @@
 package com.lukflug.panelstudio.theme;
 
+import java.awt.Color;
+
 import com.lukflug.panelstudio.base.IBoolean;
+import com.lukflug.panelstudio.base.IInterface;
 
 /**
  * Base class for themes.
  * @author lukflug
  */
 public abstract class ThemeBase implements ITheme {
+	/**
+	 * The color scheme.
+	 */
+	protected final IColorScheme scheme;
+	/**
+	 * The overridden main color.
+	 */
+	private Color overrideColor=null;
 	/**
 	 * The description renderer.
 	 */
@@ -51,6 +62,14 @@ public abstract class ThemeBase implements ITheme {
 	 * The slider renderer.
 	 */
 	protected ISliderRenderer sliderRenderer;
+	
+	public ThemeBase (IColorScheme scheme) {
+		this.scheme=scheme;
+	}
+	
+	@Override
+	public void loadAssets (IInterface inter) {
+	}
 	
 	@Override
 	public IDescriptionRenderer getDescriptionRenderer() {
@@ -109,4 +128,29 @@ public abstract class ThemeBase implements ITheme {
 	public ISliderRenderer getSliderRenderer() {
 		return sliderRenderer;
 	}
+	
+	@Override
+	public void overrideMainColor (Color color) {
+		overrideColor=color;
+	}
+	
+	@Override
+	public void restoreMainColor() {
+		overrideColor=null;
+	}
+	
+	/**
+	 * Get overridden main color.
+	 * @return the main color
+	 */
+	protected Color getMainColor() {
+		if (overrideColor==null) return getDefaultColor();
+		else return overrideColor;
+	}
+	
+	/**
+	 * Get default main color.
+	 * @return the default color
+	 */
+	protected abstract Color getDefaultColor();
 }
