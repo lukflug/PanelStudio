@@ -53,6 +53,11 @@ publishing {
 			pom {
 				name = "PanelStudio-MC8-Fabric"
 				description = "A supplement to PanelStudio desgined for Legacy Fabric 1.8.9."
+				developers {
+					developer {
+						id = "NirvanaNevermind"
+					}
+				}
 			}
 		}
 	}
