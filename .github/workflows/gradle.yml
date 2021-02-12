@@ -20,3 +20,7 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
+    - name: Upload package
+      uses: actions/upload-artifact@v2
+      with:
+        path: panelstudio*/build/libs/panelstudio-*.jar
