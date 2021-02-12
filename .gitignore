@@ -41,10 +41,8 @@ buildNumber.properties
 bin/
 
 # Gradle
+!gradle-wrapper.jar
 .gradle/
 build/
-gradle/
-gradlew
-gradlew.bat
 *.launch
 run/
