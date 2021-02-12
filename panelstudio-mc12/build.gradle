@@ -15,7 +15,7 @@ buildscript {
 apply plugin: "net.minecraftforge.gradle"
 
 minecraft {
-	mappings = project.mappings12
+	mappings("stable",project.mappings12)
 }
 
 dependencies {
