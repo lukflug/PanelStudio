@@ -23,4 +23,9 @@ jobs:
     - name: Upload package
       uses: actions/upload-artifact@v2
       with:
-        path: panelstudio*/build/libs/panelstudio-*.jar
+        path: |
+          panelstudio/build/libs/panelstudio-*.jar
+          panelstudio-mc12/build/libs/panelstudio-*.jar
+          panelstudio-mc16/build/libs/panelstudio-*.jar
+          panelstudio-mc8-fabric/build/libs/panelstudio-*.jar
+          panelstudio-mc8-forge/build/libs/panelstudio-*.jar
