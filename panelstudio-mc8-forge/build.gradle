@@ -18,6 +18,7 @@ minecraft {
 	mappings = project.mappings8forge
 	version = project.minecraft8forge
 	runDir = "run"
+	makeObfSourceJar = false
 }
 
 dependencies {
