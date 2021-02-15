@@ -13,11 +13,15 @@ public interface ISetting extends ILabeled {
 	 * Returns boolean interface indicating whether the setting is visible.
 	 * @return the visibility of the setting
 	 */
-	public IBoolean isVisible();
+	public default IBoolean isVisible() {
+		return ()->true;
+	}
 	
 	/**
 	 * Returns sub settings.
 	 * @return sub-settings
 	 */
-	public Stream<ISetting> getSubSettings();
+	public default Stream<ISetting> getSubSettings() {
+		return null;
+	}
 }

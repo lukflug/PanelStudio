@@ -4,6 +4,7 @@ package com.lukflug.panelstudio.setting;
  * Represent object with label and description.
  * @author lukflug
  */
+@FunctionalInterface
 public interface ILabeled {
 	/**
 	 * Get display name of the object.
@@ -15,5 +16,7 @@ public interface ILabeled {
 	 * Get object description.
 	 * @return the object description
 	 */
-	public String getDescription();
+	public default String getDescription() {
+		return null;
+	}
 }

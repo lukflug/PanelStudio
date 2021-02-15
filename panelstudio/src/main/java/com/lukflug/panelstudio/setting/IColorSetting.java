@@ -11,13 +11,13 @@ public interface IColorSetting extends ISetting {
 	 * Get the current value for the color setting.
 	 * @return the current color
 	 */
-	Color getValue();
+	public Color getValue();
 	
 	/**
 	 * Set the non-rainbow color.
 	 * @param value the value
 	 */
-	void setValue (Color value);
+	public void setValue (Color value);
 	
 	/**
 	 * Get the color, ignoring the rainbow.
@@ -41,17 +41,23 @@ public interface IColorSetting extends ISetting {
 	 * Returns whether setting should have alpha slider
 	 * @return whether alpha is enabled
 	 */
-	public boolean hasAlpha();
+	public default boolean hasAlpha() {
+		return false;
+	}
 	
 	/**
 	 * Returns whether setting has rainbow option.
 	 * @return whether setting allows rainbow
 	 */
-	public boolean allowsRainbow();
+	public default boolean allowsRainbow() {
+		return true;
+	}
 	
 	/**
 	 * Returns true for HSB model, false for RGB model
 	 * @return returns whether HSB model should be used
 	 */
-	public boolean hasHSBModel();
+	public default boolean hasHSBModel() {
+		return false;
+	}
 }
