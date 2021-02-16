@@ -26,6 +26,10 @@ public abstract class Container<T extends IComponent> extends ComponentBase impl
 	 * The renderer to use.
 	 */
 	protected IContainerRenderer renderer;
+	/**
+	 * The container visiblity.
+	 */
+	private boolean visible;
 	
 	/**
 	 * Constructor.
@@ -100,13 +104,13 @@ public abstract class Container<T extends IComponent> extends ComponentBase impl
 
 	@Override
 	public void enter() {
-		super.enter();
+		visible=true;
 		doContextlessLoop(component->{});
 	}
 
 	@Override
 	public void exit() {
-		super.exit();
+		visible=false;
 		doContextlessLoop(component->{});
 	}
 
@@ -159,7 +163,7 @@ public abstract class Container<T extends IComponent> extends ComponentBase impl
 	 * @return the visibility boolean
 	 */
 	protected IBoolean getDefaultVisibility() {
-		return ()->lastVisible();
+		return ()->visible;
 	}
 	
 	

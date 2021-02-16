@@ -71,11 +71,6 @@ public class ComponentProxy implements IComponent {
 	public boolean isVisible() {
 		return component.isVisible();
 	}
-
-	@Override
-	public boolean lastVisible() {
-		return component.lastVisible();
-	}
 	
 	/**
 	 * Returns the current component being redirected.

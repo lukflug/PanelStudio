@@ -22,10 +22,6 @@ public abstract class ComponentBase implements IComponent {
 	 * Boolean indicating visibility of component.
 	 */
 	protected IBoolean visible;
-	/**
-	 * Return value of {@link #lastVisible}.
-	 */
-	private boolean lastVisible=false;
 	
 	/**
 	 * Constructor.
@@ -67,25 +63,18 @@ public abstract class ComponentBase implements IComponent {
 	public void getHeight(Context context) {
 		context.setHeight(getHeight());
 	}
-
+	
 	@Override
 	public void enter() {
-		lastVisible=true;
 	}
-
+	
 	@Override
 	public void exit() {
-		lastVisible=false;
 	}
 
 	@Override
 	public boolean isVisible() {
 		return visible.isOn();
-	}
-	
-	@Override
-	public boolean lastVisible() {
-		return lastVisible;
 	}
 	
 	/**
