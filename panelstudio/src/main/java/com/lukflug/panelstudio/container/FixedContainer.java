@@ -8,11 +8,11 @@ import java.util.function.Consumer;
 
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.Description;
-import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.component.IFixedComponent;
 import com.lukflug.panelstudio.config.IConfigList;
 import com.lukflug.panelstudio.config.IPanelConfig;
+import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.theme.IContainerRenderer;
 
 /**
@@ -27,14 +27,12 @@ public class FixedContainer extends Container<IFixedComponent> {
 	
 	/**
 	 * Constructor.
-	 * @param title the caption for this component
-	 * @param description the description for this component
-	 * @param visible whether this component is visible
+	 * @param label the label for the component
 	 * @param renderer the renderer for this container
 	 * @param clip whether to clip container
 	*/
-	public FixedContainer(String title, String description, IBoolean visible, IContainerRenderer renderer, boolean clip) {
-		super(title, description, visible, renderer);
+	public FixedContainer(ILabeled label, IContainerRenderer renderer, boolean clip) {
+		super(label, renderer);
 		this.clip=clip;
 	}
 	
@@ -88,7 +86,7 @@ public class FixedContainer extends Container<IFixedComponent> {
 		for (int i=components.size()-1;i>=0;i--) {
 			ComponentState state=components.get(i);
 			state.update();
-			if (state.component.lastVisible()) function.accept(state.component);
+			if (state.lastVisible()) function.accept(state.component);
 		}
 	}
 

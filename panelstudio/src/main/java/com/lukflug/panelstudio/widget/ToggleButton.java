@@ -7,6 +7,7 @@ import com.lukflug.panelstudio.base.IToggleable;
 import com.lukflug.panelstudio.base.SimpleToggleable;
 import com.lukflug.panelstudio.component.FocusableComponent;
 import com.lukflug.panelstudio.setting.IBooleanSetting;
+import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.theme.IButtonRenderer;
 
 /**
@@ -25,14 +26,12 @@ public class ToggleButton extends FocusableComponent {
 	
 	/**
 	 * Constructor.
-	 * @param title the caption for this component
-	 * @param description the description for this component
-	 * @param visible whether this component is visible
+	 * @param label the label for the component
 	 * @param toggle the toggle
 	 * @param renderer the renderer for this component
 	 */
-	public ToggleButton (String title, String description, IBoolean visible, IToggleable toggle, IButtonRenderer<IBoolean> renderer) {
-		super(title,description,visible);
+	public ToggleButton (ILabeled label, IToggleable toggle, IButtonRenderer<IBoolean> renderer) {
+		super(label);
 		this.toggle=toggle;
 		this.renderer=renderer;
 		if (this.toggle==null) this.toggle=new SimpleToggleable(false);
@@ -44,7 +43,7 @@ public class ToggleButton extends FocusableComponent {
 	 * @param renderer the renderer for this component
 	 */
 	public ToggleButton (IBooleanSetting setting, IButtonRenderer<IBoolean> renderer) {
-		this(setting.getDescription(),setting.getDescription(),setting.isVisible(),setting,renderer);
+		this(setting,setting,renderer);
 	}
 	
 	@Override

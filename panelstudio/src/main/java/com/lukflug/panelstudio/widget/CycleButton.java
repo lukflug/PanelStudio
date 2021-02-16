@@ -26,7 +26,7 @@ public class CycleButton extends FocusableComponent {
 	 * @param renderer the renderer for this component
 	 */
 	public CycleButton (IEnumSetting setting, IButtonRenderer<String> renderer) {
-		super(setting.getDisplayName(),setting.getDescription(),setting.isVisible());
+		super(setting);
 		this.setting=setting;
 		this.renderer=renderer;
 	}

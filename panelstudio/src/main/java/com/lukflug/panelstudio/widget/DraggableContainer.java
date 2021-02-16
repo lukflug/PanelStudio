@@ -11,6 +11,7 @@ import com.lukflug.panelstudio.component.IComponent;
 import com.lukflug.panelstudio.component.IFixedComponent;
 import com.lukflug.panelstudio.container.IContainer;
 import com.lukflug.panelstudio.container.VerticalContainer;
+import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.theme.IButtonRenderer;
 import com.lukflug.panelstudio.theme.IContainerRenderer;
 import com.lukflug.panelstudio.theme.IEmptySpaceRenderer;
@@ -27,9 +28,7 @@ public class DraggableContainer extends DraggableComponent implements IContainer
 	
 	/**
 	 * Constructor using theme.
-	 * @param title the title of the panel
-	 * @param description the description of the panel
-	 * @param visible the visibility of the panel
+	 * @param label the label for the component
 	 * @param active whether the panel is active
 	 * @param open the toggleable to be used to open and close the panel
 	 * @param animation the animation for opening and closing the panel
@@ -38,15 +37,13 @@ public class DraggableContainer extends DraggableComponent implements IContainer
 	 * @param width the width of the panel
 	 * @param savesState whether the panel saves the state
 	 */
-	public DraggableContainer (String title, String description, IBoolean visible, IBoolean active, IToggleable open, Animation animation, ITheme theme, Point position, int width, boolean savesState) {
-		this(title,description,visible,active,open,animation,theme.getPanelRenderer(true),theme.getTitleRenderer(true),theme.getContainerRednerer(true),theme.getScrollBarRenderer(),theme.getEmptySpaceRenderer(),position,width,savesState);
+	public DraggableContainer (ILabeled label, IBoolean active, IToggleable open, Animation animation, ITheme theme, Point position, int width, boolean savesState) {
+		this(label,active,open,animation,theme.getPanelRenderer(true),theme.getTitleRenderer(true),theme.getContainerRednerer(true),theme.getScrollBarRenderer(),theme.getEmptySpaceRenderer(),position,width,savesState);
 	}
 	
 	/**
 	 * Constructor.
-	 * @param title the title of the panel
-	 * @param description the description of the panel
-	 * @param visible the visibility of the panel
+	 * @param label the label for the component
 	 * @param active whether the panel is active
 	 * @param open the toggleable to be used to open and close the panel
 	 * @param animation the animation for opening and closing the panel
@@ -59,9 +56,9 @@ public class DraggableContainer extends DraggableComponent implements IContainer
 	 * @param width
 	 * @param savesState
 	 */
-	public DraggableContainer (String title, String description, IBoolean visible, IBoolean active, IToggleable open, Animation animation, IPanelRenderer panelRenderer, IButtonRenderer<Void> titleRenderer, IContainerRenderer containerRenderer, IScrollBarRenderer scrollRenderer, IEmptySpaceRenderer emptyRenderer, Point position, int width, boolean savesState) {
+	public DraggableContainer (ILabeled label, IBoolean active, IToggleable open, Animation animation, IPanelRenderer panelRenderer, IButtonRenderer<Void> titleRenderer, IContainerRenderer containerRenderer, IScrollBarRenderer scrollRenderer, IEmptySpaceRenderer emptyRenderer, Point position, int width, boolean savesState) {
 		super(null);
-		panel=new CollapsibleContainer(getWrappedDragComponent(new Button(title,description,visible,titleRenderer)),new VerticalContainer(title,description,visible,containerRenderer),active,open,animation,panelRenderer,scrollRenderer,emptyRenderer) {
+		panel=new CollapsibleContainer(getWrappedDragComponent(new Button(label,titleRenderer)),new VerticalContainer(label,containerRenderer),active,open,animation,panelRenderer,scrollRenderer,emptyRenderer) {
 			@Override
 			protected int getScrollHeight(int componentHeight) {
 				return DraggableContainer.this.getScrollHeight(componentHeight);

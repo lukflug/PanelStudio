@@ -8,6 +8,7 @@ import com.lukflug.panelstudio.component.IComponent;
 import com.lukflug.panelstudio.component.ScrollComponent;
 import com.lukflug.panelstudio.container.HorizontalContainer;
 import com.lukflug.panelstudio.container.VerticalContainer;
+import com.lukflug.panelstudio.setting.Labeled;
 import com.lukflug.panelstudio.theme.IContainerRenderer;
 import com.lukflug.panelstudio.theme.IEmptySpaceRenderer;
 import com.lukflug.panelstudio.theme.IScrollBarRenderer;
@@ -19,7 +20,7 @@ import com.lukflug.panelstudio.theme.IScrollBarRenderer;
 public abstract class ScrollableComponent extends HorizontalContainer {
 	
 	public ScrollableComponent (IComponent component, IScrollBarRenderer renderer, IEmptySpaceRenderer emptyRenderer) {
-		super(component.getTitle(),null,()->component.isVisible(),new IContainerRenderer(){});
+		super(new Labeled(component.getTitle(),null,()->component.isVisible()),new IContainerRenderer(){});
 		// Component containing content
 		ScrollComponent scrollComponent=new ScrollComponent(component) {
 			@Override
@@ -33,7 +34,7 @@ public abstract class ScrollableComponent extends HorizontalContainer {
 			}
 		};
 		// Vertical scroll bar
-		ScrollBar verticalBar=new ScrollBar(component.getTitle(),null,()->scrollComponent.isScrollingY(),false,renderer) {
+		ScrollBar verticalBar=new ScrollBar(new Labeled(component.getTitle(),null,()->scrollComponent.isScrollingY()),false,renderer) {
 			@Override
 			protected int getLength() {
 				return scrollComponent.getScrollSize().height;
@@ -60,7 +61,7 @@ public abstract class ScrollableComponent extends HorizontalContainer {
 			}
 		};
 		// Horizontal scroll bar
-		ScrollBar horizontalBar=new ScrollBar(component.getTitle(),null,()->scrollComponent.isScrollingX(),true,renderer) {
+		ScrollBar horizontalBar=new ScrollBar(new Labeled(component.getTitle(),null,()->scrollComponent.isScrollingX()),true,renderer) {
 			@Override
 			protected int getLength() {
 				return scrollComponent.getScrollSize().width;
@@ -86,13 +87,13 @@ public abstract class ScrollableComponent extends HorizontalContainer {
 				return ScrollableComponent.this.isActive();
 			}
 		};
-		// Porpulate containers
-		VerticalContainer leftContainer=new VerticalContainer(component.getTitle(),null,()->true,new IContainerRenderer(){});
+		// Populate containers
+		VerticalContainer leftContainer=new VerticalContainer(new Labeled(component.getTitle(),null,()->true),new IContainerRenderer(){});
 		leftContainer.addComponent(scrollComponent);
 		leftContainer.addComponent(horizontalBar);
-		VerticalContainer rightContainer=new VerticalContainer(component.getTitle(),null,()->true,new IContainerRenderer(){});
+		VerticalContainer rightContainer=new VerticalContainer(new Labeled(component.getTitle(),null,()->true),new IContainerRenderer(){});
 		rightContainer.addComponent(verticalBar);
-		rightContainer.addComponent(new EmptySpace(()->renderer.getThickness(),()->scrollComponent.isScrollingX()&&scrollComponent.isScrollingY(),emptyRenderer));
+		rightContainer.addComponent(new EmptySpace(new Labeled("Empty",null,()->scrollComponent.isScrollingX()&&scrollComponent.isScrollingY()),()->renderer.getThickness(),emptyRenderer));
 		addComponent(new HorizontalComponent(leftContainer,0,1));
 		addComponent(new HorizontalComponent(rightContainer,0,1) {
 			@Override

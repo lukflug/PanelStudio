@@ -8,12 +8,12 @@ import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IToggleable;
 import com.lukflug.panelstudio.base.SimpleToggleable;
 import com.lukflug.panelstudio.setting.IColorSetting;
+import com.lukflug.panelstudio.setting.Labeled;
 import com.lukflug.panelstudio.theme.ISliderRenderer;
 import com.lukflug.panelstudio.theme.ITheme;
 
 /**
  * Component representing a color-valued setting.
- * TODO: Override main color!
  * @author lukflug
  */
 public class ColorComponent extends CollapsibleContainer {
@@ -28,21 +28,15 @@ public class ColorComponent extends CollapsibleContainer {
 	
 	/**
 	 * Constructor.
-	 * @param title the name of the setting
-	 * @param description the description for this component
-	 * @param renderer the renderer for the color setting container
-	 * @param animation the animation for opening and closing
-	 * @param componentRenderer the renderer for the children of the container
 	 * @param setting the setting in question
-	 * @param alpha whether to render an alpha slider
-	 * @param rainbow whether to render a rainbow slider
-	 * @param colorModel {@link IToggleable} indicating whether to use RGB (false) or HSB (true)
+	 * @param animation the animation to be used
+	 * @param theme the theme to be used
 	 */
 	public ColorComponent (IColorSetting setting, Animation animation, ITheme theme) {
-		super(setting.getDisplayName(),setting.getDescription(),setting.isVisible(),()->true,new SimpleToggleable(false),animation,theme);
+		super(setting,()->true,new SimpleToggleable(false),animation,theme);
 		this.setting=setting;
 		this.theme=theme;
-		addComponent(new ToggleButton("Rainbow",null,()->setting.allowsRainbow(),new IToggleable() {
+		addComponent(new ToggleButton(new Labeled("Rainbow",null,()->setting.allowsRainbow()),new IToggleable() {
 			@Override
 			public boolean isOn() {
 				return setting.getRainbow();
@@ -83,7 +77,7 @@ public class ColorComponent extends CollapsibleContainer {
 		 * @param value the index of the slider inside the color component
 		 */
 		public ColorSlider (IBoolean visible, ISliderRenderer renderer, int value) {
-			super("",null,visible,renderer);
+			super(new Labeled("",null,visible),renderer);
 			this.value=value;
 		}
 		

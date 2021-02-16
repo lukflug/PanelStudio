@@ -72,9 +72,4 @@ public interface IComponent {
 	 * Check if component should be visible.
 	 */
 	public boolean isVisible();
-	
-	/**
-	 * Whether enter or exit was last called.
-	 */
-	public boolean lastVisible();
 }

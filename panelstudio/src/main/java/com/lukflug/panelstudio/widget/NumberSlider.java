@@ -19,7 +19,8 @@ public class NumberSlider extends Slider {
 	 * @param renderer the renderer for the component
 	 */
 	public NumberSlider (INumberSetting setting, ISliderRenderer renderer) {
-		super(setting.getDisplayName(),setting.getDescription(),setting.isVisible(),renderer);
+		super(setting,renderer);
+		this.setting=setting;
 	}
 
 	@Override

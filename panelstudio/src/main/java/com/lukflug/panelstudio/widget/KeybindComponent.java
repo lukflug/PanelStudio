@@ -25,7 +25,7 @@ public class KeybindComponent extends FocusableComponent {
 	 * @param renderer the renderer for this component
 	 */
 	public KeybindComponent (IKeybindSetting keybind, IButtonRenderer<String> renderer) {
-		super(keybind.getDescription(),keybind.getDescription(),keybind.isVisible());
+		super(keybind);
 		this.keybind=keybind;
 		this.renderer=renderer;
 	}

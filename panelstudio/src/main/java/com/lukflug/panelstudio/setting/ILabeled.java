@@ -1,5 +1,7 @@
 package com.lukflug.panelstudio.setting;
 
+import com.lukflug.panelstudio.base.IBoolean;
+
 /**
  * Represent object with label and description.
  * @author lukflug
@@ -18,5 +20,13 @@ public interface ILabeled {
 	 */
 	public default String getDescription() {
 		return null;
+	}
+	
+	/**
+	 * Returns boolean interface indicating whether the object is visible.
+	 * @return the visibility of the setting
+	 */
+	public default IBoolean isVisible() {
+		return ()->true;
 	}
 }

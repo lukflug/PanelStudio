@@ -2,8 +2,8 @@ package com.lukflug.panelstudio.widget;
 
 import java.util.function.Supplier;
 
-import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.component.ComponentBase;
+import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.theme.IEmptySpaceRenderer;
 
 /**
@@ -21,12 +21,13 @@ public class EmptySpace extends ComponentBase {
 	protected IEmptySpaceRenderer renderer;
 	
 	/**
-	 * Constructor
-	 * @param visible
-	 * @param renderer the renderer for this component
+	 * Constructor.
+	 * @param label the label for the component
+	 * @param height the height of the component
+	 * @param renderer the renderer to be used
 	 */
-	public EmptySpace (Supplier<Integer> height, IBoolean visible, IEmptySpaceRenderer renderer) {
-		super("Empty",null,visible);
+	public EmptySpace (ILabeled label, Supplier<Integer> height, IEmptySpaceRenderer renderer) {
+		super(label);
 		this.height=height;
 		this.renderer=renderer;
 	}

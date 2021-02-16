@@ -3,6 +3,7 @@ package com.lukflug.panelstudio.component;
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.Description;
 import com.lukflug.panelstudio.base.IBoolean;
+import com.lukflug.panelstudio.setting.ILabeled;
 
 /**
  * Base class for components.
@@ -28,14 +29,12 @@ public abstract class ComponentBase implements IComponent {
 	
 	/**
 	 * Constructor.
-	 * @param title the caption for this component
-	 * @param description the description for this component
-	 * @param visible whether this component is visible
+	 * @param label the label for the component
 	 */
-	public ComponentBase (String title, String description, IBoolean visible) {
-		this.title=title;
-		this.description=description;
-		this.visible=visible;
+	public ComponentBase (ILabeled label) {
+		this.title=label.getDisplayName();
+		this.description=label.getDescription();
+		this.visible=label.isVisible();
 	}
 
 	@Override

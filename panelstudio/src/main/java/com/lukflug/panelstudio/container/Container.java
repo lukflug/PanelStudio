@@ -9,6 +9,7 @@ import com.lukflug.panelstudio.base.Description;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.component.ComponentBase;
 import com.lukflug.panelstudio.component.IComponent;
+import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.theme.IContainerRenderer;
 
 /**
@@ -28,13 +29,11 @@ public abstract class Container<T extends IComponent> extends ComponentBase impl
 	
 	/**
 	 * Constructor.
-	 * @param title the caption for this component
-	 * @param description the description for this component
-	 * @param visible whether this component is visible
+	 * @param label the label for the component
 	 * @param renderer the renderer for this container
 	 */
-	public Container(String title, String description, IBoolean visible, IContainerRenderer renderer) {
-		super(title,description,visible);
+	public Container(ILabeled label, IContainerRenderer renderer) {
+		super(label);
 		this.renderer=renderer;
 	}
 	
@@ -144,7 +143,7 @@ public abstract class Container<T extends IComponent> extends ComponentBase impl
 		}
 		for (ComponentState state: components) {
 			state.update();
-			if (state.component.lastVisible()) function.accept(state.component);
+			if (state.lastVisible()) function.accept(state.component);
 		}
 	}
 	
@@ -177,6 +176,10 @@ public abstract class Container<T extends IComponent> extends ComponentBase impl
 		 * The visibility defined by thing outside the component.
 		 */
 		public final IBoolean externalVisibility;
+		/**
+		 * Last visibility state.
+		 */
+		private boolean lastVisible=false;
 		
 		/**
 		 * Constructor.
@@ -193,10 +196,23 @@ public abstract class Container<T extends IComponent> extends ComponentBase impl
 		 * Updates the visibility state of the component.
 		 */
 		public void update() {
-			if (component.isVisible()&&externalVisibility.isOn()&&lastVisible()!=component.lastVisible()) {
-				if (component.lastVisible()) component.exit();
-				else component.enter();
+			if (component.isVisible()&&externalVisibility.isOn()&&lastVisible()!=lastVisible) {
+				if (lastVisible) {
+					lastVisible=false;
+					component.exit();
+				} else {
+					lastVisible=true;
+					component.enter();
+				}
 			}
+		}
+		
+		/**
+		 * Get last visibility state.
+		 * @return the last visiblity state
+		 */
+		public boolean lastVisible() {
+			return lastVisible;
 		}
 	}
 	

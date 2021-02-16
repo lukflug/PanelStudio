@@ -1,7 +1,7 @@
 package com.lukflug.panelstudio.component;
 
 import com.lukflug.panelstudio.base.Context;
-import com.lukflug.panelstudio.base.IBoolean;
+import com.lukflug.panelstudio.setting.ILabeled;
 
 /**
  * Base class for all components included in this library.
@@ -15,12 +15,10 @@ public abstract class FocusableComponent extends ComponentBase {
 
 	/**
 	 * Constructor.
-	 * @param title the caption for this component
-	 * @param description the description for this component
-	 * @param visible whether this component is visible
+	 * @param label the label for the component
 	 */
-	public FocusableComponent (String title, String description, IBoolean visible) {
-		super(title,description,visible);
+	public FocusableComponent (ILabeled label) {
+		super(label);
 	}
 	
 	@Override

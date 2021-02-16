@@ -6,6 +6,7 @@ import com.lukflug.panelstudio.base.IToggleable;
 import com.lukflug.panelstudio.component.IComponent;
 import com.lukflug.panelstudio.container.IContainer;
 import com.lukflug.panelstudio.container.VerticalContainer;
+import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.theme.IButtonRenderer;
 import com.lukflug.panelstudio.theme.IContainerRenderer;
 import com.lukflug.panelstudio.theme.IEmptySpaceRenderer;
@@ -25,23 +26,19 @@ public class CollapsibleContainer extends Panel implements IContainer<IComponent
 	
 	/**
 	 * Constructor using theme.
-	 * @param title the title of the panel
-	 * @param description the description of the panel
-	 * @param visible the visibility of the panel
+	 * @param label the label for the component
 	 * @param active whether the panel is active
 	 * @param open the toggleable to be used to open and close the panel
 	 * @param animation the animation for opening and closing the panel
 	 * @param theme the theme to be used
 	 */
-	public CollapsibleContainer (String title, String description, IBoolean visible, IBoolean active, IToggleable open, Animation animation, ITheme theme) {
-		this(title,description,visible,active,open,animation,theme.getPanelRenderer(false),theme.getTitleRenderer(false),theme.getContainerRednerer(false),theme.getScrollBarRenderer(),theme.getEmptySpaceRenderer());
+	public CollapsibleContainer (ILabeled label, IBoolean active, IToggleable open, Animation animation, ITheme theme) {
+		this(label,active,open,animation,theme.getPanelRenderer(false),theme.getTitleRenderer(false),theme.getContainerRednerer(false),theme.getScrollBarRenderer(),theme.getEmptySpaceRenderer());
 	}
 	
 	/**
 	 * Constructor.
-	 * @param title the title of the panel
-	 * @param description the description of the panel
-	 * @param visible the visibility of the panel
+	 * @param label the label for the component
 	 * @param active whether the panel is active
 	 * @param open the toggleable to be used to open and close the panel
 	 * @param animation the animation for opening and closing the panel
@@ -51,8 +48,8 @@ public class CollapsibleContainer extends Panel implements IContainer<IComponent
 	 * @param scrollRenderer the renderer for the scroll bars
 	 * @param emptyRenderer the renderer for the scroll corner
 	 */
-	public CollapsibleContainer (String title, String description, IBoolean visible, IBoolean active, IToggleable open, Animation animation, IPanelRenderer panelRenderer, IButtonRenderer<Void> titleRenderer, IContainerRenderer containerRenderer, IScrollBarRenderer scrollRenderer, IEmptySpaceRenderer emptyRenderer) {
-		this(new Button(title,description,visible,titleRenderer),new VerticalContainer(title,description,visible,containerRenderer),active,open,animation,panelRenderer,scrollRenderer,emptyRenderer);
+	public CollapsibleContainer (ILabeled label, IBoolean active, IToggleable open, Animation animation, IPanelRenderer panelRenderer, IButtonRenderer<Void> titleRenderer, IContainerRenderer containerRenderer, IScrollBarRenderer scrollRenderer, IEmptySpaceRenderer emptyRenderer) {
+		this(new Button(label,titleRenderer),new VerticalContainer(label,containerRenderer),active,open,animation,panelRenderer,scrollRenderer,emptyRenderer);
 	}
 	
 	/**

@@ -1,8 +1,8 @@
 package com.lukflug.panelstudio.widget;
 
 import com.lukflug.panelstudio.base.Context;
-import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.component.FocusableComponent;
+import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.theme.IButtonRenderer;
 
 /**
@@ -17,13 +17,11 @@ public class Button extends FocusableComponent {
 
 	/**
 	 * Constructor.
-	 * @param title the caption for this component
-	 * @param description the description for this component
-	 * @param visible whether this component is visible
+	 * @param label the label for the component
 	 * @param renderer the renderer for this component
 	 */
-	public Button(String title, String description, IBoolean visible, IButtonRenderer<Void> renderer) {
-		super(title,description,visible);
+	public Button(ILabeled label, IButtonRenderer<Void> renderer) {
+		super(label);
 		this.renderer=renderer;
 	}
 	

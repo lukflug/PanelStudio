@@ -1,8 +1,8 @@
 package com.lukflug.panelstudio.widget;
 
 import com.lukflug.panelstudio.base.Context;
-import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.component.FocusableComponent;
+import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.theme.IScrollBarRenderer;
 
 /**
@@ -21,14 +21,12 @@ public abstract class ScrollBar extends FocusableComponent {
 
 	/**
 	 * Constructor.
-	 * @param title the caption for this component
-	 * @param description the description for this component
-	 * @param visible whether this component is visible
+	 * @param label the label for the component
 	 * @param horizontal whether this component is horizontal
 	 * @param renderer the renderer for this component
 	 */
-	public ScrollBar(String title, String description, IBoolean visible, boolean horizontal, IScrollBarRenderer renderer) {
-		super(title, description, visible);
+	public ScrollBar(ILabeled label, boolean horizontal, IScrollBarRenderer renderer) {
+		super(label);
 		this.horizontal=horizontal;
 	}
 	

@@ -43,7 +43,7 @@ public class GUI implements IContainer<IFixedComponent> {
 		this.inter=inter;
 		this.descriptionRenderer=descriptionRenderer;
 		this.descriptionPosition=descriptionPosition;
-		container=new FixedContainer("GUI",null,()->true,null,false);
+		container=new FixedContainer(()->"GUI",null,false);
 	}
 	
 	@Override

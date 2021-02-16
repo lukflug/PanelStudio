@@ -3,9 +3,9 @@ package com.lukflug.panelstudio.widget;
 import java.awt.Rectangle;
 
 import com.lukflug.panelstudio.base.Context;
-import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.component.FocusableComponent;
+import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.theme.ISliderRenderer;
 
 /**
@@ -24,13 +24,11 @@ public abstract class Slider extends FocusableComponent {
 	
 	/**
 	 * Constructor.
-	 * @param title caption of the slider
-	 * @param description the description for this component
-	 * @param visible whether this component is visible
+	 * @param label the label for the component
 	 * @param renderer renderer for the slider
 	 */
-	public Slider(String title, String description, IBoolean visible, ISliderRenderer renderer) {
-		super(title,description,visible);
+	public Slider(ILabeled label, ISliderRenderer renderer) {
+		super(label);
 		this.renderer=renderer;
 	}
 
