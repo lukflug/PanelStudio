@@ -117,4 +117,14 @@ public interface ITheme {
 	 * Restore the main color.
 	 */
 	public void restoreMainColor();
+	
+	/**
+	 * Override the alpha of one color with the alpha of another
+	 * @param main the main color
+	 * @param opacity the color determining the alpha value
+	 * @return the main color with the alpha from the other color
+	 */
+	public static Color combineColors (Color main, Color opacity) {
+		return new Color(main.getRed(),main.getGreen(),main.getBlue(),opacity.getAlpha());
+	}
 }

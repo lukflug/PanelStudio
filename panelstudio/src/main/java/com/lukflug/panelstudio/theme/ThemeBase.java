@@ -140,17 +140,12 @@ public abstract class ThemeBase implements ITheme {
 	}
 	
 	/**
-	 * Get overridden main color.
+	 * Get overridden color.
+	 * @param color the default color
 	 * @return the main color
 	 */
-	protected Color getMainColor() {
-		if (overrideColor==null) return getDefaultColor();
+	protected Color getColor (Color color) {
+		if (overrideColor==null) return color;
 		else return overrideColor;
 	}
-	
-	/**
-	 * Get default main color.
-	 * @return the default color
-	 */
-	protected abstract Color getDefaultColor();
 }
