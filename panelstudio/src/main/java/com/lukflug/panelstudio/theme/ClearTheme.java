@@ -32,10 +32,4 @@ public class ClearTheme extends ThemeBase {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	protected Color getDefaultColor() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
