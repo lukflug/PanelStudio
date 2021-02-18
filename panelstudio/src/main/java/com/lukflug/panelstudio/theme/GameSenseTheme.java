@@ -29,7 +29,7 @@ public class GameSenseTheme extends ThemeBase {
 		titleRenderer=new IButtonRenderer<Void>() {
 			@Override
 			public void renderButton(Context context, String title, boolean hasFocus, Void state) {
-				
+				context.getInterface().drawString(context.getRect().getLocation(),title,getFontColor(hasFocus));
 			}
 
 			@Override
@@ -40,7 +40,7 @@ public class GameSenseTheme extends ThemeBase {
 		panelTitleRenderer=new IButtonRenderer<Void>() {
 			@Override
 			public void renderButton(Context context, String title, boolean hasFocus, Void state) {
-				
+				context.getInterface().drawString(context.getRect().getLocation(),title,getFontColor(hasFocus));
 			}
 
 			@Override
@@ -51,13 +51,11 @@ public class GameSenseTheme extends ThemeBase {
 		panelRenderer=new IPanelRenderer() {
 			@Override
 			public void renderPanelOverlay(Context context, boolean focus, boolean active) {
-				
 			}
 		};
 		panelPanelRenderer=new IPanelRenderer() {
 			@Override
 			public void renderPanelOverlay(Context context, boolean focus, boolean active) {
-				
 			}
 		};
 		containerRenderer=new IContainerRenderer() {
@@ -90,66 +88,56 @@ public class GameSenseTheme extends ThemeBase {
 		toggleButtonRenderer=new IButtonRenderer<IBoolean>() {
 			@Override
 			public void renderButton(Context context, String title, boolean hasFocus, IBoolean state) {
-				// TODO Auto-generated method stub
-				
+				context.getInterface().drawString(context.getRect().getLocation(),title,getFontColor(hasFocus));
 			}
 
 			@Override
 			public int getDefaultHeight() {
-				// TODO Auto-generated method stub
-				return 0;
+				return height+2*border;
 			}
 		};
 		checkMarkRenderer=new IButtonRenderer<IBoolean>() {
 			@Override
 			public void renderButton(Context context, String title, boolean hasFocus, IBoolean state) {
-				// TODO Auto-generated method stub
-				
+				context.getInterface().drawString(context.getRect().getLocation(),title,getFontColor(hasFocus));
 			}
 
 			@Override
 			public int getDefaultHeight() {
-				// TODO Auto-generated method stub
-				return 0;
+				return height+2*border;
 			}
 		};
 		cycleButtonRenderer=new IButtonRenderer<String>() {
 			@Override
 			public void renderButton(Context context, String title, boolean hasFocus, String state) {
-				// TODO Auto-generated method stub
-				
+				context.getInterface().drawString(context.getRect().getLocation(),title,getFontColor(hasFocus));
 			}
 
 			@Override
 			public int getDefaultHeight() {
-				// TODO Auto-generated method stub
-				return 0;
+				return height+2*border;
 			}
 		};
 		keybindRenderer=new IButtonRenderer<String>() {
 			@Override
 			public void renderButton(Context context, String title, boolean hasFocus, String state) {
-				// TODO Auto-generated method stub
-				
+				context.getInterface().drawString(context.getRect().getLocation(),title,getFontColor(hasFocus));
 			}
 
 			@Override
 			public int getDefaultHeight() {
-				// TODO Auto-generated method stub
-				return 0;
+				return height+2*border;
 			}
 		};
 		sliderRenderer=new ISliderRenderer() {
 			@Override
 			public void renderSlider(Context context, String title, String state, boolean hasFocus, double value) {
-				// TODO Auto-generated method stub
-				
+				context.getInterface().drawString(context.getRect().getLocation(),title,getFontColor(hasFocus));
 			}
 
 			@Override
 			public int getDefaultHeight() {
-				// TODO Auto-generated method stub
-				return 0;
+				return height+2*border;
 			}
 
 			@Override
