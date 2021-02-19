@@ -1,5 +1,7 @@
 package com.lukflug.panelstudio.widget;
 
+import java.util.function.IntFunction;
+
 import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IToggleable;
@@ -49,7 +51,7 @@ public class CollapsibleContainer extends Panel implements IContainer<IComponent
 	 * @param emptyRenderer the renderer for the scroll corner
 	 */
 	public CollapsibleContainer (ILabeled label, IBoolean active, IToggleable open, Animation animation, IPanelRenderer panelRenderer, IButtonRenderer<Void> titleRenderer, IContainerRenderer containerRenderer, IScrollBarRenderer scrollRenderer, IEmptySpaceRenderer emptyRenderer) {
-		this(new Button(label,titleRenderer),new VerticalContainer(label,containerRenderer),active,open,animation,panelRenderer,scrollRenderer,emptyRenderer);
+		this(new Button(label,titleRenderer),new VerticalContainer(label,containerRenderer),active,open,animation,panelRenderer,scrollRenderer,emptyRenderer,height->height,width->width);
 	}
 	
 	/**
@@ -62,17 +64,19 @@ public class CollapsibleContainer extends Panel implements IContainer<IComponent
 	 * @param panelRenderer the renderer for the panel overlay
 	 * @param scrollRenderer the renderer for the scroll bars
 	 * @param emptyRenderer the renderer for the scroll corner
+	 * @param scrollHeight function for the scroll height
+	 * @param componentWidth function for the component width
 	 */
-	public CollapsibleContainer (IComponent title, VerticalContainer content, IBoolean active, IToggleable open, Animation animation, IPanelRenderer panelRenderer, IScrollBarRenderer scrollRenderer, IEmptySpaceRenderer emptyRenderer) {
+	public CollapsibleContainer (IComponent title, VerticalContainer content, IBoolean active, IToggleable open, Animation animation, IPanelRenderer panelRenderer, IScrollBarRenderer scrollRenderer, IEmptySpaceRenderer emptyRenderer, IntFunction<Integer> scrollHeight, IntFunction<Integer> componentWidth) {
 		super(title,new ScrollableComponent(content,scrollRenderer,emptyRenderer) {
 			@Override
 			protected int getScrollHeight (int componentHeight) {
-				return getScrollHeight(componentHeight);
+				return scrollHeight.apply(componentHeight); 
 			}
 
 			@Override
 			protected int getComponentWidth (int scrollWidth) {
-				return getComponentWidth(scrollWidth);
+				return componentWidth.apply(scrollWidth);
 			}
 
 			@Override
@@ -96,23 +100,5 @@ public class CollapsibleContainer extends Panel implements IContainer<IComponent
 	@Override
 	public boolean removeComponent (IComponent component) {
 		return contentContainer.removeComponent(component);
-	}
-	
-	/**
-	 * Get visible scroll height based on content container height.
-	 * @param componentHeight the container height
-	 * @return the scroll height
-	 */
-	protected int getScrollHeight (int componentHeight) {
-		return componentHeight;
-	}
-
-	/**
-	 * Get content container width based on scroll width.
-	 * @param scrollWidth the scroll width
-	 * @return the container width
-	 */
-	protected int getComponentWidth (int scrollWidth) {
-		return scrollWidth;
 	}
 }

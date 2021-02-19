@@ -29,6 +29,8 @@ public class GameSenseTheme extends ThemeBase {
 		titleRenderer=new IButtonRenderer<Void>() {
 			@Override
 			public void renderButton(Context context, String title, boolean hasFocus, Void state) {
+				Color color=getMainColor(hasFocus,true);
+				context.getInterface().drawRect(context.getRect(),color,color,color,color);
 				context.getInterface().drawString(context.getRect().getLocation(),title,getFontColor(hasFocus));
 			}
 
@@ -40,6 +42,8 @@ public class GameSenseTheme extends ThemeBase {
 		panelTitleRenderer=new IButtonRenderer<Void>() {
 			@Override
 			public void renderButton(Context context, String title, boolean hasFocus, Void state) {
+				Color color=getMainColor(hasFocus,true);
+				context.getInterface().drawRect(context.getRect(),color,color,color,color);
 				context.getInterface().drawString(context.getRect().getLocation(),title,getFontColor(hasFocus));
 			}
 
@@ -88,6 +92,8 @@ public class GameSenseTheme extends ThemeBase {
 		toggleButtonRenderer=new IButtonRenderer<IBoolean>() {
 			@Override
 			public void renderButton(Context context, String title, boolean hasFocus, IBoolean state) {
+				Color color=getMainColor(hasFocus,true);
+				context.getInterface().drawRect(context.getRect(),color,color,color,color);
 				context.getInterface().drawString(context.getRect().getLocation(),title,getFontColor(hasFocus));
 			}
 
@@ -99,6 +105,8 @@ public class GameSenseTheme extends ThemeBase {
 		checkMarkRenderer=new IButtonRenderer<IBoolean>() {
 			@Override
 			public void renderButton(Context context, String title, boolean hasFocus, IBoolean state) {
+				Color color=getMainColor(hasFocus,true);
+				context.getInterface().drawRect(context.getRect(),color,color,color,color);
 				context.getInterface().drawString(context.getRect().getLocation(),title,getFontColor(hasFocus));
 			}
 
@@ -110,6 +118,8 @@ public class GameSenseTheme extends ThemeBase {
 		cycleButtonRenderer=new IButtonRenderer<String>() {
 			@Override
 			public void renderButton(Context context, String title, boolean hasFocus, String state) {
+				Color color=getMainColor(hasFocus,true);
+				context.getInterface().drawRect(context.getRect(),color,color,color,color);
 				context.getInterface().drawString(context.getRect().getLocation(),title,getFontColor(hasFocus));
 			}
 
@@ -121,6 +131,8 @@ public class GameSenseTheme extends ThemeBase {
 		keybindRenderer=new IButtonRenderer<String>() {
 			@Override
 			public void renderButton(Context context, String title, boolean hasFocus, String state) {
+				Color color=getMainColor(hasFocus,true);
+				context.getInterface().drawRect(context.getRect(),color,color,color,color);
 				context.getInterface().drawString(context.getRect().getLocation(),title,getFontColor(hasFocus));
 			}
 
@@ -132,6 +144,8 @@ public class GameSenseTheme extends ThemeBase {
 		sliderRenderer=new ISliderRenderer() {
 			@Override
 			public void renderSlider(Context context, String title, String state, boolean hasFocus, double value) {
+				Color color=getMainColor(hasFocus,true);
+				context.getInterface().drawRect(context.getRect(),color,color,color,color);
 				context.getInterface().drawString(context.getRect().getLocation(),title,getFontColor(hasFocus));
 			}
 
@@ -149,13 +163,13 @@ public class GameSenseTheme extends ThemeBase {
 
 	@Override
 	public Color getMainColor(boolean focus, boolean active) {
-		if (active) return scheme.getColor("Enabled Color");
-		else return ITheme.combineColors(scheme.getColor("Disabled Color"),scheme.getColor("Enabled Color"));
+		if (active) return getColor(scheme.getColor("Enabled Color"));
+		else return ITheme.combineColors(scheme.getColor("Disabled Color"),getColor(scheme.getColor("Enabled Color")));
 	}
 
 	@Override
 	public Color getBackgroundColor(boolean focus) {
-		return ITheme.combineColors(scheme.getColor("Settings Color"),scheme.getColor("Enabled Color"));
+		return ITheme.combineColors(scheme.getColor("Settings Color"),getColor(scheme.getColor("Enabled Color")));
 	}
 
 	@Override

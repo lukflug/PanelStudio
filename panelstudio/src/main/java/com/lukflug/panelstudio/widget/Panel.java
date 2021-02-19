@@ -23,7 +23,7 @@ public class Panel extends FocusableComponentProxy {
 	/**
 	 * The current collapsible component.
 	 */
-	protected CollapsibleComponent collapsible;
+	protected final CollapsibleComponent collapsible;
 	
 	/**
 	 * Creates a generic panel.
@@ -49,7 +49,7 @@ public class Panel extends FocusableComponentProxy {
 			@Override
 			public void handleButton (Context context, int button) {
 				super.handleButton(context,button);
-				if (button==IInterface.RBUTTON && context.isClicked()) {
+				if (button==IInterface.RBUTTON && context.isHovered() && context.getInterface().getButton(IInterface.RBUTTON)) {
 					collapsible.getToggle().toggle();
 				}
 			}

@@ -52,23 +52,13 @@ public class DraggableContainer extends DraggableComponent implements IContainer
 	 * @param containerRenderer the renderer for the panel content container
 	 * @param scrollRenderer the renderer for the scroll bars
 	 * @param emptyRenderer the renderer for the scroll corner
-	 * @param position
-	 * @param width
-	 * @param savesState
+	 * @param position the initial position
+	 * @param width the width of the panel
+	 * @param savesState whether the panel saves the state
 	 */
 	public DraggableContainer (ILabeled label, IBoolean active, IToggleable open, Animation animation, IPanelRenderer panelRenderer, IButtonRenderer<Void> titleRenderer, IContainerRenderer containerRenderer, IScrollBarRenderer scrollRenderer, IEmptySpaceRenderer emptyRenderer, Point position, int width, boolean savesState) {
 		super(null);
-		panel=new CollapsibleContainer(getWrappedDragComponent(new Button(label,titleRenderer)),new VerticalContainer(label,containerRenderer),active,open,animation,panelRenderer,scrollRenderer,emptyRenderer) {
-			@Override
-			protected int getScrollHeight(int componentHeight) {
-				return DraggableContainer.this.getScrollHeight(componentHeight);
-			}
-			
-			@Override
-			protected int getComponentWidth (int scrollWidth) {
-				return DraggableContainer.this.getComponentWidth(scrollWidth);
-			}
-		};
+		panel=new CollapsibleContainer(getWrappedDragComponent(new Button(label,titleRenderer)),new VerticalContainer(label,containerRenderer),active,open,animation,panelRenderer,scrollRenderer,emptyRenderer,height->getScrollHeight(height),cwidth->getComponentWidth(cwidth));
 		this.fixedComponent=new FixedComponent(panel,position,width,panel.getToggle(),savesState);
 		this.component=fixedComponent;
 	}

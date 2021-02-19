@@ -64,6 +64,7 @@ public abstract class Container<T extends IComponent> extends ComponentBase impl
 		ComponentState state=getComponentState(component);
 		if (state!=null) {
 			components.remove(state);
+			if (state.lastVisible) state.component.exit();
 			return true;
 		}
 		return false;
@@ -163,7 +164,7 @@ public abstract class Container<T extends IComponent> extends ComponentBase impl
 	 * @return the visibility boolean
 	 */
 	protected IBoolean getDefaultVisibility() {
-		return ()->visible;
+		return ()->true;
 	}
 	
 	
@@ -200,7 +201,7 @@ public abstract class Container<T extends IComponent> extends ComponentBase impl
 		 * Updates the visibility state of the component.
 		 */
 		public void update() {
-			if (component.isVisible()&&externalVisibility.isOn()&&lastVisible()!=lastVisible) {
+			if (component.isVisible()&&externalVisibility.isOn()&&visible!=lastVisible) {
 				if (lastVisible) {
 					lastVisible=false;
 					component.exit();
