@@ -30,9 +30,9 @@ public class CollapsibleComponent extends ComponentProxy {
 	@Override
 	public void render(Context context) {
 		doOperation(context,subContext->{
-			context.getInterface().window(context.getRect());
+			//context.getInterface().window(context.getRect());
 			component.render(subContext);
-			context.getInterface().restore();
+			//context.getInterface().restore();
 		});
 	}
 	

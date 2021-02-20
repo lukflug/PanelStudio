@@ -47,6 +47,11 @@ public class Panel extends FocusableComponentProxy {
 		collapsible=new CollapsibleComponent(content,open,animation);
 		container.addComponent(new ComponentProxy(title) {
 			@Override
+			public void render (Context context) {
+				super.render(context);
+			}
+			
+			@Override
 			public void handleButton (Context context, int button) {
 				super.handleButton(context,button);
 				if (button==IInterface.RBUTTON && context.isHovered() && context.getInterface().getButton(IInterface.RBUTTON)) {

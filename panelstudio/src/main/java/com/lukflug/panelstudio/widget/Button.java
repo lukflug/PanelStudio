@@ -29,6 +29,7 @@ public class Button extends FocusableComponent {
 	public void render (Context context) {
 		super.render(context);
 		renderer.renderButton(context,getTitle(),hasFocus(context),null);
+		System.err.println(context.getSize().height);
 	}
 
 	@Override

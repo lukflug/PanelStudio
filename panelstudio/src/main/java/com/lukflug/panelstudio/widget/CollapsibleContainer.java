@@ -3,6 +3,7 @@ package com.lukflug.panelstudio.widget;
 import java.util.function.IntFunction;
 
 import com.lukflug.panelstudio.base.Animation;
+import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IToggleable;
 import com.lukflug.panelstudio.component.IComponent;
@@ -85,6 +86,11 @@ public class CollapsibleContainer extends Panel implements IContainer<IComponent
 			}
 		},active,open,animation,panelRenderer);
 		contentContainer=content;
+	}
+	
+	@Override
+	public void render (Context context) {
+		super.render(context);
 	}
 
 	@Override

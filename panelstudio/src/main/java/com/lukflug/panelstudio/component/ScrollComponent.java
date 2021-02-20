@@ -39,9 +39,9 @@ public abstract class ScrollComponent extends ComponentProxy {
 	@Override
 	public void render(Context context) {
 		getHeight(context);
-		context.getInterface().window(context.getRect());
+		//context.getInterface().window(context.getRect());
 		doOperation(context,component::render);
-		context.getInterface().restore();
+		//context.getInterface().restore();
 	}
 
 	@Override
