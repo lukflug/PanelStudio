@@ -3,12 +3,16 @@ package com.lukflug.panelstudio.base;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.Stack;
 
 /**
  * A class for the communication between a component and its parent.
  * @author lukflug
  */
 public final class Context {
+	// TODO remove debug code eventually
+	public static final Stack<Context> contextStack=new Stack<Context>();
+	public final Object object;
 	/**
 	 * The current {@link Interface}.
 	 */
@@ -55,13 +59,16 @@ public final class Context {
 	 * @param focus focus state of the parent
 	 * @param onTop whether component is in the front
 	 */
-	public Context (Context context, int width, Point offset, boolean focus, boolean onTop) {
+	public Context (Context context, int width, Point offset, boolean focus, boolean onTop, Object object) {
 		inter=context.getInterface();
 		size=new Dimension(width,0);
 		this.position=context.getPos();
 		position.translate(offset.x,offset.y);
 		this.focus=context.hasFocus()&&focus;
 		this.onTop=context.onTop()&&onTop;
+		this.object=object;
+		while (contextStack.lastElement()!=context) contextStack.pop();
+		contextStack.push(this);
 	}
 	
 	/**
@@ -72,12 +79,15 @@ public final class Context {
 	 * @param focus set to false, to disable the component from having focus
 	 * @param onTop set to false, if a component is above another component at the current cursor position
 	 */
-	public Context (IInterface inter, int width, Point position, boolean focus, boolean onTop) {
+	public Context (IInterface inter, int width, Point position, boolean focus, boolean onTop, Object object) {
 		this.inter=inter;
 		size=new Dimension(width,0);
 		this.position=new Point(position);
 		this.focus=focus;
 		this.onTop=onTop;
+		this.object=object;
+		contextStack.clear();
+		contextStack.push(this);
 	}
 	
 	/**

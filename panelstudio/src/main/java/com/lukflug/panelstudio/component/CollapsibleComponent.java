@@ -30,9 +30,9 @@ public class CollapsibleComponent extends ComponentProxy {
 	@Override
 	public void render(Context context) {
 		doOperation(context,subContext->{
-			//context.getInterface().window(context.getRect());
+			context.getInterface().window(context.getRect());
 			component.render(subContext);
-			//context.getInterface().restore();
+			context.getInterface().restore();
 		});
 	}
 	
@@ -43,12 +43,12 @@ public class CollapsibleComponent extends ComponentProxy {
 	
 	@Override
 	protected Context getContext (Context context) {
-		Context subContext=new Context(context,context.getSize().width,new Point(0,0),context.hasFocus(),context.onTop());
+		Context subContext=new Context(context,context.getSize().width,new Point(0,0),context.hasFocus(),context.onTop(),this);
 		component.getHeight(subContext);
 		int height=getHeight(subContext.getSize().height);
 		int offset=height-subContext.getSize().height;
 		context.setHeight(height);
-		return new Context(context,context.getSize().width,new Point(0,offset),context.hasFocus(),context.onTop());
+		return new Context(context,context.getSize().width,new Point(0,offset),context.hasFocus(),context.onTop(),this);
 	}
 	
 	@Override

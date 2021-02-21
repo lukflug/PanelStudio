@@ -93,7 +93,6 @@ public class ComponentProxy implements IComponent {
 			else if (subContext.foucsRequested()) context.requestFocus();
 			context.setHeight(getHeight(subContext.getSize().height));
 		}
-		System.err.println(getTitle()+" "+this.getClass().getName()+">"+component.getClass().getName()+" "+context.getSize().height);
 		return subContext;
 	}
 	

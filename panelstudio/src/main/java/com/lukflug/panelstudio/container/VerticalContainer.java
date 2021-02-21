@@ -27,7 +27,7 @@ public class VerticalContainer extends Container<IComponent> {
 		AtomicInteger posy=new AtomicInteger(renderer.getTop());
 		doContextlessLoop(component->{
 			Context subContext=getSubContext(context,posy.get());
-			function.accept(context,component);
+			function.accept(subContext,component);
 			if (subContext.focusReleased()) context.releaseFocus();
 			else if (subContext.foucsRequested()) context.requestFocus();
 			posy.addAndGet(subContext.getSize().height+renderer.getBorder());
@@ -42,6 +42,6 @@ public class VerticalContainer extends Container<IComponent> {
 	 * @return the context for the child component
 	 */
 	protected Context getSubContext (Context context, int posy) {
-		return new Context(context,context.getSize().width-renderer.getLeft()-renderer.getRight(),new Point(renderer.getLeft(),posy),context.hasFocus(),true);
+		return new Context(context,context.getSize().width-renderer.getLeft()-renderer.getRight(),new Point(renderer.getLeft(),posy),context.hasFocus(),true,this);
 	}
 }

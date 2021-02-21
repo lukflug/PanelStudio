@@ -35,7 +35,7 @@ public class HorizontalContainer extends Container<IHorizontalComponent> {
 		AtomicInteger spentWeight=new AtomicInteger(0);
 		AtomicInteger height=new AtomicInteger(0);
 		doContextlessLoop(component->{
-		    int componentWidth=(int)(component.getWidth(context.getInterface())-component.getWeight()*weightFactor);
+		    int componentWidth=(int)(component.getWidth(context.getInterface())+component.getWeight()*weightFactor);
 		    int componentPosition=(int)(x.get()+spentWeight.get()*weightFactor);
 		    Context subContext=getSubContext(context,componentPosition,componentWidth);
 			function.accept(subContext,component);
@@ -56,6 +56,6 @@ public class HorizontalContainer extends Container<IHorizontalComponent> {
 	 * @return the context for the child component
 	 */
 	protected Context getSubContext (Context context, int posx, int width) {
-		return new Context(context,width,new Point(posx,renderer.getTop()),context.hasFocus(),true);
+		return new Context(context,width,new Point(posx,renderer.getTop()),context.hasFocus(),true,this);
 	}
 }

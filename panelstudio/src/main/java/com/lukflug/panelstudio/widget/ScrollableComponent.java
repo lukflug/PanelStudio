@@ -95,12 +95,12 @@ public abstract class ScrollableComponent extends HorizontalContainer {
 		rightContainer.addComponent(verticalBar);
 		rightContainer.addComponent(new EmptySpace(new Labeled("Empty",null,()->scrollComponent.isScrollingX()&&scrollComponent.isScrollingY()),()->renderer.getThickness(),emptyRenderer));
 		addComponent(new HorizontalComponent(leftContainer,0,1));
-		addComponent(new HorizontalComponent(rightContainer,0,1) {
+		addComponent(new HorizontalComponent(rightContainer,0,0) {
 			@Override
 			public int getWidth (IInterface inter) {
 				return renderer.getThickness();
 			}
-		});
+		},()->scrollComponent.isScrollingY());
 	}
 
 	/**

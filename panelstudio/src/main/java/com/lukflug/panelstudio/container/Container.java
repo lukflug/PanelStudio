@@ -201,7 +201,7 @@ public abstract class Container<T extends IComponent> extends ComponentBase impl
 		 * Updates the visibility state of the component.
 		 */
 		public void update() {
-			if (component.isVisible()&&externalVisibility.isOn()&&visible!=lastVisible) {
+			if ((component.isVisible()&&externalVisibility.isOn()&&visible)!=lastVisible) {
 				if (lastVisible) {
 					lastVisible=false;
 					component.exit();

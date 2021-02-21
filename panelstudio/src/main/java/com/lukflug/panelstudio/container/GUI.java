@@ -134,6 +134,6 @@ public class GUI implements IContainer<IFixedComponent> {
 	 * @return the context
 	 */
 	protected Context getContext() {
-		return new Context(inter,0,new Point(0,0),true,true);
+		return new Context(inter,0,new Point(0,0),true,true,this);
 	}
 }

@@ -28,10 +28,10 @@ public class GameSenseTheme extends ThemeBase {
 		};
 		titleRenderer=new IButtonRenderer<Void>() {
 			@Override
-			public void renderButton(Context context, String title, boolean hasFocus, Void state) {
-				Color color=getMainColor(hasFocus,true);
+			public void renderButton(Context context, String title, boolean focus, Void state) {
+				Color color=getMainColor(focus,true);
 				context.getInterface().drawRect(context.getRect(),color,color,color,color);
-				context.getInterface().drawString(context.getRect().getLocation(),title,getFontColor(hasFocus));
+				context.getInterface().drawString(context.getRect().getLocation(),title,getFontColor(focus));
 			}
 
 			@Override
@@ -41,10 +41,10 @@ public class GameSenseTheme extends ThemeBase {
 		};
 		panelTitleRenderer=new IButtonRenderer<Void>() {
 			@Override
-			public void renderButton(Context context, String title, boolean hasFocus, Void state) {
-				Color color=getMainColor(hasFocus,true);
+			public void renderButton(Context context, String title, boolean focus, Void state) {
+				Color color=getMainColor(focus,true);
 				context.getInterface().drawRect(context.getRect(),color,color,color,color);
-				context.getInterface().drawString(context.getRect().getLocation(),title,getFontColor(hasFocus));
+				context.getInterface().drawString(context.getRect().getLocation(),title,getFontColor(focus));
 			}
 
 			@Override
@@ -75,6 +75,8 @@ public class GameSenseTheme extends ThemeBase {
 		scrollRenderer=new IScrollBarRenderer() {
 			@Override
 			public int renderScrollBar(Context context, boolean focus, boolean active, boolean horizontal, int height, int position) {
+				Color color=getMainColor(focus,true);
+				context.getInterface().drawRect(context.getRect(),color,color,color,color);
 				return position;
 			}
 
@@ -91,10 +93,10 @@ public class GameSenseTheme extends ThemeBase {
 		};
 		toggleButtonRenderer=new IButtonRenderer<IBoolean>() {
 			@Override
-			public void renderButton(Context context, String title, boolean hasFocus, IBoolean state) {
-				Color color=getMainColor(hasFocus,true);
+			public void renderButton(Context context, String title, boolean focus, IBoolean state) {
+				Color color=getMainColor(focus,true);
 				context.getInterface().drawRect(context.getRect(),color,color,color,color);
-				context.getInterface().drawString(context.getRect().getLocation(),title,getFontColor(hasFocus));
+				context.getInterface().drawString(context.getRect().getLocation(),title,getFontColor(focus));
 			}
 
 			@Override
@@ -104,10 +106,10 @@ public class GameSenseTheme extends ThemeBase {
 		};
 		checkMarkRenderer=new IButtonRenderer<IBoolean>() {
 			@Override
-			public void renderButton(Context context, String title, boolean hasFocus, IBoolean state) {
-				Color color=getMainColor(hasFocus,true);
+			public void renderButton(Context context, String title, boolean focus, IBoolean state) {
+				Color color=getMainColor(focus,true);
 				context.getInterface().drawRect(context.getRect(),color,color,color,color);
-				context.getInterface().drawString(context.getRect().getLocation(),title,getFontColor(hasFocus));
+				context.getInterface().drawString(context.getRect().getLocation(),title,getFontColor(focus));
 			}
 
 			@Override
