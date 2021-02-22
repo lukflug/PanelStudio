@@ -5,12 +5,13 @@ import com.lukflug.panelstudio.base.Context;
 /**
  * Proxy redirecting calls.
  * @author lukflug
+ * @param <T> type representing state of scroll bar
  */
 @FunctionalInterface
-public interface IScrollBarRendererProxy extends IScrollBarRenderer {
+public interface IScrollBarRendererProxy<T> extends IScrollBarRenderer<T> {
 	@Override
-	public default int renderScrollBar(Context context, boolean focus, boolean active, boolean horizontal, int height, int position) {
-		return getRenderer().renderScrollBar(context,focus,active,horizontal,height,position);
+	public default int renderScrollBar(Context context, boolean focus, T state, boolean horizontal, int height, int position) {
+		return getRenderer().renderScrollBar(context,focus,state,horizontal,height,position);
 	}
 
 	@Override
@@ -22,5 +23,5 @@ public interface IScrollBarRendererProxy extends IScrollBarRenderer {
 	 * The renderer to be redirected to.
 	 * @return the renderer
 	 */
-	public IScrollBarRenderer getRenderer();
+	public IScrollBarRenderer<T> getRenderer();
 }

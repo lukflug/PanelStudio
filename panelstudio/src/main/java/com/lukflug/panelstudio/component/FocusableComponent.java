@@ -56,6 +56,7 @@ public abstract class FocusableComponent extends ComponentBase {
 	protected void updateFocus (Context context, int button) {
 		if (context.getInterface().getButton(button)) {
 			focus=context.isHovered();
+			if (focus) context.requestFocus();;
 			handleFocus(context,focus&&context.hasFocus());
 		}
 	}

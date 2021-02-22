@@ -23,13 +23,6 @@ public interface ITheme {
 	public IDescriptionRenderer getDescriptionRenderer();
 	
 	/**
-	 * Returns the renderer for the panel title.
-	 * @param panel whether this is the root panel or not
-	 * @return the title renderer
-	 */
-	public IButtonRenderer<Void> getTitleRenderer (boolean panel);
-	
-	/**
 	 * Returns the renderer for the panel outline.
 	 * @param panel whether this is the root panel or not
 	 * @return the panel renderer
@@ -53,37 +46,55 @@ public interface ITheme {
 	 * Returns the renderer for the scroll corner.
 	 * @return the empty space renderer
 	 */
-	public IEmptySpaceRenderer getEmptySpaceRenderer();
+	public <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer();
+	
+	/**
+	 * Returns the renderer for stateless buttons.
+	 * @param level the panel nesting level
+	 * @param container whether this is the title of a panel
+	 * @return the title renderer
+	 */
+	public IButtonRenderer<Void> getButtonRenderer (int level, boolean container);
 	
 	/**
 	 * Returns the renderer for toggle buttons.
+	 * @param level the panel nesting level
+	 * @param container whether this is the title of a panel
 	 * @return the button renderer
 	 */
-	public IButtonRenderer<IBoolean> getToggleButtonRenderer();
+	public IButtonRenderer<IBoolean> getToggleButtonRenderer (int level, boolean container);
 	
 	/**
 	 * Returns the renderer for check marks.
+	 * @param level the panel nesting level
+	 * @param container whether this is the title of a panel
 	 * @return the check mark renderer
 	 */
-	public IButtonRenderer<IBoolean> getCheckMarkRenderer();
+	public IButtonRenderer<IBoolean> getCheckMarkRenderer (int level, boolean container);
 	
 	/**
 	 * Returns the renderer for cycle buttons.
+	 * @param level the panel nesting level
+	 * @param container whether this is the title of a panel
 	 * @return the button renderer
 	 */
-	public IButtonRenderer<String> getCycleButtonRenderer();
+	public IButtonRenderer<String> getCycleButtonRenderer (int level, boolean container);
 	
 	/**
 	 * Returns the renderer for keybinds.
+	 * @param level the panel nesting level
+	 * @param container whether this is the title of a panel
 	 * @return the keybind renderer
 	 */
-	public IButtonRenderer<String> getKeybindRenderer();
+	public IButtonRenderer<String> getKeybindRenderer (int level, boolean container);
 	
 	/**
 	 * Returns the renderer for sliders.
+	 * @param level the panel nesting level
+	 * @param container whether this is the title of a panel
 	 * @return the slider renderer
 	 */
-	public ISliderRenderer getSliderRenderer();
+	public ISliderRenderer getSliderRenderer (int level, boolean container);
 	
 	/**
 	 * Returns the main color of a title bar.

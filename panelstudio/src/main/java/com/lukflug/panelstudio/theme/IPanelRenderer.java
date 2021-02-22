@@ -5,14 +5,15 @@ import com.lukflug.panelstudio.base.Context;
 /**
  * Interface abstracting the rendering of a panel.
  * @author lukflug
+ * @param <T> type representing state of the panel
  */
 @FunctionalInterface
-public interface IPanelRenderer {
+public interface IPanelRenderer<T> {
 	/**
 	 * Render the outline of a panel.
 	 * @param context the context to be used
 	 * @param focus the focus state of the panel
-	 * @param active the active state of the panel
+	 * @param active the state of the panel
 	 */
-	public void renderPanelOverlay (Context context, boolean focus, boolean active);
+	public void renderPanelOverlay (Context context, boolean focus, T state);
 }

@@ -95,24 +95,28 @@ public class FixedContainer extends Container<IFixedComponent> {
 		// Set context height
 		context.setHeight(getHeight());
 		// Do loop in inverse order
-		boolean highest[]= {true};
-		IFixedComponent focusComponent[]={null};
+		AtomicBoolean highest=new AtomicBoolean(true);
+		AtomicReference<IFixedComponent> focusComponent=new AtomicReference<IFixedComponent>(null);
 		doContextlessLoop(component->{
 			// Do payload operation
-			Context subContext=getSubContext(context,component,highest[0]);
+			Context subContext=getSubContext(context,component,highest.get());
 			function.accept(subContext,component);
 			// Check focus state
 			if (subContext.focusReleased()) context.releaseFocus();
 			else if (subContext.foucsRequested()) {
-				focusComponent[0]=component;
+				focusComponent.set(component);
 				context.requestFocus();
 			}
 			// Check onTop state
-			if (subContext.isHovered()) highest[0]=false;
+			if (subContext.isHovered()) highest.set(false);
 		});
 		// Update focus state
-		if (focusComponent[0]!=null) {
-			if (removeComponent(focusComponent[0])) addComponent(focusComponent[0]);
+		if (focusComponent.get()!=null) {
+			ComponentState focusState=components.stream().filter(state->state.component==focusComponent.get()).findFirst().orElse(null);
+			if (focusState!=null) {
+				components.remove(focusState);
+				components.add(focusState);
+			}
 		}
 	}
 	
