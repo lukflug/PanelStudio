@@ -1,6 +1,7 @@
 package com.lukflug.panelstudio.widget;
 
 import java.awt.Point;
+import java.util.function.Supplier;
 
 import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.IBoolean;
@@ -12,7 +13,6 @@ import com.lukflug.panelstudio.component.IFixedComponent;
 import com.lukflug.panelstudio.container.IContainer;
 import com.lukflug.panelstudio.container.VerticalContainer;
 import com.lukflug.panelstudio.setting.ILabeled;
-import com.lukflug.panelstudio.theme.IButtonRenderer;
 import com.lukflug.panelstudio.theme.IContainerRenderer;
 import com.lukflug.panelstudio.theme.IEmptySpaceRenderer;
 import com.lukflug.panelstudio.theme.IPanelRenderer;
@@ -37,8 +37,8 @@ public class DraggableContainer extends DraggableComponent implements IContainer
 	 * @param width the width of the panel
 	 * @param savesState whether the panel saves the state
 	 */
-	public DraggableContainer (ILabeled label, IBoolean active, IToggleable open, Animation animation, ITheme theme, Point position, int width, boolean savesState) {
-		this(label,active,open,animation,theme.getPanelRenderer(true),theme.getTitleRenderer(true),theme.getContainerRednerer(true),theme.getScrollBarRenderer(),theme.getEmptySpaceRenderer(),position,width,savesState);
+	public <T> DraggableContainer (ILabeled label, IComponent title, Supplier<T> state, IToggleable open, Animation animation, ITheme theme, int level, Point position, int width, boolean savesState) {
+		this(label,title,state,open,animation,theme.getPanelRenderer(level),theme.getContainerRenderer(level),theme.getScrollBarRenderer(level),theme.getEmptySpaceRenderer(level),position,width,savesState);
 	}
 	
 	/**
@@ -56,9 +56,9 @@ public class DraggableContainer extends DraggableComponent implements IContainer
 	 * @param width the width of the panel
 	 * @param savesState whether the panel saves the state
 	 */
-	public DraggableContainer (ILabeled label, IBoolean active, IToggleable open, Animation animation, IPanelRenderer panelRenderer, IButtonRenderer<Void> titleRenderer, IContainerRenderer containerRenderer, IScrollBarRenderer scrollRenderer, IEmptySpaceRenderer emptyRenderer, Point position, int width, boolean savesState) {
+	public <T> DraggableContainer (ILabeled label, IComponent title, Supplier<T> state, IToggleable open, Animation animation, IPanelRenderer<T> panelRenderer, IContainerRenderer containerRenderer, IScrollBarRenderer<T> scrollRenderer, IEmptySpaceRenderer<T> emptyRenderer, Point position, int width, boolean savesState) {
 		super(null);
-		panel=new CollapsibleContainer(getWrappedDragComponent(new Button(label,titleRenderer)),new VerticalContainer(label,containerRenderer),active,open,animation,panelRenderer,scrollRenderer,emptyRenderer,height->getScrollHeight(height),cwidth->getComponentWidth(cwidth));
+		panel=new CollapsibleContainer(getWrappedDragComponent(title),new VerticalContainer(label,containerRenderer),state,open,animation,panelRenderer,scrollRenderer,emptyRenderer,height->getScrollHeight(height),cwidth->getComponentWidth(cwidth));
 		this.fixedComponent=new FixedComponent(panel,position,width,panel.getToggle(),savesState);
 		this.component=fixedComponent;
 	}

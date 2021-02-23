@@ -8,8 +8,9 @@ import com.lukflug.panelstudio.theme.IScrollBarRenderer;
 /**
  * Scroll bar for use in scrollable containers.
  * @author lukflug
+ * @param <T> the state type
  */
-public abstract class ScrollBar extends FocusableComponent {
+public abstract class ScrollBar<T> extends FocusableComponent {
 	/**
 	 * Whether this scroll bar is horizontal or vertical.
 	 */
@@ -17,7 +18,7 @@ public abstract class ScrollBar extends FocusableComponent {
 	/**
 	 * The renderer to be used.
 	 */
-	protected IScrollBarRenderer renderer;
+	protected IScrollBarRenderer<T> renderer;
 
 	/**
 	 * Constructor.
@@ -25,7 +26,7 @@ public abstract class ScrollBar extends FocusableComponent {
 	 * @param horizontal whether this component is horizontal
 	 * @param renderer the renderer for this component
 	 */
-	public ScrollBar(ILabeled label, boolean horizontal, IScrollBarRenderer renderer) {
+	public ScrollBar (ILabeled label, boolean horizontal, IScrollBarRenderer<T> renderer) {
 		super(label);
 		this.horizontal=horizontal;
 	}
@@ -33,7 +34,7 @@ public abstract class ScrollBar extends FocusableComponent {
 	@Override
 	public void render (Context context) {
 		super.render(context);
-		setScrollPosition(renderer.renderScrollBar(context,hasFocus(context),isActive(),horizontal,getContentHeight(),getScrollPosition()));
+		setScrollPosition(renderer.renderScrollBar(context,hasFocus(context),getState(),horizontal,getContentHeight(),getScrollPosition()));
 	}
 
 	@Override
@@ -76,8 +77,8 @@ public abstract class ScrollBar extends FocusableComponent {
 	protected abstract void setScrollPosition (int position);
 	
 	/**
-	 * Whether scroll bar should be rendered as active.
-	 * @return whether scroll bar is active
+	 * What render state the scroll bar should use.
+	 * @return the scroll bar render state
 	 */
-	protected abstract boolean isActive();
+	protected abstract T getState();
 }

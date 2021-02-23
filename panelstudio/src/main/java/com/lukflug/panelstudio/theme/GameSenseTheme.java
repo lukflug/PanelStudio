@@ -1,18 +1,10 @@
 package com.lukflug.panelstudio.theme;
 
-import java.awt.Color;
-import java.awt.Point;
-import java.awt.Rectangle;
-
-import com.lukflug.panelstudio.base.Context;
-import com.lukflug.panelstudio.base.IBoolean;
-import com.lukflug.panelstudio.base.IInterface;
-
 /**
  * Recreates the appearance of GameSense 2.2.0.
  * @author lukflug
  */
-public class GameSenseTheme extends ThemeBase {
+/*public class GameSenseTheme extends ThemeBase {
 	public GameSenseTheme (IColorScheme scheme, int height, int border, int scroll) {
 		super(scheme);
 		scheme.createSetting(this,"Title Color","The color for panel titles.",false,true,new Color(255,0,0),false);
@@ -178,4 +170,4 @@ public class GameSenseTheme extends ThemeBase {
 	public Color getFontColor(boolean focus) {
 		return scheme.getColor("Font Color");
 	}
-}
+}*/

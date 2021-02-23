@@ -6,7 +6,6 @@ import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IToggleable;
-import com.lukflug.panelstudio.base.SimpleToggleable;
 import com.lukflug.panelstudio.setting.IColorSetting;
 import com.lukflug.panelstudio.setting.Labeled;
 import com.lukflug.panelstudio.theme.ISliderRenderer;
@@ -32,8 +31,8 @@ public class ColorComponent extends CollapsibleContainer {
 	 * @param animation the animation to be used
 	 * @param theme the theme to be used
 	 */
-	public ColorComponent (IColorSetting setting, Animation animation, ITheme theme) {
-		super(setting,()->true,new SimpleToggleable(false),animation,theme);
+	public ColorComponent (IColorSetting setting, Animation animation, ITheme theme, int level) {
+		super(setting,new Button(setting,theme.getButtonRenderer(level,true)),()->setting.getColor(),null,animation,theme,level);
 		this.setting=setting;
 		this.theme=theme;
 		addComponent(new ToggleButton(new Labeled("Rainbow",null,()->setting.allowsRainbow()),new IToggleable() {
@@ -46,11 +45,11 @@ public class ColorComponent extends CollapsibleContainer {
 			public void toggle() {
 				setting.setRainbow(!setting.getRainbow());
 			}
-		},theme.getToggleButtonRenderer()));
-		addComponent(new ColorSlider(()->true,theme.getSliderRenderer(),0));
-		addComponent(new ColorSlider(()->true,theme.getSliderRenderer(),1));
-		addComponent(new ColorSlider(()->true,theme.getSliderRenderer(),2));
-		addComponent(new ColorSlider(()->setting.hasAlpha(),theme.getSliderRenderer(),3));
+		},theme.getButtonRenderer(level,false)));
+		addComponent(new ColorSlider(()->true,theme.getSliderRenderer(level,false),0));
+		addComponent(new ColorSlider(()->true,theme.getSliderRenderer(level,false),1));
+		addComponent(new ColorSlider(()->true,theme.getSliderRenderer(level,false),2));
+		addComponent(new ColorSlider(()->setting.hasAlpha(),theme.getSliderRenderer(level,false),3));
 	}
 	
 	@Override

@@ -16,10 +16,16 @@ import com.lukflug.panelstudio.theme.IScrollBarRenderer;
 /**
  * Composite container containing a scroll component, which can be scrolled using scroll bars.
  * @author lukflug
+ * @param <T> the state type
  */
-public abstract class ScrollableComponent extends HorizontalContainer {
-	
-	public ScrollableComponent (IComponent component, IScrollBarRenderer renderer, IEmptySpaceRenderer emptyRenderer) {
+public abstract class ScrollableComponent<T> extends HorizontalContainer {
+	/**
+	 * Constructor.
+	 * @param component the component to be wrapped
+	 * @param renderer the renderer to use for the scroll bars
+	 * @param emptyRenderer the renderer to use for the corners
+	 */
+	public ScrollableComponent (IComponent component, IScrollBarRenderer<T> renderer, IEmptySpaceRenderer<T> emptyRenderer) {
 		super(new Labeled(component.getTitle(),null,()->component.isVisible()),new IContainerRenderer(){});
 		// Component containing content
 		ScrollComponent scrollComponent=new ScrollComponent(component) {
@@ -34,7 +40,7 @@ public abstract class ScrollableComponent extends HorizontalContainer {
 			}
 		};
 		// Vertical scroll bar
-		ScrollBar verticalBar=new ScrollBar(new Labeled(component.getTitle(),null,()->scrollComponent.isScrollingY()),false,renderer) {
+		ScrollBar<T> verticalBar=new ScrollBar<T>(new Labeled(component.getTitle(),null,()->scrollComponent.isScrollingY()),false,renderer) {
 			@Override
 			protected int getLength() {
 				return scrollComponent.getScrollSize().height;
@@ -56,12 +62,12 @@ public abstract class ScrollableComponent extends HorizontalContainer {
 			}
 
 			@Override
-			protected boolean isActive() {
-				return ScrollableComponent.this.isActive();
+			protected T getState() {
+				return ScrollableComponent.this.getState();
 			}
 		};
 		// Horizontal scroll bar
-		ScrollBar horizontalBar=new ScrollBar(new Labeled(component.getTitle(),null,()->scrollComponent.isScrollingX()),true,renderer) {
+		ScrollBar<T> horizontalBar=new ScrollBar<T>(new Labeled(component.getTitle(),null,()->scrollComponent.isScrollingX()),true,renderer) {
 			@Override
 			protected int getLength() {
 				return scrollComponent.getScrollSize().width;
@@ -83,8 +89,8 @@ public abstract class ScrollableComponent extends HorizontalContainer {
 			}
 
 			@Override
-			protected boolean isActive() {
-				return ScrollableComponent.this.isActive();
+			protected T getState() {
+				return ScrollableComponent.this.getState();
 			}
 		};
 		// Populate containers
@@ -93,7 +99,12 @@ public abstract class ScrollableComponent extends HorizontalContainer {
 		leftContainer.addComponent(horizontalBar);
 		VerticalContainer rightContainer=new VerticalContainer(new Labeled(component.getTitle(),null,()->true),new IContainerRenderer(){});
 		rightContainer.addComponent(verticalBar);
-		rightContainer.addComponent(new EmptySpace(new Labeled("Empty",null,()->scrollComponent.isScrollingX()&&scrollComponent.isScrollingY()),()->renderer.getThickness(),emptyRenderer));
+		rightContainer.addComponent(new EmptySpace<T>(new Labeled("Empty",null,()->scrollComponent.isScrollingX()&&scrollComponent.isScrollingY()),()->renderer.getThickness(),emptyRenderer) {
+			@Override
+			protected T getState() {
+				return ScrollableComponent.this.getState();
+			}
+		});
 		addComponent(new HorizontalComponent(leftContainer,0,1));
 		addComponent(new HorizontalComponent(rightContainer,0,0) {
 			@Override
@@ -118,8 +129,8 @@ public abstract class ScrollableComponent extends HorizontalContainer {
 	protected abstract int getComponentWidth (int scrollWidth);
 	
 	/**
-	 * Whether component should be rendered as active.
-	 * @return whether scroll bar is active
+	 * What render state the scroll bar should use.
+	 * @return the scroll bar render state
 	 */
-	protected abstract boolean isActive();
+	protected abstract T getState();
 }

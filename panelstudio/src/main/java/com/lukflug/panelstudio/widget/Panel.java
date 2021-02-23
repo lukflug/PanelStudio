@@ -1,9 +1,10 @@
 package com.lukflug.panelstudio.widget;
 
+import java.util.function.Supplier;
+
 import com.lukflug.panelstudio.base.AnimatedToggleable;
 import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.Context;
-import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.base.IToggleable;
 import com.lukflug.panelstudio.component.CollapsibleComponent;
@@ -29,19 +30,19 @@ public class Panel extends FocusableComponentProxy {
 	 * Creates a generic panel.
 	 * @param title the title component of the panel
 	 * @param content the content of the panel
-	 * @param active whether this panel is active
+	 * @param state the state of this panel
 	 * @param open the toggleable to use for opening and closing the panel 
 	 * @param animation the animation to use for opening and closing the panel
 	 * @param panelRenderer the render to use for the overlay of this panel
 	 * @return a vertical container having the functionality of a panel
 	 */
-	public Panel (IComponent title, IComponent content, IBoolean active, IToggleable open, Animation animation, IPanelRenderer panelRenderer) {
+	public <T> Panel (IComponent title, IComponent content, Supplier<T> state, IToggleable open, Animation animation, IPanelRenderer<T> panelRenderer) {
 		super(null);
 		VerticalContainer container=new VerticalContainer(new Labeled(title.getTitle(),null,()->content.isVisible()),new IContainerRenderer(){}) {
 			@Override
 			public void render (Context context) {
 				super.render(context);
-				panelRenderer.renderPanelOverlay(context,hasFocus(context),active.isOn());
+				panelRenderer.renderPanelOverlay(context,hasFocus(context),state.get());
 			}
 		};
 		collapsible=new CollapsibleComponent(content,open,animation);

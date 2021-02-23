@@ -11,107 +11,91 @@ import com.lukflug.panelstudio.base.IInterface;
  * In this way, the renderers can effectively be switched, without changing the field in the components itself.
  * @author lukflug
  */
-public abstract class ThemeMultiplexer implements ITheme {
-	IDescriptionRendererProxy descriptionRenderer=()->getTheme().getDescriptionRenderer();
-	IButtonRendererProxy<Void> titleRenderer=()->getTheme().getTitleRenderer(false);
-	IButtonRendererProxy<Void> panelTitleRenderer=()->getTheme().getTitleRenderer(true);
-	IPanelRendererProxy panelRenderer=()->getTheme().getPanelRenderer(false);
-	IPanelRendererProxy panelPanelRenderer=()->getTheme().getPanelRenderer(true);
-	IContainerRendererProxy containerRenderer=()->getTheme().getContainerRednerer(false);
-	IContainerRendererProxy panelContainerRenderer=()->getTheme().getContainerRednerer(true);
-	IScrollBarRendererProxy scrollRenderer=()->getTheme().getScrollBarRenderer();
-	IEmptySpaceRendererProxy cornerRenderer=()->getTheme().getEmptySpaceRenderer();
-	IButtonRendererProxy<IBoolean> toggleButtonRenderer=()->getTheme().getToggleButtonRenderer();
-	IButtonRendererProxy<IBoolean> checkMarkRenderer=()->getTheme().getCheckMarkRenderer();
-	IButtonRendererProxy<String> cycleButtonRenderer=()->getTheme().getCycleButtonRenderer();
-	IButtonRendererProxy<String> keybindRenderer=()->getTheme().getKeybindRenderer();
-	ISliderRendererProxy sliderRenderer=()->getTheme().getSliderRenderer();
-
+@FunctionalInterface
+public interface ThemeMultiplexer extends ITheme {
 	@Override
-	public void loadAssets(IInterface inter) {
+	public default void loadAssets(IInterface inter) {
 		getTheme().loadAssets(inter);
 	}
 
 	@Override
-	public IDescriptionRenderer getDescriptionRenderer() {
-		return descriptionRenderer;
+	public default IDescriptionRenderer getDescriptionRenderer() {
+		IDescriptionRendererProxy proxy=()->getTheme().getDescriptionRenderer();
+		return proxy;
+	}
+
+	@Override
+	public default IContainerRenderer getContainerRenderer(int level) {
+		IContainerRendererProxy proxy=()->getTheme().getContainerRenderer(level);
+		return proxy;
 	}
 	
-	@Override
-	public IButtonRenderer<Void> getTitleRenderer(boolean panel) {
-		if (panel) return panelTitleRenderer;
-		else return titleRenderer;
+	public default <T> IPanelRenderer<T> getPanelRenderer (int level) {
+		IPanelRendererProxy<T> proxy=()->getTheme().getPanelRenderer(level);
+		return proxy;
+	}
+	
+	public default <T> IScrollBarRenderer<T> getScrollBarRenderer (int level) {
+		IScrollBarRendererProxy<T> proxy=()->getTheme().getScrollBarRenderer(level);
+		return proxy;
+	}
+	
+	public default <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer (int level) {
+		IEmptySpaceRendererProxy<T> proxy=()->getTheme().getEmptySpaceRenderer(level);
+		return proxy;
 	}
 
 	@Override
-	public IPanelRenderer getPanelRenderer(boolean panel) {
-		if (panel) return panelPanelRenderer;
-		else return panelRenderer;
+	public default <T> IButtonRenderer<T> getButtonRenderer(int level, boolean container) {
+		IButtonRendererProxy<T> proxy=()->getTheme().getButtonRenderer(level,container);
+		return proxy;
 	}
 
 	@Override
-	public IContainerRenderer getContainerRednerer(boolean panel) {
-		if (panel) return panelContainerRenderer;
-		else return containerRenderer;
+	public default IButtonRenderer<IBoolean> getCheckMarkRenderer(int level, boolean container) {
+		IButtonRendererProxy<IBoolean> proxy=()->getTheme().getCheckMarkRenderer(level,container);
+		return proxy;
 	}
 
 	@Override
-	public IScrollBarRenderer getScrollBarRenderer() {
-		return scrollRenderer;
+	public default IButtonRenderer<String> getKeybindRenderer(int level, boolean container) {
+		IButtonRendererProxy<String> proxy=()->getTheme().getKeybindRenderer(level,container);
+		return proxy;
 	}
 
 	@Override
-	public IEmptySpaceRenderer getEmptySpaceRenderer() {
-		return cornerRenderer;
+	public default ISliderRenderer getSliderRenderer(int level, boolean container) {
+		ISliderRendererProxy proxy=()->getTheme().getSliderRenderer(level,container);
+		return proxy;
 	}
 
 	@Override
-	public IButtonRenderer<IBoolean> getToggleButtonRenderer() {
-		return toggleButtonRenderer;
+	public default int getBaseHeight() {
+		return getTheme().getBaseHeight();
 	}
 
 	@Override
-	public IButtonRenderer<IBoolean> getCheckMarkRenderer() {
-		return checkMarkRenderer;
-	}
-
-	@Override
-	public IButtonRenderer<String> getCycleButtonRenderer() {
-		return cycleButtonRenderer;
-	}
-
-	@Override
-	public IButtonRenderer<String> getKeybindRenderer() {
-		return keybindRenderer;
-	}
-
-	@Override
-	public ISliderRenderer getSliderRenderer() {
-		return sliderRenderer;
-	}
-
-	@Override
-	public Color getMainColor(boolean focus, boolean active) {
+	public default Color getMainColor(boolean focus, boolean active) {
 		return getTheme().getMainColor(focus,active);
 	}
 
 	@Override
-	public Color getBackgroundColor(boolean focus) {
+	public default Color getBackgroundColor(boolean focus) {
 		return getTheme().getBackgroundColor(focus);
 	}
 
 	@Override
-	public Color getFontColor(boolean focus) {
+	public default Color getFontColor(boolean focus) {
 		return getTheme().getFontColor(focus);
 	}
 
 	@Override
-	public void overrideMainColor(Color color) {
+	public default void overrideMainColor(Color color) {
 		getTheme().overrideMainColor(color);
 	}
 
 	@Override
-	public void restoreMainColor() {
+	public default void restoreMainColor() {
 		getTheme().restoreMainColor();
 	}
 	
@@ -119,5 +103,5 @@ public abstract class ThemeMultiplexer implements ITheme {
 	 * Abstract method that returns the current theme.
 	 * @return the current theme
 	 */
-	protected abstract ITheme getTheme();
+	public ITheme getTheme();
 }

@@ -1,6 +1,7 @@
 package com.lukflug.panelstudio.widget;
 
 import java.util.function.IntFunction;
+import java.util.function.Supplier;
 
 import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.Context;
@@ -10,7 +11,6 @@ import com.lukflug.panelstudio.component.IComponent;
 import com.lukflug.panelstudio.container.IContainer;
 import com.lukflug.panelstudio.container.VerticalContainer;
 import com.lukflug.panelstudio.setting.ILabeled;
-import com.lukflug.panelstudio.theme.IButtonRenderer;
 import com.lukflug.panelstudio.theme.IContainerRenderer;
 import com.lukflug.panelstudio.theme.IEmptySpaceRenderer;
 import com.lukflug.panelstudio.theme.IPanelRenderer;
@@ -20,6 +20,7 @@ import com.lukflug.panelstudio.theme.ITheme;
 /**
  * Container that can be closed and scrolled, so that its children can be hidden.
  * @author lukflug
+ * @param <T> the type representing the state
  */
 public class CollapsibleContainer extends Panel implements IContainer<IComponent> {
 	/**
@@ -30,36 +31,38 @@ public class CollapsibleContainer extends Panel implements IContainer<IComponent
 	/**
 	 * Constructor using theme.
 	 * @param label the label for the component
-	 * @param active whether the panel is active
+	 * @param title the title for the component
+	 * @param state the state of this panel
 	 * @param open the toggleable to be used to open and close the panel
 	 * @param animation the animation for opening and closing the panel
 	 * @param theme the theme to be used
+	 * @param level the nesting level to use
 	 */
-	public CollapsibleContainer (ILabeled label, IBoolean active, IToggleable open, Animation animation, ITheme theme) {
-		this(label,active,open,animation,theme.getPanelRenderer(false),theme.getTitleRenderer(false),theme.getContainerRednerer(false),theme.getScrollBarRenderer(),theme.getEmptySpaceRenderer());
+	public <T> CollapsibleContainer (ILabeled label, IComponent title, Supplier<T> state, IToggleable open, Animation animation, ITheme theme, int level) {
+		this(label,title,state,open,animation,theme.getPanelRenderer(level),theme.getContainerRenderer(level),theme.getScrollBarRenderer(level),theme.getEmptySpaceRenderer(level));
 	}
 	
 	/**
 	 * Constructor.
 	 * @param label the label for the component
-	 * @param active whether the panel is active
+	 * @param title the title for the component
+	 * @param state the state of this panel
 	 * @param open the toggleable to be used to open and close the panel
 	 * @param animation the animation for opening and closing the panel
 	 * @param panelRenderer the renderer for the panel overlay
-	 * @param titleRenderer the renderer for the panel title
 	 * @param containerRenderer the renderer for the panel content container
 	 * @param scrollRenderer the renderer for the scroll bars
 	 * @param emptyRenderer the renderer for the scroll corner
 	 */
-	public CollapsibleContainer (ILabeled label, IBoolean active, IToggleable open, Animation animation, IPanelRenderer panelRenderer, IButtonRenderer<Void> titleRenderer, IContainerRenderer containerRenderer, IScrollBarRenderer scrollRenderer, IEmptySpaceRenderer emptyRenderer) {
-		this(new Button(label,titleRenderer),new VerticalContainer(label,containerRenderer),active,open,animation,panelRenderer,scrollRenderer,emptyRenderer,height->height,width->width);
+	public <T> CollapsibleContainer (ILabeled label, IComponent title, Supplier<T> state, IToggleable open, Animation animation, IPanelRenderer<T> panelRenderer, IContainerRenderer containerRenderer, IScrollBarRenderer<T> scrollRenderer, IEmptySpaceRenderer<T> emptyRenderer) {
+		this(title,new VerticalContainer(label,containerRenderer),state,open,animation,panelRenderer,scrollRenderer,emptyRenderer,height->height,width->width);
 	}
 	
 	/**
 	 * Constructor.
 	 * @param title the title of the panel
 	 * @param content the content container of the panel
-	 * @param active whether the panel is active
+	 * @param state the state of this panel
 	 * @param open the toggleable to be used to open and close the panel
 	 * @param animation the animation for opening and closing the panel
 	 * @param panelRenderer the renderer for the panel overlay
@@ -68,8 +71,8 @@ public class CollapsibleContainer extends Panel implements IContainer<IComponent
 	 * @param scrollHeight function for the scroll height
 	 * @param componentWidth function for the component width
 	 */
-	public CollapsibleContainer (IComponent title, VerticalContainer content, IBoolean active, IToggleable open, Animation animation, IPanelRenderer panelRenderer, IScrollBarRenderer scrollRenderer, IEmptySpaceRenderer emptyRenderer, IntFunction<Integer> scrollHeight, IntFunction<Integer> componentWidth) {
-		super(title,new ScrollableComponent(content,scrollRenderer,emptyRenderer) {
+	public <T> CollapsibleContainer (IComponent title, VerticalContainer content, Supplier<T> state, IToggleable open, Animation animation, IPanelRenderer<T> panelRenderer, IScrollBarRenderer<T> scrollRenderer, IEmptySpaceRenderer<T> emptyRenderer, IntFunction<Integer> scrollHeight, IntFunction<Integer> componentWidth) {
+		super(title,new ScrollableComponent<T>(content,scrollRenderer,emptyRenderer) {
 			@Override
 			protected int getScrollHeight (int componentHeight) {
 				return scrollHeight.apply(componentHeight); 
@@ -81,10 +84,10 @@ public class CollapsibleContainer extends Panel implements IContainer<IComponent
 			}
 
 			@Override
-			protected boolean isActive() {
-				return active.isOn();
+			protected T getState() {
+				return state.get();
 			}
-		},active,open,animation,panelRenderer);
+		},state,open,animation,panelRenderer);
 		contentContainer=content;
 	}
 	

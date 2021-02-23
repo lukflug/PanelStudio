@@ -2,6 +2,7 @@ package com.lukflug.panelstudio.theme;
 
 import java.awt.Color;
 
+import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IInterface;
 
@@ -23,46 +24,90 @@ public interface ITheme {
 	public IDescriptionRenderer getDescriptionRenderer();
 	
 	/**
-	 * Returns the renderer for the panel outline.
-	 * @param panel whether this is the root panel or not
-	 * @return the panel renderer
-	 */
-	public IPanelRenderer getPanelRenderer (boolean panel);
-	
-	/**
 	 * Returns the renderer for the panel background.
-	 * @param panel whether this is the root panel or not
+	 * @param level the panel nesting level
 	 * @return the container renderer
 	 */
-	public IContainerRenderer getContainerRednerer (boolean panel);
+	public IContainerRenderer getContainerRenderer (int level);
+	
+	/**
+	 * Returns the renderer for the panel outline.
+	 * @param <T> the state type
+	 * @param level the panel nesting level
+	 * @return the panel renderer
+	 */
+	public default <T> IPanelRenderer<T> getPanelRenderer (int level) {
+		return new IPanelRenderer<T>() {
+			IPanelRenderer<Void> renderer=getPanelRenderer(level);
+			
+			@Override
+			public void renderPanelOverlay(Context context, boolean focus, T state) {
+				renderer.renderPanelOverlay(context,focus,null);
+			}
+		};
+	}
 	
 	/**
 	 * Returns the renderer for scroll bars.
+	 * @param <T> the state type
+	 * @param level the panel nesting level
 	 * @return the scroll bar renderer
 	 */
-	public IScrollBarRenderer getScrollBarRenderer();
+	public default <T> IScrollBarRenderer<T> getScrollBarRenderer (int level) {
+		return new IScrollBarRenderer<T>() {
+			IScrollBarRenderer<Void> renderer=getScrollBarRenderer(level);
+
+			@Override
+			public int renderScrollBar(Context context, boolean focus, T state, boolean horizontal, int height, int position) {
+				return renderer.renderScrollBar(context,focus,null,horizontal,height,position);
+			}
+
+			@Override
+			public int getThickness() {
+				return renderer.getThickness();
+			}
+		};
+	}
 	
 	/**
 	 * Returns the renderer for the scroll corner.
+	 * @param <T> the state type
+	 * @param level the panel nesting level
 	 * @return the empty space renderer
 	 */
-	public <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer();
+	public default <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer (int level) {
+		return new IEmptySpaceRenderer<T>() {
+			IEmptySpaceRenderer<Void> renderer=getEmptySpaceRenderer(level);
+
+			@Override
+			public void renderSpace(Context context, boolean focus, T state) {
+				renderer.renderSpace(context,focus,null);
+			}
+		};
+	}
 	
 	/**
-	 * Returns the renderer for stateless buttons.
+	 * Returns the renderer for buttons.
+	 * @param <T> the state type
 	 * @param level the panel nesting level
 	 * @param container whether this is the title of a panel
 	 * @return the title renderer
 	 */
-	public IButtonRenderer<Void> getButtonRenderer (int level, boolean container);
-	
-	/**
-	 * Returns the renderer for toggle buttons.
-	 * @param level the panel nesting level
-	 * @param container whether this is the title of a panel
-	 * @return the button renderer
-	 */
-	public IButtonRenderer<IBoolean> getToggleButtonRenderer (int level, boolean container);
+	public default <T> IButtonRenderer<T> getButtonRenderer (int level, boolean container) {
+		return new IButtonRenderer<T>() {
+			IButtonRenderer<Void> renderer=getButtonRenderer(level,container);
+			
+			@Override
+			public void renderButton(Context context, String title, boolean focus, T state) {
+				renderer.renderButton(context,title,focus,null);
+			}
+
+			@Override
+			public int getDefaultHeight() {
+				return renderer.getDefaultHeight();
+			}
+		};
+	}
 	
 	/**
 	 * Returns the renderer for check marks.
@@ -71,14 +116,6 @@ public interface ITheme {
 	 * @return the check mark renderer
 	 */
 	public IButtonRenderer<IBoolean> getCheckMarkRenderer (int level, boolean container);
-	
-	/**
-	 * Returns the renderer for cycle buttons.
-	 * @param level the panel nesting level
-	 * @param container whether this is the title of a panel
-	 * @return the button renderer
-	 */
-	public IButtonRenderer<String> getCycleButtonRenderer (int level, boolean container);
 	
 	/**
 	 * Returns the renderer for keybinds.
@@ -95,6 +132,12 @@ public interface ITheme {
 	 * @return the slider renderer
 	 */
 	public ISliderRenderer getSliderRenderer (int level, boolean container);
+	
+	/**
+	 * Get the common height of a component.
+	 * @return the base height
+	 */
+	public int getBaseHeight();
 	
 	/**
 	 * Returns the main color of a title bar.
