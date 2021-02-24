@@ -37,8 +37,8 @@ public class DraggableContainer extends DraggableComponent implements IContainer
 	 * @param width the width of the panel
 	 * @param savesState whether the panel saves the state
 	 */
-	public <T> DraggableContainer (ILabeled label, IComponent title, Supplier<T> state, IToggleable open, Animation animation, ITheme theme, int level, Point position, int width, boolean savesState) {
-		this(label,title,state,open,animation,theme.getPanelRenderer(level),theme.getContainerRenderer(level),theme.getScrollBarRenderer(level),theme.getEmptySpaceRenderer(level),position,width,savesState);
+	public <T> DraggableContainer (ILabeled label, IComponent title, Class<T> type, Supplier<T> state, IToggleable open, Animation animation, ITheme theme, int level, Point position, int width, boolean savesState) {
+		this(label,title,state,open,animation,theme.getPanelRenderer(type,level),theme.getContainerRenderer(level),theme.getScrollBarRenderer(type,level),theme.getEmptySpaceRenderer(type,level),position,width,savesState);
 	}
 	
 	/**

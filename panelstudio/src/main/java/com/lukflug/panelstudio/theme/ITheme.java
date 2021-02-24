@@ -2,7 +2,6 @@ package com.lukflug.panelstudio.theme;
 
 import java.awt.Color;
 
-import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IInterface;
 
@@ -33,85 +32,44 @@ public interface ITheme {
 	/**
 	 * Returns the renderer for the panel outline.
 	 * @param <T> the state type
+	 * @param type the state class
 	 * @param level the panel nesting level
 	 * @return the panel renderer
 	 */
-	public default <T> IPanelRenderer<T> getPanelRenderer (int level) {
-		return new IPanelRenderer<T>() {
-			IPanelRenderer<Void> renderer=getPanelRenderer(level);
-			
-			@Override
-			public void renderPanelOverlay(Context context, boolean focus, T state) {
-				renderer.renderPanelOverlay(context,focus,null);
-			}
-		};
-	}
+	public <T> IPanelRenderer<T> getPanelRenderer (Class<T> type, int level);
 	
 	/**
 	 * Returns the renderer for scroll bars.
 	 * @param <T> the state type
+	 * @param type the state class
 	 * @param level the panel nesting level
 	 * @return the scroll bar renderer
 	 */
-	public default <T> IScrollBarRenderer<T> getScrollBarRenderer (int level) {
-		return new IScrollBarRenderer<T>() {
-			IScrollBarRenderer<Void> renderer=getScrollBarRenderer(level);
-
-			@Override
-			public int renderScrollBar(Context context, boolean focus, T state, boolean horizontal, int height, int position) {
-				return renderer.renderScrollBar(context,focus,null,horizontal,height,position);
-			}
-
-			@Override
-			public int getThickness() {
-				return renderer.getThickness();
-			}
-		};
-	}
+	public <T> IScrollBarRenderer<T> getScrollBarRenderer (Class<T> type, int level);
 	
 	/**
 	 * Returns the renderer for the scroll corner.
 	 * @param <T> the state type
+	 * @param type the state class
 	 * @param level the panel nesting level
 	 * @return the empty space renderer
 	 */
-	public default <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer (int level) {
-		return new IEmptySpaceRenderer<T>() {
-			IEmptySpaceRenderer<Void> renderer=getEmptySpaceRenderer(level);
-
-			@Override
-			public void renderSpace(Context context, boolean focus, T state) {
-				renderer.renderSpace(context,focus,null);
-			}
-		};
-	}
+	public <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer (Class<T> type, int level);
 	
 	/**
 	 * Returns the renderer for buttons.
 	 * @param <T> the state type
+	 * @param type the state class
 	 * @param level the panel nesting level
 	 * @param container whether this is the title of a panel
 	 * @return the title renderer
 	 */
-	public default <T> IButtonRenderer<T> getButtonRenderer (int level, boolean container) {
-		return new IButtonRenderer<T>() {
-			IButtonRenderer<Void> renderer=getButtonRenderer(level,container);
-			
-			@Override
-			public void renderButton(Context context, String title, boolean focus, T state) {
-				renderer.renderButton(context,title,focus,null);
-			}
-
-			@Override
-			public int getDefaultHeight() {
-				return renderer.getDefaultHeight();
-			}
-		};
-	}
+	public <T> IButtonRenderer<T> getButtonRenderer (Class<T> type, int level, boolean container);
 	
 	/**
 	 * Returns the renderer for check marks.
 	 * @param level the panel nesting level
+	 * @param type the state class
 	 * @param container whether this is the title of a panel
 	 * @return the check mark renderer
 	 */

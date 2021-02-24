@@ -38,8 +38,8 @@ public class CollapsibleContainer extends Panel implements IContainer<IComponent
 	 * @param theme the theme to be used
 	 * @param level the nesting level to use
 	 */
-	public <T> CollapsibleContainer (ILabeled label, IComponent title, Supplier<T> state, IToggleable open, Animation animation, ITheme theme, int level) {
-		this(label,title,state,open,animation,theme.getPanelRenderer(level),theme.getContainerRenderer(level),theme.getScrollBarRenderer(level),theme.getEmptySpaceRenderer(level));
+	public <T> CollapsibleContainer (ILabeled label, IComponent title, Class<T> type, Supplier<T> state, IToggleable open, Animation animation, ITheme theme, int level) {
+		this(label,title,state,open,animation,theme.getPanelRenderer(type,level),theme.getContainerRenderer(level),theme.getScrollBarRenderer(type,level),theme.getEmptySpaceRenderer(type,level));
 	}
 	
 	/**

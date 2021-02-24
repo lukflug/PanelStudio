@@ -30,24 +30,27 @@ public interface ThemeMultiplexer extends ITheme {
 		return proxy;
 	}
 	
-	public default <T> IPanelRenderer<T> getPanelRenderer (int level) {
-		IPanelRendererProxy<T> proxy=()->getTheme().getPanelRenderer(level);
+	@Override
+	public default <T> IPanelRenderer<T> getPanelRenderer (Class<T> type, int level) {
+		IPanelRendererProxy<T> proxy=()->getTheme().getPanelRenderer(type,level);
 		return proxy;
 	}
 	
-	public default <T> IScrollBarRenderer<T> getScrollBarRenderer (int level) {
-		IScrollBarRendererProxy<T> proxy=()->getTheme().getScrollBarRenderer(level);
+	@Override
+	public default <T> IScrollBarRenderer<T> getScrollBarRenderer (Class<T> type, int level) {
+		IScrollBarRendererProxy<T> proxy=()->getTheme().getScrollBarRenderer(type,level);
 		return proxy;
 	}
 	
-	public default <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer (int level) {
-		IEmptySpaceRendererProxy<T> proxy=()->getTheme().getEmptySpaceRenderer(level);
+	@Override
+	public default <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer (Class<T> type, int level) {
+		IEmptySpaceRendererProxy<T> proxy=()->getTheme().getEmptySpaceRenderer(type,level);
 		return proxy;
 	}
 
 	@Override
-	public default <T> IButtonRenderer<T> getButtonRenderer(int level, boolean container) {
-		IButtonRendererProxy<T> proxy=()->getTheme().getButtonRenderer(level,container);
+	public default <T> IButtonRenderer<T> getButtonRenderer(Class<T> type, int level, boolean container) {
+		IButtonRendererProxy<T> proxy=()->getTheme().getButtonRenderer(type,level,container);
 		return proxy;
 	}
 

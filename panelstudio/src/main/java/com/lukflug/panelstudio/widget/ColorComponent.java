@@ -32,7 +32,7 @@ public class ColorComponent extends CollapsibleContainer {
 	 * @param theme the theme to be used
 	 */
 	public ColorComponent (IColorSetting setting, Animation animation, ITheme theme, int level) {
-		super(setting,new Button(setting,theme.getButtonRenderer(level,true)),()->setting.getColor(),null,animation,theme,level);
+		super(setting,new Button(setting,theme.getButtonRenderer(Void.class,level,true)),Void.class,()->null,null,animation,theme,level);
 		this.setting=setting;
 		this.theme=theme;
 		addComponent(new ToggleButton(new Labeled("Rainbow",null,()->setting.allowsRainbow()),new IToggleable() {
@@ -45,7 +45,7 @@ public class ColorComponent extends CollapsibleContainer {
 			public void toggle() {
 				setting.setRainbow(!setting.getRainbow());
 			}
-		},theme.getButtonRenderer(level,false)));
+		},theme.getButtonRenderer(IBoolean.class,level,false)));
 		addComponent(new ColorSlider(()->true,theme.getSliderRenderer(level,false),0));
 		addComponent(new ColorSlider(()->true,theme.getSliderRenderer(level,false),1));
 		addComponent(new ColorSlider(()->true,theme.getSliderRenderer(level,false),2));
