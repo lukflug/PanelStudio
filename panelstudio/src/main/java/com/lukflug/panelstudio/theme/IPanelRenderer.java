@@ -8,7 +8,7 @@ import com.lukflug.panelstudio.base.Context;
  * @param <T> type representing state of the panel
  */
 @FunctionalInterface
-public interface IPanelRenderer<T> {
+public interface IPanelRenderer<T> extends IContainerRenderer {
 	/**
 	 * Render the outline of a panel.
 	 * @param context the context to be used

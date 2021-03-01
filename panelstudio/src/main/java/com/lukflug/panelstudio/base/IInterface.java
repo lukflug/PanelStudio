@@ -22,6 +22,13 @@ public interface IInterface {
 	public static final int RBUTTON=1;
 	
 	/**
+	 * Returns the time in milliseconds of the start of rendering.
+	 * Should not change during rendering, because it serves to ensure the animations are synchronized.
+	 * @return the current time in milliseconds
+	 */
+	public long getTime();
+	
+	/**
 	 * Method to query the current mouse position.
 	 * May be called by any GUI-related method.
 	 * @return current mouse position

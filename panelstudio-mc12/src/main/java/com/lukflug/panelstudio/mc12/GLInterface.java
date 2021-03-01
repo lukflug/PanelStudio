@@ -52,9 +52,13 @@ public abstract class GLInterface implements IInterface {
 	 */
 	private Stack<Rectangle> clipRect=new Stack<Rectangle>();
 	/**
-	 * Boolean indicating whether to clip in the horizontal direction 
+	 * Boolean indicating whether to clip in the horizontal direction. 
 	 */
 	protected boolean clipX;
+	/**
+	 * Last rendering time.
+	 */
+	protected long lastTime;
 	
 	/**
 	 * Constructor.
@@ -62,6 +66,11 @@ public abstract class GLInterface implements IInterface {
 	 */
 	public GLInterface (boolean clipX) {
 		this.clipX=clipX;
+	}
+	
+	@Override
+	public long getTime() {
+		return lastTime;
 	}
 
 	@Override
@@ -231,6 +240,7 @@ public abstract class GLInterface implements IInterface {
 	 * Update the matrix buffers.
 	 */
 	public void getMatrices() {
+		lastTime=System.currentTimeMillis();
 		GlStateManager.getFloat(GL11.GL_MODELVIEW_MATRIX,MODELVIEW);
 		GlStateManager.getFloat(GL11.GL_PROJECTION_MATRIX,PROJECTION);
 		GlStateManager.glGetInteger(GL11.GL_VIEWPORT,VIEWPORT);

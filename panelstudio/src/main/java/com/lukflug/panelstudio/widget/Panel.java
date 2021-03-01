@@ -13,7 +13,6 @@ import com.lukflug.panelstudio.component.FocusableComponentProxy;
 import com.lukflug.panelstudio.component.IComponent;
 import com.lukflug.panelstudio.container.VerticalContainer;
 import com.lukflug.panelstudio.setting.Labeled;
-import com.lukflug.panelstudio.theme.IContainerRenderer;
 import com.lukflug.panelstudio.theme.IPanelRenderer;
 
 /**
@@ -38,7 +37,7 @@ public class Panel extends FocusableComponentProxy {
 	 */
 	public <T> Panel (IComponent title, IComponent content, Supplier<T> state, IToggleable open, Animation animation, IPanelRenderer<T> panelRenderer) {
 		super(null);
-		VerticalContainer container=new VerticalContainer(new Labeled(title.getTitle(),null,()->content.isVisible()),new IContainerRenderer(){}) {
+		VerticalContainer container=new VerticalContainer(new Labeled(title.getTitle(),null,()->content.isVisible()),panelRenderer) {
 			@Override
 			public void render (Context context) {
 				super.render(context);

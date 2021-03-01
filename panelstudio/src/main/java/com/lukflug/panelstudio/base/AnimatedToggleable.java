@@ -23,7 +23,7 @@ public final class AnimatedToggleable implements IToggleable {
 		if (toggle!=null) this.toggle=toggle;
 		else this.toggle=new SimpleToggleable(false);
 		if (animation!=null) this.animation=animation;
-		else this.animation=new Animation() {
+		else this.animation=new Animation(System::currentTimeMillis) {
 			@Override
 			protected int getSpeed() {
 				return 0;

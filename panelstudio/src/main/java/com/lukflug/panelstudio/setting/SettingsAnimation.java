@@ -18,7 +18,8 @@ public class SettingsAnimation extends Animation {
 	 * Constructor.
 	 * @param speed speed setting
 	 */
-	public SettingsAnimation (Supplier<Integer> speed) {
+	public SettingsAnimation (Supplier<Integer> speed, Supplier<Long> time) {
+		super(time);
 		this.speed=speed;
 	}
 	

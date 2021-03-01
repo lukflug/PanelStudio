@@ -1,10 +1,16 @@
 package com.lukflug.panelstudio.base;
 
+import java.util.function.Supplier;
+
 /**
  * Class representing an animation.
  * @author lukflug
  */
 public abstract class Animation {
+	/**
+	 * The function to supply the current time in milliseconds
+	 */
+	protected final Supplier<Long> time;
 	/**
 	 * Current value.
 	 */
@@ -16,13 +22,18 @@ public abstract class Animation {
 	/**
 	 * Time of last value transition.
 	 */
-	protected long lastTime=System.currentTimeMillis();
+	protected long lastTime;
+	
+	public Animation (Supplier<Long> time) {
+		this.time=time;
+		lastTime=time.get();
+	}
 	
 	/**
 	 * Set a value immediately, without an transition animation.
 	 * @param value the new value
 	 */
-	public void initValue(double value) {
+	public void initValue (double value) {
 		this.value=value;
 		lastValue=value;
 	}
@@ -33,7 +44,7 @@ public abstract class Animation {
 	 */
 	public double getValue() {
 		if (getSpeed()==0) return value;
-		double weight=(System.currentTimeMillis()-lastTime)/(double)getSpeed();
+		double weight=(time.get()-lastTime)/(double)getSpeed();
 		if (weight>=1) return value;
 		else if (weight<=0) return lastValue;
 		return value*weight+lastValue*(1-weight);
@@ -54,7 +65,7 @@ public abstract class Animation {
 	public void setValue(double value) {
 		lastValue=getValue();
 		this.value=value;
-		lastTime=System.currentTimeMillis();
+		lastTime=time.get();
 	}
 	
 	/**

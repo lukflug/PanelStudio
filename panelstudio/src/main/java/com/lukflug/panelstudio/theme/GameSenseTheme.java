@@ -2,6 +2,7 @@ package com.lukflug.panelstudio.theme;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.Rectangle;
 
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IBoolean;
@@ -13,12 +14,14 @@ import com.lukflug.panelstudio.base.IInterface;
  */
 public class GameSenseTheme extends ThemeBase {
 	protected final int height,border,scroll;
+	protected final String separator;
 	
-	public GameSenseTheme (IColorScheme scheme, int height, int border, int scroll) {
+	public GameSenseTheme (IColorScheme scheme, int height, int border, int scroll, String separator) {
 		super(scheme);
 		this.height=height;
 		this.border=border;
 		this.scroll=scroll;
+		this.separator=separator;
 		scheme.createSetting(this,"Title Color","The color for panel titles.",false,true,new Color(255,0,0),false);
 		scheme.createSetting(this,"Outline Color","The color for panel outlines.",false,true,new Color(255,0,0),false);
 		scheme.createSetting(this,"Enabled Color","The main color for enabled components.",true,true,new Color(255,0,0,150),false);
@@ -29,7 +32,13 @@ public class GameSenseTheme extends ThemeBase {
 	
 	protected void fillBaseRect (Context context, boolean focus, boolean active, int level) {
 		Color color=getMainColor(focus,active);
-		if (level<2) getBackgroundColor(focus);
+		if (level>1 && !active) color=getBackgroundColor(focus);
+		else if (level==0 && active) color=ITheme.combineColors(getColor(scheme.getColor("Title Color")),scheme.getColor("Enabled Color"));
+		context.getInterface().fillRect(context.getRect(),color,color,color,color);
+	}
+	
+	protected void renderOverlay (Context context) {
+		Color color=context.isHovered()?new Color(255,255,255,64):new Color(0,0,0,0);
 		context.getInterface().fillRect(context.getRect(),color,color,color,color);
 	}
 	
@@ -45,18 +54,56 @@ public class GameSenseTheme extends ThemeBase {
 	@Override
 	public IContainerRenderer getContainerRenderer(int level) {
 		return new IContainerRenderer() {
+			@Override
+			public void renderBackground (Context context, boolean focus) {
+				Color color=ITheme.combineColors(getColor(scheme.getColor("Enabled Color")),new Color(0,0,0));
+				context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y,context.getSize().width,1),color,color,color,color);
+				if (level!=0) {
+					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+context.getSize().height-1,context.getSize().width,1),color,color,color,color);
+				}
+			}
+			
+			@Override
+			public int getTop() {
+				return 1;
+			}
+			
+			@Override
+			public int getBottom() {
+				return level==0?0:1;
+			}
 		};
 	}
 	
 	@Override
 	public <T> IPanelRenderer<T> getPanelRenderer (Class<T> type, int level) {
-		if (type==Void.class) return (context,focus,state)->{};
-		return super.getPanelRenderer(type,level);
+		return new IPanelRenderer<T>() {
+			@Override
+			public int getLeft() {
+				return level==0?1:0;
+			}
+			
+			@Override
+			public int getRight() {
+				return level==0?1:0;
+			}
+			
+			@Override
+			public void renderPanelOverlay(Context context, boolean focus, T state) {
+				if (level==0) {
+					Color color=ITheme.combineColors(getColor(scheme.getColor("Enabled Color")),new Color(0,0,0));
+					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y,context.getSize().width,1),color,color,color,color);
+					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+context.getSize().height-1,context.getSize().width,1),color,color,color,color);
+					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y,1,context.getSize().height),color,color,color,color);
+					context.getInterface().fillRect(new Rectangle(context.getPos().x+context.getSize().width-1,context.getPos().y,1,context.getSize().height),color,color,color,color);
+				}
+			}
+		};
 	}
 	
 	@Override
 	public <T> IScrollBarRenderer<T> getScrollBarRenderer (Class<T> type, int level) {
-		if (type==Void.class) return new IScrollBarRenderer<T>() {
+		return new IScrollBarRenderer<T>() {
 			@Override
 			public int renderScrollBar(Context context, boolean focus, T state, boolean horizontal, int height, int position) {
 				//Color color=getMainColor(focus,true);
@@ -69,22 +116,23 @@ public class GameSenseTheme extends ThemeBase {
 				return scroll;
 			}
 		};
-		return super.getScrollBarRenderer(type,level);
 	}
 	
 	@Override
 	public <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer (Class<T> type, int level) {
-		if (type==Void.class) return (context,focus,state)->{};
-		return super.getEmptySpaceRenderer(type,level);
+		return (context,focus,state)->{};
 	}
 	
 	@Override
 	public <T> IButtonRenderer<T> getButtonRenderer (Class<T> type, int level, boolean container) {
-		if (type==Void.class) return new IButtonRenderer<T>() {
+		return new IButtonRenderer<T>() {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, T state) {
-				fillBaseRect(context,focus,focus,level);
-				context.getInterface().drawString(context.getRect().getLocation(),title,getFontColor(focus));
+				if (type==IBoolean.class) fillBaseRect(context,focus,((IBoolean)state).isOn(),level);
+				else fillBaseRect(context,focus,true,level);
+				renderOverlay(context);
+				if (type==String.class) context.getInterface().drawString(context.getRect().getLocation(),title+separator+state,getFontColor(focus));
+				else context.getInterface().drawString(context.getRect().getLocation(),title,getFontColor(focus));
 			}
 
 			@Override
@@ -92,19 +140,6 @@ public class GameSenseTheme extends ThemeBase {
 				return getBaseHeight();
 			}
 		};
-		else if (type==IBoolean.class) return new IButtonRenderer<T>() {
-			@Override
-			public void renderButton(Context context, String title, boolean focus, T state) {
-				fillBaseRect(context,focus,((IBoolean)state).isOn(),level);
-				context.getInterface().drawString(context.getRect().getLocation(),title,getFontColor(focus));
-			}
-
-			@Override
-			public int getDefaultHeight() {
-				return getBaseHeight();
-			}
-		};
-		return super.getButtonRenderer(type,level,container);
 	}
 
 	@Override
@@ -114,7 +149,19 @@ public class GameSenseTheme extends ThemeBase {
 
 	@Override
 	public IButtonRenderer<String> getKeybindRenderer(int level, boolean container) {
-		return getButtonRenderer(String.class,level,container);
+		return new IButtonRenderer<String>() {
+			@Override
+			public void renderButton(Context context, String title, boolean focus, String state) {
+				fillBaseRect(context,focus,focus,level);
+				renderOverlay(context);
+				context.getInterface().drawString(context.getRect().getLocation(),title+separator+state,getFontColor(focus));
+			}
+
+			@Override
+			public int getDefaultHeight() {
+				return getBaseHeight();
+			}
+		};
 	}
 
 	@Override
@@ -122,8 +169,13 @@ public class GameSenseTheme extends ThemeBase {
 		return new ISliderRenderer() {
 			@Override
 			public void renderSlider(Context context, String title, String state, boolean focus, double value) {
-				fillBaseRect(context,focus,true,level);
-				context.getInterface().drawString(context.getRect().getLocation(),title,getFontColor(focus));
+				Color colorA=getMainColor(focus,true),colorB=getBackgroundColor(focus);
+				Rectangle rect=getSlideArea(context);
+				int divider=(int)(rect.width*value);
+				context.getInterface().fillRect(new Rectangle(rect.x,rect.y,divider,rect.height),colorA,colorA,colorA,colorA);
+				context.getInterface().fillRect(new Rectangle(rect.x+divider,rect.y,rect.width-divider,rect.height),colorB,colorB,colorB,colorB);
+				renderOverlay(context);
+				context.getInterface().drawString(context.getRect().getLocation(),title+separator+state,getFontColor(focus));
 			}
 
 			@Override
@@ -140,13 +192,13 @@ public class GameSenseTheme extends ThemeBase {
 
 	@Override
 	public Color getMainColor(boolean focus, boolean active) {
-		if (active) return getColor(scheme.getColor("Enabled Color"));
-		else return ITheme.combineColors(scheme.getColor("Disabled Color"),getColor(scheme.getColor("Enabled Color")));
+		if (active) return ITheme.combineColors(getColor(scheme.getColor("Enabled Color")),scheme.getColor("Enabled Color"));
+		else return ITheme.combineColors(scheme.getColor("Disabled Color"),scheme.getColor("Enabled Color"));
 	}
 
 	@Override
 	public Color getBackgroundColor(boolean focus) {
-		return ITheme.combineColors(scheme.getColor("Settings Color"),getColor(scheme.getColor("Enabled Color")));
+		return ITheme.combineColors(scheme.getColor("Settings Color"),scheme.getColor("Enabled Color"));
 	}
 
 	@Override
