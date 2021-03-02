@@ -29,6 +29,7 @@ public abstract class ScrollBar<T> extends FocusableComponent {
 	public ScrollBar (ILabeled label, boolean horizontal, IScrollBarRenderer<T> renderer) {
 		super(label);
 		this.horizontal=horizontal;
+		this.renderer=renderer;
 	}
 	
 	@Override

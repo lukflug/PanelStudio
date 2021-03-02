@@ -53,8 +53,10 @@ public class FixedContainer extends Container<IFixedComponent> {
 		AtomicBoolean highestReached=new AtomicBoolean(false);
 		AtomicReference<IFixedComponent> focusComponent=new AtomicReference<IFixedComponent>(null);
 		super.doContextlessLoop(component->{
+			// Check onTop state
+			if (component==highest.get()) highestReached.set(true);
 			// Render component
-			Context subContext=getSubContext(context,component,!highestReached.get());
+			Context subContext=getSubContext(context,component,highestReached.get());
 			component.render(subContext);
 			// Check focus state
 			if (subContext.focusReleased()) context.releaseFocus();
@@ -64,8 +66,6 @@ public class FixedContainer extends Container<IFixedComponent> {
 			}
 			// Check description state
 			if (subContext.isHovered() && subContext.getDescription()!=null) context.setDescription(new Description(subContext.getDescription(),subContext.getRect()));
-			// Check onTop state
-			if (component==highest.get()) highestReached.set(true);
 		});
 		// Update focus state
 		if (focusComponent.get()!=null) {
@@ -138,10 +138,10 @@ public class FixedContainer extends Container<IFixedComponent> {
 	 */
 	public void saveConfig (IInterface inter, IConfigList config) {
 		config.begin(false);
-		doContextlessLoop(component->{
-			IPanelConfig cf=config.addPanel(component.getTitle());
-			if (cf!=null && component.savesState()) component.saveConfig(inter,cf);
-		});
+		for (ComponentState state: components) {
+			IPanelConfig cf=config.addPanel(state.component.getTitle());
+			if (cf!=null && state.component.savesState()) state.component.saveConfig(inter,cf);
+		};
 		config.end(false);
 	}
 	
@@ -152,10 +152,10 @@ public class FixedContainer extends Container<IFixedComponent> {
 	 */
 	public void loadConfig (IInterface inter, IConfigList config) {
 		config.begin(true);
-		doContextlessLoop(component->{
-			IPanelConfig cf=config.getPanel(component.getTitle());
-			if (cf!=null && component.savesState()) component.loadConfig(inter,cf);
-		});
+		for (ComponentState state: components) {
+			IPanelConfig cf=config.getPanel(state.component.getTitle());
+			if (cf!=null && state.component.savesState()) state.component.loadConfig(inter,cf);
+		};
 		config.end(true);
 	}
 }

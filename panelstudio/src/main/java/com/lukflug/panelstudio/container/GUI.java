@@ -88,7 +88,7 @@ public class GUI implements IContainer<IFixedComponent> {
 	 * @param scancode the scancode of the key being typed
 	 */
 	public void handleKey (int scancode) {
-		container.handleButton(getContext(),scancode);
+		container.handleKey(getContext(),scancode);
 	}
 	
 	/**

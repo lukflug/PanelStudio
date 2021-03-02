@@ -47,6 +47,7 @@ public abstract class Animation {
 		double weight=(time.get()-lastTime)/(double)getSpeed();
 		if (weight>=1) return value;
 		else if (weight<=0) return lastValue;
+		weight=interpolate(weight);
 		return value*weight+lastValue*(1-weight);
 	}
 	
@@ -66,6 +67,14 @@ public abstract class Animation {
 		lastValue=getValue();
 		this.value=value;
 		lastTime=time.get();
+	}
+	
+	/**
+	 * Function to use for animation.
+	 * @param weight the time-linear weight
+	 */
+	protected double interpolate (double weight) {
+		return (weight-1)*(weight-1)*(weight-1)+1;
 	}
 	
 	/**
