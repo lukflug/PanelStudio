@@ -1,6 +1,7 @@
 package com.lukflug.panelstudio.theme;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -47,6 +48,15 @@ public class GameSenseTheme extends ThemeBase {
 		return new IDescriptionRenderer() {
 			@Override
 			public void renderDescription(IInterface inter, Point pos, String text) {
+				Rectangle rect=new Rectangle(pos,new Dimension(inter.getFontWidth(text),inter.getFontHeight()));
+				Color color=getMainColor(true,false);
+				inter.fillRect(rect,color,color,color,color);
+				inter.drawString(pos,text,getFontColor(true));
+				Color bordercolor=scheme.getColor("Outline Color");
+				inter.fillRect(new Rectangle(rect.x,rect.y,rect.width,1),bordercolor,bordercolor,bordercolor,bordercolor);
+				inter.fillRect(new Rectangle(rect.x,rect.y+rect.height-1,rect.width,1),bordercolor,bordercolor,bordercolor,bordercolor);
+				inter.fillRect(new Rectangle(rect.x,rect.y,1,rect.height),bordercolor,bordercolor,bordercolor,bordercolor);
+				inter.fillRect(new Rectangle(rect.x+rect.width-1,rect.y,1,rect.height),bordercolor,bordercolor,bordercolor,bordercolor);
 			}
 		};
 	}
@@ -108,15 +118,24 @@ public class GameSenseTheme extends ThemeBase {
 			public int renderScrollBar(Context context, boolean focus, T state, boolean horizontal, int height, int position) {
 				Color activecolor=getMainColor(focus,true);
 				Color inactivecolor=getMainColor(focus,false);
-				int a=(int)(position/(double)height*context.getSize().height);
-				int b=(int)((position+context.getSize().height)/(double)height*context.getSize().height);
-				context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y,context.getSize().width,a),inactivecolor,inactivecolor,inactivecolor,inactivecolor);
-				context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+a,context.getSize().width,b-a),activecolor,activecolor,activecolor,activecolor);
-				context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+b,context.getSize().width,context.getSize().height-b),inactivecolor,inactivecolor,inactivecolor,inactivecolor);
+				if (horizontal) {
+					int a=(int)(position/(double)height*context.getSize().width);
+					int b=(int)((position+context.getSize().width)/(double)height*context.getSize().width);
+					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y,a,context.getSize().height),inactivecolor,inactivecolor,inactivecolor,inactivecolor);
+					context.getInterface().fillRect(new Rectangle(context.getPos().x+a,context.getPos().y,b-a,context.getSize().height),activecolor,activecolor,activecolor,activecolor);
+					context.getInterface().fillRect(new Rectangle(context.getPos().x+b,context.getPos().y,context.getSize().width-b,context.getSize().height),inactivecolor,inactivecolor,inactivecolor,inactivecolor);
+				} else {
+					int a=(int)(position/(double)height*context.getSize().height);
+					int b=(int)((position+context.getSize().height)/(double)height*context.getSize().height);
+					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y,context.getSize().width,a),inactivecolor,inactivecolor,inactivecolor,inactivecolor);
+					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+a,context.getSize().width,b-a),activecolor,activecolor,activecolor,activecolor);
+					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+b,context.getSize().width,context.getSize().height-b),inactivecolor,inactivecolor,inactivecolor,inactivecolor);
+				}
 				Color bordercolor=scheme.getColor("Outline Color");
-				context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y,1,context.getSize().height),bordercolor,bordercolor,bordercolor,bordercolor);
-				if (context.isClicked()) return (int)((context.getInterface().getMouse().y-context.getPos().y)*height/(double)context.getSize().height-context.getSize().height/2.0);
-				return position;
+				if (horizontal) context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y,context.getSize().width,1),bordercolor,bordercolor,bordercolor,bordercolor);
+				else context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y,1,context.getSize().height),bordercolor,bordercolor,bordercolor,bordercolor);
+				if (horizontal) return (int)((context.getInterface().getMouse().x-context.getPos().x)*height/(double)context.getSize().width-context.getSize().width/2.0);
+				else return (int)((context.getInterface().getMouse().y-context.getPos().y)*height/(double)context.getSize().height-context.getSize().height/2.0);
 			}
 
 			@Override
@@ -128,7 +147,10 @@ public class GameSenseTheme extends ThemeBase {
 	
 	@Override
 	public <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer (Class<T> type, int level) {
-		return (context,focus,state)->{};
+		return (context,focus,state)->{
+			Color color=scheme.getColor("Outline Color");
+			context.getInterface().fillRect(context.getRect(),color,color,color,color);
+		};
 	}
 	
 	@Override

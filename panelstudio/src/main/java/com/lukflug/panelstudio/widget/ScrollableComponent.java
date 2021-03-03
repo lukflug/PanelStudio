@@ -1,7 +1,5 @@
 package com.lukflug.panelstudio.widget;
 
-import java.awt.Point;
-
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.component.HorizontalComponent;
 import com.lukflug.panelstudio.component.IComponent;
@@ -58,7 +56,7 @@ public abstract class ScrollableComponent<T> extends HorizontalContainer {
 
 			@Override
 			protected void setScrollPosition(int position) {
-				scrollComponent.setScrollPos(new Point(scrollComponent.getScrollPos().x,position));
+				scrollComponent.setScrollPosY(position);
 			}
 
 			@Override
@@ -85,7 +83,7 @@ public abstract class ScrollableComponent<T> extends HorizontalContainer {
 
 			@Override
 			protected void setScrollPosition(int position) {
-				scrollComponent.setScrollPos(new Point(position,scrollComponent.getScrollPos().y));
+				scrollComponent.setScrollPosX(position);
 			}
 
 			@Override

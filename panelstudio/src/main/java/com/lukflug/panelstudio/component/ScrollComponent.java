@@ -86,11 +86,21 @@ public abstract class ScrollComponent extends ComponentProxy {
 	}
 	
 	/**
-	 * Set the scroll position;
+	 * Set the horizontal scroll position
 	 * @param scrollPos the new scroll position
 	 */
-	public void setScrollPos (Point scrollPos) {
-		nextScrollPos=new Point(scrollPos);
+	public void setScrollPosX (int scrollPos) {
+		if (nextScrollPos==null) nextScrollPos=new Point(scrollPos,this.scrollPos.y);
+		else nextScrollPos.x=scrollPos;
+	}
+	
+	/**
+	 * Set the vertical scroll position
+	 * @param scrollPos the new scroll position
+	 */
+	public void setScrollPosY (int scrollPos) {
+		if (nextScrollPos==null) nextScrollPos=new Point(this.scrollPos.x,scrollPos);
+		else nextScrollPos.y=scrollPos;
 	}
 	
 	/**

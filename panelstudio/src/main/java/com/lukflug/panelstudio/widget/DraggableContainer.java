@@ -59,8 +59,7 @@ public class DraggableContainer extends DraggableComponent implements IContainer
 	public <T> DraggableContainer (ILabeled label, IComponent title, Supplier<T> state, IToggleable open, Animation animation, IPanelRenderer<T> panelRenderer, IContainerRenderer containerRenderer, IScrollBarRenderer<T> scrollRenderer, IEmptySpaceRenderer<T> emptyRenderer, Point position, int width, boolean savesState) {
 		super(null);
 		panel=new CollapsibleContainer(getWrappedDragComponent(title),new VerticalContainer(label,containerRenderer),state,open,animation,panelRenderer,scrollRenderer,emptyRenderer,height->getScrollHeight(height),cwidth->getComponentWidth(cwidth));
-		this.fixedComponent=new FixedComponent(panel,position,width,panel.getToggle(),savesState);
-		this.component=fixedComponent;
+		setComponent(new FixedComponent(panel,position,width,panel.getToggle(),savesState));
 	}
 
 	@Override

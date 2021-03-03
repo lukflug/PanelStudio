@@ -1,6 +1,7 @@
 package com.lukflug.panelstudio.widget;
 
 import com.lukflug.panelstudio.base.Context;
+import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.component.FocusableComponent;
 import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.theme.IScrollBarRenderer;
@@ -15,6 +16,10 @@ public abstract class ScrollBar<T> extends FocusableComponent {
 	 * Whether this scroll bar is horizontal or vertical.
 	 */
 	protected boolean horizontal;
+	/**
+	 * Whether scroll bar was clicked and is sliding.
+	 */
+	protected boolean attached=false;
 	/**
 	 * The renderer to be used.
 	 */
@@ -35,7 +40,21 @@ public abstract class ScrollBar<T> extends FocusableComponent {
 	@Override
 	public void render (Context context) {
 		super.render(context);
-		setScrollPosition(renderer.renderScrollBar(context,hasFocus(context),getState(),horizontal,getContentHeight(),getScrollPosition()));
+		int value=renderer.renderScrollBar(context,hasFocus(context),getState(),horizontal,getContentHeight(),getScrollPosition());
+		if (attached) setScrollPosition(value);
+		if (!context.getInterface().getButton(IInterface.LBUTTON)) attached=false;
+	}
+	
+	@Override
+	public void handleButton (Context context, int button) {
+		super.handleButton(context,button);
+		if (button==IInterface.LBUTTON && context.isClicked()) attached=true;
+	}
+	
+	@Override
+	public void handleScroll (Context context, int diff) {
+		super.handleScroll(context,diff);
+		if (context.isHovered()) setScrollPosition(getScrollPosition()+diff);
 	}
 
 	@Override

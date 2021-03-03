@@ -32,6 +32,15 @@ public class DraggableComponent extends ComponentProxy implements IFixedComponen
 		super(fixedComponent);
 		this.fixedComponent=fixedComponent;
 	}
+	
+	/**
+	 * Sets the fixed component to be dragged after initialization
+	 * @param component the component to be dragged
+	 */
+	public void setComponent (IFixedComponent component) {
+		this.fixedComponent=component;
+		this.component=component;
+	}
 
 	@Override
 	public Point getPosition(IInterface inter) {
