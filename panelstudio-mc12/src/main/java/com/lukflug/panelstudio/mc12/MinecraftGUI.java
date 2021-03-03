@@ -1,5 +1,6 @@
 package com.lukflug.panelstudio.mc12;
 
+import java.awt.Dimension;
 import java.awt.Point;
 
 import org.lwjgl.input.Keyboard;
@@ -30,37 +31,25 @@ public abstract class MinecraftGUI extends GuiScreen {
 	private boolean rButton=false;
 	
 	/**
-	 * Displays the GUI.
-	 */
-	public void enterGUI() {
-		Minecraft.getMinecraft().displayGuiScreen(this);
-		getGUI().enter();
-	}
-	
-	/**
-	 * Closes the GUI.
-	 */
-	public void exitGUI() {
-		getGUI().exit();
-		Minecraft.getMinecraft().displayGuiScreen(null);
-	}
-	
-	/**
 	 * Updates the matrix buffers and renders the GUI.
 	 */
 	protected void renderGUI() {
 		getInterface().getMatrices();
-		GLInterface.begin();
+		getInterface().begin(true);
 		getGUI().render();
-		GLInterface.end();
+		getInterface().end(true);
 	}
 	
-	/**
-	 * Draws the screen, updates the mouse position and handles scroll events.
-	 * @param mouseX current mouse x position
-	 * @param mouseY current mouse y position
-	 * @param partialTicks partial tick count
-	 */
+	@Override
+	public void initGui() {
+		getGUI().enter();
+	}
+	
+	@Override
+	public void onGuiClosed() {
+		getGUI().exit();
+	}
+	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		mouse=new Point(mouseX,mouseY);
@@ -72,12 +61,6 @@ public abstract class MinecraftGUI extends GuiScreen {
 		}
 	}
 
-	/**
-	 * Updates {@link #lButton} and {@link #rButton}.
-	 * @param mouseX current mouse x position
-	 * @param mouseY current mouse y position
-	 * @param clickedButton number of button being clicked
-	 */
 	@Override
 	public void mouseClicked(int mouseX, int mouseY, int clickedButton) {
 		mouse=new Point(mouseX,mouseY);
@@ -92,12 +75,6 @@ public abstract class MinecraftGUI extends GuiScreen {
 		getGUI().handleButton(clickedButton);
 	}
 
-	/**
-	 * Updates {@link #lButton} and {@link #rButton}.
-	 * @param mouseX current mouse x position
-	 * @param mouseY current mouse y position
-	 * @param releaseButton number of button being released
-	 */
 	@Override
 	public void mouseReleased(int mouseX, int mouseY, int releaseButton) {
 		mouse=new Point(mouseX,mouseY);
@@ -112,21 +89,12 @@ public abstract class MinecraftGUI extends GuiScreen {
 		getGUI().handleButton(releaseButton);
 	}
 	
-	/**
-	 * Handles the current keys being typed.
-	 * @param typedChar character being typed
-	 * @param keyCode scancode of key being typed
-	 */
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) {
-		if (keyCode == Keyboard.KEY_ESCAPE) exitGUI();
+		if (keyCode == Keyboard.KEY_ESCAPE) Minecraft.getMinecraft().displayGuiScreen(null);
 		else getGUI().handleKey(keyCode);
 	}
 
-	/**
-	 * Returns false.
-	 * @return returns false
-	 */
 	@Override
 	public boolean doesGuiPauseGame() {
 		return false;
@@ -137,22 +105,29 @@ public abstract class MinecraftGUI extends GuiScreen {
 	 * @return current ClickGUI
 	 */
 	protected abstract GUI getGUI();
+	
 	/**
 	 * Get current {@link GUIInterface}.
 	 * @return the current interface
 	 */
 	protected abstract GUIInterface getInterface();
+	
 	/**
 	 * Get current scroll speed.
 	 * @return the scroll speed
 	 */
 	protected abstract int getScrollSpeed();
 	
+	
 	/**
 	 * Implementation of {@link GLInterface} to be used with {@link MinecraftGUI}
 	 * @author lukflug
 	 */
 	public abstract class GUIInterface extends GLInterface {
+		/**
+		 * Constructor.
+		 * @param clipX whether to clip in the horizontal direction
+		 */
 		public GUIInterface (boolean clipX) {
 			super(clipX);
 		}
@@ -176,6 +151,11 @@ public abstract class MinecraftGUI extends GuiScreen {
 		@Override
 		protected float getZLevel() {
 			return zLevel;
+		}
+
+		@Override
+		public Dimension getWindowSize() {
+			return new Dimension(width,height);
 		}
 	}
 }

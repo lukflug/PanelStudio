@@ -48,10 +48,10 @@ public class GameSenseTheme extends ThemeBase {
 		return new IDescriptionRenderer() {
 			@Override
 			public void renderDescription(IInterface inter, Point pos, String text) {
-				Rectangle rect=new Rectangle(pos,new Dimension(inter.getFontWidth(text),inter.getFontHeight()));
+				Rectangle rect=new Rectangle(pos,new Dimension(inter.getFontWidth(height,text)+4,height+4));
 				Color color=getMainColor(true,false);
 				inter.fillRect(rect,color,color,color,color);
-				inter.drawString(pos,text,getFontColor(true));
+				inter.drawString(new Point(pos.x+2,pos.y+2),height,text,getFontColor(true));
 				Color bordercolor=scheme.getColor("Outline Color");
 				inter.fillRect(new Rectangle(rect.x,rect.y,rect.width,1),bordercolor,bordercolor,bordercolor,bordercolor);
 				inter.fillRect(new Rectangle(rect.x,rect.y+rect.height-1,rect.width,1),bordercolor,bordercolor,bordercolor,bordercolor);
@@ -165,8 +165,8 @@ public class GameSenseTheme extends ThemeBase {
 					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+context.getSize().height-1,context.getSize().width,1),color,color,color,color);
 				}
 				renderOverlay(context);
-				if (type==String.class) context.getInterface().drawString(context.getRect().getLocation(),title+separator+state,getFontColor(focus));
-				else context.getInterface().drawString(context.getRect().getLocation(),title,getFontColor(focus));
+				if (type==String.class) context.getInterface().drawString(new Point(context.getRect().x+border,context.getRect().y+border),height,title+separator+state,getFontColor(focus));
+				else context.getInterface().drawString(new Point(context.getRect().x+border,context.getRect().y+border),height,title,getFontColor(focus));
 			}
 
 			@Override
@@ -188,7 +188,7 @@ public class GameSenseTheme extends ThemeBase {
 			public void renderButton(Context context, String title, boolean focus, String state) {
 				fillBaseRect(context,focus,focus,level);
 				renderOverlay(context);
-				context.getInterface().drawString(context.getRect().getLocation(),title+separator+(focus?"...":state),getFontColor(focus));
+				context.getInterface().drawString(new Point(context.getRect().x+border,context.getRect().y+border),height,title+separator+(focus?"...":state),getFontColor(focus));
 			}
 
 			@Override
@@ -209,7 +209,7 @@ public class GameSenseTheme extends ThemeBase {
 				context.getInterface().fillRect(new Rectangle(rect.x,rect.y,divider,rect.height),colorA,colorA,colorA,colorA);
 				context.getInterface().fillRect(new Rectangle(rect.x+divider,rect.y,rect.width-divider,rect.height),colorB,colorB,colorB,colorB);
 				renderOverlay(context);
-				context.getInterface().drawString(context.getRect().getLocation(),title+separator+state,getFontColor(focus));
+				context.getInterface().drawString(new Point(context.getRect().x+border,context.getRect().y+border),height,title+separator+state,getFontColor(focus));
 			}
 
 			@Override

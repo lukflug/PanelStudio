@@ -49,23 +49,19 @@ public interface IInterface {
 	 * Draw a string on the screen.
 	 * May only be called in a GUI rendering method.
 	 * @param pos the position of the string on the screen
+	 * @param height the height of the font
 	 * @param s the string to be displayed
 	 * @param c the color of the string to be displayed
 	 */
-	public void drawString (Point pos, String s, Color c);
+	public void drawString (Point pos, int height, String s, Color c);
 	
 	/**
 	 * Get the font width of a string being rendered by {@link #drawString(Point, String, Color)}
 	 * @param s the string to be considered
+	 * @param height the height of the string
 	 * @return the font width
 	 */
-	public int getFontWidth (String s);
-	
-	/**
-	 * Get height of font rendered by {@link #drawString(Point, String, Color)}
-	 * @return the font height
-	 */
-	public int getFontHeight();
+	public int getFontWidth (int height, String s);
 	
 	/**
 	 * Draw a triangle on the screen.

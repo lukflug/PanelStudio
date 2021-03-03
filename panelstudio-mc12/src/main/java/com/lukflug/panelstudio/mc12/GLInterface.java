@@ -18,6 +18,7 @@ import org.lwjgl.util.glu.GLU;
 import com.lukflug.panelstudio.base.IInterface;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
@@ -71,6 +72,24 @@ public abstract class GLInterface implements IInterface {
 	@Override
 	public long getTime() {
 		return lastTime;
+	}
+
+	@Override
+	public void drawString(Point pos, int height, String s, Color c) {
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(pos.x,pos.y,0);
+		double scale=height/(double)(Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT-1);
+		GlStateManager.scale(scale,scale,1);
+		end(false);
+		Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(s,0,0,c.getRGB());
+		begin(false);
+		GlStateManager.popMatrix();
+	}
+
+	@Override
+	public int getFontWidth(int height, String s) {
+		double scale=height/(double)(Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT-1);
+		return (int)Math.round(Minecraft.getMinecraft().fontRenderer.getStringWidth(s)*scale);
 	}
 
 	@Override
@@ -246,14 +265,38 @@ public abstract class GLInterface implements IInterface {
 		GlStateManager.glGetInteger(GL11.GL_VIEWPORT,VIEWPORT);
 	}
 	
+	public Point screenToGui (Point p) {
+		ScaledResolution res=new ScaledResolution(Minecraft.getMinecraft());
+		int resX=res.getScaledWidth();
+		int resY=res.getScaledHeight();
+		return new Point(p.x*resX/Minecraft.getMinecraft().displayWidth,resY-p.y*resY/Minecraft.getMinecraft().displayHeight-1);
+	}
+	
+	public Point guiToScreen (Point p) {
+		ScaledResolution res=new ScaledResolution(Minecraft.getMinecraft());
+		int resX=res.getScaledWidth();
+		int resY=res.getScaledHeight();
+		return new Point(p.x*Minecraft.getMinecraft().displayWidth/resX,(resY-p.y-1)*Minecraft.getMinecraft().displayHeight/resY);
+	}
+	
 	/**
 	 * Set OpenGL to the state used by the rendering methods.
 	 * Should be called before rendering.
+	 * @param matrix whether to set up the modelview matrix
 	 */
-	public static void begin() {
+	public void begin (boolean matrix) {
+		if (matrix) {
+			GlStateManager.matrixMode(GL11.GL_PROJECTION);
+			GlStateManager.pushMatrix();
+			GlStateManager.loadIdentity();
+			GlStateManager.ortho(0,getWindowSize().width,getWindowSize().height,0,-1,1);
+			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+			GlStateManager.pushMatrix();
+			GlStateManager.loadIdentity();
+		}
 		GlStateManager.enableBlend();
 		GlStateManager.disableTexture2D();
-		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA,GL11.GL_ONE_MINUS_SRC_ALPHA,GL11.GL_ONE,GL11.GL_ZERO);
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		GlStateManager.glLineWidth(2);
 	}
@@ -262,10 +305,16 @@ public abstract class GLInterface implements IInterface {
 	 * Restore OpenGL to the state expected by Minecraft.
 	 * Should be called after rendering.
 	 */
-	public static void end() {
+	public void end (boolean matrix) {
 		GlStateManager.shadeModel(GL11.GL_FLAT);
 		GlStateManager.enableTexture2D();
 		GlStateManager.disableBlend();
+		if (matrix) {
+			GlStateManager.matrixMode(GL11.GL_PROJECTION);
+			GlStateManager.popMatrix();
+			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+			GlStateManager.popMatrix();
+		}
 	}
 	
 	/**
