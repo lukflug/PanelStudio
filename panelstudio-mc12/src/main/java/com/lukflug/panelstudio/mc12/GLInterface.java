@@ -1,26 +1,24 @@
 package com.lukflug.panelstudio.mc12;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 import java.util.Stack;
 
 import javax.imageio.ImageIO;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.GLU;
+import org.lwjgl.opengl.GL13;
 
 import com.lukflug.panelstudio.base.IInterface;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureUtil;
@@ -35,19 +33,19 @@ public abstract class GLInterface implements IInterface {
 	/**
 	 * Buffer to store current modelview matrix.
 	 */
-	private static final FloatBuffer MODELVIEW = GLAllocation.createDirectFloatBuffer(16);
+	//private static final FloatBuffer MODELVIEW = GLAllocation.createDirectFloatBuffer(16);
 	/**
 	 * Buffer to store current projection matrix.
 	 */
-	private static final FloatBuffer PROJECTION = GLAllocation.createDirectFloatBuffer(16);
+	//private static final FloatBuffer PROJECTION = GLAllocation.createDirectFloatBuffer(16);
 	/**
 	 * Buffer to store current viewport.
 	 */
-	private static final IntBuffer VIEWPORT = GLAllocation.createDirectIntBuffer(16);
+	//private static final IntBuffer VIEWPORT = GLAllocation.createDirectIntBuffer(16);
 	/**
 	 * Buffer used to calculate coordinates using gluProject.
 	 */
-	private static final FloatBuffer COORDS = GLAllocation.createDirectFloatBuffer(3);
+	//private static final FloatBuffer COORDS = GLAllocation.createDirectFloatBuffer(3);
 	/**
 	 * Clipping rectangle stack.
 	 */
@@ -56,10 +54,6 @@ public abstract class GLInterface implements IInterface {
 	 * Boolean indicating whether to clip in the horizontal direction. 
 	 */
 	protected boolean clipX;
-	/**
-	 * Last rendering time.
-	 */
-	protected long lastTime;
 	
 	/**
 	 * Constructor.
@@ -70,15 +64,15 @@ public abstract class GLInterface implements IInterface {
 	}
 	
 	@Override
-	public long getTime() {
-		return lastTime;
+	public Dimension getWindowSize() {
+		return new Dimension((int)Math.ceil(getScreenWidth()),(int)Math.ceil(getScreenHeight()));
 	}
 
 	@Override
 	public void drawString(Point pos, int height, String s, Color c) {
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(pos.x,pos.y,0);
-		double scale=height/(double)(Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT-1);
+		double scale=height/(double)Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT;
 		GlStateManager.scale(scale,scale,1);
 		end(false);
 		Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(s,0,0,c.getRGB());
@@ -88,7 +82,7 @@ public abstract class GLInterface implements IInterface {
 
 	@Override
 	public int getFontWidth(int height, String s) {
-		double scale=height/(double)(Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT-1);
+		double scale=height/(double)Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT;
 		return (int)Math.round(Minecraft.getMinecraft().fontRenderer.getStringWidth(s)*scale);
 	}
 
@@ -153,7 +147,7 @@ public abstract class GLInterface implements IInterface {
 	}
 
 	@Override
-	public void drawImage(Rectangle r, int rotation, boolean parity, int image) {
+	public void drawImage(Rectangle r, int rotation, boolean parity, int image, Color color) {
 		if (image==0) return;
 		int texCoords[][]={{0,1},{1,1},{1,0},{0,0}};
 		for (int i=0;i<rotation%4;i++) {
@@ -182,7 +176,13 @@ public abstract class GLInterface implements IInterface {
 		}
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
+		FloatBuffer colorBuffer=FloatBuffer.allocate(4);
+		colorBuffer.put(0,color.getRed()/255.0f);
+		colorBuffer.put(1,color.getGreen()/255.0f);
+		colorBuffer.put(2,color.getBlue()/255.0f);
+		colorBuffer.put(3,color.getAlpha()/255.0f);
 		GlStateManager.bindTexture(image);
+		GlStateManager.glTexEnv(GL11.GL_TEXTURE_ENV,GL11.GL_TEXTURE_ENV_COLOR,colorBuffer);
 		GlStateManager.enableTexture2D();
 		bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 			bufferbuilder.pos(r.x,r.y+r.height,getZLevel()).tex(texCoords[0][0],texCoords[0][1]).endVertex();
@@ -203,18 +203,12 @@ public abstract class GLInterface implements IInterface {
 			GL11.glEnable(GL11.GL_SCISSOR_TEST);
 			return;
 		}
-		float x1,y1,x2,y2;
-		GLU.gluProject(r.x,r.y,getZLevel(),MODELVIEW,PROJECTION,VIEWPORT,COORDS);
-		x1=COORDS.get(0);
-		y1=COORDS.get(1);
-		GLU.gluProject(r.x+r.width,r.y+r.height,getZLevel(),MODELVIEW,PROJECTION,VIEWPORT,COORDS);
-		x2=COORDS.get(0);
-		y2=COORDS.get(1);
+		Point a=guiToScreen(r.getLocation()),b=guiToScreen(new Point(r.x+r.width,r.y+r.height));
 		if (!clipX) {
-			x1=VIEWPORT.get(0);
-			x2=x1+VIEWPORT.get(2);
+			a.x=0;
+			b.x=Minecraft.getMinecraft().displayWidth;
 		}
-		GL11.glScissor(Math.round(Math.min(x1,x2)),Math.round(Math.min(y1,y2)),Math.round(Math.abs(x2-x1)),Math.round(Math.abs(y2-y1)));
+		GL11.glScissor(Math.min(a.x,b.x),Math.min(a.y,b.y),Math.abs(b.x-a.x),Math.abs(b.y-a.y));
 		GL11.glEnable(GL11.GL_SCISSOR_TEST);
 	}
 
@@ -255,28 +249,16 @@ public abstract class GLInterface implements IInterface {
 		}
 	}
 	
-	/**
-	 * Update the matrix buffers.
-	 */
-	public void getMatrices() {
-		lastTime=System.currentTimeMillis();
-		GlStateManager.getFloat(GL11.GL_MODELVIEW_MATRIX,MODELVIEW);
-		GlStateManager.getFloat(GL11.GL_PROJECTION_MATRIX,PROJECTION);
-		GlStateManager.glGetInteger(GL11.GL_VIEWPORT,VIEWPORT);
-	}
-	
 	public Point screenToGui (Point p) {
-		ScaledResolution res=new ScaledResolution(Minecraft.getMinecraft());
-		int resX=res.getScaledWidth();
-		int resY=res.getScaledHeight();
+		int resX=getWindowSize().width;
+		int resY=getWindowSize().height;
 		return new Point(p.x*resX/Minecraft.getMinecraft().displayWidth,resY-p.y*resY/Minecraft.getMinecraft().displayHeight-1);
 	}
 	
 	public Point guiToScreen (Point p) {
-		ScaledResolution res=new ScaledResolution(Minecraft.getMinecraft());
-		int resX=res.getScaledWidth();
-		int resY=res.getScaledHeight();
-		return new Point(p.x*Minecraft.getMinecraft().displayWidth/resX,(resY-p.y-1)*Minecraft.getMinecraft().displayHeight/resY);
+		double resX=getScreenWidth();
+		double resY=getScreenHeight();
+		return new Point((int)Math.round(p.x*Minecraft.getMinecraft().displayWidth/resX),(int)Math.round((resY-p.y)*Minecraft.getMinecraft().displayHeight/resY));
 	}
 	
 	/**
@@ -289,7 +271,7 @@ public abstract class GLInterface implements IInterface {
 			GlStateManager.matrixMode(GL11.GL_PROJECTION);
 			GlStateManager.pushMatrix();
 			GlStateManager.loadIdentity();
-			GlStateManager.ortho(0,getWindowSize().width,getWindowSize().height,0,-1,1);
+			GlStateManager.ortho(0,getScreenWidth(),getScreenHeight(),0,-1,1);
 			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 			GlStateManager.pushMatrix();
 			GlStateManager.loadIdentity();
@@ -299,6 +281,21 @@ public abstract class GLInterface implements IInterface {
 		GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA,GL11.GL_ONE_MINUS_SRC_ALPHA,GL11.GL_ONE,GL11.GL_ZERO);
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		GlStateManager.glLineWidth(2);
+		// Set texture env mode to combine and set texture env color to color
+		GlStateManager.glTexEnvi(GL11.GL_TEXTURE_ENV,GL11.GL_TEXTURE_ENV_MODE,GL13.GL_COMBINE);
+		// Set combine mode to modulate
+		GlStateManager.glTexEnvi(GL11.GL_TEXTURE_ENV,GL13.GL_COMBINE_RGB,GL11.GL_MODULATE);
+		GlStateManager.glTexEnvi(GL11.GL_TEXTURE_ENV,GL13.GL_COMBINE_ALPHA,GL11.GL_MODULATE);
+		// Set first argument to sampled texture
+		GlStateManager.glTexEnvi(GL11.GL_TEXTURE_ENV,GL13.GL_SOURCE0_RGB,GL11.GL_TEXTURE);
+		GlStateManager.glTexEnvi(GL11.GL_TEXTURE_ENV,GL13.GL_OPERAND0_RGB,GL11.GL_SRC_COLOR);
+		GlStateManager.glTexEnvi(GL11.GL_TEXTURE_ENV,GL13.GL_SOURCE0_ALPHA,GL11.GL_TEXTURE);
+		GlStateManager.glTexEnvi(GL11.GL_TEXTURE_ENV,GL13.GL_OPERAND0_ALPHA,GL11.GL_SRC_ALPHA);
+		// Set second argument to env color
+		GlStateManager.glTexEnvi(GL11.GL_TEXTURE_ENV,GL13.GL_SOURCE1_RGB,GL13.GL_CONSTANT);
+		GlStateManager.glTexEnvi(GL11.GL_TEXTURE_ENV,GL13.GL_OPERAND1_RGB,GL11.GL_SRC_COLOR);
+		GlStateManager.glTexEnvi(GL11.GL_TEXTURE_ENV,GL13.GL_SOURCE1_ALPHA,GL13.GL_CONSTANT);
+		GlStateManager.glTexEnvi(GL11.GL_TEXTURE_ENV,GL13.GL_OPERAND1_ALPHA,GL11.GL_SRC_ALPHA);
 	}
 	
 	/**
@@ -306,9 +303,7 @@ public abstract class GLInterface implements IInterface {
 	 * Should be called after rendering.
 	 */
 	public void end (boolean matrix) {
-		GlStateManager.shadeModel(GL11.GL_FLAT);
-		GlStateManager.enableTexture2D();
-		GlStateManager.disableBlend();
+		GlStateManager.Profile.DEFAULT.apply();
 		if (matrix) {
 			GlStateManager.matrixMode(GL11.GL_PROJECTION);
 			GlStateManager.popMatrix();
@@ -317,11 +312,16 @@ public abstract class GLInterface implements IInterface {
 		}
 	}
 	
+	protected abstract double getScreenWidth();
+	
+	protected abstract double getScreenHeight();
+	
 	/**
 	 * Get the z-coordinate to render everything.
 	 * @return the z-level
 	 */
 	protected abstract float getZLevel();
+	
 	/**
 	 * Get the Minecraft resource location string.
 	 * @return the resource prefix

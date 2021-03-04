@@ -1,6 +1,5 @@
 package com.lukflug.panelstudio.mc12;
 
-import java.awt.Dimension;
 import java.awt.Point;
 
 import org.lwjgl.input.Keyboard;
@@ -11,6 +10,7 @@ import com.lukflug.panelstudio.container.GUI;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.ScaledResolution;
 
 /**
  * Implementation of Minecraft's GuiScreen that renders a PanelStudio GUI.
@@ -29,12 +29,16 @@ public abstract class MinecraftGUI extends GuiScreen {
 	 * Current right mouse button state.
 	 */
 	private boolean rButton=false;
+	/**
+	 * Last rendering time.
+	 */
+	private long lastTime;
 	
 	/**
 	 * Updates the matrix buffers and renders the GUI.
 	 */
 	protected void renderGUI() {
-		getInterface().getMatrices();
+		lastTime=System.currentTimeMillis();
 		getInterface().begin(true);
 		getGUI().render();
 		getInterface().end(true);
@@ -52,7 +56,7 @@ public abstract class MinecraftGUI extends GuiScreen {
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		mouse=new Point(mouseX,mouseY);
+		mouse=getInterface().screenToGui(new Point(Mouse.getX(),Mouse.getY()));
 		renderGUI();
 		int scroll=Mouse.getDWheel();
 		if (scroll!=0) {
@@ -63,7 +67,7 @@ public abstract class MinecraftGUI extends GuiScreen {
 
 	@Override
 	public void mouseClicked(int mouseX, int mouseY, int clickedButton) {
-		mouse=new Point(mouseX,mouseY);
+		mouse=getInterface().screenToGui(new Point(Mouse.getX(),Mouse.getY()));
 		switch (clickedButton) {
 		case IInterface.LBUTTON:
 			lButton=true;
@@ -77,11 +81,11 @@ public abstract class MinecraftGUI extends GuiScreen {
 
 	@Override
 	public void mouseReleased(int mouseX, int mouseY, int releaseButton) {
-		mouse=new Point(mouseX,mouseY);
+		mouse=getInterface().screenToGui(new Point(Mouse.getX(),Mouse.getY()));
 		switch (releaseButton) {
 		case IInterface.LBUTTON:
 			lButton=false;
-		break;
+			break;
 		case IInterface.RBUTTON:
 			rButton=false;
 			break;
@@ -133,6 +137,21 @@ public abstract class MinecraftGUI extends GuiScreen {
 		}
 		
 		@Override
+		protected double getScreenWidth() {
+			return new ScaledResolution(Minecraft.getMinecraft()).getScaledWidth_double();
+		}
+		
+		@Override
+		protected double getScreenHeight() {
+			return new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight_double();
+		}
+		
+		@Override
+		public long getTime() {
+			return lastTime;
+		}
+		
+		@Override
 		public boolean getButton(int button) {
 			switch (button) {
 			case IInterface.LBUTTON:
@@ -151,11 +170,6 @@ public abstract class MinecraftGUI extends GuiScreen {
 		@Override
 		protected float getZLevel() {
 			return zLevel;
-		}
-
-		@Override
-		public Dimension getWindowSize() {
-			return new Dimension(width,height);
 		}
 	}
 }

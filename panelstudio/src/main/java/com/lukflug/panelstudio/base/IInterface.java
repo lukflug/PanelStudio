@@ -130,7 +130,20 @@ public interface IInterface {
 	 * @param image the number identifying the image
 	 * @see #loadImage(String)
 	 */
-	public void drawImage (Rectangle r, int rotation, boolean parity, int image);
+	public default void drawImage (Rectangle r, int rotation, boolean parity, int image) {
+		drawImage(r,rotation,parity,image,new Color(255,255,255));
+	}
+	
+	/**
+	 * Draw an image.
+	 * @param r the rectangle specifying the position of the image
+	 * @param rotation the rotation of the image in units of 90 degrees counter-clockwise
+	 * @param parity if true, will switch the top-left and bottom-right, the bottom-left and top-right corners
+	 * @param image the number identifying the image
+	 * @param color the color to modulate the image by
+	 * @see #loadImage(String)
+	 */
+	public void drawImage (Rectangle r, int rotation, boolean parity, int image, Color color);
 	
 	/**
 	 * Get size of display.
