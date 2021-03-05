@@ -19,6 +19,7 @@ import com.lukflug.panelstudio.base.IInterface;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureUtil;
@@ -30,22 +31,6 @@ import net.minecraft.util.ResourceLocation;
  * @author lukflug
  */
 public abstract class GLInterface implements IInterface {
-	/**
-	 * Buffer to store current modelview matrix.
-	 */
-	//private static final FloatBuffer MODELVIEW = GLAllocation.createDirectFloatBuffer(16);
-	/**
-	 * Buffer to store current projection matrix.
-	 */
-	//private static final FloatBuffer PROJECTION = GLAllocation.createDirectFloatBuffer(16);
-	/**
-	 * Buffer to store current viewport.
-	 */
-	//private static final IntBuffer VIEWPORT = GLAllocation.createDirectIntBuffer(16);
-	/**
-	 * Buffer used to calculate coordinates using gluProject.
-	 */
-	//private static final FloatBuffer COORDS = GLAllocation.createDirectFloatBuffer(3);
 	/**
 	 * Clipping rectangle stack.
 	 */
@@ -176,7 +161,7 @@ public abstract class GLInterface implements IInterface {
 		}
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
-		FloatBuffer colorBuffer=FloatBuffer.allocate(4);
+		FloatBuffer colorBuffer=GLAllocation.createDirectFloatBuffer(4);
 		colorBuffer.put(0,color.getRed()/255.0f);
 		colorBuffer.put(1,color.getGreen()/255.0f);
 		colorBuffer.put(2,color.getBlue()/255.0f);
@@ -281,7 +266,8 @@ public abstract class GLInterface implements IInterface {
 		GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA,GL11.GL_ONE_MINUS_SRC_ALPHA,GL11.GL_ONE,GL11.GL_ZERO);
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		GlStateManager.glLineWidth(2);
-		// Set texture env mode to combine and set texture env color to color
+		// Set texture env mode to combine
+		GL11.glPushAttrib(GL11.GL_TEXTURE_BIT);
 		GlStateManager.glTexEnvi(GL11.GL_TEXTURE_ENV,GL11.GL_TEXTURE_ENV_MODE,GL13.GL_COMBINE);
 		// Set combine mode to modulate
 		GlStateManager.glTexEnvi(GL11.GL_TEXTURE_ENV,GL13.GL_COMBINE_RGB,GL11.GL_MODULATE);
@@ -303,7 +289,10 @@ public abstract class GLInterface implements IInterface {
 	 * Should be called after rendering.
 	 */
 	public void end (boolean matrix) {
-		GlStateManager.Profile.DEFAULT.apply();
+		GL11.glPopAttrib();
+		GlStateManager.shadeModel(GL11.GL_FLAT);
+		GlStateManager.enableTexture2D();
+		GlStateManager.disableBlend();
 		if (matrix) {
 			GlStateManager.matrixMode(GL11.GL_PROJECTION);
 			GlStateManager.popMatrix();
