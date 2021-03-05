@@ -27,7 +27,7 @@ public class GameSenseTheme extends ThemeBase {
 		scheme.createSetting(this,"Outline Color","The color for panel outlines.",false,true,new Color(255,0,0),false);
 		scheme.createSetting(this,"Enabled Color","The main color for enabled components.",true,true,new Color(255,0,0,150),false);
 		scheme.createSetting(this,"Disabled Color","The main color for disabled modules.",false,true,new Color(0,0,0),false);
-		scheme.createSetting(this,"Settings Color","The background color for settings.",false,true,new Color(32,32,32),false);
+		scheme.createSetting(this,"Settings Color","The background color for settings.",false,true,new Color(30,30,30),false);
 		scheme.createSetting(this,"Font Color","The main color for text.",false,true,new Color(255,255,255),false);
 	}
 	
