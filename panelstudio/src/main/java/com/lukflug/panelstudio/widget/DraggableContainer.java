@@ -1,6 +1,7 @@
 package com.lukflug.panelstudio.widget;
 
 import java.awt.Point;
+import java.util.function.IntFunction;
 import java.util.function.Supplier;
 
 import com.lukflug.panelstudio.base.Animation;
@@ -59,6 +60,12 @@ public class DraggableContainer extends DraggableComponent implements IContainer
 	public <T> DraggableContainer (ILabeled label, IComponent title, Supplier<T> state, IToggleable open, Animation animation, IPanelRenderer<T> panelRenderer, IContainerRenderer containerRenderer, IScrollBarRenderer<T> scrollRenderer, IEmptySpaceRenderer<T> emptyRenderer, Point position, int width, boolean savesState) {
 		super(null);
 		panel=new CollapsibleContainer(getWrappedDragComponent(title),new VerticalContainer(label,containerRenderer),state,open,animation,panelRenderer,scrollRenderer,emptyRenderer,height->getScrollHeight(height),cwidth->getComponentWidth(cwidth));
+		setComponent(new FixedComponent(panel,position,width,panel.getToggle(),savesState));
+	}
+	
+	public <T> DraggableContainer (IComponent title, VerticalContainer content, Supplier<T> state, IToggleable open, Animation animation, IPanelRenderer<T> panelRenderer, IScrollBarRenderer<T> scrollRenderer, IEmptySpaceRenderer<T> emptyRenderer, IntFunction<Integer> scrollHeight, IntFunction<Integer> componentWidth, Point position, int width, boolean savesState) {
+		super(null);
+		panel=new CollapsibleContainer(getWrappedDragComponent(title),content,state,open,animation,panelRenderer,scrollRenderer,emptyRenderer,height->getScrollHeight(height),cwidth->getComponentWidth(cwidth));
 		setComponent(new FixedComponent(panel,position,width,panel.getToggle(),savesState));
 	}
 
