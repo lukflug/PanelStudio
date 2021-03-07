@@ -6,6 +6,7 @@ import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IToggleable;
+import com.lukflug.panelstudio.base.SimpleToggleable;
 import com.lukflug.panelstudio.setting.IColorSetting;
 import com.lukflug.panelstudio.setting.Labeled;
 import com.lukflug.panelstudio.theme.ISliderRenderer;
@@ -32,7 +33,7 @@ public class ColorComponent extends CollapsibleContainer {
 	 * @param theme the theme to be used
 	 */
 	public ColorComponent (IColorSetting setting, Animation animation, ITheme theme, int level) {
-		super(setting,new Button(setting,theme.getButtonRenderer(Void.class,level,true)),Void.class,()->null,null,animation,theme,level);
+		super(setting,new Button(setting,theme.getButtonRenderer(Void.class,level,true)),Void.class,()->null,new SimpleToggleable(false),animation,theme,level);
 		this.setting=setting;
 		this.theme=theme;
 		addComponent(new ToggleButton(new Labeled("Rainbow",null,()->setting.allowsRainbow()),new IToggleable() {

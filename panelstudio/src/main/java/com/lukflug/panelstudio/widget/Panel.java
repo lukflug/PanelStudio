@@ -37,11 +37,12 @@ public class Panel extends FocusableComponentProxy {
 	 */
 	public <T> Panel (IComponent title, IComponent content, Supplier<T> state, IToggleable open, Animation animation, IPanelRenderer<T> panelRenderer) {
 		super(null);
+		open.isOn();
 		VerticalContainer container=new VerticalContainer(new Labeled(title.getTitle(),null,()->content.isVisible()),panelRenderer) {
 			@Override
 			public void render (Context context) {
 				super.render(context);
-				panelRenderer.renderPanelOverlay(context,hasFocus(context),state.get());
+				panelRenderer.renderPanelOverlay(context,hasFocus(context),state.get(),open.isOn());
 			}
 		};
 		collapsible=new CollapsibleComponent(content,open,animation);
@@ -49,6 +50,7 @@ public class Panel extends FocusableComponentProxy {
 			@Override
 			public void render (Context context) {
 				super.render(context);
+				panelRenderer.renderTitleOverlay(context,hasFocus(context),state.get(),open.isOn());
 			}
 			
 			@Override

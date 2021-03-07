@@ -10,8 +10,13 @@ import com.lukflug.panelstudio.base.Context;
 @FunctionalInterface
 public interface IPanelRendererProxy<T> extends IPanelRenderer<T> {
 	@Override
-	public default void renderPanelOverlay(Context context, boolean focus, T state) {
-		getRenderer().renderPanelOverlay(context,focus,state);
+	public default void renderPanelOverlay(Context context, boolean focus, T state, boolean open) {
+		getRenderer().renderPanelOverlay(context,focus,state,open);
+	}
+	
+	@Override
+	public default void renderTitleOverlay (Context context, boolean focus, T state, boolean open) {
+		getRenderer().renderTitleOverlay(context,focus,state,open);
 	}
 
 	/**

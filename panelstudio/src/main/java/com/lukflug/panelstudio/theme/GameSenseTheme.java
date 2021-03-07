@@ -14,13 +14,13 @@ import com.lukflug.panelstudio.base.IInterface;
  * @author lukflug
  */
 public class GameSenseTheme extends ThemeBase {
-	protected final int height,border,scroll;
+	protected final int height,padding,scroll;
 	protected final String separator;
 	
-	public GameSenseTheme (IColorScheme scheme, int height, int border, int scroll, String separator) {
+	public GameSenseTheme (IColorScheme scheme, int height, int padding, int scroll, String separator) {
 		super(scheme);
 		this.height=height;
-		this.border=border;
+		this.padding=padding;
 		this.scroll=scroll;
 		this.separator=separator;
 		scheme.createSetting(this,"Title Color","The color for panel titles.",false,true,new Color(255,0,0),false);
@@ -99,7 +99,7 @@ public class GameSenseTheme extends ThemeBase {
 			}
 			
 			@Override
-			public void renderPanelOverlay(Context context, boolean focus, T state) {
+			public void renderPanelOverlay(Context context, boolean focus, T state, boolean open) {
 				if (level==0) {
 					Color color=scheme.getColor("Outline Color");
 					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y,context.getSize().width,1),color,color,color,color);
@@ -107,6 +107,10 @@ public class GameSenseTheme extends ThemeBase {
 					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y,1,context.getSize().height),color,color,color,color);
 					context.getInterface().fillRect(new Rectangle(context.getPos().x+context.getSize().width-1,context.getPos().y,1,context.getSize().height),color,color,color,color);
 				}
+			}
+
+			@Override
+			public void renderTitleOverlay(Context context, boolean focus, T state, boolean open) {
 			}
 		};
 	}
@@ -165,8 +169,8 @@ public class GameSenseTheme extends ThemeBase {
 					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+context.getSize().height-1,context.getSize().width,1),color,color,color,color);
 				}
 				renderOverlay(context);
-				if (type==String.class) context.getInterface().drawString(new Point(context.getRect().x+border,context.getRect().y+border),height,title+separator+state,getFontColor(focus));
-				else context.getInterface().drawString(new Point(context.getRect().x+border,context.getRect().y+border),height,title,getFontColor(focus));
+				if (type==String.class) context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title+separator+state,getFontColor(focus));
+				else context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title,getFontColor(focus));
 			}
 
 			@Override
@@ -188,7 +192,7 @@ public class GameSenseTheme extends ThemeBase {
 			public void renderButton(Context context, String title, boolean focus, String state) {
 				fillBaseRect(context,focus,focus,level);
 				renderOverlay(context);
-				context.getInterface().drawString(new Point(context.getRect().x+border,context.getRect().y+border),height,title+separator+(focus?"...":state),getFontColor(focus));
+				context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title+separator+(focus?"...":state),getFontColor(focus));
 			}
 
 			@Override
@@ -209,7 +213,7 @@ public class GameSenseTheme extends ThemeBase {
 				context.getInterface().fillRect(new Rectangle(rect.x,rect.y,divider,rect.height),colorA,colorA,colorA,colorA);
 				context.getInterface().fillRect(new Rectangle(rect.x+divider,rect.y,rect.width-divider,rect.height),colorB,colorB,colorB,colorB);
 				renderOverlay(context);
-				context.getInterface().drawString(new Point(context.getRect().x+border,context.getRect().y+border),height,title+separator+state,getFontColor(focus));
+				context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title+separator+state,getFontColor(focus));
 			}
 
 			@Override
@@ -221,7 +225,7 @@ public class GameSenseTheme extends ThemeBase {
 
 	@Override
 	public int getBaseHeight() {
-		return height+2*border;
+		return height+2*padding;
 	}
 
 	@Override

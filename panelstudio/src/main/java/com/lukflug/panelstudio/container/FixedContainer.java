@@ -42,6 +42,7 @@ public class FixedContainer extends Container<IFixedComponent> {
 		context.setHeight(getHeight());
 		// Clip rectangle
 		if (clip) context.getInterface().window(context.getRect());
+		if (renderer!=null) renderer.renderBackground(context,context.hasFocus());
 		// Find highest component
 		AtomicReference<IFixedComponent> highest=new AtomicReference<IFixedComponent>(null);
 		doContextlessLoop(component->{
