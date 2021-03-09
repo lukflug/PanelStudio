@@ -10,11 +10,7 @@ import com.lukflug.panelstudio.config.IPanelConfig;
  * Fixed component wrapper that can be dragged by another component.
  * @author lukflug
  */
-public class DraggableComponent extends ComponentProxy implements IFixedComponent {
-	/**
-	 * The fixed component to be dragged.
-	 */
-	protected IFixedComponent fixedComponent;
+public abstract class DraggableComponent<T extends IFixedComponent> implements IComponentProxy<T>,IFixedComponent {
 	/**
 	 * Flag indicating whether the user is dragging the component with the mouse.
 	 */
@@ -24,54 +20,36 @@ public class DraggableComponent extends ComponentProxy implements IFixedComponen
 	 */
 	protected Point attachPoint;
 
-	/**
-	 * Constructor.
-	 * @param fixedComponent fixed component to be dragged
-	 */
-	public DraggableComponent (IFixedComponent fixedComponent) {
-		super(fixedComponent);
-		this.fixedComponent=fixedComponent;
-	}
-	
-	/**
-	 * Sets the fixed component to be dragged after initialization
-	 * @param component the component to be dragged
-	 */
-	public void setComponent (IFixedComponent component) {
-		this.fixedComponent=component;
-		this.component=component;
-	}
-
 	@Override
 	public Point getPosition(IInterface inter) {
-		Point point=fixedComponent.getPosition(inter);
+		Point point=getComponent().getPosition(inter);
 		if (dragging) point.translate(inter.getMouse().x-attachPoint.x,inter.getMouse().y-attachPoint.y);
 		return point;
 	}
 
 	@Override
 	public void setPosition(IInterface inter, Point position) {
-		fixedComponent.setPosition(inter,position);
+		getComponent().setPosition(inter,position);
 	}
 
 	@Override
 	public int getWidth(IInterface inter) {
-		return fixedComponent.getWidth(inter);
+		return getComponent().getWidth(inter);
 	}
 
 	@Override
 	public boolean savesState() {
-		return fixedComponent.savesState();
+		return getComponent().savesState();
 	}
 
 	@Override
 	public void saveConfig(IInterface inter, IPanelConfig config) {
-		fixedComponent.saveConfig(inter,config);
+		getComponent().saveConfig(inter,config);
 	}
 
 	@Override
 	public void loadConfig(IInterface inter, IPanelConfig config) {
-		fixedComponent.loadConfig(inter,config);
+		getComponent().loadConfig(inter,config);
 	}
 	
 	/**
@@ -79,7 +57,7 @@ public class DraggableComponent extends ComponentProxy implements IFixedComponen
 	 * @param dragComponent component that is used to drag the panel
 	 */
 	public IComponent getWrappedDragComponent (IComponent dragComponent) {
-		return new ComponentProxy(dragComponent) {
+		return new ComponentProxy<IComponent>(dragComponent) {
 			@Override
 			public void handleButton (Context context, int button) {
 				super.handleButton(context,button);
@@ -89,9 +67,9 @@ public class DraggableComponent extends ComponentProxy implements IFixedComponen
 				} else if (!context.getInterface().getButton(IInterface.LBUTTON) && dragging) {
 					Point mouse=context.getInterface().getMouse();
 					dragging=false;
-					Point p=fixedComponent.getPosition(context.getInterface());
+					Point p=DraggableComponent.this.getComponent().getPosition(context.getInterface());
 					p.translate(mouse.x-attachPoint.x,mouse.y-attachPoint.y);
-					fixedComponent.setPosition(context.getInterface(),p);
+					DraggableComponent.this.getComponent().setPosition(context.getInterface(),p);
 				}
 			}
 			

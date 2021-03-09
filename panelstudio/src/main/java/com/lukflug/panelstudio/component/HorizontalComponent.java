@@ -6,7 +6,7 @@ import com.lukflug.panelstudio.base.IInterface;
  * Class wrapping a generic component into a horizontal component.
  * @author lukflug
  */
-public class HorizontalComponent extends ComponentProxy implements IHorizontalComponent {
+public class HorizontalComponent<T extends IComponent> extends ComponentProxy<T> implements IHorizontalComponent {
 	/**
 	 * The minimal width of the component.
 	 */
@@ -22,7 +22,7 @@ public class HorizontalComponent extends ComponentProxy implements IHorizontalCo
 	 * @param width the width of the component
 	 * @param weight the weight of the component
 	 */
-	public HorizontalComponent (IComponent component, int width, int weight) {
+	public HorizontalComponent (T component, int width, int weight) {
 		super(component);
 		this.width=width;
 		this.weight=weight;

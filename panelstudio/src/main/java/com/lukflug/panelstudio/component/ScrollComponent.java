@@ -10,7 +10,7 @@ import com.lukflug.panelstudio.base.Context;
  * A component that can scroll another component.
  * @author lukflug
  */
-public abstract class ScrollComponent extends ComponentProxy {
+public abstract class ScrollComponent<T extends IComponent> implements IComponentProxy<T> {
 	/**
 	 * Current scrolling position.
 	 */
@@ -28,26 +28,18 @@ public abstract class ScrollComponent extends ComponentProxy {
 	 */
 	protected Dimension scrollSize=new Dimension(0,0);
 	
-	/**
-	 * Constructor.
-	 * @param component the component to scroll
-	 */
-	public ScrollComponent(IComponent component) {
-		super(component);
-	}
-	
 	@Override
 	public void render(Context context) {
 		doOperation(context,subContext->{
 			context.getInterface().window(context.getRect());
-			component.render(subContext);
+			getComponent().render(subContext);
 			context.getInterface().restore();
 		});
 	}
 
 	@Override
 	public void handleScroll(Context context, int diff) {
-		Context sContext=doOperation(context,subContext->component.handleScroll(subContext,diff));
+		Context sContext=doOperation(context,subContext->getComponent().handleScroll(subContext,diff));
 		if (context.isHovered()) {
 			if (isScrollingY()) scrollPos.translate(0,diff);
 			else if (isScrollingX()) scrollPos.translate(diff,0);
@@ -56,8 +48,8 @@ public abstract class ScrollComponent extends ComponentProxy {
 	}
 	
 	@Override
-	protected Context doOperation (Context context, Consumer<Context> operation) {
-		Context subContext=super.doOperation(context,operation);
+	public Context doOperation (Context context, Consumer<Context> operation) {
+		Context subContext=IComponentProxy.super.doOperation(context,operation);
 		if (nextScrollPos!=null) {
 			scrollPos=nextScrollPos;
 			clampScrollPos(context.getSize(),subContext.getSize());
@@ -69,9 +61,9 @@ public abstract class ScrollComponent extends ComponentProxy {
 	}
 	
 	@Override
-	protected Context getContext (Context context) {
+	public Context getContext (Context context) {
 		Context subContext=new Context(context,context.getSize().width,new Point(-scrollPos.x,-scrollPos.y),true,true,this);
-		component.getHeight(subContext);
+		getComponent().getHeight(subContext);
 		int height=getHeight(subContext.getSize().height);
 		context.setHeight(height);
 		return new Context(context,getComponentWidth(context.getSize().width),new Point(-scrollPos.x,-scrollPos.y),true,context.isHovered(),this);

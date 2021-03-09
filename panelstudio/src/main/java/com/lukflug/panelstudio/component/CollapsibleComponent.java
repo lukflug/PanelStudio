@@ -11,7 +11,7 @@ import com.lukflug.panelstudio.base.IToggleable;
  * A component that can be collapsed.
  * @author lukflug
  */
-public class CollapsibleComponent extends ComponentProxy {
+public abstract class CollapsibleComponent<T extends IComponent> implements IComponentProxy<T> {
 	/**
 	 * Animation to be used.
 	 */
@@ -22,8 +22,7 @@ public class CollapsibleComponent extends ComponentProxy {
 	 * @param component the component to be wrapped
 	 * @param toggle the toggleable indicating whether the component is open
 	 */
-	public CollapsibleComponent (IComponent component, IToggleable toggle, Animation animation) {
-		super(component);
+	public CollapsibleComponent (IToggleable toggle, Animation animation) {
 		this.toggle=new AnimatedToggleable(toggle,animation);
 	}
 	
@@ -31,20 +30,20 @@ public class CollapsibleComponent extends ComponentProxy {
 	public void render(Context context) {
 		doOperation(context,subContext->{
 			context.getInterface().window(context.getRect());
-			component.render(subContext);
+			getComponent().render(subContext);
 			context.getInterface().restore();
 		});
 	}
 	
 	@Override
 	public boolean isVisible() {
-		return component.isVisible()&&(toggle.getValue()!=0);
+		return getComponent().isVisible()&&(toggle.getValue()!=0);
 	}
 	
 	@Override
-	protected Context getContext (Context context) {
+	public Context getContext (Context context) {
 		Context subContext=new Context(context,context.getSize().width,new Point(0,0),true,true,this);
-		component.getHeight(subContext);
+		getComponent().getHeight(subContext);
 		int height=getHeight(subContext.getSize().height);
 		int offset=height-subContext.getSize().height;
 		context.setHeight(height);
@@ -52,7 +51,7 @@ public class CollapsibleComponent extends ComponentProxy {
 	}
 	
 	@Override
-	protected int getHeight (int height) {
+	public int getHeight (int height) {
 		return (int)(toggle.getValue()*height);
 	}
 	

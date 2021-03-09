@@ -10,7 +10,7 @@ import com.lukflug.panelstudio.config.IPanelConfig;
  * Class wrapping a generic component into a fixed component.
  * @author lukflug
  */
-public class FixedComponent extends ComponentProxy implements IFixedComponent {
+public class FixedComponent<T extends IComponent> extends ComponentProxy<T> implements IFixedComponent {
 	/**
 	 * The position of the fixed component.
 	 */
@@ -36,7 +36,7 @@ public class FixedComponent extends ComponentProxy implements IFixedComponent {
 	 * @param boolean to save as state
 	 * @param boolean whether state is saved
 	 */
-	public FixedComponent (IComponent component, Point position, int width, IToggleable state, boolean savesState) {
+	public FixedComponent (T component, Point position, int width, IToggleable state, boolean savesState) {
 		super(component);
 		this.position=position;
 		this.width=width;
