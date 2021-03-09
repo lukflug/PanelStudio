@@ -27,7 +27,7 @@ import com.lukflug.panelstudio.theme.ITheme;
  * A panel that can be opened and closed.
  * @author lukflug
  */
-public class Panel<T extends IComponent> extends FocusableComponentProxy<VerticalContainer> {
+public class ClosableComponent<T extends IComponent> extends FocusableComponentProxy<VerticalContainer> {
 	protected final IComponent title;
 	/**
 	 * The current collapsible component.
@@ -45,7 +45,7 @@ public class Panel<T extends IComponent> extends FocusableComponentProxy<Vertica
 	 * @param panelRenderer the render to use for the overlay of this panel
 	 * @return a vertical container having the functionality of a panel
 	 */
-	public <S> Panel (IComponent title, T content, Supplier<S> state, IToggleable open, Animation animation, IPanelRenderer<S> panelRenderer) {
+	public <S> ClosableComponent (IComponent title, T content, Supplier<S> state, IToggleable open, Animation animation, IPanelRenderer<S> panelRenderer) {
 		this.title=title;
 		container=new VerticalContainer(new Labeled(title.getTitle(),null,()->content.isVisible()),panelRenderer) {
 			@Override
@@ -91,25 +91,25 @@ public class Panel<T extends IComponent> extends FocusableComponentProxy<Vertica
 		return collapsible;
 	}
 	
-	public static <S,T extends IComponent> DraggableComponent<FixedComponent<Panel<T>>> createDraggableComponent (Panel<T> panel, Point position, int width, boolean savesState) {
-		return new DraggableComponent<FixedComponent<Panel<T>>>() {
+	public static <S,T extends IComponent> DraggableComponent<FixedComponent<ClosableComponent<T>>> createDraggableComponent (ClosableComponent<T> panel, Point position, int width, boolean savesState) {
+		return new DraggableComponent<FixedComponent<ClosableComponent<T>>>() {
 			@Override
-			public FixedComponent<Panel<T>> getComponent() {
-				return new FixedComponent<Panel<T>>(panel,position,width,panel.getCollapsible().getToggle(),savesState);
+			public FixedComponent<ClosableComponent<T>> getComponent() {
+				return new FixedComponent<ClosableComponent<T>>(panel,position,width,panel.getCollapsible().getToggle(),savesState);
 			}
 		};
 	}
 	
-	public static <S> Panel<ScrollableComponent<S,VerticalContainer>> createContainer (ILabeled label, IComponent title, Class<S> type, Supplier<S> state, IToggleable open, Animation animation, ITheme theme, int level) {
-		return createContainer(label,title,state,open,animation,theme.getPanelRenderer(type,level),theme.getContainerRenderer(level),theme.getScrollBarRenderer(type,level),theme.getEmptySpaceRenderer(type,level));
+	public static <S> ClosableComponent<ScrollBarComponent<S,VerticalContainer>> createScrollableContainer (ILabeled label, IComponent title, Class<S> type, Supplier<S> state, IToggleable open, Animation animation, ITheme theme, int level) {
+		return createScrollableContainer(label,title,state,open,animation,theme.getPanelRenderer(type,level),theme.getContainerRenderer(level),theme.getScrollBarRenderer(type,level),theme.getEmptySpaceRenderer(type,level));
 	}
 	
-	public static <S> Panel<ScrollableComponent<S,VerticalContainer>> createContainer (ILabeled label, IComponent title, Supplier<S> state, IToggleable open, Animation animation, IPanelRenderer<S> panelRenderer, IContainerRenderer containerRenderer, IScrollBarRenderer<S> scrollRenderer, IEmptySpaceRenderer<S> emptyRenderer) {
-		return createScrollablePanel(title,new VerticalContainer(label,containerRenderer),state,open,animation,panelRenderer,scrollRenderer,emptyRenderer,height->height,width->width);
+	public static <S> ClosableComponent<ScrollBarComponent<S,VerticalContainer>> createScrollableContainer (ILabeled label, IComponent title, Supplier<S> state, IToggleable open, Animation animation, IPanelRenderer<S> panelRenderer, IContainerRenderer containerRenderer, IScrollBarRenderer<S> scrollRenderer, IEmptySpaceRenderer<S> emptyRenderer) {
+		return createScrollableComponent(title,new VerticalContainer(label,containerRenderer),state,open,animation,panelRenderer,scrollRenderer,emptyRenderer,height->height,width->width);
 	}
 	
-	public static <S,T extends IComponent> Panel<ScrollableComponent<S,T>> createScrollablePanel (IComponent title, T content, Supplier<S> state, IToggleable open, Animation animation, IPanelRenderer<S> panelRenderer, IScrollBarRenderer<S> scrollRenderer, IEmptySpaceRenderer<S> emptyRenderer, IntFunction<Integer> scrollHeight, IntFunction<Integer> componentWidth) {
-		return new Panel<ScrollableComponent<S,T>>(title,new ScrollableComponent<S,T>(content,scrollRenderer,emptyRenderer) {
+	public static <S,T extends IComponent> ClosableComponent<ScrollBarComponent<S,T>> createScrollableComponent (IComponent title, T content, Supplier<S> state, IToggleable open, Animation animation, IPanelRenderer<S> panelRenderer, IScrollBarRenderer<S> scrollRenderer, IEmptySpaceRenderer<S> emptyRenderer, IntFunction<Integer> scrollHeight, IntFunction<Integer> componentWidth) {
+		return new ClosableComponent<ScrollBarComponent<S,T>>(title,new ScrollBarComponent<S,T>(content,scrollRenderer,emptyRenderer) {
 			@Override
 			protected int getScrollHeight (int componentHeight) {
 				return scrollHeight.apply(componentHeight); 

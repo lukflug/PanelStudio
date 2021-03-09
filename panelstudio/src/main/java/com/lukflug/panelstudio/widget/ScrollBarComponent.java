@@ -3,7 +3,7 @@ package com.lukflug.panelstudio.widget;
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.component.HorizontalComponent;
 import com.lukflug.panelstudio.component.IComponent;
-import com.lukflug.panelstudio.component.ScrollComponent;
+import com.lukflug.panelstudio.component.ScrollableComponent;
 import com.lukflug.panelstudio.container.HorizontalContainer;
 import com.lukflug.panelstudio.container.VerticalContainer;
 import com.lukflug.panelstudio.setting.Labeled;
@@ -16,7 +16,7 @@ import com.lukflug.panelstudio.theme.IScrollBarRenderer;
  * @author lukflug
  * @param <T> the state type
  */
-public abstract class ScrollableComponent<S,T extends IComponent> extends HorizontalContainer {
+public abstract class ScrollBarComponent<S,T extends IComponent> extends HorizontalContainer {
 	protected final T component;
 	
 	/**
@@ -25,11 +25,11 @@ public abstract class ScrollableComponent<S,T extends IComponent> extends Horizo
 	 * @param renderer the renderer to use for the scroll bars
 	 * @param emptyRenderer the renderer to use for the corners
 	 */
-	public ScrollableComponent (T component, IScrollBarRenderer<S> renderer, IEmptySpaceRenderer<S> emptyRenderer) {
+	public ScrollBarComponent (T component, IScrollBarRenderer<S> renderer, IEmptySpaceRenderer<S> emptyRenderer) {
 		super(new Labeled(component.getTitle(),null,()->component.isVisible()),new IContainerRenderer(){});
 		this.component=component;
 		// Component containing content
-		ScrollComponent<T> scrollComponent=new ScrollComponent<T>() {
+		ScrollableComponent<T> scrollComponent=new ScrollableComponent<T>() {
 			@Override
 			public T getComponent() {
 				return component;
@@ -42,7 +42,7 @@ public abstract class ScrollableComponent<S,T extends IComponent> extends Horizo
 			
 			@Override
 			protected int getComponentWidth(int scrollWidth) {
-				return ScrollableComponent.this.getComponentWidth(scrollWidth);
+				return ScrollBarComponent.this.getComponentWidth(scrollWidth);
 			}
 		};
 		// Vertical scroll bar
@@ -69,7 +69,7 @@ public abstract class ScrollableComponent<S,T extends IComponent> extends Horizo
 
 			@Override
 			protected S getState() {
-				return ScrollableComponent.this.getState();
+				return ScrollBarComponent.this.getState();
 			}
 		};
 		// Horizontal scroll bar
@@ -96,7 +96,7 @@ public abstract class ScrollableComponent<S,T extends IComponent> extends Horizo
 
 			@Override
 			protected S getState() {
-				return ScrollableComponent.this.getState();
+				return ScrollBarComponent.this.getState();
 			}
 		};
 		// Populate containers
@@ -108,7 +108,7 @@ public abstract class ScrollableComponent<S,T extends IComponent> extends Horizo
 		rightContainer.addComponent(new EmptySpace<S>(new Labeled("Empty",null,()->scrollComponent.isScrollingX()&&scrollComponent.isScrollingY()),()->renderer.getThickness(),emptyRenderer) {
 			@Override
 			protected S getState() {
-				return ScrollableComponent.this.getState();
+				return ScrollBarComponent.this.getState();
 			}
 		});
 		addComponent(new HorizontalComponent<VerticalContainer>(leftContainer,0,1));

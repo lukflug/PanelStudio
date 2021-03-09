@@ -10,7 +10,7 @@ import com.lukflug.panelstudio.base.Context;
  * A component that can scroll another component.
  * @author lukflug
  */
-public abstract class ScrollComponent<T extends IComponent> implements IComponentProxy<T> {
+public abstract class ScrollableComponent<T extends IComponent> implements IComponentProxy<T> {
 	/**
 	 * Current scrolling position.
 	 */
