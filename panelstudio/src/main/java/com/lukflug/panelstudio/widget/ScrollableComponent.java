@@ -29,9 +29,9 @@ public abstract class ScrollableComponent<S,T extends IComponent> extends Horizo
 		super(new Labeled(component.getTitle(),null,()->component.isVisible()),new IContainerRenderer(){});
 		this.component=component;
 		// Component containing content
-		ScrollComponent scrollComponent=new ScrollComponent() {
+		ScrollComponent<T> scrollComponent=new ScrollComponent<T>() {
 			@Override
-			public IComponent getComponent() {
+			public T getComponent() {
 				return component;
 			}
 			
@@ -111,8 +111,8 @@ public abstract class ScrollableComponent<S,T extends IComponent> extends Horizo
 				return ScrollableComponent.this.getState();
 			}
 		});
-		addComponent(new HorizontalComponent(leftContainer,0,1));
-		addComponent(new HorizontalComponent(rightContainer,0,0) {
+		addComponent(new HorizontalComponent<VerticalContainer>(leftContainer,0,1));
+		addComponent(new HorizontalComponent<VerticalContainer>(rightContainer,0,0) {
 			@Override
 			public int getWidth (IInterface inter) {
 				return renderer.getThickness();

@@ -91,11 +91,11 @@ public class Panel<T extends IComponent> extends FocusableComponentProxy<Vertica
 		return collapsible;
 	}
 	
-	public static <S> DraggableComponent<FixedComponent<Panel<?>>> createDraggableComponent (Panel<?> panel, Point position, int width, boolean savesState) {
-		return new DraggableComponent<FixedComponent<Panel<?>>>() {
+	public static <S,T extends IComponent> DraggableComponent<FixedComponent<Panel<T>>> createDraggableComponent (Panel<T> panel, Point position, int width, boolean savesState) {
+		return new DraggableComponent<FixedComponent<Panel<T>>>() {
 			@Override
-			public FixedComponent<Panel<?>> getComponent() {
-				return new FixedComponent<Panel<?>>(panel,position,width,panel.getCollapsible().getToggle(),savesState);
+			public FixedComponent<Panel<T>> getComponent() {
+				return new FixedComponent<Panel<T>>(panel,position,width,panel.getCollapsible().getToggle(),savesState);
 			}
 		};
 	}
