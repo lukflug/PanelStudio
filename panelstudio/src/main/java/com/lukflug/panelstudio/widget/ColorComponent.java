@@ -17,7 +17,7 @@ import com.lukflug.panelstudio.theme.ITheme;
  * Component representing a color-valued setting.
  * @author lukflug
  */
-public class ColorComponent extends ClosableComponent<VerticalContainer> {
+public class ColorComponent extends ClosableComponent<Button,VerticalContainer> {
 	/**
 	 * The setting in question.
 	 */
