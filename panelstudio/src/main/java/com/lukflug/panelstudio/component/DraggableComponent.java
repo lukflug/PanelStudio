@@ -56,8 +56,8 @@ public abstract class DraggableComponent<T extends IFixedComponent> implements I
 	 * Returns the wrapped dragging component.
 	 * @param dragComponent component that is used to drag the panel
 	 */
-	public IComponent getWrappedDragComponent (IComponent dragComponent) {
-		return new ComponentProxy<IComponent>(dragComponent) {
+	public <S extends IComponent> ComponentProxy<S> getWrappedDragComponent (S dragComponent) {
+		return new ComponentProxy<S>(dragComponent) {
 			@Override
 			public void handleButton (Context context, int button) {
 				super.handleButton(context,button);

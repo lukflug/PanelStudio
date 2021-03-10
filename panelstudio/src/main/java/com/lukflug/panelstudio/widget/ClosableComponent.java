@@ -1,6 +1,7 @@
 package com.lukflug.panelstudio.widget;
 
 import java.awt.Point;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.IntFunction;
 import java.util.function.Supplier;
 
@@ -15,20 +16,17 @@ import com.lukflug.panelstudio.component.FixedComponent;
 import com.lukflug.panelstudio.component.FocusableComponentProxy;
 import com.lukflug.panelstudio.component.IComponent;
 import com.lukflug.panelstudio.container.VerticalContainer;
-import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.setting.Labeled;
-import com.lukflug.panelstudio.theme.IContainerRenderer;
 import com.lukflug.panelstudio.theme.IEmptySpaceRenderer;
 import com.lukflug.panelstudio.theme.IPanelRenderer;
 import com.lukflug.panelstudio.theme.IScrollBarRenderer;
-import com.lukflug.panelstudio.theme.ITheme;
 
 /**
  * A panel that can be opened and closed.
  * @author lukflug
  */
-public class ClosableComponent<T extends IComponent> extends FocusableComponentProxy<VerticalContainer> {
-	protected final IComponent title;
+public class ClosableComponent<S extends IComponent,T extends IComponent> extends FocusableComponentProxy<VerticalContainer> {
+	protected final S title;
 	/**
 	 * The current collapsible component.
 	 */
@@ -45,7 +43,7 @@ public class ClosableComponent<T extends IComponent> extends FocusableComponentP
 	 * @param panelRenderer the render to use for the overlay of this panel
 	 * @return a vertical container having the functionality of a panel
 	 */
-	public <S> ClosableComponent (IComponent title, T content, Supplier<S> state, IToggleable open, Animation animation, IPanelRenderer<S> panelRenderer) {
+	public <U> ClosableComponent (S title, T content, Supplier<U> state, IToggleable open, Animation animation, IPanelRenderer<U> panelRenderer) {
 		this.title=title;
 		container=new VerticalContainer(new Labeled(title.getTitle(),null,()->content.isVisible()),panelRenderer) {
 			@Override
@@ -91,25 +89,24 @@ public class ClosableComponent<T extends IComponent> extends FocusableComponentP
 		return collapsible;
 	}
 	
-	public static <S,T extends IComponent> DraggableComponent<FixedComponent<ClosableComponent<T>>> createDraggableComponent (ClosableComponent<T> panel, Point position, int width, boolean savesState) {
-		return new DraggableComponent<FixedComponent<ClosableComponent<T>>>() {
+	public static <S extends IComponent,T extends IComponent,U> DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>> createDraggableComponent (S title, T content, Supplier<U> state, IToggleable open, Animation animation, IPanelRenderer<U> panelRenderer, IScrollBarRenderer<U> scrollRenderer, IEmptySpaceRenderer<U> emptyRenderer, IntFunction<Integer> scrollHeight, IntFunction<Integer> componentWidth, Point position, int width, boolean savesState) {
+		AtomicReference<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>> panel=new AtomicReference<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>(null);
+		DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>> draggable=createDraggableComponent(()->panel.get(),position,width,savesState);
+		panel.set(createScrollableComponent(draggable.getWrappedDragComponent(title),content,state,open,animation,panelRenderer,scrollRenderer,emptyRenderer,scrollHeight,componentWidth));
+		return draggable;
+	}
+	
+	public static <S extends IComponent,T extends IComponent,U> DraggableComponent<FixedComponent<ClosableComponent<S,T>>> createDraggableComponent (Supplier<ClosableComponent<S,T>> panel, Point position, int width, boolean savesState) {
+		return new DraggableComponent<FixedComponent<ClosableComponent<S,T>>>() {
 			@Override
-			public FixedComponent<ClosableComponent<T>> getComponent() {
-				return new FixedComponent<ClosableComponent<T>>(panel,position,width,panel.getCollapsible().getToggle(),savesState);
+			public FixedComponent<ClosableComponent<S,T>> getComponent() {
+				return new FixedComponent<ClosableComponent<S,T>>(panel.get(),position,width,panel.get().getCollapsible().getToggle(),savesState);
 			}
 		};
 	}
 	
-	public static <S> ClosableComponent<ScrollBarComponent<S,VerticalContainer>> createScrollableContainer (ILabeled label, IComponent title, Class<S> type, Supplier<S> state, IToggleable open, Animation animation, ITheme theme, int level) {
-		return createScrollableContainer(label,title,state,open,animation,theme.getPanelRenderer(type,level),theme.getContainerRenderer(level),theme.getScrollBarRenderer(type,level),theme.getEmptySpaceRenderer(type,level));
-	}
-	
-	public static <S> ClosableComponent<ScrollBarComponent<S,VerticalContainer>> createScrollableContainer (ILabeled label, IComponent title, Supplier<S> state, IToggleable open, Animation animation, IPanelRenderer<S> panelRenderer, IContainerRenderer containerRenderer, IScrollBarRenderer<S> scrollRenderer, IEmptySpaceRenderer<S> emptyRenderer) {
-		return createScrollableComponent(title,new VerticalContainer(label,containerRenderer),state,open,animation,panelRenderer,scrollRenderer,emptyRenderer,height->height,width->width);
-	}
-	
-	public static <S,T extends IComponent> ClosableComponent<ScrollBarComponent<S,T>> createScrollableComponent (IComponent title, T content, Supplier<S> state, IToggleable open, Animation animation, IPanelRenderer<S> panelRenderer, IScrollBarRenderer<S> scrollRenderer, IEmptySpaceRenderer<S> emptyRenderer, IntFunction<Integer> scrollHeight, IntFunction<Integer> componentWidth) {
-		return new ClosableComponent<ScrollBarComponent<S,T>>(title,new ScrollBarComponent<S,T>(content,scrollRenderer,emptyRenderer) {
+	public static <S extends IComponent,T extends IComponent,U> ClosableComponent<S,ScrollBarComponent<U,T>> createScrollableComponent (S title, T content, Supplier<U> state, IToggleable open, Animation animation, IPanelRenderer<U> panelRenderer, IScrollBarRenderer<U> scrollRenderer, IEmptySpaceRenderer<U> emptyRenderer, IntFunction<Integer> scrollHeight, IntFunction<Integer> componentWidth) {
+		return new ClosableComponent<S,ScrollBarComponent<U,T>>(title,new ScrollBarComponent<U,T>(content,scrollRenderer,emptyRenderer) {
 			@Override
 			protected int getScrollHeight (int componentHeight) {
 				return scrollHeight.apply(componentHeight); 
@@ -121,7 +118,7 @@ public class ClosableComponent<T extends IComponent> extends FocusableComponentP
 			}
 
 			@Override
-			protected S getState() {
+			protected U getState() {
 				return state.get();
 			}
 		},state,open,animation,panelRenderer);
