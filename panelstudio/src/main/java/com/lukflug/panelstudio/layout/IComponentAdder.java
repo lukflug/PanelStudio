@@ -1,7 +1,9 @@
 package com.lukflug.panelstudio.layout;
 
 import java.awt.Point;
+import java.util.function.Supplier;
 
+import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.component.IComponent;
 import com.lukflug.panelstudio.theme.ITheme;
 
@@ -11,5 +13,5 @@ import com.lukflug.panelstudio.theme.ITheme;
  */
 @FunctionalInterface
 public interface IComponentAdder {
-	public <S extends IComponent,T extends IComponent> void addComponent (S title, T content, ITheme theme, int level, Point position, int width);
+	public <S extends IComponent,T extends IComponent> void addComponent (S title, T content, ITheme theme, int level, Point position, int width, Supplier<Animation> animation);
 }
