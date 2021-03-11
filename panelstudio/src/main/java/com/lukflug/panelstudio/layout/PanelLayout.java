@@ -28,12 +28,14 @@ import com.lukflug.panelstudio.widget.NumberSlider;
 import com.lukflug.panelstudio.widget.ToggleButton;
 
 public class PanelLayout implements ILayout {
+	protected final int width;
 	protected final Point start;
 	protected final int skipX,skipY;
 	protected final Supplier<Animation> animation;
 	protected final IntPredicate deleteKey;
 	
-	public PanelLayout (Point start, int skipX, int skipY, Supplier<Animation> animation, IntPredicate deleteKey) {
+	public PanelLayout (int width, Point start, int skipX, int skipY, Supplier<Animation> animation, IntPredicate deleteKey) {
+		this.width=width;
 		this.start=start;
 		this.skipX=skipX;
 		this.skipY=skipY;
@@ -48,7 +50,7 @@ public class PanelLayout implements ILayout {
 		client.getCategories().forEach(category->{
 			Button categoryTitle=new Button(category,theme.getButtonRenderer(Void.class,0,true));
 			VerticalContainer categoryContent=new VerticalContainer(category,theme.getContainerRenderer(0));
-			gui.addComponent(categoryTitle,categoryContent,theme,0,new Point(pos),100,animation);
+			gui.addComponent(categoryTitle,categoryContent,theme,0,new Point(pos),width,animation);
 			pos.translate(skipX,skipY.get());
 			skipY.set(-skipY.get());
 			category.getModules().forEach(module->{
