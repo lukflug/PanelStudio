@@ -6,12 +6,16 @@ import java.util.stream.Stream;
  * Interface representing a single setting.
  * @author lukflug
  */
-public interface ISetting extends ILabeled {
+public interface ISetting<T> extends ILabeled {
+	public T getSettingState();
+	
+	public Class<T> getSettingClass();
+	
 	/**
 	 * Returns sub settings.
 	 * @return sub-settings
 	 */
-	public default Stream<ISetting> getSubSettings() {
+	public default Stream<ISetting<?>> getSubSettings() {
 		return null;
 	}
 }

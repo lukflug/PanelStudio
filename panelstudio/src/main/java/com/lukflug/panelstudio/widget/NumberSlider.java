@@ -35,7 +35,6 @@ public class NumberSlider extends Slider {
 
 	@Override
 	protected String getDisplayState() {
-		if (setting.getPrecision()==0) return ""+(int)setting.getNumber();
-		else return String.format("%."+setting.getPrecision()+"f",setting.getNumber());
+		return setting.getSettingState();
 	}
 }

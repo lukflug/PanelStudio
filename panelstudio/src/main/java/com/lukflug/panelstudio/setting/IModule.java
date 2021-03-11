@@ -19,5 +19,5 @@ public interface IModule extends ILabeled {
 	 * Get list of settings in module.
 	 * @return stream of settings
 	 */
-	public Stream<ISetting> getSettings();
+	public Stream<ISetting<?>> getSettings();
 }
