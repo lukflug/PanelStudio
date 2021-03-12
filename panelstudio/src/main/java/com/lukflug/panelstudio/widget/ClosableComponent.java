@@ -98,9 +98,12 @@ public class ClosableComponent<S extends IComponent,T extends IComponent> extend
 	
 	public static <S extends IComponent,T extends IComponent,U> DraggableComponent<FixedComponent<ClosableComponent<S,T>>> createDraggableComponent (Supplier<ClosableComponent<S,T>> panel, Point position, int width, boolean savesState) {
 		return new DraggableComponent<FixedComponent<ClosableComponent<S,T>>>() {
+			FixedComponent<ClosableComponent<S,T>> fixedComponent=null;
+			
 			@Override
 			public FixedComponent<ClosableComponent<S,T>> getComponent() {
-				return new FixedComponent<ClosableComponent<S,T>>(panel.get(),position,width,panel.get().getCollapsible().getToggle(),savesState);
+				if (fixedComponent==null) fixedComponent=new FixedComponent<ClosableComponent<S,T>>(panel.get(),position,width,panel.get().getCollapsible().getToggle(),savesState);
+				return fixedComponent;
 			}
 		};
 	}
