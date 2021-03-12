@@ -2,6 +2,7 @@ package com.lukflug.panelstudio.layout;
 
 import java.awt.Point;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.IntFunction;
 import java.util.function.IntPredicate;
 import java.util.function.Supplier;
 
@@ -33,14 +34,16 @@ public class PanelLayout implements ILayout {
 	protected final int skipX,skipY;
 	protected final Supplier<Animation> animation;
 	protected final IntPredicate deleteKey;
+	protected final IntFunction<ChildMode> layoutType;
 	
-	public PanelLayout (int width, Point start, int skipX, int skipY, Supplier<Animation> animation, IntPredicate deleteKey) {
+	public PanelLayout (int width, Point start, int skipX, int skipY, Supplier<Animation> animation, IntPredicate deleteKey, IntFunction<ChildMode> layoutType) {
 		this.width=width;
 		this.start=start;
 		this.skipX=skipX;
 		this.skipY=skipY;
 		this.animation=animation;
 		this.deleteKey=deleteKey;
+		this.layoutType=layoutType;
 	}
 	
 	@Override
@@ -92,5 +95,9 @@ public class PanelLayout implements ILayout {
 		} else {
 			container.addComponent(component);
 		}
+	}
+	
+	public enum ChildMode {
+		DOWN,POPUP,DRAG_POPUP;
 	}
 }
