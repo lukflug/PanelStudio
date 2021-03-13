@@ -24,6 +24,11 @@ public class PanelAdder implements IComponentAdder {
 	public <S extends IComponent,T extends IComponent> void addComponent(S title, T content, ITheme theme, int level, Point position, int width, Supplier<Animation> animation) {
 		container.addComponent(ClosableComponent.createDraggableComponent(title,content,()->null,new SimpleToggleable(open),animation.get(),theme.getPanelRenderer(Void.class,level),theme.getScrollBarRenderer(Void.class,level),theme.getEmptySpaceRenderer(Void.class,level),this::getScrollHeight,this::getComponentWidth,position,width,true));
 	}
+
+	@Override
+	public void addPopup(IFixedComponent popup) {
+		container.addComponent(popup);
+	}
 	
 	protected int getScrollHeight (int componentHeight) {
 		return componentHeight;

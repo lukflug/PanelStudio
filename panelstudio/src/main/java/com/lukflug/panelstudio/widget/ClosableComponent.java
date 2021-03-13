@@ -6,6 +6,7 @@ import java.util.function.IntFunction;
 import java.util.function.Supplier;
 
 import com.lukflug.panelstudio.base.Animation;
+import com.lukflug.panelstudio.base.ConstantToggleable;
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.base.IToggleable;
@@ -45,7 +46,7 @@ public class ClosableComponent<S extends IComponent,T extends IComponent> extend
 	 */
 	public <U> ClosableComponent (S title, T content, Supplier<U> state, IToggleable open, Animation animation, IPanelRenderer<U> panelRenderer) {
 		this.title=title;
-		container=new VerticalContainer(new Labeled(title.getTitle(),null,()->content.isVisible()),panelRenderer) {
+		container=new VerticalContainer(new Labeled(content.getTitle(),null,()->content.isVisible()),panelRenderer) {
 			@Override
 			public void render (Context context) {
 				super.render(context);
@@ -87,6 +88,38 @@ public class ClosableComponent<S extends IComponent,T extends IComponent> extend
 	
 	public CollapsibleComponent<T> getCollapsible() {
 		return collapsible;
+	}
+	
+	public static <S extends IComponent,T extends IComponent> DraggableComponent<FixedComponent<ClosableComponent<S,T>>> createPopup (S title, T content, Animation animation, IPanelRenderer<Void> panelRenderer, IToggleable shown, int width, boolean savesState) {
+		ClosableComponent<S,T> panel=new ClosableComponent<S,T>(title,content,()->null,new ConstantToggleable(true),animation,panelRenderer);
+		return new DraggableComponent<FixedComponent<ClosableComponent<S,T>>>() {
+			FixedComponent<ClosableComponent<S,T>> fixedComponent=new FixedComponent<ClosableComponent<S,T>>(panel,new Point(0,0),width,panel.getCollapsible().getToggle(),savesState);
+			
+			@Override
+			public void handleButton (Context context, int button) {
+				super.handleButton(context,button);
+				if (context.getInterface().getButton(button) && !context.isHovered() && shown.isOn()) {
+					System.out.println("Nah!");
+					shown.toggle();
+				}
+			}
+			
+			@Override
+			public void enter() {
+				System.out.println("gee!");
+			}
+			
+			@Override
+			public boolean isVisible() {
+				if (super.isVisible()&&shown.isOn()) System.out.println("okay!");
+				return super.isVisible()&&shown.isOn();
+			}
+			
+			@Override
+			public FixedComponent<ClosableComponent<S,T>> getComponent() {
+				return fixedComponent;
+			}
+		};
 	}
 	
 	public static <S extends IComponent,T extends IComponent,U> DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>> createDraggableComponent (S title, T content, Supplier<U> state, IToggleable open, Animation animation, IPanelRenderer<U> panelRenderer, IScrollBarRenderer<U> scrollRenderer, IEmptySpaceRenderer<U> emptyRenderer, IntFunction<Integer> scrollHeight, IntFunction<Integer> componentWidth, Point position, int width, boolean savesState) {

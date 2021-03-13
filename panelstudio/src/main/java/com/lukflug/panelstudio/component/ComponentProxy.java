@@ -11,5 +11,4 @@ public class ComponentProxy<T extends IComponent> implements IComponentProxy<T> 
 	public T getComponent() {
 		return component;
 	}
-
 }
