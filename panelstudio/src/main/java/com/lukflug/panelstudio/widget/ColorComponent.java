@@ -6,7 +6,6 @@ import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IToggleable;
-import com.lukflug.panelstudio.base.SimpleToggleable;
 import com.lukflug.panelstudio.container.VerticalContainer;
 import com.lukflug.panelstudio.setting.IColorSetting;
 import com.lukflug.panelstudio.setting.Labeled;
@@ -17,7 +16,7 @@ import com.lukflug.panelstudio.theme.ITheme;
  * Component representing a color-valued setting.
  * @author lukflug
  */
-public class ColorComponent extends ClosableComponent<Button,VerticalContainer> {
+public class ColorComponent extends VerticalContainer {
 	/**
 	 * The setting in question.
 	 */
@@ -34,10 +33,10 @@ public class ColorComponent extends ClosableComponent<Button,VerticalContainer> 
 	 * @param theme the theme to be used
 	 */
 	public ColorComponent (IColorSetting setting, Animation animation, ITheme theme, int level) {
-		super(new Button(setting,theme.getButtonRenderer(Void.class,level,true)),new VerticalContainer(setting,theme.getContainerRenderer(level)),()->null,new SimpleToggleable(false),animation,theme.getPanelRenderer(Void.class,level));
+		super(setting,theme.getContainerRenderer(level));
 		this.setting=setting;
 		this.theme=theme;
-		getCollapsible().getComponent().addComponent(new ToggleButton(new Labeled("Rainbow",null,()->setting.allowsRainbow()),new IToggleable() {
+		addComponent(new ToggleButton(new Labeled("Rainbow",null,()->setting.allowsRainbow()),new IToggleable() {
 			@Override
 			public boolean isOn() {
 				return setting.getRainbow();
@@ -48,10 +47,10 @@ public class ColorComponent extends ClosableComponent<Button,VerticalContainer> 
 				setting.setRainbow(!setting.getRainbow());
 			}
 		},theme.getButtonRenderer(IBoolean.class,level,false)));
-		getCollapsible().getComponent().addComponent(new ColorSlider(()->true,theme.getSliderRenderer(level,false),0));
-		getCollapsible().getComponent().addComponent(new ColorSlider(()->true,theme.getSliderRenderer(level,false),1));
-		getCollapsible().getComponent().addComponent(new ColorSlider(()->true,theme.getSliderRenderer(level,false),2));
-		getCollapsible().getComponent().addComponent(new ColorSlider(()->setting.hasAlpha(),theme.getSliderRenderer(level,false),3));
+		addComponent(new ColorSlider(()->true,theme.getSliderRenderer(level,false),0));
+		addComponent(new ColorSlider(()->true,theme.getSliderRenderer(level,false),1));
+		addComponent(new ColorSlider(()->true,theme.getSliderRenderer(level,false),2));
+		addComponent(new ColorSlider(()->setting.hasAlpha(),theme.getSliderRenderer(level,false),3));
 	}
 	
 	@Override

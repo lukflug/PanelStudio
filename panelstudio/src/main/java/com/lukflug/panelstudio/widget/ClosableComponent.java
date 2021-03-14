@@ -90,36 +90,41 @@ public class ClosableComponent<S extends IComponent,T extends IComponent> extend
 		return collapsible;
 	}
 	
-	public static <S extends IComponent,T extends IComponent> DraggableComponent<FixedComponent<ClosableComponent<S,T>>> createPopup (S title, T content, Animation animation, IPanelRenderer<Void> panelRenderer, IToggleable shown, int width, boolean savesState) {
-		ClosableComponent<S,T> panel=new ClosableComponent<S,T>(title,content,()->null,new ConstantToggleable(true),animation,panelRenderer);
-		return new DraggableComponent<FixedComponent<ClosableComponent<S,T>>>() {
-			FixedComponent<ClosableComponent<S,T>> fixedComponent=new FixedComponent<ClosableComponent<S,T>>(panel,new Point(0,0),width,panel.getCollapsible().getToggle(),savesState);
+	public static <S extends IComponent,T extends IComponent> DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,T>>> createPopup (S title, T content, Animation animation, IPanelRenderer<Void> panelRenderer, IToggleable shown, int width, boolean savesState) {
+		AtomicReference<ClosableComponent<ComponentProxy<S>,T>> panel=new AtomicReference<ClosableComponent<ComponentProxy<S>,T>>(null);
+		DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,T>>> draggable=new DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,T>>>() {
+			FixedComponent<ClosableComponent<ComponentProxy<S>,T>> fixedComponent=null;
+			boolean focusRequested=false;
+			
+			@Override
+			public void render (Context context) {
+				super.render(context);
+				if (!context.hasFocus() && !focusRequested) context.requestFocus();
+				focusRequested=true;
+			}
 			
 			@Override
 			public void handleButton (Context context, int button) {
 				super.handleButton(context,button);
-				if (context.getInterface().getButton(button) && !context.isHovered() && shown.isOn()) {
-					System.out.println("Nah!");
-					shown.toggle();
+				if (context.getInterface().getButton(button) && !context.isHovered()) {
+					if (shown.isOn()) shown.toggle();
+					focusRequested=false;
 				}
 			}
 			
 			@Override
-			public void enter() {
-				System.out.println("gee!");
-			}
-			
-			@Override
 			public boolean isVisible() {
-				if (super.isVisible()&&shown.isOn()) System.out.println("okay!");
 				return super.isVisible()&&shown.isOn();
 			}
 			
 			@Override
-			public FixedComponent<ClosableComponent<S,T>> getComponent() {
+			public FixedComponent<ClosableComponent<ComponentProxy<S>,T>> getComponent() {
+				if (fixedComponent==null) fixedComponent=new FixedComponent<ClosableComponent<ComponentProxy<S>,T>>(panel.get(),new Point(0,0),width,panel.get().getCollapsible().getToggle(),savesState);
 				return fixedComponent;
 			}
 		};
+		panel.set(new ClosableComponent<ComponentProxy<S>,T>(draggable.getWrappedDragComponent(title),content,()->null,new ConstantToggleable(true),animation,panelRenderer));
+		return draggable;
 	}
 	
 	public static <S extends IComponent,T extends IComponent,U> DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>> createDraggableComponent (S title, T content, Supplier<U> state, IToggleable open, Animation animation, IPanelRenderer<U> panelRenderer, IScrollBarRenderer<U> scrollRenderer, IEmptySpaceRenderer<U> emptyRenderer, IntFunction<Integer> scrollHeight, IntFunction<Integer> componentWidth, Point position, int width, boolean savesState) {

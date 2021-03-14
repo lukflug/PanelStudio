@@ -79,7 +79,7 @@ public class PanelLayout implements ILayout {
 	}
 	
 	protected <T> void addContainer (IComponent title, VerticalContainer container, Supplier<T> state, Class<T> stateClass, VerticalContainer parent, IComponentAdder gui, ITheme theme, int level) {
-		DraggableComponent<FixedComponent<ClosableComponent<IComponent,VerticalContainer>>> popup;
+		DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<IComponent>,VerticalContainer>>> popup;
 		IToggleable toggle;
 		boolean drawTitle=layoutType.apply(level-1)==ChildMode.DRAG_POPUP;
 		switch (layoutType.apply(level-1)) {
@@ -89,15 +89,15 @@ public class PanelLayout implements ILayout {
 		case POPUP:
 		case DRAG_POPUP:
 			toggle=new SimpleToggleable(false);
-			popup=ClosableComponent.createPopup(new Button(new Labeled(container.getTitle(),null,()->drawTitle),theme.getButtonRenderer(Void.class,level,true)),container,animation.get(),theme.getPanelRenderer(Void.class,level),toggle,level,false);
+			popup=ClosableComponent.createPopup(new Button(new Labeled(container.getTitle(),null,()->drawTitle),theme.getButtonRenderer(Void.class,level,true)),container,animation.get(),theme.getPanelRenderer(Void.class,level),toggle,width,false);
 			parent.addComponent(new ComponentProxy<IComponent>(title) {
 				@Override
 				public void handleButton (Context context, int button) {
 					super.handleButton(context,button);
-					if (button==IInterface.RBUTTON && context.isHovered() && context.getInterface().getButton(IInterface.RBUTTON)) {
-						System.out.println("Blah!");
+					if (button==IInterface.RBUTTON && context.isHovered() && !context.getInterface().getButton(IInterface.RBUTTON)) {
 						popup.setPosition(context.getInterface(),popupPos.getPosition(context.getInterface(),context.getRect(),null));
 						if (!toggle.isOn()) toggle.toggle();
+						context.releaseFocus();
 					}
 				}
 			});
@@ -116,7 +116,10 @@ public class PanelLayout implements ILayout {
 		} else if (setting instanceof IEnumSetting) {
 			component=new CycleButton((IEnumSetting)setting,theme.getButtonRenderer(String.class,level,isContainer));
 		} else if (setting instanceof IColorSetting) {
-			component=new ColorComponent((IColorSetting)setting,animation.get(),theme,level);
+			VerticalContainer colorContainer=new ColorComponent((IColorSetting)setting,animation.get(),theme,level);
+			addContainer(new Button(setting,theme.getButtonRenderer(Void.class,level,true)),colorContainer,()->setting.getSettingState(),setting.getSettingClass(),container,gui,theme,level);
+			if (isContainer) setting.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,colorContainer,gui,theme,level+1));
+			return;
 		} else if (setting instanceof IKeybindSetting) {
 			component=new KeybindComponent((IKeybindSetting)setting,theme.getKeybindRenderer(level,isContainer)) {
 				@Override

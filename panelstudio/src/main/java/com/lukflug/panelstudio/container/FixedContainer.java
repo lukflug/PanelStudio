@@ -129,7 +129,7 @@ public class FixedContainer extends Container<IFixedComponent> {
 	 * @return the context for the child component
 	 */
 	protected Context getSubContext (Context context, IFixedComponent component, boolean highest) {
-		return new Context(context,component.getWidth(context.getInterface()),component.getPosition(context.getInterface()),context.hasFocus(),highest,this);
+		return new Context(context,component.getWidth(context.getInterface()),component.getPosition(context.getInterface()),context.hasFocus()&&highest,highest,this);
 	}
 	
 	/**

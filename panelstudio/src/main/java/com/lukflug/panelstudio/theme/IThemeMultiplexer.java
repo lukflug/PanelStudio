@@ -12,7 +12,7 @@ import com.lukflug.panelstudio.base.IInterface;
  * @author lukflug
  */
 @FunctionalInterface
-public interface ThemeMultiplexer extends ITheme {
+public interface IThemeMultiplexer extends ITheme {
 	@Override
 	public default void loadAssets(IInterface inter) {
 		getTheme().loadAssets(inter);
