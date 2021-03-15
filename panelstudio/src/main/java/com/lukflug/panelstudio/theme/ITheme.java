@@ -27,7 +27,7 @@ public interface ITheme {
 	 * @param level the panel nesting level
 	 * @return the container renderer
 	 */
-	public IContainerRenderer getContainerRenderer (int level);
+	public IContainerRenderer getContainerRenderer (int logicalLevel, int graphicalLevel);
 	
 	/**
 	 * Returns the renderer for the panel outline.
@@ -36,7 +36,7 @@ public interface ITheme {
 	 * @param level the panel nesting level
 	 * @return the panel renderer
 	 */
-	public <T> IPanelRenderer<T> getPanelRenderer (Class<T> type, int level);
+	public <T> IPanelRenderer<T> getPanelRenderer (Class<T> type, int logicalLevel, int graphicalLevel);
 	
 	/**
 	 * Returns the renderer for scroll bars.
@@ -45,7 +45,7 @@ public interface ITheme {
 	 * @param level the panel nesting level
 	 * @return the scroll bar renderer
 	 */
-	public <T> IScrollBarRenderer<T> getScrollBarRenderer (Class<T> type, int level);
+	public <T> IScrollBarRenderer<T> getScrollBarRenderer (Class<T> type, int logicalLevel, int graphicalLevel);
 	
 	/**
 	 * Returns the renderer for the scroll corner.
@@ -54,7 +54,7 @@ public interface ITheme {
 	 * @param level the panel nesting level
 	 * @return the empty space renderer
 	 */
-	public <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer (Class<T> type, int level);
+	public <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer (Class<T> type, int logicalLevel, int graphicalLevel);
 	
 	/**
 	 * Returns the renderer for buttons.
@@ -64,7 +64,7 @@ public interface ITheme {
 	 * @param container whether this is the title of a panel
 	 * @return the title renderer
 	 */
-	public <T> IButtonRenderer<T> getButtonRenderer (Class<T> type, int level, boolean container);
+	public <T> IButtonRenderer<T> getButtonRenderer (Class<T> type, int logicalLevel, int graphicalLevel, boolean container);
 	
 	/**
 	 * Returns the renderer for check marks.
@@ -73,7 +73,7 @@ public interface ITheme {
 	 * @param container whether this is the title of a panel
 	 * @return the check mark renderer
 	 */
-	public IButtonRenderer<IBoolean> getCheckMarkRenderer (int level, boolean container);
+	public IButtonRenderer<IBoolean> getCheckMarkRenderer (int logicalLevel, int graphicalLevel, boolean container);
 	
 	/**
 	 * Returns the renderer for keybinds.
@@ -81,7 +81,7 @@ public interface ITheme {
 	 * @param container whether this is the title of a panel
 	 * @return the keybind renderer
 	 */
-	public IButtonRenderer<String> getKeybindRenderer (int level, boolean container);
+	public IButtonRenderer<String> getKeybindRenderer (int logicalLevel, int graphicalLevel, boolean container);
 	
 	/**
 	 * Returns the renderer for sliders.
@@ -89,7 +89,7 @@ public interface ITheme {
 	 * @param container whether this is the title of a panel
 	 * @return the slider renderer
 	 */
-	public ISliderRenderer getSliderRenderer (int level, boolean container);
+	public ISliderRenderer getSliderRenderer (int logicalLevel, int graphicalLevel, boolean container);
 	
 	/**
 	 * Get the common height of a component.

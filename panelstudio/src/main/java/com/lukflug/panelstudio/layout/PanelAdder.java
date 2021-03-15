@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.function.Supplier;
 
 import com.lukflug.panelstudio.base.Animation;
+import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.SimpleToggleable;
 import com.lukflug.panelstudio.component.IComponent;
 import com.lukflug.panelstudio.component.IFixedComponent;
@@ -21,8 +22,8 @@ public class PanelAdder implements IComponentAdder {
 	}
 	
 	@Override
-	public <S extends IComponent,T extends IComponent> void addComponent(S title, T content, ITheme theme, int level, Point position, int width, Supplier<Animation> animation) {
-		container.addComponent(ClosableComponent.createDraggableComponent(title,content,()->null,new SimpleToggleable(open),animation.get(),theme.getPanelRenderer(Void.class,level),theme.getScrollBarRenderer(Void.class,level),theme.getEmptySpaceRenderer(Void.class,level),this::getScrollHeight,this::getComponentWidth,position,width,true));
+	public <S extends IComponent,T extends IComponent> void addComponent(S title, T content, ITheme theme, int logicalLevel, int graphicalLevel, Point position, int width, Supplier<Animation> animation) {
+		container.addComponent(ClosableComponent.createDraggableComponent(title,content,()->null,new SimpleToggleable(open),animation.get(),theme.getPanelRenderer(Void.class,logicalLevel,graphicalLevel),theme.getScrollBarRenderer(Void.class,logicalLevel,graphicalLevel),theme.getEmptySpaceRenderer(Void.class,logicalLevel,graphicalLevel),this::getScrollHeight,this::getComponentWidth,position,width,true));
 	}
 
 	@Override
@@ -30,11 +31,11 @@ public class PanelAdder implements IComponentAdder {
 		container.addComponent(popup);
 	}
 	
-	protected int getScrollHeight (int componentHeight) {
+	protected int getScrollHeight (Context context, int componentHeight) {
 		return componentHeight;
 	}
 	
-	protected int getComponentWidth (int scrollWidth) {
-		return scrollWidth;
+	protected int getComponentWidth (Context context) {
+		return context.getSize().width;
 	}
 }

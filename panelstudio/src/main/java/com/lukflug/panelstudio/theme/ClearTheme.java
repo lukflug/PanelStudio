@@ -52,11 +52,11 @@ public class ClearTheme extends ThemeBase {
 	}
 
 	@Override
-	public IContainerRenderer getContainerRenderer(int level) {
+	public IContainerRenderer getContainerRenderer(int logicalLevel, int graphicalLevel) {
 		return new IContainerRenderer() {
 			@Override
 			public void renderBackground (Context context, boolean focus) {
-				if (level==0) {
+				if (graphicalLevel==0) {
 					Color color=getBackgroundColor(focus);
 					context.getInterface().fillRect(context.getRect(),color,color,color,color);
 				}
@@ -75,7 +75,7 @@ public class ClearTheme extends ThemeBase {
 	}
 
 	@Override
-	public <T> IPanelRenderer<T> getPanelRenderer(Class<T> type, int level) {
+	public <T> IPanelRenderer<T> getPanelRenderer(Class<T> type, int logicalLevel, int graphicalLevel) {
 		return new IPanelRenderer<T>() {
 			@Override
 			public void renderPanelOverlay(Context context, boolean focus, T state, boolean open) {
@@ -83,7 +83,7 @@ public class ClearTheme extends ThemeBase {
 
 			@Override
 			public void renderTitleOverlay(Context context, boolean focus, T state, boolean open) {
-				if (level!=0) {
+				if (graphicalLevel>0) {
 					Color color=getFontColor(focus);
 					Rectangle rect=context.getRect();
 					rect=new Rectangle(rect.x+rect.width-rect.height+2,rect.y+2,rect.height-4,rect.height-4);
@@ -109,11 +109,11 @@ public class ClearTheme extends ThemeBase {
 	}
 
 	@Override
-	public <T> IScrollBarRenderer<T> getScrollBarRenderer(Class<T> type, int level) {
+	public <T> IScrollBarRenderer<T> getScrollBarRenderer(Class<T> type, int logicalLevel, int graphicalLevel) {
 		return new IScrollBarRenderer<T>() {
 			@Override
 			public int renderScrollBar (Context context, boolean focus, T state, boolean horizontal, int height, int position) {
-				if (level==0) {
+				if (graphicalLevel==0) {
 					Color color=getBackgroundColor(focus);
 					context.getInterface().fillRect(context.getRect(),color,color,color,color);
 				}
@@ -141,11 +141,11 @@ public class ClearTheme extends ThemeBase {
 	}
 
 	@Override
-	public <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer(Class<T> type, int level) {
+	public <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer(Class<T> type, int logicalLevel, int graphicalLevel) {
 		return new IEmptySpaceRenderer<T>() {
 			@Override
 			public void renderSpace(Context context, boolean focus, T state) {
-				if (level==0) {
+				if (graphicalLevel==0) {
 					Color color=getBackgroundColor(focus);
 					context.getInterface().fillRect(context.getRect(),color,color,color,color);
 				}
@@ -154,17 +154,17 @@ public class ClearTheme extends ThemeBase {
 	}
 
 	@Override
-	public <T> IButtonRenderer<T> getButtonRenderer(Class<T> type, int level, boolean container) {
+	public <T> IButtonRenderer<T> getButtonRenderer(Class<T> type, int logicalLevel, int graphicalLevel, boolean container) {
 		return new IButtonRenderer<T>() {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, T state) {
-				if (container && level==0) {
+				if (container && graphicalLevel<=0) {
 					Color colorA=getColor(scheme.getColor("Title Color")),colorB=gradient?getBackgroundColor(focus):colorA;
 					context.getInterface().fillRect(context.getRect(),colorA,colorA,colorB,colorB);
 				}
 				Color color=getFontColor(focus);
 				if (type==IBoolean.class && ((IBoolean)state).isOn()==true) color=getMainColor(focus,true);
-				if (level!=0) renderOverlay(context);
+				if (graphicalLevel>0) renderOverlay(context);
 				if (type==String.class) context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title+separator+state,color);
 				else context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title,color);
 			}
@@ -177,18 +177,18 @@ public class ClearTheme extends ThemeBase {
 	}
 
 	@Override
-	public IButtonRenderer<IBoolean> getCheckMarkRenderer(int level, boolean container) {
-		return getButtonRenderer(IBoolean.class,level,container);
+	public IButtonRenderer<IBoolean> getCheckMarkRenderer(int logicalLevel, int graphicalLevel, boolean container) {
+		return getButtonRenderer(IBoolean.class,logicalLevel,graphicalLevel,container);
 	}
 
 	@Override
-	public IButtonRenderer<String> getKeybindRenderer(int level, boolean container) {
+	public IButtonRenderer<String> getKeybindRenderer(int logicalLevel, int graphicalLevel, boolean container) {
 		return new IButtonRenderer<String>() {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, String state) {
 				Color color=getFontColor(focus);
 				if (focus) color=getMainColor(focus,true);
-				if (level!=0) renderOverlay(context);
+				renderOverlay(context);
 				context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title+separator+(focus?"...":state),color);
 			}
 
@@ -200,7 +200,7 @@ public class ClearTheme extends ThemeBase {
 	}
 
 	@Override
-	public ISliderRenderer getSliderRenderer(int level, boolean container) {
+	public ISliderRenderer getSliderRenderer(int logicalLevel, int graphicalLevel, boolean container) {
 		return new ISliderRenderer() {
 			@Override
 			public void renderSlider(Context context, String title, String state, boolean focus, double value) {
@@ -209,7 +209,7 @@ public class ClearTheme extends ThemeBase {
 				Rectangle rect=getSlideArea(context);
 				int divider=(int)(rect.width*value);
 				context.getInterface().fillRect(new Rectangle(rect.x,rect.y,divider,rect.height),colorA,colorA,colorA,colorA);
-				if (level!=0) renderOverlay(context);
+				renderOverlay(context);
 				context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title+separator+state,color);
 			}
 

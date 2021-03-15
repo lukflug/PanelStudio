@@ -11,6 +11,7 @@ import com.lukflug.panelstudio.base.Context;
  * @author lukflug
  */
 public abstract class ScrollableComponent<T extends IComponent> implements IComponentProxy<T> {
+	private Context tempContext;
 	/**
 	 * Current scrolling position.
 	 */
@@ -49,12 +50,13 @@ public abstract class ScrollableComponent<T extends IComponent> implements IComp
 	
 	@Override
 	public Context doOperation (Context context, Consumer<Context> operation) {
+		tempContext=context;
 		Context subContext=IComponentProxy.super.doOperation(context,operation);
 		if (nextScrollPos!=null) {
 			scrollPos=nextScrollPos;
-			clampScrollPos(context.getSize(),subContext.getSize());
 			nextScrollPos=null;
 		}
+		clampScrollPos(context.getSize(),subContext.getSize());
 		contentSize=subContext.getSize();
 		scrollSize=context.getSize();
 		return subContext;
@@ -64,9 +66,9 @@ public abstract class ScrollableComponent<T extends IComponent> implements IComp
 	public Context getContext (Context context) {
 		Context subContext=new Context(context,context.getSize().width,new Point(-scrollPos.x,-scrollPos.y),true,true,this);
 		getComponent().getHeight(subContext);
-		int height=getHeight(subContext.getSize().height);
+		int height=getScrollHeight(context,subContext.getSize().height);
 		context.setHeight(height);
-		return new Context(context,getComponentWidth(context.getSize().width),new Point(-scrollPos.x,-scrollPos.y),true,context.isHovered(),this);
+		return new Context(context,getComponentWidth(context),new Point(-scrollPos.x,-scrollPos.y),true,context.isHovered(),this);
 	}
 	
 	/**
@@ -139,10 +141,17 @@ public abstract class ScrollableComponent<T extends IComponent> implements IComp
 		if (scrollPos.y<0) scrollPos.y=0;
 	}
 	
+	@Override
+	public final int getHeight (int height) {
+		return getScrollHeight(tempContext,height);
+	}
+	
+	protected abstract int getScrollHeight (Context context, int componentHeight);
+	
 	/**
 	 * Function to determine the width allocated to the child component.
 	 * @param scrollWidth the visible width
 	 * @return the component width
 	 */
-	protected abstract int getComponentWidth (int scrollWidth);
+	protected abstract int getComponentWidth (Context context);
 }

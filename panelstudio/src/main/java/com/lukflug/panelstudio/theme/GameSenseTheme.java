@@ -31,10 +31,10 @@ public class GameSenseTheme extends ThemeBase {
 		scheme.createSetting(this,"Font Color","The main color for text.",false,true,new Color(255,255,255),false);
 	}
 	
-	protected void fillBaseRect (Context context, boolean focus, boolean active, int level) {
+	protected void fillBaseRect (Context context, boolean focus, boolean active, int logicalLevel, int graphicalLevel) {
 		Color color=getMainColor(focus,active);
-		if (level>1 && !active) color=getBackgroundColor(focus);
-		else if (level==0 && active) color=ITheme.combineColors(getColor(scheme.getColor("Title Color")),scheme.getColor("Enabled Color"));
+		if (logicalLevel>1 && !active) color=getBackgroundColor(focus);
+		else if (graphicalLevel<=0 && active) color=ITheme.combineColors(getColor(scheme.getColor("Title Color")),scheme.getColor("Enabled Color"));
 		context.getInterface().fillRect(context.getRect(),color,color,color,color);
 	}
 	
@@ -62,11 +62,11 @@ public class GameSenseTheme extends ThemeBase {
 	}
 
 	@Override
-	public IContainerRenderer getContainerRenderer(int level) {
+	public IContainerRenderer getContainerRenderer(int logicalLevel, int graphicalLevel) {
 		return new IContainerRenderer() {
 			@Override
 			public void renderBackground (Context context, boolean focus) {
-				if (level!=0) {
+				if (graphicalLevel!=0) {
 					Color color=scheme.getColor("Outline Color");
 					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y,context.getSize().width,1),color,color,color,color);
 					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+context.getSize().height-1,context.getSize().width,1),color,color,color,color);
@@ -75,32 +75,32 @@ public class GameSenseTheme extends ThemeBase {
 			
 			@Override
 			public int getTop() {
-				return level==0?0:1;
+				return graphicalLevel==0?0:1;
 			}
 			
 			@Override
 			public int getBottom() {
-				return level==0?0:1;
+				return graphicalLevel==0?0:1;
 			}
 		};
 	}
 	
 	@Override
-	public <T> IPanelRenderer<T> getPanelRenderer (Class<T> type, int level) {
+	public <T> IPanelRenderer<T> getPanelRenderer (Class<T> type, int logicalLevel, int graphicalLevel) {
 		return new IPanelRenderer<T>() {
 			@Override
 			public int getLeft() {
-				return level==0?1:0;
+				return graphicalLevel==0?1:0;
 			}
 			
 			@Override
 			public int getRight() {
-				return level==0?1:0;
+				return graphicalLevel==0?1:0;
 			}
 			
 			@Override
 			public void renderPanelOverlay(Context context, boolean focus, T state, boolean open) {
-				if (level==0) {
+				if (graphicalLevel==0) {
 					Color color=scheme.getColor("Outline Color");
 					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y,context.getSize().width,1),color,color,color,color);
 					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+context.getSize().height-1,context.getSize().width,1),color,color,color,color);
@@ -116,7 +116,7 @@ public class GameSenseTheme extends ThemeBase {
 	}
 	
 	@Override
-	public <T> IScrollBarRenderer<T> getScrollBarRenderer (Class<T> type, int level) {
+	public <T> IScrollBarRenderer<T> getScrollBarRenderer (Class<T> type, int logicalLevel, int graphicalLevel) {
 		return new IScrollBarRenderer<T>() {
 			@Override
 			public int renderScrollBar(Context context, boolean focus, T state, boolean horizontal, int height, int position) {
@@ -150,7 +150,7 @@ public class GameSenseTheme extends ThemeBase {
 	}
 	
 	@Override
-	public <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer (Class<T> type, int level) {
+	public <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer (Class<T> type, int logicalLevel, int graphicalLevel) {
 		return (context,focus,state)->{
 			Color color=scheme.getColor("Outline Color");
 			context.getInterface().fillRect(context.getRect(),color,color,color,color);
@@ -158,13 +158,13 @@ public class GameSenseTheme extends ThemeBase {
 	}
 	
 	@Override
-	public <T> IButtonRenderer<T> getButtonRenderer (Class<T> type, int level, boolean container) {
+	public <T> IButtonRenderer<T> getButtonRenderer (Class<T> type, int logicalLevel, int graphicalLevel, boolean container) {
 		return new IButtonRenderer<T>() {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, T state) {
-				if (type==IBoolean.class) fillBaseRect(context,focus,((IBoolean)state).isOn(),level);
-				else fillBaseRect(context,focus,level==0,level);
-				if (level==0 && container) {
+				if (type==IBoolean.class) fillBaseRect(context,focus,((IBoolean)state).isOn(),logicalLevel,graphicalLevel);
+				else fillBaseRect(context,focus,graphicalLevel<=0,logicalLevel,graphicalLevel);
+				if (graphicalLevel<=0 && container) {
 					Color color=scheme.getColor("Outline Color");
 					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+context.getSize().height-1,context.getSize().width,1),color,color,color,color);
 				}
@@ -181,16 +181,16 @@ public class GameSenseTheme extends ThemeBase {
 	}
 
 	@Override
-	public IButtonRenderer<IBoolean> getCheckMarkRenderer(int level, boolean container) {
-		return getButtonRenderer(IBoolean.class,level,container);
+	public IButtonRenderer<IBoolean> getCheckMarkRenderer(int logicalLevel, int graphicalLevel, boolean container) {
+		return getButtonRenderer(IBoolean.class,logicalLevel,graphicalLevel,container);
 	}
 
 	@Override
-	public IButtonRenderer<String> getKeybindRenderer(int level, boolean container) {
+	public IButtonRenderer<String> getKeybindRenderer(int logicalLevel, int graphicalLevel, boolean container) {
 		return new IButtonRenderer<String>() {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, String state) {
-				fillBaseRect(context,focus,focus,level);
+				fillBaseRect(context,focus,focus,logicalLevel,graphicalLevel);
 				renderOverlay(context);
 				context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title+separator+(focus?"...":state),getFontColor(focus));
 			}
@@ -203,7 +203,7 @@ public class GameSenseTheme extends ThemeBase {
 	}
 
 	@Override
-	public ISliderRenderer getSliderRenderer(int level, boolean container) {
+	public ISliderRenderer getSliderRenderer(int logicalLevel, int graphicalLevel, boolean container) {
 		return new ISliderRenderer() {
 			@Override
 			public void renderSlider(Context context, String title, String state, boolean focus, double value) {

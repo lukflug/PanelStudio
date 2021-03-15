@@ -52,6 +52,7 @@ public class FixedContainer extends Container<IFixedComponent> {
 		});
 		// Render loop in right order (lowest panel first)
 		AtomicBoolean highestReached=new AtomicBoolean(false);
+		if (highest.get()==null) highestReached.set(true);
 		AtomicReference<IFixedComponent> focusComponent=new AtomicReference<IFixedComponent>(null);
 		super.doContextlessLoop(component->{
 			// Check onTop state

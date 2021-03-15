@@ -25,50 +25,50 @@ public interface IThemeMultiplexer extends ITheme {
 	}
 
 	@Override
-	public default IContainerRenderer getContainerRenderer(int level) {
-		IContainerRendererProxy proxy=()->getTheme().getContainerRenderer(level);
+	public default IContainerRenderer getContainerRenderer(int logicalLevel, int graphicalLevel) {
+		IContainerRendererProxy proxy=()->getTheme().getContainerRenderer(logicalLevel,graphicalLevel);
 		return proxy;
 	}
 	
 	@Override
-	public default <T> IPanelRenderer<T> getPanelRenderer (Class<T> type, int level) {
-		IPanelRendererProxy<T> proxy=()->getTheme().getPanelRenderer(type,level);
+	public default <T> IPanelRenderer<T> getPanelRenderer (Class<T> type, int logicalLevel, int graphicalLevel) {
+		IPanelRendererProxy<T> proxy=()->getTheme().getPanelRenderer(type,logicalLevel,graphicalLevel);
 		return proxy;
 	}
 	
 	@Override
-	public default <T> IScrollBarRenderer<T> getScrollBarRenderer (Class<T> type, int level) {
-		IScrollBarRendererProxy<T> proxy=()->getTheme().getScrollBarRenderer(type,level);
+	public default <T> IScrollBarRenderer<T> getScrollBarRenderer (Class<T> type, int logicalLevel, int graphicalLevel) {
+		IScrollBarRendererProxy<T> proxy=()->getTheme().getScrollBarRenderer(type,logicalLevel,graphicalLevel);
 		return proxy;
 	}
 	
 	@Override
-	public default <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer (Class<T> type, int level) {
-		IEmptySpaceRendererProxy<T> proxy=()->getTheme().getEmptySpaceRenderer(type,level);
+	public default <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer (Class<T> type, int logicalLevel, int graphicalLevel) {
+		IEmptySpaceRendererProxy<T> proxy=()->getTheme().getEmptySpaceRenderer(type,logicalLevel,graphicalLevel);
 		return proxy;
 	}
 
 	@Override
-	public default <T> IButtonRenderer<T> getButtonRenderer(Class<T> type, int level, boolean container) {
-		IButtonRendererProxy<T> proxy=()->getTheme().getButtonRenderer(type,level,container);
+	public default <T> IButtonRenderer<T> getButtonRenderer(Class<T> type, int logicalLevel, int graphicalLevel, boolean container) {
+		IButtonRendererProxy<T> proxy=()->getTheme().getButtonRenderer(type,logicalLevel,graphicalLevel,container);
 		return proxy;
 	}
 
 	@Override
-	public default IButtonRenderer<IBoolean> getCheckMarkRenderer(int level, boolean container) {
-		IButtonRendererProxy<IBoolean> proxy=()->getTheme().getCheckMarkRenderer(level,container);
+	public default IButtonRenderer<IBoolean> getCheckMarkRenderer(int logicalLevel, int graphicalLevel, boolean container) {
+		IButtonRendererProxy<IBoolean> proxy=()->getTheme().getCheckMarkRenderer(logicalLevel,graphicalLevel,container);
 		return proxy;
 	}
 
 	@Override
-	public default IButtonRenderer<String> getKeybindRenderer(int level, boolean container) {
-		IButtonRendererProxy<String> proxy=()->getTheme().getKeybindRenderer(level,container);
+	public default IButtonRenderer<String> getKeybindRenderer(int logicalLevel, int graphicalLevel, boolean container) {
+		IButtonRendererProxy<String> proxy=()->getTheme().getKeybindRenderer(logicalLevel,graphicalLevel,container);
 		return proxy;
 	}
 
 	@Override
-	public default ISliderRenderer getSliderRenderer(int level, boolean container) {
-		ISliderRendererProxy proxy=()->getTheme().getSliderRenderer(level,container);
+	public default ISliderRenderer getSliderRenderer(int logicalLevel, int graphicalLevel, boolean container) {
+		ISliderRendererProxy proxy=()->getTheme().getSliderRenderer(logicalLevel,graphicalLevel,container);
 		return proxy;
 	}
 

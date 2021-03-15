@@ -1,5 +1,6 @@
 package com.lukflug.panelstudio.widget;
 
+import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.component.HorizontalComponent;
 import com.lukflug.panelstudio.component.IComponent;
@@ -36,13 +37,13 @@ public abstract class ScrollBarComponent<S,T extends IComponent> extends Horizon
 			}
 			
 			@Override
-			public int getHeight (int height) {
-				return getScrollHeight(height);
+			public int getScrollHeight (Context context, int height) {
+				return ScrollBarComponent.this.getScrollHeight(context,height);
 			}
 			
 			@Override
-			protected int getComponentWidth(int scrollWidth) {
-				return ScrollBarComponent.this.getComponentWidth(scrollWidth);
+			protected int getComponentWidth (Context context) {
+				return ScrollBarComponent.this.getComponentWidth(context);
 			}
 		};
 		// Vertical scroll bar
@@ -129,14 +130,14 @@ public abstract class ScrollBarComponent<S,T extends IComponent> extends Horizon
 	 * @param componentHeight the component height
 	 * @return the vsiible height
 	 */
-	protected abstract int getScrollHeight (int componentHeight);
+	protected abstract int getScrollHeight (Context context, int componentHeight);
 
 	/**
 	 * Function to determine the width allocated to the child component.
 	 * @param scrollWidth the visible width
 	 * @return the component width
 	 */
-	protected abstract int getComponentWidth (int scrollWidth);
+	protected abstract int getComponentWidth (Context context);
 	
 	/**
 	 * What render state the scroll bar should use.

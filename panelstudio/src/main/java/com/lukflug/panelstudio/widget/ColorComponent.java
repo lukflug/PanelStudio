@@ -32,8 +32,8 @@ public class ColorComponent extends VerticalContainer {
 	 * @param animation the animation to be used
 	 * @param theme the theme to be used
 	 */
-	public ColorComponent (IColorSetting setting, Animation animation, ITheme theme, int level) {
-		super(setting,theme.getContainerRenderer(level));
+	public ColorComponent (IColorSetting setting, Animation animation, ITheme theme, int logicalLevel, int graphicalLevel) {
+		super(setting,theme.getContainerRenderer(logicalLevel,graphicalLevel));
 		this.setting=setting;
 		this.theme=theme;
 		addComponent(new ToggleButton(new Labeled("Rainbow",null,()->setting.allowsRainbow()),new IToggleable() {
@@ -46,11 +46,11 @@ public class ColorComponent extends VerticalContainer {
 			public void toggle() {
 				setting.setRainbow(!setting.getRainbow());
 			}
-		},theme.getButtonRenderer(IBoolean.class,level,false)));
-		addComponent(new ColorSlider(()->true,theme.getSliderRenderer(level,false),0));
-		addComponent(new ColorSlider(()->true,theme.getSliderRenderer(level,false),1));
-		addComponent(new ColorSlider(()->true,theme.getSliderRenderer(level,false),2));
-		addComponent(new ColorSlider(()->setting.hasAlpha(),theme.getSliderRenderer(level,false),3));
+		},theme.getButtonRenderer(IBoolean.class,logicalLevel,graphicalLevel+1,false)));
+		addComponent(new ColorSlider(()->true,theme.getSliderRenderer(logicalLevel,graphicalLevel+1,false),0));
+		addComponent(new ColorSlider(()->true,theme.getSliderRenderer(logicalLevel,graphicalLevel+1,false),1));
+		addComponent(new ColorSlider(()->true,theme.getSliderRenderer(logicalLevel,graphicalLevel+1,false),2));
+		addComponent(new ColorSlider(()->setting.hasAlpha(),theme.getSliderRenderer(logicalLevel,graphicalLevel+1,false),3));
 	}
 	
 	@Override

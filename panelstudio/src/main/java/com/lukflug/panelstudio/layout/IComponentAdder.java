@@ -13,7 +13,7 @@ import com.lukflug.panelstudio.theme.ITheme;
  * @author lukflug
  */
 public interface IComponentAdder {
-	public <S extends IComponent,T extends IComponent> void addComponent (S title, T content, ITheme theme, int level, Point position, int width, Supplier<Animation> animation);
+	public <S extends IComponent,T extends IComponent> void addComponent (S title, T content, ITheme theme, int logicalLevel, int graphicalLevel, Point position, int width, Supplier<Animation> animation);
 	
 	public void addPopup (IFixedComponent popup);
 }

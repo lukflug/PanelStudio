@@ -2,7 +2,8 @@ package com.lukflug.panelstudio.widget;
 
 import java.awt.Point;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.IntFunction;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.lukflug.panelstudio.base.Animation;
@@ -90,10 +91,10 @@ public class ClosableComponent<S extends IComponent,T extends IComponent> extend
 		return collapsible;
 	}
 	
-	public static <S extends IComponent,T extends IComponent> DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,T>>> createPopup (S title, T content, Animation animation, IPanelRenderer<Void> panelRenderer, IToggleable shown, int width, boolean savesState) {
-		AtomicReference<ClosableComponent<ComponentProxy<S>,T>> panel=new AtomicReference<ClosableComponent<ComponentProxy<S>,T>>(null);
-		DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,T>>> draggable=new DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,T>>>() {
-			FixedComponent<ClosableComponent<ComponentProxy<S>,T>> fixedComponent=null;
+	public static <S extends IComponent,T extends IComponent> DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>>> createPopup (S title, T content, Animation animation, IPanelRenderer<Void> panelRenderer, IScrollBarRenderer<Void> scrollRenderer, IEmptySpaceRenderer<Void> emptyRenderer, BiFunction<Context,Integer,Integer> popupHeight, IToggleable shown, int width, boolean savesState) {
+		AtomicReference<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>> panel=new AtomicReference<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>>(null);
+		DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>>> draggable=new DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>>>() {
+			FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>> fixedComponent=null;
 			boolean focusRequested=false;
 			
 			@Override
@@ -118,16 +119,16 @@ public class ClosableComponent<S extends IComponent,T extends IComponent> extend
 			}
 			
 			@Override
-			public FixedComponent<ClosableComponent<ComponentProxy<S>,T>> getComponent() {
-				if (fixedComponent==null) fixedComponent=new FixedComponent<ClosableComponent<ComponentProxy<S>,T>>(panel.get(),new Point(0,0),width,panel.get().getCollapsible().getToggle(),savesState);
+			public FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>> getComponent() {
+				if (fixedComponent==null) fixedComponent=new FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>>(panel.get(),new Point(0,0),width,panel.get().getCollapsible().getToggle(),savesState);
 				return fixedComponent;
 			}
 		};
-		panel.set(new ClosableComponent<ComponentProxy<S>,T>(draggable.getWrappedDragComponent(title),content,()->null,new ConstantToggleable(true),animation,panelRenderer));
+		panel.set(createScrollableComponent(draggable.getWrappedDragComponent(title),content,()->null,new ConstantToggleable(true),animation,panelRenderer,scrollRenderer,emptyRenderer,popupHeight,(context)->context.getSize().width));
 		return draggable;
 	}
 	
-	public static <S extends IComponent,T extends IComponent,U> DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>> createDraggableComponent (S title, T content, Supplier<U> state, IToggleable open, Animation animation, IPanelRenderer<U> panelRenderer, IScrollBarRenderer<U> scrollRenderer, IEmptySpaceRenderer<U> emptyRenderer, IntFunction<Integer> scrollHeight, IntFunction<Integer> componentWidth, Point position, int width, boolean savesState) {
+	public static <S extends IComponent,T extends IComponent,U> DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>> createDraggableComponent (S title, T content, Supplier<U> state, IToggleable open, Animation animation, IPanelRenderer<U> panelRenderer, IScrollBarRenderer<U> scrollRenderer, IEmptySpaceRenderer<U> emptyRenderer, BiFunction<Context,Integer,Integer> scrollHeight, Function<Context,Integer> componentWidth, Point position, int width, boolean savesState) {
 		AtomicReference<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>> panel=new AtomicReference<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>(null);
 		DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>> draggable=createDraggableComponent(()->panel.get(),position,width,savesState);
 		panel.set(createScrollableComponent(draggable.getWrappedDragComponent(title),content,state,open,animation,panelRenderer,scrollRenderer,emptyRenderer,scrollHeight,componentWidth));
@@ -146,16 +147,16 @@ public class ClosableComponent<S extends IComponent,T extends IComponent> extend
 		};
 	}
 	
-	public static <S extends IComponent,T extends IComponent,U> ClosableComponent<S,ScrollBarComponent<U,T>> createScrollableComponent (S title, T content, Supplier<U> state, IToggleable open, Animation animation, IPanelRenderer<U> panelRenderer, IScrollBarRenderer<U> scrollRenderer, IEmptySpaceRenderer<U> emptyRenderer, IntFunction<Integer> scrollHeight, IntFunction<Integer> componentWidth) {
+	public static <S extends IComponent,T extends IComponent,U> ClosableComponent<S,ScrollBarComponent<U,T>> createScrollableComponent (S title, T content, Supplier<U> state, IToggleable open, Animation animation, IPanelRenderer<U> panelRenderer, IScrollBarRenderer<U> scrollRenderer, IEmptySpaceRenderer<U> emptyRenderer, BiFunction<Context,Integer,Integer> scrollHeight, Function<Context,Integer> componentWidth) {
 		return new ClosableComponent<S,ScrollBarComponent<U,T>>(title,new ScrollBarComponent<U,T>(content,scrollRenderer,emptyRenderer) {
 			@Override
-			protected int getScrollHeight (int componentHeight) {
-				return scrollHeight.apply(componentHeight); 
+			protected int getScrollHeight (Context context, int componentHeight) {
+				return scrollHeight.apply(context,componentHeight); 
 			}
 
 			@Override
-			protected int getComponentWidth (int scrollWidth) {
-				return componentWidth.apply(scrollWidth);
+			protected int getComponentWidth (Context context) {
+				return componentWidth.apply(context);
 			}
 
 			@Override
