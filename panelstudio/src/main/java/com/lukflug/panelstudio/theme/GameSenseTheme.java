@@ -62,11 +62,11 @@ public class GameSenseTheme extends ThemeBase {
 	}
 
 	@Override
-	public IContainerRenderer getContainerRenderer(int logicalLevel, int graphicalLevel) {
+	public IContainerRenderer getContainerRenderer (int logicalLevel, int graphicalLevel, boolean horizontal) {
 		return new IContainerRenderer() {
 			@Override
 			public void renderBackground (Context context, boolean focus) {
-				if (graphicalLevel!=0) {
+				if (graphicalLevel>0) {
 					Color color=scheme.getColor("Outline Color");
 					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y,context.getSize().width,1),color,color,color,color);
 					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+context.getSize().height-1,context.getSize().width,1),color,color,color,color);
@@ -75,12 +75,12 @@ public class GameSenseTheme extends ThemeBase {
 			
 			@Override
 			public int getTop() {
-				return graphicalLevel==0?0:1;
+				return graphicalLevel<=0?0:1;
 			}
 			
 			@Override
 			public int getBottom() {
-				return graphicalLevel==0?0:1;
+				return graphicalLevel<=0?0:1;
 			}
 		};
 	}

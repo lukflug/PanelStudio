@@ -33,7 +33,7 @@ public class ColorComponent extends VerticalContainer {
 	 * @param theme the theme to be used
 	 */
 	public ColorComponent (IColorSetting setting, Animation animation, ITheme theme, int logicalLevel, int graphicalLevel) {
-		super(setting,theme.getContainerRenderer(logicalLevel,graphicalLevel));
+		super(setting,theme.getContainerRenderer(logicalLevel,graphicalLevel,false));
 		this.setting=setting;
 		this.theme=theme;
 		addComponent(new ToggleButton(new Labeled("Rainbow",null,()->setting.allowsRainbow()),new IToggleable() {

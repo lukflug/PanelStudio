@@ -52,7 +52,7 @@ public class ClearTheme extends ThemeBase {
 	}
 
 	@Override
-	public IContainerRenderer getContainerRenderer(int logicalLevel, int graphicalLevel) {
+	public IContainerRenderer getContainerRenderer(int logicalLevel, int graphicalLevel, boolean horizontal) {
 		return new IContainerRenderer() {
 			@Override
 			public void renderBackground (Context context, boolean focus) {
@@ -64,12 +64,12 @@ public class ClearTheme extends ThemeBase {
 			
 			@Override
 			public int getBorder() {
-				return border;
+				return horizontal?0:border;
 			}
 			
 			@Override
 			public int getTop() {
-				return border;
+				return horizontal?0:border;
 			}
 		};
 	}

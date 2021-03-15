@@ -3,16 +3,12 @@ package com.lukflug.panelstudio.base;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.Stack;
 
 /**
  * A class for the communication between a component and its parent.
  * @author lukflug
  */
 public final class Context {
-	// TODO remove debug code eventually
-	public static final Stack<Context> contextStack=new Stack<Context>();
-	public final Object object;
 	/**
 	 * The current {@link Interface}.
 	 */
@@ -49,6 +45,7 @@ public final class Context {
 	 * Description set by the child to be displayed when hovered.
 	 */
 	private Description description=null;
+	private IPopupDisplayer popupDisplayer=null;
 	
 	/**
 	 * Constructor that should be used when a parent is calling a method by the child.
@@ -66,9 +63,7 @@ public final class Context {
 		position.translate(offset.x,offset.y);
 		this.focus=context.hasFocus()&&focus;
 		this.onTop=context.onTop()&&onTop;
-		this.object=object;
-		while (contextStack.lastElement()!=context) contextStack.pop();
-		contextStack.push(this);
+		this.popupDisplayer=context.getPopupDisplayer();
 	}
 	
 	/**
@@ -85,9 +80,6 @@ public final class Context {
 		this.position=new Point(position);
 		this.focus=focus;
 		this.onTop=onTop;
-		this.object=object;
-		contextStack.clear();
-		contextStack.push(this);
 	}
 	
 	/**
@@ -207,5 +199,13 @@ public final class Context {
 	 */
 	public void setDescription (Description description) {
 		this.description=description;
+	}
+	
+	public IPopupDisplayer getPopupDisplayer() {
+		return popupDisplayer;
+	}
+	
+	public void setPopupDisplayer (IPopupDisplayer popupDisplayer) {
+		this.popupDisplayer=popupDisplayer;
 	}
 }

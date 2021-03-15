@@ -25,8 +25,8 @@ public interface IThemeMultiplexer extends ITheme {
 	}
 
 	@Override
-	public default IContainerRenderer getContainerRenderer(int logicalLevel, int graphicalLevel) {
-		IContainerRendererProxy proxy=()->getTheme().getContainerRenderer(logicalLevel,graphicalLevel);
+	public default IContainerRenderer getContainerRenderer (int logicalLevel, int graphicalLevel, boolean horizontal) {
+		IContainerRendererProxy proxy=()->getTheme().getContainerRenderer(logicalLevel,graphicalLevel,horizontal);
 		return proxy;
 	}
 	

@@ -27,7 +27,7 @@ public interface ITheme {
 	 * @param level the panel nesting level
 	 * @return the container renderer
 	 */
-	public IContainerRenderer getContainerRenderer (int logicalLevel, int graphicalLevel);
+	public IContainerRenderer getContainerRenderer (int logicalLevel, int graphicalLevel, boolean horizontal);
 	
 	/**
 	 * Returns the renderer for the panel outline.

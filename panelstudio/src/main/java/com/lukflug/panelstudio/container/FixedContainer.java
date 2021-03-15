@@ -1,5 +1,6 @@
 package com.lukflug.panelstudio.container;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -9,9 +10,12 @@ import java.util.function.Consumer;
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.Description;
 import com.lukflug.panelstudio.base.IInterface;
+import com.lukflug.panelstudio.base.IPopupDisplayer;
+import com.lukflug.panelstudio.base.IToggleable;
 import com.lukflug.panelstudio.component.IFixedComponent;
 import com.lukflug.panelstudio.config.IConfigList;
 import com.lukflug.panelstudio.config.IPanelConfig;
+import com.lukflug.panelstudio.layout.IPopupPositioner;
 import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.theme.IContainerRenderer;
 
@@ -19,11 +23,12 @@ import com.lukflug.panelstudio.theme.IContainerRenderer;
  * Container with contents arranged at will.
  * @author lukflug
  */
-public class FixedContainer extends Container<IFixedComponent> {
+public class FixedContainer extends Container<IFixedComponent> implements IPopupDisplayer {
 	/**
 	 * Whether to clip container.
 	 */
 	protected boolean clip;
+	protected List<PopupPair> popups=new ArrayList<PopupPair>();
 	
 	/**
 	 * Constructor.
@@ -34,6 +39,13 @@ public class FixedContainer extends Container<IFixedComponent> {
 	public FixedContainer(ILabeled label, IContainerRenderer renderer, boolean clip) {
 		super(label, renderer);
 		this.clip=clip;
+	}
+
+	@Override
+	public void displayPopup(Object popup, Rectangle rect, IToggleable visible, IPopupPositioner positioner) {
+		if (popup instanceof IFixedComponent) {
+			popups.add(new PopupPair((IFixedComponent)popup,rect,visible,positioner));
+		}
 	}
 	
 	@Override
@@ -68,6 +80,13 @@ public class FixedContainer extends Container<IFixedComponent> {
 			}
 			// Check description state
 			if (subContext.isHovered() && subContext.getDescription()!=null) context.setDescription(new Description(subContext.getDescription(),subContext.getRect()));
+			// Deal with popups
+			for (PopupPair popup: popups) {
+				popup.popup.setPosition(context.getInterface(),popup.positioner.getPosition(context.getInterface(),popup.rect,subContext.getRect()));
+				if (!popup.visible.isOn()) popup.visible.toggle();
+				focusComponent.set(popup.popup);
+			}
+			popups.clear();
 		});
 		// Update focus state
 		if (focusComponent.get()!=null) {
@@ -111,6 +130,13 @@ public class FixedContainer extends Container<IFixedComponent> {
 			}
 			// Check onTop state
 			if (subContext.isHovered()) highest.set(false);
+			// Deal with popups
+			for (PopupPair popup: popups) {
+				popup.popup.setPosition(context.getInterface(),popup.positioner.getPosition(context.getInterface(),popup.rect,subContext.getRect()));
+				if (!popup.visible.isOn()) popup.visible.toggle();
+				focusComponent.set(popup.popup);
+			}
+			popups.clear();
 		});
 		// Update focus state
 		if (focusComponent.get()!=null) {
@@ -130,7 +156,9 @@ public class FixedContainer extends Container<IFixedComponent> {
 	 * @return the context for the child component
 	 */
 	protected Context getSubContext (Context context, IFixedComponent component, boolean highest) {
-		return new Context(context,component.getWidth(context.getInterface()),component.getPosition(context.getInterface()),context.hasFocus()&&highest,highest,this);
+		Context subContext=new Context(context,component.getWidth(context.getInterface()),component.getPosition(context.getInterface()),context.hasFocus()&&highest,highest,this);
+		subContext.setPopupDisplayer(this);
+		return subContext;
 	}
 	
 	/**
@@ -159,5 +187,20 @@ public class FixedContainer extends Container<IFixedComponent> {
 			if (cf!=null && state.component.savesState()) state.component.loadConfig(inter,cf);
 		};
 		config.end(true);
+	}
+	
+	
+	protected final class PopupPair {
+		public final IFixedComponent popup;
+		public final Rectangle rect;
+		public final IToggleable visible;
+		public final IPopupPositioner positioner;
+		
+		public PopupPair (IFixedComponent popup, Rectangle rect, IToggleable visible, IPopupPositioner positioner) {
+			this.popup=popup;
+			this.rect=rect;
+			this.visible=visible;
+			this.positioner=positioner;
+		}
 	}
 }
