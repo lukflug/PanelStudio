@@ -33,13 +33,13 @@ public class ChildUtil {
 		this.popupHeight=popupHeight;
 	}
 	
-	protected <T> void addContainer (ILabeled label, IComponent title, VerticalContainer container, Supplier<T> state, Class<T> stateClass, VerticalContainer parent, IComponentAdder gui, ITheme theme, int logicalLevel, int graphicalLevel, ChildMode mode) {
-		DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<IComponent>,ScrollBarComponent<Void,VerticalContainer>>>> popup;
+	protected <T> void addContainer (ILabeled label, IComponent title, IComponent container, Supplier<T> state, Class<T> stateClass, VerticalContainer parent, IComponentAdder gui, ITheme theme, int logicalLevel, int graphicalLevel, ChildMode mode) {
+		DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<IComponent>,ScrollBarComponent<Void,IComponent>>>> popup;
 		IToggleable toggle;
 		boolean drawTitle=mode==ChildMode.DRAG_POPUP;
 		switch (mode) {
 		case DOWN:
-			parent.addComponent(new ClosableComponent<IComponent,VerticalContainer>(title,container,state,new SimpleToggleable(false),animation.get(),theme.getPanelRenderer(stateClass,logicalLevel,graphicalLevel)));
+			parent.addComponent(new ClosableComponent<IComponent,IComponent>(title,container,state,new SimpleToggleable(false),animation.get(),theme.getPanelRenderer(stateClass,logicalLevel,graphicalLevel)));
 			break;
 		case POPUP:
 		case DRAG_POPUP:

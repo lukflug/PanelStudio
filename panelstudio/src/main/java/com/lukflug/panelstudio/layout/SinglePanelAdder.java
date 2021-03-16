@@ -18,7 +18,7 @@ import com.lukflug.panelstudio.widget.ScrollBarComponent;
 
 public class SinglePanelAdder implements IComponentAdder {
 	protected final IContainer<? super IFixedComponent> container;
-	protected HorizontalContainer title,content;
+	protected final HorizontalContainer title,content;
 	
 	public SinglePanelAdder (IContainer<? super IFixedComponent> container, ILabeled label, ITheme theme, Point position, int width, Supplier<Animation> animation) {
 		this.container=container;
