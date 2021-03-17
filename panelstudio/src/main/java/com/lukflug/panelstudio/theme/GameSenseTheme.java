@@ -14,8 +14,8 @@ import com.lukflug.panelstudio.base.IInterface;
  * @author lukflug
  */
 public class GameSenseTheme extends ThemeBase {
-	protected final int height,padding,scroll;
-	protected final String separator;
+	protected int height,padding,scroll;
+	protected String separator;
 	
 	public GameSenseTheme (IColorScheme scheme, int height, int padding, int scroll, String separator) {
 		super(scheme);

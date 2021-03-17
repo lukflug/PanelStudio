@@ -42,12 +42,12 @@ public abstract class CollapsibleComponent<T extends IComponent> implements ICom
 	
 	@Override
 	public Context getContext (Context context) {
-		Context subContext=new Context(context,context.getSize().width,new Point(0,0),true,true,this);
+		Context subContext=new Context(context,context.getSize().width,new Point(0,0),true,true);
 		getComponent().getHeight(subContext);
 		int height=getHeight(subContext.getSize().height);
 		int offset=height-subContext.getSize().height;
 		context.setHeight(height);
-		return new Context(context,context.getSize().width,new Point(0,offset),true,context.isHovered(),this);
+		return new Context(context,context.getSize().width,new Point(0,offset),true,context.isHovered());
 	}
 	
 	@Override

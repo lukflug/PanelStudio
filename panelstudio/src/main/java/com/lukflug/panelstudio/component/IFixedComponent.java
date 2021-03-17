@@ -53,4 +53,6 @@ public interface IFixedComponent extends IComponent {
 	 * @param config configuration to use
 	 */
 	public void loadConfig (IInterface inter, IPanelConfig config);
+	
+	public String getConfigName();
 }

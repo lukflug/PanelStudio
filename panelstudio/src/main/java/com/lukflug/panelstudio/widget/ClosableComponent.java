@@ -91,26 +91,20 @@ public class ClosableComponent<S extends IComponent,T extends IComponent> extend
 		return collapsible;
 	}
 	
-	public static <S extends IComponent,T extends IComponent> DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>>> createPopup (S title, T content, Animation animation, IPanelRenderer<Void> panelRenderer, IScrollBarRenderer<Void> scrollRenderer, IEmptySpaceRenderer<Void> emptyRenderer, BiFunction<Context,Integer,Integer> popupHeight, IToggleable shown, int width, boolean savesState) {
+	public static <S extends IComponent,T extends IComponent> DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>>> createPopup (S title, T content, Animation animation, IPanelRenderer<Void> panelRenderer, IScrollBarRenderer<Void> scrollRenderer, IEmptySpaceRenderer<Void> emptyRenderer, BiFunction<Context,Integer,Integer> popupHeight, IToggleable shown, int width, boolean savesState, String configName) {
 		AtomicReference<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>> panel=new AtomicReference<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>>(null);
 		DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>>> draggable=new DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>>>() {
 			FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>> fixedComponent=null;
-			boolean focusRequested=false;
 			
 			@Override
 			public void render (Context context) {
 				super.render(context);
-				if (!context.hasFocus() && !focusRequested) context.requestFocus();
-				focusRequested=true;
 			}
 			
 			@Override
 			public void handleButton (Context context, int button) {
 				super.handleButton(context,button);
-				if (context.getInterface().getButton(button) && !context.isHovered()) {
-					if (shown.isOn()) shown.toggle();
-					focusRequested=false;
-				}
+				if (context.getInterface().getButton(button) && !context.isHovered() && shown.isOn()) shown.toggle();
 			}
 			
 			@Override
@@ -120,7 +114,7 @@ public class ClosableComponent<S extends IComponent,T extends IComponent> extend
 			
 			@Override
 			public FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>> getComponent() {
-				if (fixedComponent==null) fixedComponent=new FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>>(panel.get(),new Point(0,0),width,panel.get().getCollapsible().getToggle(),savesState);
+				if (fixedComponent==null) fixedComponent=new FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>>(panel.get(),new Point(0,0),width,panel.get().getCollapsible().getToggle(),savesState,configName);
 				return fixedComponent;
 			}
 		};
@@ -128,20 +122,20 @@ public class ClosableComponent<S extends IComponent,T extends IComponent> extend
 		return draggable;
 	}
 	
-	public static <S extends IComponent,T extends IComponent,U> DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>> createDraggableComponent (S title, T content, Supplier<U> state, IToggleable open, Animation animation, IPanelRenderer<U> panelRenderer, IScrollBarRenderer<U> scrollRenderer, IEmptySpaceRenderer<U> emptyRenderer, BiFunction<Context,Integer,Integer> scrollHeight, Function<Context,Integer> componentWidth, Point position, int width, boolean savesState) {
+	public static <S extends IComponent,T extends IComponent,U> DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>> createDraggableComponent (S title, T content, Supplier<U> state, IToggleable open, Animation animation, IPanelRenderer<U> panelRenderer, IScrollBarRenderer<U> scrollRenderer, IEmptySpaceRenderer<U> emptyRenderer, BiFunction<Context,Integer,Integer> scrollHeight, Function<Context,Integer> componentWidth, Point position, int width, boolean savesState, String configName) {
 		AtomicReference<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>> panel=new AtomicReference<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>(null);
-		DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>> draggable=createDraggableComponent(()->panel.get(),position,width,savesState);
+		DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>> draggable=createDraggableComponent(()->panel.get(),position,width,savesState,configName);
 		panel.set(createScrollableComponent(draggable.getWrappedDragComponent(title),content,state,open,animation,panelRenderer,scrollRenderer,emptyRenderer,scrollHeight,componentWidth));
 		return draggable;
 	}
 	
-	public static <S extends IComponent,T extends IComponent,U> DraggableComponent<FixedComponent<ClosableComponent<S,T>>> createDraggableComponent (Supplier<ClosableComponent<S,T>> panel, Point position, int width, boolean savesState) {
+	public static <S extends IComponent,T extends IComponent,U> DraggableComponent<FixedComponent<ClosableComponent<S,T>>> createDraggableComponent (Supplier<ClosableComponent<S,T>> panel, Point position, int width, boolean savesState, String configName) {
 		return new DraggableComponent<FixedComponent<ClosableComponent<S,T>>>() {
 			FixedComponent<ClosableComponent<S,T>> fixedComponent=null;
 			
 			@Override
 			public FixedComponent<ClosableComponent<S,T>> getComponent() {
-				if (fixedComponent==null) fixedComponent=new FixedComponent<ClosableComponent<S,T>>(panel.get(),position,width,panel.get().getCollapsible().getToggle(),savesState);
+				if (fixedComponent==null) fixedComponent=new FixedComponent<ClosableComponent<S,T>>(panel.get(),position,width,panel.get().getCollapsible().getToggle(),savesState,configName);
 				return fixedComponent;
 			}
 		};

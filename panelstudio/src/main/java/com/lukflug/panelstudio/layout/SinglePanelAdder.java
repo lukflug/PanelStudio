@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 
 import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.Context;
+import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.SimpleToggleable;
 import com.lukflug.panelstudio.component.HorizontalComponent;
 import com.lukflug.panelstudio.component.IComponent;
@@ -17,14 +18,16 @@ import com.lukflug.panelstudio.widget.ClosableComponent;
 import com.lukflug.panelstudio.widget.ScrollBarComponent;
 
 public class SinglePanelAdder implements IComponentAdder {
-	protected final IContainer<? super IFixedComponent> container;
-	protected final HorizontalContainer title,content;
+	protected IContainer<? super IFixedComponent> container;
+	protected HorizontalContainer title,content;
+	protected IBoolean isVisible;
 	
-	public SinglePanelAdder (IContainer<? super IFixedComponent> container, ILabeled label, ITheme theme, Point position, int width, Supplier<Animation> animation) {
+	public SinglePanelAdder (IContainer<? super IFixedComponent> container, ILabeled label, ITheme theme, Point position, int width, Supplier<Animation> animation, IBoolean isVisible, String configName) {
 		this.container=container;
+		this.isVisible=isVisible;
 		title=new HorizontalContainer(label,theme.getContainerRenderer(-1,-1,true));
 		content=new HorizontalContainer(label,theme.getContainerRenderer(-1,-1,true));
-		container.addComponent(ClosableComponent.createDraggableComponent(title,content,()->null,new SimpleToggleable(true),animation.get(),theme.getPanelRenderer(Void.class,-1,-1),theme.getScrollBarRenderer(Void.class,-1,-1),theme.getEmptySpaceRenderer(Void.class,-1,-1),(context,height)->height,context->context.getSize().width,position,width,false));
+		container.addComponent(ClosableComponent.createDraggableComponent(title,content,()->null,new SimpleToggleable(true),animation.get(),theme.getPanelRenderer(Void.class,-1,-1),theme.getScrollBarRenderer(Void.class,-1,-1),theme.getEmptySpaceRenderer(Void.class,-1,-1),(context,height)->height,context->context.getSize().width,position,width,true,configName),isVisible);
 	}
 	
 	@Override
@@ -50,7 +53,7 @@ public class SinglePanelAdder implements IComponentAdder {
 
 	@Override
 	public void addPopup(IFixedComponent popup) {
-		container.addComponent(popup);
+		container.addComponent(popup,isVisible);
 	}
 	
 	protected int getScrollHeight (Context context, int componentHeight) {

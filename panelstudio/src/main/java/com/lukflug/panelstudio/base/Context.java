@@ -12,16 +12,16 @@ public final class Context {
 	/**
 	 * The current {@link Interface}.
 	 */
-	private IInterface inter;
+	private final IInterface inter;
 	/**
 	 * The size of the component.
 	 * The width is decided by the parent, while the height is decided by the component.
 	 */
-	private Dimension size;
+	private final Dimension size;
 	/**
 	 * The position of the component, determined by its parent.
 	 */
-	private Point position;
+	private final Point position;
 	/**
 	 * The focus state of the parent.
 	 * The component cannot have focus, if the parent doesn't.
@@ -56,7 +56,7 @@ public final class Context {
 	 * @param focus focus state of the parent
 	 * @param onTop whether component is in the front
 	 */
-	public Context (Context context, int width, Point offset, boolean focus, boolean onTop, Object object) {
+	public Context (Context context, int width, Point offset, boolean focus, boolean onTop) {
 		inter=context.getInterface();
 		size=new Dimension(width,0);
 		this.position=context.getPos();
@@ -74,7 +74,7 @@ public final class Context {
 	 * @param focus set to false, to disable the component from having focus
 	 * @param onTop set to false, if a component is above another component at the current cursor position
 	 */
-	public Context (IInterface inter, int width, Point position, boolean focus, boolean onTop, Object object) {
+	public Context (IInterface inter, int width, Point position, boolean focus, boolean onTop) {
 		this.inter=inter;
 		size=new Dimension(width,0);
 		this.position=new Point(position);

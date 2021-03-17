@@ -68,7 +68,7 @@ public class GUI implements IContainer<IFixedComponent> {
 		Context context=getContext();
 		container.render(context);
 		if (context.getDescription()!=null) {
-			Point pos=descriptionPosition.getPosition(inter,context.getDescription().getComponentPos(),context.getDescription().getPanelPos());
+			Point pos=descriptionPosition.getPosition(inter,null,context.getDescription().getComponentPos(),context.getDescription().getPanelPos());
 			descriptionRenderer.renderDescription(inter,pos,context.getDescription().getContent());
 		}
 	}
@@ -134,6 +134,6 @@ public class GUI implements IContainer<IFixedComponent> {
 	 * @return the context
 	 */
 	protected Context getContext() {
-		return new Context(inter,0,new Point(0,0),true,true,this);
+		return new Context(inter,0,new Point(0,0),true,true);
 	}
 }

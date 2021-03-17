@@ -26,5 +26,4 @@ public class ConstantToggleable implements IToggleable {
 	@Override
 	public void toggle() {
 	}
-
 }

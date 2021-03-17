@@ -64,11 +64,11 @@ public abstract class ScrollableComponent<T extends IComponent> implements IComp
 	
 	@Override
 	public Context getContext (Context context) {
-		Context subContext=new Context(context,context.getSize().width,new Point(-scrollPos.x,-scrollPos.y),true,true,this);
+		Context subContext=new Context(context,context.getSize().width,new Point(-scrollPos.x,-scrollPos.y),true,true);
 		getComponent().getHeight(subContext);
 		int height=getScrollHeight(context,subContext.getSize().height);
 		context.setHeight(height);
-		return new Context(context,getComponentWidth(context),new Point(-scrollPos.x,-scrollPos.y),true,context.isHovered(),this);
+		return new Context(context,getComponentWidth(context),new Point(-scrollPos.x,-scrollPos.y),true,context.isHovered());
 	}
 	
 	/**

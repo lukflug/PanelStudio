@@ -21,10 +21,10 @@ import com.lukflug.panelstudio.widget.ClosableComponent;
 import com.lukflug.panelstudio.widget.ScrollBarComponent;
 
 public class ChildUtil {
-	protected final int width;
-	protected final Supplier<Animation> animation;
-	protected final IPopupPositioner popupPos;
-	protected final BiFunction<Context,Integer,Integer> popupHeight;
+	protected int width;
+	protected Supplier<Animation> animation;
+	protected IPopupPositioner popupPos;
+	protected BiFunction<Context,Integer,Integer> popupHeight;
 	
 	public ChildUtil (int width, Supplier<Animation> animation, IPopupPositioner popupPos, BiFunction<Context,Integer,Integer> popupHeight) {
 		this.width=width;
@@ -44,7 +44,7 @@ public class ChildUtil {
 		case POPUP:
 		case DRAG_POPUP:
 			toggle=new SimpleToggleable(false);
-			popup=ClosableComponent.createPopup(new Button(new Labeled(label.getDisplayName(),label.getDescription(),()->drawTitle&&label.isVisible().isOn()),theme.getButtonRenderer(Void.class,logicalLevel,graphicalLevel,true)),container,animation.get(),theme.getPanelRenderer(Void.class,logicalLevel,graphicalLevel),theme.getScrollBarRenderer(Void.class,logicalLevel,graphicalLevel),theme.getEmptySpaceRenderer(Void.class,logicalLevel,graphicalLevel),popupHeight,toggle,width,false);
+			popup=ClosableComponent.createPopup(new Button(new Labeled(label.getDisplayName(),label.getDescription(),()->drawTitle&&label.isVisible().isOn()),theme.getButtonRenderer(Void.class,logicalLevel,graphicalLevel,true)),container,animation.get(),theme.getPanelRenderer(Void.class,logicalLevel,graphicalLevel),theme.getScrollBarRenderer(Void.class,logicalLevel,graphicalLevel),theme.getEmptySpaceRenderer(Void.class,logicalLevel,graphicalLevel),popupHeight,toggle,width,false,"");
 			parent.addComponent(new ComponentProxy<IComponent>(title) {
 				@Override
 				public void handleButton (Context context, int button) {

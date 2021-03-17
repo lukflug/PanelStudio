@@ -15,11 +15,11 @@ import com.lukflug.panelstudio.base.IInterface;
  * @author lukflug
  */
 public class ClearTheme extends ThemeBase {
-	protected final boolean gradient;
-	protected final int height,padding,border;
-	protected final String separator;
+	protected IBoolean gradient;
+	protected int height,padding,border;
+	protected String separator;
 	
-	public ClearTheme (IColorScheme scheme, boolean gradient, int height, int padding, int border, String separator) {
+	public ClearTheme (IColorScheme scheme, IBoolean gradient, int height, int padding, int border, String separator) {
 		super(scheme);
 		this.gradient=gradient;
 		this.height=height;
@@ -159,7 +159,7 @@ public class ClearTheme extends ThemeBase {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, T state) {
 				if (container && graphicalLevel<=0) {
-					Color colorA=getColor(scheme.getColor("Title Color")),colorB=gradient?getBackgroundColor(focus):colorA;
+					Color colorA=getColor(scheme.getColor("Title Color")),colorB=gradient.isOn()?getBackgroundColor(focus):colorA;
 					context.getInterface().fillRect(context.getRect(),colorA,colorA,colorB,colorB);
 				}
 				Color color=getFontColor(focus);

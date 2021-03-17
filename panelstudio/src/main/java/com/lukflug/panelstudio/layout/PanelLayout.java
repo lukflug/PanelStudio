@@ -30,14 +30,14 @@ import com.lukflug.panelstudio.widget.NumberSlider;
 import com.lukflug.panelstudio.widget.ToggleButton;
 
 public class PanelLayout implements ILayout {
-	protected final int width;
-	protected final Point start;
-	protected final int skipX,skipY;
-	protected final Supplier<Animation> animation;
-	protected final IntPredicate deleteKey;
-	protected final IntFunction<ChildMode> layoutType;
-	protected final ChildMode colorType;
-	protected final ChildUtil util;
+	protected int width;
+	protected Point start;
+	protected int skipX,skipY;
+	protected Supplier<Animation> animation;
+	protected IntPredicate deleteKey;
+	protected IntFunction<ChildMode> layoutType;
+	protected ChildMode colorType;
+	protected ChildUtil util;
 	
 	public PanelLayout (int width, Point start, int skipX, int skipY, Supplier<Animation> animation, IntPredicate deleteKey, IntFunction<ChildMode> layoutType, ChildMode colorType, IPopupPositioner popupPos, BiFunction<Context,Integer,Integer> popupHeight) {
 		this.width=width;
@@ -78,7 +78,7 @@ public class PanelLayout implements ILayout {
 	protected <T> void addSettingsComponent (ISetting<T> setting, VerticalContainer container, IComponentAdder gui, ITheme theme, int logicalLevel, int graphicalLevel) {
 		int nextLevel=(layoutType.apply(logicalLevel-1)==ChildMode.DOWN)?graphicalLevel:0;
 		IComponent component;
-		boolean isContainer=setting.getSubSettings()!=null;
+		boolean isContainer=(setting.getSubSettings()!=null)&&(layoutType.apply(logicalLevel-1)==ChildMode.DOWN);
 		if (setting instanceof IBooleanSetting) {
 			component=new ToggleButton((IBooleanSetting)setting,theme.getButtonRenderer(IBoolean.class,logicalLevel,graphicalLevel,isContainer));
 		} else if (setting instanceof INumberSetting) {
@@ -88,8 +88,8 @@ public class PanelLayout implements ILayout {
 		} else if (setting instanceof IColorSetting) {
 			int colorLevel=(colorType==ChildMode.DOWN)?graphicalLevel:0;
 			VerticalContainer colorContainer=new ColorComponent((IColorSetting)setting,animation.get(),theme,logicalLevel,colorLevel);
-			util.addContainer(setting,new Button(setting,theme.getButtonRenderer(Void.class,logicalLevel,graphicalLevel,true)),colorContainer,()->setting.getSettingState(),setting.getSettingClass(),container,gui,theme,logicalLevel,colorLevel,colorType);
-			if (isContainer) setting.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,colorContainer,gui,theme,logicalLevel+1,colorLevel+1));
+			util.addContainer(setting,new Button(setting,theme.getButtonRenderer(Void.class,logicalLevel,graphicalLevel,colorType==ChildMode.DOWN)),colorContainer,()->setting.getSettingState(),setting.getSettingClass(),container,gui,theme,logicalLevel,colorLevel,colorType);
+			if (setting.getSubSettings()!=null) setting.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,colorContainer,gui,theme,logicalLevel+1,colorLevel+1));
 			return;
 		} else if (setting instanceof IKeybindSetting) {
 			component=new KeybindComponent((IKeybindSetting)setting,theme.getKeybindRenderer(logicalLevel,graphicalLevel,isContainer)) {
@@ -101,7 +101,7 @@ public class PanelLayout implements ILayout {
 		} else {
 			component=new Button(setting,theme.getButtonRenderer(Void.class,logicalLevel,graphicalLevel,isContainer));
 		}
-		if (isContainer) {
+		if (setting.getSubSettings()!=null) {
 			VerticalContainer settingContainer=new VerticalContainer(setting,theme.getContainerRenderer(logicalLevel,nextLevel,false));
 			util.addContainer(setting,component,settingContainer,()->setting.getSettingState(),setting.getSettingClass(),container,gui,theme,logicalLevel,nextLevel,layoutType.apply(logicalLevel-1));
 			setting.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,settingContainer,gui,theme,logicalLevel+1,nextLevel+1));

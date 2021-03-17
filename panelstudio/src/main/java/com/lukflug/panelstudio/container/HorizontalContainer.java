@@ -56,6 +56,6 @@ public class HorizontalContainer extends Container<IHorizontalComponent> {
 	 * @return the context for the child component
 	 */
 	protected Context getSubContext (Context context, int posx, int width) {
-		return new Context(context,width,new Point(posx,renderer.getTop()),context.hasFocus(),true,this);
+		return new Context(context,width,new Point(posx,renderer.getTop()),context.hasFocus(),true);
 	}
 }

@@ -52,6 +52,11 @@ public abstract class DraggableComponent<T extends IFixedComponent> implements I
 		getComponent().loadConfig(inter,config);
 	}
 	
+	@Override
+	public String getConfigName() {
+		return getComponent().getConfigName();
+	}
+	
 	/**
 	 * Returns the wrapped dragging component.
 	 * @param dragComponent component that is used to drag the panel

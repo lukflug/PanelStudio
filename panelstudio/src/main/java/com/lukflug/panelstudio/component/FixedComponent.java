@@ -27,6 +27,7 @@ public class FixedComponent<T extends IComponent> extends ComponentProxy<T> impl
 	 * Whether the components state is stored.
 	 */
 	protected boolean savesState;
+	protected String configName;
 	
 	/**
 	 * Constructor.
@@ -36,12 +37,13 @@ public class FixedComponent<T extends IComponent> extends ComponentProxy<T> impl
 	 * @param boolean to save as state
 	 * @param boolean whether state is saved
 	 */
-	public FixedComponent (T component, Point position, int width, IToggleable state, boolean savesState) {
+	public FixedComponent (T component, Point position, int width, IToggleable state, boolean savesState, String configName) {
 		super(component);
 		this.position=position;
 		this.width=width;
 		this.state=state;
 		this.savesState=savesState;
+		this.configName=configName;
 	}
 
 	@Override
@@ -76,5 +78,10 @@ public class FixedComponent<T extends IComponent> extends ComponentProxy<T> impl
 		if (state!=null) {
 			if (state.isOn()!=config.loadState()) state.toggle();
 		}
+	}
+	
+	@Override
+	public String getConfigName() {
+		return configName;
 	}
 }

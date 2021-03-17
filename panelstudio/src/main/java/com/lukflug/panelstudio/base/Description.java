@@ -14,7 +14,7 @@ public final class Description {
 	/**
 	 * The position of the panel the component is in.
 	 */
-	private Rectangle panelPos;
+	private final Rectangle panelPos;
 	/**
 	 * The content of the description.
 	 */

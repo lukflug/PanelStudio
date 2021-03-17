@@ -1,5 +1,6 @@
 package com.lukflug.panelstudio.container;
 
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +83,9 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 			if (subContext.isHovered() && subContext.getDescription()!=null) context.setDescription(new Description(subContext.getDescription(),subContext.getRect()));
 			// Deal with popups
 			for (PopupPair popup: popups) {
-				popup.popup.setPosition(context.getInterface(),popup.positioner.getPosition(context.getInterface(),popup.rect,subContext.getRect()));
+				Context tempContext=new Context(context.getInterface(),popup.popup.getWidth(context.getInterface()),new Point(0,0),true,true);
+				popup.popup.getHeight(tempContext);
+				popup.popup.setPosition(context.getInterface(),popup.positioner.getPosition(context.getInterface(),tempContext.getSize(),popup.rect,subContext.getRect()));
 				if (!popup.visible.isOn()) popup.visible.toggle();
 				focusComponent.set(popup.popup);
 			}
@@ -132,7 +135,9 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 			if (subContext.isHovered()) highest.set(false);
 			// Deal with popups
 			for (PopupPair popup: popups) {
-				popup.popup.setPosition(context.getInterface(),popup.positioner.getPosition(context.getInterface(),popup.rect,subContext.getRect()));
+				Context tempContext=new Context(context.getInterface(),popup.popup.getWidth(context.getInterface()),new Point(0,0),true,true);
+				popup.popup.getHeight(tempContext);
+				popup.popup.setPosition(context.getInterface(),popup.positioner.getPosition(context.getInterface(),tempContext.getSize(),popup.rect,subContext.getRect()));
 				if (!popup.visible.isOn()) popup.visible.toggle();
 				focusComponent.set(popup.popup);
 			}
@@ -156,7 +161,7 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 	 * @return the context for the child component
 	 */
 	protected Context getSubContext (Context context, IFixedComponent component, boolean highest) {
-		Context subContext=new Context(context,component.getWidth(context.getInterface()),component.getPosition(context.getInterface()),context.hasFocus()&&highest,highest,this);
+		Context subContext=new Context(context,component.getWidth(context.getInterface()),component.getPosition(context.getInterface()),context.hasFocus()&&highest,highest);
 		subContext.setPopupDisplayer(this);
 		return subContext;
 	}
@@ -169,8 +174,10 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 	public void saveConfig (IInterface inter, IConfigList config) {
 		config.begin(false);
 		for (ComponentState state: components) {
-			IPanelConfig cf=config.addPanel(state.component.getTitle());
-			if (cf!=null && state.component.savesState()) state.component.saveConfig(inter,cf);
+			if (state.component.savesState()) {
+				IPanelConfig cf=config.addPanel(state.component.getConfigName());
+				if (cf!=null) state.component.saveConfig(inter,cf);
+			}
 		};
 		config.end(false);
 	}
@@ -183,8 +190,10 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 	public void loadConfig (IInterface inter, IConfigList config) {
 		config.begin(true);
 		for (ComponentState state: components) {
-			IPanelConfig cf=config.getPanel(state.component.getTitle());
-			if (cf!=null && state.component.savesState()) state.component.loadConfig(inter,cf);
+			if (state.component.savesState()) {
+				IPanelConfig cf=config.getPanel(state.component.getConfigName());
+				if (cf!=null) state.component.loadConfig(inter,cf);
+			}
 		};
 		config.end(true);
 	}
