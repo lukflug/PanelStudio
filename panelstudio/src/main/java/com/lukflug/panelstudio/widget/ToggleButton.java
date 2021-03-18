@@ -1,7 +1,6 @@
 package com.lukflug.panelstudio.widget;
 
 import com.lukflug.panelstudio.base.Context;
-import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.base.IToggleable;
 import com.lukflug.panelstudio.base.SimpleToggleable;
@@ -22,7 +21,7 @@ public class ToggleButton extends FocusableComponent {
 	/**
 	 * Renderer for this component.
 	 */
-	protected IButtonRenderer<IBoolean> renderer;
+	protected IButtonRenderer<Boolean> renderer;
 	
 	/**
 	 * Constructor.
@@ -30,7 +29,7 @@ public class ToggleButton extends FocusableComponent {
 	 * @param toggle the toggle
 	 * @param renderer the renderer for this component
 	 */
-	public ToggleButton (ILabeled label, IToggleable toggle, IButtonRenderer<IBoolean> renderer) {
+	public ToggleButton (ILabeled label, IToggleable toggle, IButtonRenderer<Boolean> renderer) {
 		super(label);
 		this.toggle=toggle;
 		this.renderer=renderer;
@@ -42,14 +41,14 @@ public class ToggleButton extends FocusableComponent {
 	 * @param setting the setting in question
 	 * @param renderer the renderer for this component
 	 */
-	public ToggleButton (IBooleanSetting setting, IButtonRenderer<IBoolean> renderer) {
+	public ToggleButton (IBooleanSetting setting, IButtonRenderer<Boolean> renderer) {
 		this(setting,setting,renderer);
 	}
 	
 	@Override
 	public void render (Context context) {
 		super.render(context);
-		renderer.renderButton(context,getTitle(),hasFocus(context),toggle);
+		renderer.renderButton(context,getTitle(),hasFocus(context),toggle.isOn());
 	}
 	
 	@Override

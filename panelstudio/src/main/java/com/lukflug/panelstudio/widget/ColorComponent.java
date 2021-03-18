@@ -46,7 +46,7 @@ public class ColorComponent extends VerticalContainer {
 			public void toggle() {
 				setting.setRainbow(!setting.getRainbow());
 			}
-		},theme.getButtonRenderer(IBoolean.class,logicalLevel,graphicalLevel+1,false)));
+		},theme.getButtonRenderer(Boolean.class,logicalLevel,graphicalLevel+1,false)));
 		addComponent(new ColorSlider(()->true,theme.getSliderRenderer(logicalLevel,graphicalLevel+1,false),0));
 		addComponent(new ColorSlider(()->true,theme.getSliderRenderer(logicalLevel,graphicalLevel+1,false),1));
 		addComponent(new ColorSlider(()->true,theme.getSliderRenderer(logicalLevel,graphicalLevel+1,false),2));

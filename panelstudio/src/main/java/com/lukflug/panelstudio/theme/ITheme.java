@@ -2,7 +2,6 @@ package com.lukflug.panelstudio.theme;
 
 import java.awt.Color;
 
-import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IInterface;
 
 /**
@@ -73,7 +72,7 @@ public interface ITheme {
 	 * @param container whether this is the title of a panel
 	 * @return the check mark renderer
 	 */
-	public IButtonRenderer<IBoolean> getCheckMarkRenderer (int logicalLevel, int graphicalLevel, boolean container);
+	public IButtonRenderer<Boolean> getCheckMarkRenderer (int logicalLevel, int graphicalLevel, boolean container);
 	
 	/**
 	 * Returns the renderer for keybinds.

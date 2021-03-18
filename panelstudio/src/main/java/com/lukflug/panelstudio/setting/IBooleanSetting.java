@@ -1,20 +1,19 @@
 package com.lukflug.panelstudio.setting;
 
-import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IToggleable;
 
 /**
  * Interface representing boolean setting.
  * @author lukflug
  */
-public interface IBooleanSetting extends ISetting<IBoolean>,IToggleable {
+public interface IBooleanSetting extends ISetting<Boolean>,IToggleable {
 	@Override
-	public default IBoolean getSettingState() {
-		return this;
+	public default Boolean getSettingState() {
+		return isOn();
 	}
 	
 	@Override
-	public default Class<IBoolean> getSettingClass() {
-		return IBoolean.class;
+	public default Class<Boolean> getSettingClass() {
+		return Boolean.class;
 	}
 }

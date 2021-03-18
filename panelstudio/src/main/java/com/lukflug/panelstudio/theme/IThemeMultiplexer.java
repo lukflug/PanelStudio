@@ -2,7 +2,6 @@ package com.lukflug.panelstudio.theme;
 
 import java.awt.Color;
 
-import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IInterface;
 
 /**
@@ -55,8 +54,8 @@ public interface IThemeMultiplexer extends ITheme {
 	}
 
 	@Override
-	public default IButtonRenderer<IBoolean> getCheckMarkRenderer(int logicalLevel, int graphicalLevel, boolean container) {
-		IButtonRendererProxy<IBoolean> proxy=()->getTheme().getCheckMarkRenderer(logicalLevel,graphicalLevel,container);
+	public default IButtonRenderer<Boolean> getCheckMarkRenderer(int logicalLevel, int graphicalLevel, boolean container) {
+		IButtonRendererProxy<Boolean> proxy=()->getTheme().getCheckMarkRenderer(logicalLevel,graphicalLevel,container);
 		return proxy;
 	}
 

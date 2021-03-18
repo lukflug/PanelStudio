@@ -163,7 +163,7 @@ public class ClearTheme extends ThemeBase {
 					context.getInterface().fillRect(context.getRect(),colorA,colorA,colorB,colorB);
 				}
 				Color color=getFontColor(focus);
-				if (type==IBoolean.class && ((IBoolean)state).isOn()==true) color=getMainColor(focus,true);
+				if (type==Boolean.class && (Boolean)state==true) color=getMainColor(focus,true);
 				if (graphicalLevel>0) renderOverlay(context);
 				if (type==String.class) context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title+separator+state,color);
 				else context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title,color);
@@ -177,8 +177,8 @@ public class ClearTheme extends ThemeBase {
 	}
 
 	@Override
-	public IButtonRenderer<IBoolean> getCheckMarkRenderer(int logicalLevel, int graphicalLevel, boolean container) {
-		return getButtonRenderer(IBoolean.class,logicalLevel,graphicalLevel,container);
+	public IButtonRenderer<Boolean> getCheckMarkRenderer(int logicalLevel, int graphicalLevel, boolean container) {
+		return getButtonRenderer(Boolean.class,logicalLevel,graphicalLevel,container);
 	}
 
 	@Override

@@ -19,7 +19,7 @@ public class GUI implements IContainer<IFixedComponent> {
 	/**
 	 * Container containing all components.
 	 */
-	FixedContainer container;
+	protected FixedContainer container;
 	/**
 	 * The {@link Interface} to be used by the GUI.
 	 */

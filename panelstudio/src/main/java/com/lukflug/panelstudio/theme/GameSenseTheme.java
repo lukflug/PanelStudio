@@ -181,8 +181,8 @@ public class GameSenseTheme extends ThemeBase {
 	}
 
 	@Override
-	public IButtonRenderer<IBoolean> getCheckMarkRenderer(int logicalLevel, int graphicalLevel, boolean container) {
-		return getButtonRenderer(IBoolean.class,logicalLevel,graphicalLevel,container);
+	public IButtonRenderer<Boolean> getCheckMarkRenderer(int logicalLevel, int graphicalLevel, boolean container) {
+		return getButtonRenderer(Boolean.class,logicalLevel,graphicalLevel,container);
 	}
 
 	@Override
