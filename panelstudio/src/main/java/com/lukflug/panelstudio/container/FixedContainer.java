@@ -1,6 +1,5 @@
 package com.lukflug.panelstudio.container;
 
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,12 +10,13 @@ import java.util.function.Consumer;
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.Description;
 import com.lukflug.panelstudio.base.IInterface;
-import com.lukflug.panelstudio.base.IPopupDisplayer;
 import com.lukflug.panelstudio.base.IToggleable;
 import com.lukflug.panelstudio.component.IFixedComponent;
 import com.lukflug.panelstudio.config.IConfigList;
 import com.lukflug.panelstudio.config.IPanelConfig;
-import com.lukflug.panelstudio.layout.IPopupPositioner;
+import com.lukflug.panelstudio.popup.IPopup;
+import com.lukflug.panelstudio.popup.IPopupDisplayer;
+import com.lukflug.panelstudio.popup.IPopupPositioner;
 import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.theme.IContainerRenderer;
 
@@ -43,10 +43,8 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 	}
 
 	@Override
-	public void displayPopup(Object popup, Rectangle rect, IToggleable visible, IPopupPositioner positioner) {
-		if (popup instanceof IFixedComponent) {
-			popups.add(new PopupPair((IFixedComponent)popup,rect,visible,positioner));
-		}
+	public void displayPopup(IPopup popup, Rectangle rect, IToggleable visible, IPopupPositioner positioner) {
+		popups.add(new PopupPair(popup,rect,visible,positioner));
 	}
 	
 	@Override
@@ -83,11 +81,9 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 			if (subContext.isHovered() && subContext.getDescription()!=null) context.setDescription(new Description(subContext.getDescription(),subContext.getRect()));
 			// Deal with popups
 			for (PopupPair popup: popups) {
-				Context tempContext=new Context(context.getInterface(),popup.popup.getWidth(context.getInterface()),new Point(0,0),true,true);
-				popup.popup.getHeight(tempContext);
-				popup.popup.setPosition(context.getInterface(),popup.positioner.getPosition(context.getInterface(),tempContext.getSize(),popup.rect,subContext.getRect()));
+				popup.popup.setPosition(context.getInterface(),popup.rect,subContext.getRect(),popup.positioner);
 				if (!popup.visible.isOn()) popup.visible.toggle();
-				focusComponent.set(popup.popup);
+				if (popup.popup instanceof IFixedComponent) focusComponent.set((IFixedComponent)popup.popup);
 			}
 			popups.clear();
 		});
@@ -135,11 +131,9 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 			if (subContext.isHovered()) highest.set(false);
 			// Deal with popups
 			for (PopupPair popup: popups) {
-				Context tempContext=new Context(context.getInterface(),popup.popup.getWidth(context.getInterface()),new Point(0,0),true,true);
-				popup.popup.getHeight(tempContext);
-				popup.popup.setPosition(context.getInterface(),popup.positioner.getPosition(context.getInterface(),tempContext.getSize(),popup.rect,subContext.getRect()));
+				popup.popup.setPosition(context.getInterface(),popup.rect,subContext.getRect(),popup.positioner);
 				if (!popup.visible.isOn()) popup.visible.toggle();
-				focusComponent.set(popup.popup);
+				if (popup.popup instanceof IFixedComponent) focusComponent.set((IFixedComponent)popup.popup);
 			}
 			popups.clear();
 		});
@@ -200,12 +194,12 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 	
 	
 	protected final class PopupPair {
-		public final IFixedComponent popup;
+		public final IPopup popup;
 		public final Rectangle rect;
 		public final IToggleable visible;
 		public final IPopupPositioner positioner;
 		
-		public PopupPair (IFixedComponent popup, Rectangle rect, IToggleable visible, IPopupPositioner positioner) {
+		public PopupPair (IPopup popup, Rectangle rect, IToggleable visible, IPopupPositioner positioner) {
 			this.popup=popup;
 			this.rect=rect;
 			this.visible=visible;

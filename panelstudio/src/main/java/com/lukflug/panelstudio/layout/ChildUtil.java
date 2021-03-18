@@ -9,32 +9,33 @@ import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.base.IToggleable;
 import com.lukflug.panelstudio.base.SimpleToggleable;
 import com.lukflug.panelstudio.component.ComponentProxy;
-import com.lukflug.panelstudio.component.DraggableComponent;
-import com.lukflug.panelstudio.component.FixedComponent;
 import com.lukflug.panelstudio.component.IComponent;
+import com.lukflug.panelstudio.component.IFixedComponent;
 import com.lukflug.panelstudio.container.VerticalContainer;
+import com.lukflug.panelstudio.popup.IPopupPositioner;
 import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.setting.Labeled;
 import com.lukflug.panelstudio.theme.ITheme;
 import com.lukflug.panelstudio.widget.Button;
 import com.lukflug.panelstudio.widget.ClosableComponent;
-import com.lukflug.panelstudio.widget.ScrollBarComponent;
 
 public class ChildUtil {
 	protected int width;
 	protected Supplier<Animation> animation;
 	protected IPopupPositioner popupPos;
 	protected BiFunction<Context,Integer,Integer> popupHeight;
+	protected boolean dynamicPopup;
 	
-	public ChildUtil (int width, Supplier<Animation> animation, IPopupPositioner popupPos, BiFunction<Context,Integer,Integer> popupHeight) {
+	public ChildUtil (int width, Supplier<Animation> animation, IPopupPositioner popupPos, boolean dynamicPopup, BiFunction<Context,Integer,Integer> popupHeight) {
 		this.width=width;
 		this.animation=animation;
 		this.popupPos=popupPos;
 		this.popupHeight=popupHeight;
+		this.dynamicPopup=dynamicPopup;
 	}
 	
 	protected <T> void addContainer (ILabeled label, IComponent title, IComponent container, Supplier<T> state, Class<T> stateClass, VerticalContainer parent, IComponentAdder gui, ITheme theme, int logicalLevel, int graphicalLevel, ChildMode mode) {
-		DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<IComponent>,ScrollBarComponent<Void,IComponent>>>> popup;
+		IFixedComponent popup;
 		IToggleable toggle;
 		boolean drawTitle=mode==ChildMode.DRAG_POPUP;
 		switch (mode) {
@@ -44,7 +45,8 @@ public class ChildUtil {
 		case POPUP:
 		case DRAG_POPUP:
 			toggle=new SimpleToggleable(false);
-			popup=ClosableComponent.createPopup(new Button(new Labeled(label.getDisplayName(),label.getDescription(),()->drawTitle&&label.isVisible().isOn()),theme.getButtonRenderer(Void.class,logicalLevel,graphicalLevel,true)),container,animation.get(),theme.getPanelRenderer(Void.class,logicalLevel,graphicalLevel),theme.getScrollBarRenderer(Void.class,logicalLevel,graphicalLevel),theme.getEmptySpaceRenderer(Void.class,logicalLevel,graphicalLevel),popupHeight,toggle,width,false,"");
+			if (dynamicPopup) popup=ClosableComponent.createDynamicPopup(new Button(new Labeled(label.getDisplayName(),label.getDescription(),()->drawTitle&&label.isVisible().isOn()),theme.getButtonRenderer(Void.class,logicalLevel,graphicalLevel,true)),container,animation.get(),theme.getPanelRenderer(Void.class,logicalLevel,graphicalLevel),theme.getScrollBarRenderer(Void.class,logicalLevel,graphicalLevel),theme.getEmptySpaceRenderer(Void.class,logicalLevel,graphicalLevel),popupHeight,toggle,width);
+			else popup=ClosableComponent.createStaticPopup(new Button(new Labeled(label.getDisplayName(),label.getDescription(),()->drawTitle&&label.isVisible().isOn()),theme.getButtonRenderer(Void.class,logicalLevel,graphicalLevel,true)),container,animation.get(),theme.getPanelRenderer(Void.class,logicalLevel,graphicalLevel),theme.getScrollBarRenderer(Void.class,logicalLevel,graphicalLevel),theme.getEmptySpaceRenderer(Void.class,logicalLevel,graphicalLevel),popupHeight,toggle,width,false,"");
 			parent.addComponent(new ComponentProxy<IComponent>(title) {
 				@Override
 				public void handleButton (Context context, int button) {

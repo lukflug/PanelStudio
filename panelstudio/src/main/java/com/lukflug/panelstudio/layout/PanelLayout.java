@@ -14,6 +14,7 @@ import com.lukflug.panelstudio.component.FocusableComponent;
 import com.lukflug.panelstudio.component.IComponent;
 import com.lukflug.panelstudio.container.VerticalContainer;
 import com.lukflug.panelstudio.layout.ChildUtil.ChildMode;
+import com.lukflug.panelstudio.popup.IPopupPositioner;
 import com.lukflug.panelstudio.setting.IBooleanSetting;
 import com.lukflug.panelstudio.setting.IClient;
 import com.lukflug.panelstudio.setting.IColorSetting;
@@ -39,7 +40,7 @@ public class PanelLayout implements ILayout {
 	protected ChildMode colorType;
 	protected ChildUtil util;
 	
-	public PanelLayout (int width, Point start, int skipX, int skipY, Supplier<Animation> animation, IntPredicate deleteKey, IntFunction<ChildMode> layoutType, ChildMode colorType, IPopupPositioner popupPos, BiFunction<Context,Integer,Integer> popupHeight) {
+	public PanelLayout (int width, Point start, int skipX, int skipY, Supplier<Animation> animation, IntPredicate deleteKey, IntFunction<ChildMode> layoutType, ChildMode colorType, IPopupPositioner popupPos, boolean dynamicPopup, BiFunction<Context,Integer,Integer> popupHeight) {
 		this.width=width;
 		this.start=start;
 		this.skipX=skipX;
@@ -48,7 +49,7 @@ public class PanelLayout implements ILayout {
 		this.deleteKey=deleteKey;
 		this.layoutType=layoutType;
 		this.colorType=colorType;
-		util=new ChildUtil(width,animation,popupPos,popupHeight);
+		util=new ChildUtil(width,animation,popupPos,dynamicPopup,popupHeight);
 	}
 	
 	@Override

@@ -17,6 +17,7 @@ import com.lukflug.panelstudio.component.DraggableComponent;
 import com.lukflug.panelstudio.component.FixedComponent;
 import com.lukflug.panelstudio.component.FocusableComponentProxy;
 import com.lukflug.panelstudio.component.IComponent;
+import com.lukflug.panelstudio.component.PopupComponent;
 import com.lukflug.panelstudio.container.VerticalContainer;
 import com.lukflug.panelstudio.setting.Labeled;
 import com.lukflug.panelstudio.theme.IEmptySpaceRenderer;
@@ -91,15 +92,10 @@ public class ClosableComponent<S extends IComponent,T extends IComponent> extend
 		return collapsible;
 	}
 	
-	public static <S extends IComponent,T extends IComponent> DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>>> createPopup (S title, T content, Animation animation, IPanelRenderer<Void> panelRenderer, IScrollBarRenderer<Void> scrollRenderer, IEmptySpaceRenderer<Void> emptyRenderer, BiFunction<Context,Integer,Integer> popupHeight, IToggleable shown, int width, boolean savesState, String configName) {
+	public static <S extends IComponent,T extends IComponent> DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>>> createStaticPopup (S title, T content, Animation animation, IPanelRenderer<Void> panelRenderer, IScrollBarRenderer<Void> scrollRenderer, IEmptySpaceRenderer<Void> emptyRenderer, BiFunction<Context,Integer,Integer> popupHeight, IToggleable shown, int width, boolean savesState, String configName) {
 		AtomicReference<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>> panel=new AtomicReference<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>>(null);
 		DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>>> draggable=new DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>>>() {
 			FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>> fixedComponent=null;
-			
-			@Override
-			public void render (Context context) {
-				super.render(context);
-			}
 			
 			@Override
 			public void handleButton (Context context, int button) {
@@ -120,6 +116,22 @@ public class ClosableComponent<S extends IComponent,T extends IComponent> extend
 		};
 		panel.set(createScrollableComponent(draggable.getWrappedDragComponent(title),content,()->null,new ConstantToggleable(true),animation,panelRenderer,scrollRenderer,emptyRenderer,popupHeight,(context)->context.getSize().width));
 		return draggable;
+	}
+	
+	public static <S extends IComponent,T extends IComponent> PopupComponent<ClosableComponent<S,ScrollBarComponent<Void,T>>> createDynamicPopup (S title, T content, Animation animation, IPanelRenderer<Void> panelRenderer, IScrollBarRenderer<Void> scrollRenderer, IEmptySpaceRenderer<Void> emptyRenderer, BiFunction<Context,Integer,Integer> popupHeight, IToggleable shown, int width) {
+		ClosableComponent<S,ScrollBarComponent<Void,T>> panel=createScrollableComponent(title,content,()->null,new ConstantToggleable(true),animation,panelRenderer,scrollRenderer,emptyRenderer,popupHeight,(context)->context.getSize().width);
+		return new PopupComponent<ClosableComponent<S,ScrollBarComponent<Void,T>>>(panel,width) {
+			@Override
+			public void handleButton (Context context, int button) {
+				doOperation(context,subContext->getComponent().handleButton(subContext,button));
+				if (context.getInterface().getButton(button) && !context.isHovered() && shown.isOn()) shown.toggle();
+			}
+			
+			@Override
+			public boolean isVisible() {
+				return getComponent().isVisible()&&shown.isOn();
+			}
+		};
 	}
 	
 	public static <S extends IComponent,T extends IComponent,U> DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>> createDraggableComponent (S title, T content, Supplier<U> state, IToggleable open, Animation animation, IPanelRenderer<U> panelRenderer, IScrollBarRenderer<U> scrollRenderer, IEmptySpaceRenderer<U> emptyRenderer, BiFunction<Context,Integer,Integer> scrollHeight, Function<Context,Integer> componentWidth, Point position, int width, boolean savesState, String configName) {

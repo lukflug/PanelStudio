@@ -1,4 +1,4 @@
-package com.lukflug.panelstudio.layout;
+package com.lukflug.panelstudio.popup;
 
 import java.awt.Dimension;
 import java.awt.Point;

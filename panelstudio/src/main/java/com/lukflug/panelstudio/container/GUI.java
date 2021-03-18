@@ -7,7 +7,7 @@ import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.component.IFixedComponent;
 import com.lukflug.panelstudio.config.IConfigList;
-import com.lukflug.panelstudio.layout.IPopupPositioner;
+import com.lukflug.panelstudio.popup.IPopupPositioner;
 import com.lukflug.panelstudio.theme.IDescriptionRenderer;
 
 /**

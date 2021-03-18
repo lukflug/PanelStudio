@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import com.lukflug.panelstudio.popup.IPopupDisplayer;
+
 /**
  * A class for the communication between a component and its parent.
  * @author lukflug
