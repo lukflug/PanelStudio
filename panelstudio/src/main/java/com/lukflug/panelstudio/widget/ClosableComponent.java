@@ -92,10 +92,11 @@ public class ClosableComponent<S extends IComponent,T extends IComponent> extend
 		return collapsible;
 	}
 	
-	public static <S extends IComponent,T extends IComponent> DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>>> createStaticPopup (S title, T content, Animation animation, IPanelRenderer<Void> panelRenderer, IScrollBarRenderer<Void> scrollRenderer, IEmptySpaceRenderer<Void> emptyRenderer, BiFunction<Context,Integer,Integer> popupHeight, IToggleable shown, int width, boolean savesState, String configName) {
-		AtomicReference<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>> panel=new AtomicReference<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>>(null);
-		DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>>> draggable=new DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>>>() {
-			FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>> fixedComponent=null;
+	
+	public static <S extends IComponent,T extends IComponent,U> DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>> createStaticPopup (S title, T content, Supplier<U> state, Animation animation, IPanelRenderer<U> panelRenderer, IScrollBarRenderer<U> scrollRenderer, IEmptySpaceRenderer<U> emptyRenderer, BiFunction<Context,Integer,Integer> popupHeight, IToggleable shown, int width, boolean savesState, String configName) {
+		AtomicReference<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>> panel=new AtomicReference<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>(null);
+		DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>> draggable=new DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>>() {
+			FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>> fixedComponent=null;
 			
 			@Override
 			public void handleButton (Context context, int button) {
@@ -109,18 +110,18 @@ public class ClosableComponent<S extends IComponent,T extends IComponent> extend
 			}
 			
 			@Override
-			public FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>> getComponent() {
-				if (fixedComponent==null) fixedComponent=new FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<Void,T>>>(panel.get(),new Point(0,0),width,panel.get().getCollapsible().getToggle(),savesState,configName);
+			public FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>> getComponent() {
+				if (fixedComponent==null) fixedComponent=new FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>(panel.get(),new Point(0,0),width,panel.get().getCollapsible().getToggle(),savesState,configName);
 				return fixedComponent;
 			}
 		};
-		panel.set(createScrollableComponent(draggable.getWrappedDragComponent(title),content,()->null,new ConstantToggleable(true),animation,panelRenderer,scrollRenderer,emptyRenderer,popupHeight,(context)->context.getSize().width));
+		panel.set(createScrollableComponent(draggable.getWrappedDragComponent(title),content,state,new ConstantToggleable(true),animation,panelRenderer,scrollRenderer,emptyRenderer,popupHeight,(context)->context.getSize().width));
 		return draggable;
 	}
 	
-	public static <S extends IComponent,T extends IComponent> PopupComponent<ClosableComponent<S,ScrollBarComponent<Void,T>>> createDynamicPopup (S title, T content, Animation animation, IPanelRenderer<Void> panelRenderer, IScrollBarRenderer<Void> scrollRenderer, IEmptySpaceRenderer<Void> emptyRenderer, BiFunction<Context,Integer,Integer> popupHeight, IToggleable shown, int width) {
-		ClosableComponent<S,ScrollBarComponent<Void,T>> panel=createScrollableComponent(title,content,()->null,new ConstantToggleable(true),animation,panelRenderer,scrollRenderer,emptyRenderer,popupHeight,(context)->context.getSize().width);
-		return new PopupComponent<ClosableComponent<S,ScrollBarComponent<Void,T>>>(panel,width) {
+	public static <S extends IComponent,T extends IComponent,U> PopupComponent<ClosableComponent<S,ScrollBarComponent<U,T>>> createDynamicPopup (S title, T content, Supplier<U> state, Animation animation, IPanelRenderer<U> panelRenderer, IScrollBarRenderer<U> scrollRenderer, IEmptySpaceRenderer<U> emptyRenderer, BiFunction<Context,Integer,Integer> popupHeight, IToggleable shown, int width) {
+		ClosableComponent<S,ScrollBarComponent<U,T>> panel=createScrollableComponent(title,content,state,new ConstantToggleable(true),animation,panelRenderer,scrollRenderer,emptyRenderer,popupHeight,(context)->context.getSize().width);
+		return new PopupComponent<ClosableComponent<S,ScrollBarComponent<U,T>>>(panel,width) {
 			@Override
 			public void handleButton (Context context, int button) {
 				doOperation(context,subContext->getComponent().handleButton(subContext,button));
