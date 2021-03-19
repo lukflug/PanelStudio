@@ -4,6 +4,7 @@ import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.component.HorizontalComponent;
 import com.lukflug.panelstudio.component.IComponent;
+import com.lukflug.panelstudio.component.IScrollSize;
 import com.lukflug.panelstudio.component.ScrollableComponent;
 import com.lukflug.panelstudio.container.HorizontalContainer;
 import com.lukflug.panelstudio.container.VerticalContainer;
@@ -17,7 +18,7 @@ import com.lukflug.panelstudio.theme.IScrollBarRenderer;
  * @author lukflug
  * @param <T> the state type
  */
-public abstract class ScrollBarComponent<S,T extends IComponent> extends HorizontalContainer {
+public abstract class ScrollBarComponent<S,T extends IComponent> extends HorizontalContainer implements IScrollSize {
 	protected final T component;
 	
 	/**
@@ -42,7 +43,7 @@ public abstract class ScrollBarComponent<S,T extends IComponent> extends Horizon
 			}
 			
 			@Override
-			protected int getComponentWidth (Context context) {
+			public int getComponentWidth (Context context) {
 				return ScrollBarComponent.this.getComponentWidth(context);
 			}
 		};
@@ -124,20 +125,6 @@ public abstract class ScrollBarComponent<S,T extends IComponent> extends Horizon
 	public T getContentComponent() {
 		return component;
 	}
-
-	/**
-	 * Function to determine the visible scroll height.
-	 * @param componentHeight the component height
-	 * @return the vsiible height
-	 */
-	protected abstract int getScrollHeight (Context context, int componentHeight);
-
-	/**
-	 * Function to determine the width allocated to the child component.
-	 * @param scrollWidth the visible width
-	 * @return the component width
-	 */
-	protected abstract int getComponentWidth (Context context);
 	
 	/**
 	 * What render state the scroll bar should use.

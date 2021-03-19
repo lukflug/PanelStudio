@@ -10,7 +10,7 @@ import com.lukflug.panelstudio.base.Context;
  * A component that can scroll another component.
  * @author lukflug
  */
-public abstract class ScrollableComponent<T extends IComponent> implements IComponentProxy<T> {
+public abstract class ScrollableComponent<T extends IComponent> implements IComponentProxy<T>,IScrollSize {
 	private Context tempContext;
 	/**
 	 * Current scrolling position.
@@ -145,13 +145,4 @@ public abstract class ScrollableComponent<T extends IComponent> implements IComp
 	public final int getHeight (int height) {
 		return getScrollHeight(tempContext,height);
 	}
-	
-	protected abstract int getScrollHeight (Context context, int componentHeight);
-	
-	/**
-	 * Function to determine the width allocated to the child component.
-	 * @param scrollWidth the visible width
-	 * @return the component width
-	 */
-	protected abstract int getComponentWidth (Context context);
 }

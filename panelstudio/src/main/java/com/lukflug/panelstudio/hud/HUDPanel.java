@@ -2,6 +2,7 @@ package com.lukflug.panelstudio.hud;
 
 import java.awt.Point;
 
+import com.lukflug.panelstudio.base.AnimatedToggleable;
 import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IBoolean;
@@ -54,7 +55,7 @@ public class HUDPanel<T extends IFixedComponent> extends DraggableComponent<HUDP
 				public Context getContext (Context context) {
 					return new Context(context,context.getSize().width-2*border,new Point(border,border),context.hasFocus(),context.onTop());
 				}
-			},()->state.isOn(),state,animation,new IPanelRendererProxy<Boolean>() {
+			},()->state.isOn(),new AnimatedToggleable(state,animation),new IPanelRendererProxy<Boolean>() {
 				@Override
 				public void renderBackground (Context context, boolean focus) {
 					if (renderState.isOn()) IPanelRendererProxy.super.renderBackground(context,focus);

@@ -11,6 +11,7 @@ import com.lukflug.panelstudio.setting.IColorSetting;
 import com.lukflug.panelstudio.setting.Labeled;
 import com.lukflug.panelstudio.theme.ISliderRenderer;
 import com.lukflug.panelstudio.theme.ITheme;
+import com.lukflug.panelstudio.theme.ThemeTuple;
 
 /**
  * Component representing a color-valued setting.
@@ -32,10 +33,10 @@ public class ColorComponent extends VerticalContainer {
 	 * @param animation the animation to be used
 	 * @param theme the theme to be used
 	 */
-	public ColorComponent (IColorSetting setting, Animation animation, ITheme theme, int logicalLevel, int graphicalLevel) {
-		super(setting,theme.getContainerRenderer(logicalLevel,graphicalLevel,false));
+	public ColorComponent (IColorSetting setting, Animation animation, ThemeTuple theme) {
+		super(setting,theme.getContainerRenderer(false));
 		this.setting=setting;
-		this.theme=theme;
+		this.theme=theme.theme;
 		addComponent(new ToggleButton(new Labeled("Rainbow",null,()->setting.allowsRainbow()),new IToggleable() {
 			@Override
 			public boolean isOn() {
@@ -46,11 +47,12 @@ public class ColorComponent extends VerticalContainer {
 			public void toggle() {
 				setting.setRainbow(!setting.getRainbow());
 			}
-		},theme.getButtonRenderer(Boolean.class,logicalLevel,graphicalLevel+1,false)));
-		addComponent(new ColorSlider(()->true,theme.getSliderRenderer(logicalLevel,graphicalLevel+1,false),0));
-		addComponent(new ColorSlider(()->true,theme.getSliderRenderer(logicalLevel,graphicalLevel+1,false),1));
-		addComponent(new ColorSlider(()->true,theme.getSliderRenderer(logicalLevel,graphicalLevel+1,false),2));
-		addComponent(new ColorSlider(()->setting.hasAlpha(),theme.getSliderRenderer(logicalLevel,graphicalLevel+1,false),3));
+		},theme.theme.getButtonRenderer(Boolean.class,theme.logicalLevel,theme.graphicalLevel+1,false)));
+		ISliderRenderer sliderRenderer=theme.theme.getSliderRenderer(theme.logicalLevel,theme.graphicalLevel+1,false);
+		addComponent(new ColorSlider(()->true,sliderRenderer,0));
+		addComponent(new ColorSlider(()->true,sliderRenderer,1));
+		addComponent(new ColorSlider(()->true,sliderRenderer,2));
+		addComponent(new ColorSlider(()->setting.hasAlpha(),sliderRenderer,3));
 	}
 	
 	@Override

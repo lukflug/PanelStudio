@@ -26,6 +26,10 @@ public abstract class CollapsibleComponent<T extends IComponent> implements ICom
 		this.toggle=new AnimatedToggleable(toggle,animation);
 	}
 	
+	public CollapsibleComponent (AnimatedToggleable toggle) {
+		this.toggle=toggle;
+	}
+	
 	@Override
 	public void render(Context context) {
 		doOperation(context,subContext->{
