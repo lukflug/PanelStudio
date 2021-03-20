@@ -11,19 +11,17 @@ import com.lukflug.panelstudio.component.IFixedComponent;
 import com.lukflug.panelstudio.config.IPanelConfig;
 import com.lukflug.panelstudio.setting.ILabeled;
 
-public class HUDComponent implements IFixedComponent {
+public abstract class HUDComponent implements IFixedComponent {
 	protected String title;
 	protected IBoolean visible;
 	protected String description;
 	protected Point position;
-	protected Dimension size;
 	protected String configName;
 	
-	public HUDComponent (ILabeled label, Point position, Dimension size, String configName) {
+	public HUDComponent (ILabeled label, Point position, String configName) {
 		this.title=label.getDisplayName();
 		this.position=position;
 		this.description=label.getDescription();
-		this.size=size;
 		this.configName=configName;
 	}
 
@@ -34,28 +32,28 @@ public class HUDComponent implements IFixedComponent {
 
 	@Override
 	public void render(Context context) {
-		context.setHeight(size.height);
+		context.setHeight(getSize(context.getInterface()).height);
 		context.setDescription(new Description(context.getRect(),description));
 	}
 
 	@Override
 	public void handleButton(Context context, int button) {
-		context.setHeight(size.height);
+		context.setHeight(getSize(context.getInterface()).height);
 	}
 
 	@Override
 	public void handleKey(Context context, int scancode) {
-		context.setHeight(size.height);
+		context.setHeight(getSize(context.getInterface()).height);
 	}
 
 	@Override
 	public void handleScroll(Context context, int diff) {
-		context.setHeight(size.height);
+		context.setHeight(getSize(context.getInterface()).height);
 	}
 
 	@Override
 	public void getHeight(Context context) {
-		context.setHeight(size.height);
+		context.setHeight(getSize(context.getInterface()).height);
 	}
 
 	@Override
@@ -87,7 +85,7 @@ public class HUDComponent implements IFixedComponent {
 
 	@Override
 	public int getWidth(IInterface inter) {
-		return size.width;
+		return getSize(inter).width;
 	}
 
 	@Override
@@ -109,5 +107,6 @@ public class HUDComponent implements IFixedComponent {
 	public String getConfigName() {
 		return configName;
 	}
-
+	
+	public abstract Dimension getSize (IInterface inter);
 }
