@@ -7,12 +7,13 @@ import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IInterface;
+import com.lukflug.panelstudio.base.IToggleable;
 import com.lukflug.panelstudio.component.ComponentProxy;
 import com.lukflug.panelstudio.component.DraggableComponent;
 import com.lukflug.panelstudio.component.IComponentProxy;
 import com.lukflug.panelstudio.component.IFixedComponent;
 import com.lukflug.panelstudio.config.IPanelConfig;
-import com.lukflug.panelstudio.setting.IBooleanSetting;
+import com.lukflug.panelstudio.setting.Labeled;
 import com.lukflug.panelstudio.theme.IButtonRenderer;
 import com.lukflug.panelstudio.theme.IPanelRenderer;
 import com.lukflug.panelstudio.theme.IPanelRendererProxy;
@@ -24,7 +25,7 @@ public class HUDPanel<T extends IFixedComponent> extends DraggableComponent<HUDP
 	protected T component;
 	protected HUDPanel<T>.HUDPanelComponent panel;
 	
-	public HUDPanel (T component, IBooleanSetting state, Animation animation, ITheme theme, IBoolean renderState, int border) {
+	public HUDPanel (T component, IToggleable state, Animation animation, ITheme theme, IBoolean renderState, int border) {
 		this.component=component;
 		panel=new HUDPanelComponent(state,animation,theme,renderState,border);
 	}
@@ -35,17 +36,26 @@ public class HUDPanel<T extends IFixedComponent> extends DraggableComponent<HUDP
 	}
 	
 	
-	protected class HUDPanelComponent implements IFixedComponent,IComponentProxy<ClosableComponent<ComponentProxy<ToggleButton>,ComponentProxy<T>>> {
-		protected ClosableComponent<ComponentProxy<ToggleButton>,ComponentProxy<T>> closable;
+	protected class HUDPanelComponent implements IFixedComponent,IComponentProxy<ComponentProxy<ClosableComponent<ToggleButton,ComponentProxy<T>>>> {
+		protected ComponentProxy<ClosableComponent<ToggleButton,ComponentProxy<T>>> closable;
 		protected IButtonRenderer<Boolean> titleRenderer;
 		protected IPanelRenderer<Boolean> panelRenderer;
 		protected int border;
 		
-		public HUDPanelComponent (IBooleanSetting state, Animation animation, ITheme theme, IBoolean renderState, int border) {
+		public HUDPanelComponent (IToggleable state, Animation animation, ITheme theme, IBoolean renderState, int border) {
 			this.border=border;
 			panelRenderer=theme.getPanelRenderer(Boolean.class,0,0);
 			titleRenderer=theme.getButtonRenderer(Boolean.class,0,0,true);
-			closable=new ClosableComponent<ComponentProxy<ToggleButton>,ComponentProxy<T>>(getWrappedDragComponent(new ToggleButton(state,titleRenderer)),new ComponentProxy<T>(component) {
+			closable=getWrappedDragComponent(new ClosableComponent<ToggleButton,ComponentProxy<T>>(new ToggleButton(new Labeled(component.getTitle(),null,()->component.isVisible()),new IToggleable() {
+				@Override
+				public boolean isOn() {
+					return state.isOn();
+				}
+
+				@Override
+				public void toggle() {
+				}
+			},titleRenderer),new ComponentProxy<T>(component) {
 				@Override
 				public int getHeight (int height) {
 					return height+2*border;
@@ -75,17 +85,17 @@ public class HUDPanel<T extends IFixedComponent> extends DraggableComponent<HUDP
 				public IPanelRenderer<Boolean> getRenderer() {
 					return panelRenderer;
 				}
-			});
+			}));
 		}
 
 		@Override
-		public ClosableComponent<ComponentProxy<ToggleButton>,ComponentProxy<T>> getComponent() {
+		public ComponentProxy<ClosableComponent<ToggleButton,ComponentProxy<T>>> getComponent() {
 			return closable;
 		}
 
 		@Override
 		public Point getPosition(IInterface inter) {
-			Point pos=getPosition(inter);
+			Point pos=component.getPosition(inter);
 			pos.translate(-panelRenderer.getLeft()-border,-panelRenderer.getTop()-titleRenderer.getDefaultHeight()-panelRenderer.getBorder()-border);
 			return pos;
 		}

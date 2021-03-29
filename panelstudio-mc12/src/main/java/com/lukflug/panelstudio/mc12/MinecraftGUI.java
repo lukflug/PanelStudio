@@ -35,6 +35,20 @@ public abstract class MinecraftGUI extends GuiScreen {
 	private long lastTime;
 	
 	/**
+	 * Opens the GUI.
+	 */
+	public void enterGUI() {
+		Minecraft.getMinecraft().displayGuiScreen(this);
+	}
+	
+	/**
+	 * Closes the GUI.
+	 */
+	public void exitGUI() {
+		Minecraft.getMinecraft().displayGuiScreen(null);
+	}
+	
+	/**
 	 * Updates the matrix buffers and renders the GUI.
 	 */
 	protected void renderGUI() {
@@ -95,7 +109,7 @@ public abstract class MinecraftGUI extends GuiScreen {
 	
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) {
-		if (keyCode == Keyboard.KEY_ESCAPE) Minecraft.getMinecraft().displayGuiScreen(null);
+		if (keyCode == Keyboard.KEY_ESCAPE) exitGUI();
 		else getGUI().handleKey(keyCode);
 	}
 
