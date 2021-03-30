@@ -15,6 +15,7 @@ import com.lukflug.panelstudio.component.IFixedComponent;
 import com.lukflug.panelstudio.config.IPanelConfig;
 import com.lukflug.panelstudio.setting.Labeled;
 import com.lukflug.panelstudio.theme.IButtonRenderer;
+import com.lukflug.panelstudio.theme.IButtonRendererProxy;
 import com.lukflug.panelstudio.theme.IPanelRenderer;
 import com.lukflug.panelstudio.theme.IPanelRendererProxy;
 import com.lukflug.panelstudio.theme.ITheme;
@@ -24,15 +25,32 @@ import com.lukflug.panelstudio.widget.ToggleButton;
 public class HUDPanel<T extends IFixedComponent> extends DraggableComponent<HUDPanel<T>.HUDPanelComponent> {
 	protected T component;
 	protected HUDPanel<T>.HUDPanelComponent panel;
+	protected IBoolean renderState;
 	
 	public HUDPanel (T component, IToggleable state, Animation animation, ITheme theme, IBoolean renderState, int border) {
 		this.component=component;
 		panel=new HUDPanelComponent(state,animation,theme,renderState,border);
+		this.renderState=renderState;
 	}
 	
 	@Override
 	public HUDPanel<T>.HUDPanelComponent getComponent() {
 		return panel;
+	}
+	
+	public void handleButton (Context context, int button) {
+		if (renderState.isOn()) super.handleButton(context,button);
+		else super.getHeight(context);
+	}
+	
+	public void handleKey (Context context, int scancode) {
+		if (renderState.isOn()) super.handleKey(context,scancode);
+		else super.getHeight(context);
+	}
+	
+	public void handleScroll (Context context, int diff) {
+		if (renderState.isOn()) super.handleScroll(context,diff);
+		else super.getHeight(context);
 	}
 	
 	
@@ -55,7 +73,17 @@ public class HUDPanel<T extends IFixedComponent> extends DraggableComponent<HUDP
 				@Override
 				public void toggle() {
 				}
-			},titleRenderer),new ComponentProxy<T>(component) {
+			},new IButtonRendererProxy<Boolean>() {
+				@Override
+				public void renderButton (Context context, String title, boolean focus, Boolean state) {
+					if (renderState.isOn()) IButtonRendererProxy.super.renderButton(context,title,focus,state);
+				}
+				
+				@Override
+				public IButtonRenderer<Boolean> getRenderer() {
+					return titleRenderer;
+				}
+			}),new ComponentProxy<T>(component) {
 				@Override
 				public int getHeight (int height) {
 					return height+2*border;

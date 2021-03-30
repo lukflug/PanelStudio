@@ -33,7 +33,7 @@ public abstract class HUDComponent implements IFixedComponent {
 	@Override
 	public void render(Context context) {
 		context.setHeight(getSize(context.getInterface()).height);
-		context.setDescription(new Description(context.getRect(),description));
+		if (description!=null) context.setDescription(new Description(context.getRect(),description));
 	}
 
 	@Override

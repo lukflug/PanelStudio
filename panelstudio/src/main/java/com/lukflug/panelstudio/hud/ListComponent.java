@@ -89,6 +89,6 @@ public class ListComponent extends HUDComponent {
 		}
 		int height=(this.height+border)*list.getSize()-border;
 		if (height<0) height=0;
-		return new Dimension(width,height);
+		return new Dimension(width+2*border,height);
 	}
 }

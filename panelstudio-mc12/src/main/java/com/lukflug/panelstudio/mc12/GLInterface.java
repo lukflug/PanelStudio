@@ -18,6 +18,7 @@ import org.lwjgl.opengl.GL13;
 import com.lukflug.panelstudio.base.IInterface;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
@@ -34,7 +35,7 @@ public abstract class GLInterface implements IInterface {
 	/**
 	 * Clipping rectangle stack.
 	 */
-	private Stack<Rectangle> clipRect=new Stack<Rectangle>();
+	private final Stack<Rectangle> clipRect=new Stack<Rectangle>();
 	/**
 	 * Boolean indicating whether to clip in the horizontal direction. 
 	 */
@@ -246,6 +247,14 @@ public abstract class GLInterface implements IInterface {
 		return new Point((int)Math.round(p.x*Minecraft.getMinecraft().displayWidth/resX),(int)Math.round((resY-p.y)*Minecraft.getMinecraft().displayHeight/resY));
 	}
 	
+	protected double getScreenWidth() {
+		return new ScaledResolution(Minecraft.getMinecraft()).getScaledWidth_double();
+	}
+	
+	protected double getScreenHeight() {
+		return new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight_double();
+	}
+	
 	/**
 	 * Set OpenGL to the state used by the rendering methods.
 	 * Should be called before rendering.
@@ -256,7 +265,7 @@ public abstract class GLInterface implements IInterface {
 			GlStateManager.matrixMode(GL11.GL_PROJECTION);
 			GlStateManager.pushMatrix();
 			GlStateManager.loadIdentity();
-			GlStateManager.ortho(0,getScreenWidth(),getScreenHeight(),0,-1,1);
+			GlStateManager.ortho(0,getScreenWidth(),getScreenHeight(),0,-3000,3000);
 			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 			GlStateManager.pushMatrix();
 			GlStateManager.loadIdentity();
@@ -300,10 +309,6 @@ public abstract class GLInterface implements IInterface {
 			GlStateManager.popMatrix();
 		}
 	}
-	
-	protected abstract double getScreenWidth();
-	
-	protected abstract double getScreenHeight();
 	
 	/**
 	 * Get the z-coordinate to render everything.

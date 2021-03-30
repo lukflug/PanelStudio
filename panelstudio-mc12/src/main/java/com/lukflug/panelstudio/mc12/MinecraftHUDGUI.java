@@ -10,15 +10,15 @@ public abstract class MinecraftHUDGUI extends MinecraftGUI {
 	
 	@Override
 	public void enterGUI() {
-		if (!getHUDGUI().getHUDVisibility().isOn()) getHUDGUI().getHUDVisibility().toggle();
 		if (!getHUDGUI().getGUIVisibility().isOn()) getHUDGUI().getGUIVisibility().toggle();
+		if (!getHUDGUI().getHUDVisibility().isOn()) getHUDGUI().getHUDVisibility().toggle();
 		super.enterGUI();
 	}
 	
 	@Override
 	public void exitGUI() {
-		if (getHUDGUI().getHUDVisibility().isOn()) getHUDGUI().getHUDVisibility().toggle();
 		if (getHUDGUI().getGUIVisibility().isOn()) getHUDGUI().getGUIVisibility().toggle();
+		if (getHUDGUI().getHUDVisibility().isOn()) getHUDGUI().getHUDVisibility().toggle();
 		super.exitGUI();
 	}
 
@@ -26,8 +26,8 @@ public abstract class MinecraftHUDGUI extends MinecraftGUI {
 	 * Open the HUD editor.
 	 */
 	public void enterHUDEditor() {
-		if (!getHUDGUI().getHUDVisibility().isOn()) getHUDGUI().getHUDVisibility().toggle();
 		if (getHUDGUI().getGUIVisibility().isOn()) getHUDGUI().getGUIVisibility().toggle();
+		if (!getHUDGUI().getHUDVisibility().isOn()) getHUDGUI().getHUDVisibility().toggle();
 		super.enterGUI();
 	}
 	
@@ -41,7 +41,6 @@ public abstract class MinecraftHUDGUI extends MinecraftGUI {
 	
 	@Override
 	protected void renderGUI() {
-		System.out.println("bla");
 		if (!guiOpened) getGUI().enter();
 		guiOpened=true;
 		super.renderGUI();
@@ -51,7 +50,6 @@ public abstract class MinecraftHUDGUI extends MinecraftGUI {
 	 * Render function to be called when the GUI is closed to render the HUD.
 	 */
 	public void render() {
-		System.out.println(getHUDGUI().getGUIVisibility().isOn()+" "+getHUDGUI().getHUDVisibility().isOn());
 		if (!getHUDGUI().getGUIVisibility().isOn() && !getHUDGUI().getHUDVisibility().isOn()) renderGUI();
 	}
 	

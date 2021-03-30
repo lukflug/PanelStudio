@@ -10,7 +10,6 @@ import com.lukflug.panelstudio.container.GUI;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
 
 /**
  * Implementation of Minecraft's GuiScreen that renders a PanelStudio GUI.
@@ -148,16 +147,6 @@ public abstract class MinecraftGUI extends GuiScreen {
 		 */
 		public GUIInterface (boolean clipX) {
 			super(clipX);
-		}
-		
-		@Override
-		protected double getScreenWidth() {
-			return new ScaledResolution(Minecraft.getMinecraft()).getScaledWidth_double();
-		}
-		
-		@Override
-		protected double getScreenHeight() {
-			return new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight_double();
 		}
 		
 		@Override

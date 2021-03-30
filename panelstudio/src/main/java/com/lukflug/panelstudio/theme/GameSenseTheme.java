@@ -6,7 +6,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 
 import com.lukflug.panelstudio.base.Context;
-import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IInterface;
 
 /**
@@ -162,7 +161,7 @@ public class GameSenseTheme extends ThemeBase {
 		return new IButtonRenderer<T>() {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, T state) {
-				if (type==IBoolean.class) fillBaseRect(context,focus,((IBoolean)state).isOn(),logicalLevel,graphicalLevel);
+				if (type==Boolean.class) fillBaseRect(context,focus,(Boolean)state,logicalLevel,graphicalLevel);
 				else fillBaseRect(context,focus,graphicalLevel<=0,logicalLevel,graphicalLevel);
 				if (graphicalLevel<=0 && container) {
 					Color color=scheme.getColor("Outline Color");
