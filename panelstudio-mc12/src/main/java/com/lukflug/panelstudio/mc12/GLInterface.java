@@ -28,7 +28,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
 /**
- * Implementation of Interface for OpenGL in minecraft.
+ * Implementation of {@link IInterface} for OpenGL in Minecraft.
  * @author lukflug
  */
 public abstract class GLInterface implements IInterface {
@@ -180,7 +180,7 @@ public abstract class GLInterface implements IInterface {
 	}
 	
 	/**
-	 * Utility function to set clipping rectangle by projecting the coordinates using gluProject.
+	 * Utility function to set clipping rectangle.
 	 * @param r the clipping rectangle
 	 */
 	protected void scissor (Rectangle r) {
@@ -235,22 +235,40 @@ public abstract class GLInterface implements IInterface {
 		}
 	}
 	
+	/**
+	 * Utility function to convert screen pixel coordinates to PanelStudio GUI coordinates.
+	 * @param p the screen coordinates 
+	 * @return the corresponding GUI coordinates
+	 */
 	public Point screenToGui (Point p) {
 		int resX=getWindowSize().width;
 		int resY=getWindowSize().height;
 		return new Point(p.x*resX/Minecraft.getMinecraft().displayWidth,resY-p.y*resY/Minecraft.getMinecraft().displayHeight-1);
 	}
 	
+	/**
+	 * Utility function to convert PanelStudio GUI coordinates to screen pixel coordinates.
+	 * @param p the GUI coordinates 
+	 * @return the corresponding screen coordinates
+	 */
 	public Point guiToScreen (Point p) {
 		double resX=getScreenWidth();
 		double resY=getScreenHeight();
 		return new Point((int)Math.round(p.x*Minecraft.getMinecraft().displayWidth/resX),(int)Math.round((resY-p.y)*Minecraft.getMinecraft().displayHeight/resY));
 	}
 	
+	/**
+	 * Get the current screen width.
+	 * @return the screen width
+	 */
 	protected double getScreenWidth() {
 		return new ScaledResolution(Minecraft.getMinecraft()).getScaledWidth_double();
 	}
 	
+	/**
+	 * Get the current screen height.
+	 * @return the screen height
+	 */
 	protected double getScreenHeight() {
 		return new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight_double();
 	}
@@ -296,6 +314,7 @@ public abstract class GLInterface implements IInterface {
 	/**
 	 * Restore OpenGL to the state expected by Minecraft.
 	 * Should be called after rendering.
+	 * @param matrix whether to restore the modelview matrix
 	 */
 	public void end (boolean matrix) {
 		GL11.glPopAttrib();

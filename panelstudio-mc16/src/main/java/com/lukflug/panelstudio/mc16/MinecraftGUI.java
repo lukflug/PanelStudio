@@ -11,7 +11,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 
 /**
- * Implementation of Minecraft's GuiScreen that renders a PanelStudio GUI.
+ * Implementation of Minecraft's {@link Screen} that renders a PanelStudio GUI.
  * @author lukflug
  */
 public abstract class MinecraftGUI extends Screen {
@@ -27,6 +27,10 @@ public abstract class MinecraftGUI extends Screen {
 	 * Current right mouse button state.
 	 */
 	private boolean rButton=false;
+	/**
+	 * Last rendering time.
+	 */
+	private long lastTime;
 	/**
 	 * Saved matrix stack;
 	 */
@@ -44,34 +48,36 @@ public abstract class MinecraftGUI extends Screen {
 	 */
 	public void enterGUI() {
 		MinecraftClient.getInstance().openScreen(this);
-		getGUI().enter();
 	}
 	
 	/**
 	 * Closes the GUI.
 	 */
-	@Override
-	public void onClose() {
-		getGUI().exit();
-		super.onClose();
+	public void exitGUI() {
+		MinecraftClient.getInstance().openScreen(null);
 	}
 	
 	/**
-	 * Updates the matrix buffers and renders the GUI.
+	 * Renders the GUI.
 	 */
 	protected void renderGUI() {
-		getInterface().getMatrices();
-		GLInterface.begin();
+		lastTime=System.currentTimeMillis();
+		getInterface().begin(true);
 		getGUI().render();
-		GLInterface.end();
+		getInterface().end(true);
 	}
 	
-	/**
-	 * Draws the screen, updates the mouse position and handles scroll events.
-	 * @param mouseX current mouse x position
-	 * @param mouseY current mouse y position
-	 * @param partialTicks partial tick count
-	 */
+	@Override
+	public void init() {
+		getGUI().enter();
+	}
+	
+	@Override
+	public void removed() {
+		getGUI().exit();
+		super.removed();
+	}
+	
 	@Override
 	public void render (MatrixStack matrices, int mouseX, int mouseY, float partialTicks) {
 		matrixStack=matrices;
@@ -91,12 +97,6 @@ public abstract class MinecraftGUI extends Screen {
 		return true;
 	}
 
-	/**
-	 * Updates {@link #lButton} and {@link #rButton}.
-	 * @param mouseX current mouse x position
-	 * @param mouseY current mouse y position
-	 * @param clickedButton number of button being clicked
-	 */
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int clickedButton) {
 		if (!super.mouseReleased(mouseX,mouseY,clickedButton)) {
@@ -114,12 +114,6 @@ public abstract class MinecraftGUI extends Screen {
 		return true;
 	}
 
-	/**
-	 * Updates {@link #lButton} and {@link #rButton}.
-	 * @param mouseX current mouse x position
-	 * @param mouseY current mouse y position
-	 * @param releaseButton number of button being released
-	 */
 	@Override
 	public boolean mouseReleased(double mouseX, double mouseY, int releaseButton) {
 		if (!super.mouseReleased(mouseX,mouseY,releaseButton)) {
@@ -137,50 +131,52 @@ public abstract class MinecraftGUI extends Screen {
 		return true;
 	}
 	
-	/**
-	 * Handles the current keys being typed.
-	 * @param keyCode key code of key being typed
-	 * @param scanCode scancode of the key being typed
-	 * @param modifiers modifiers of the keys
-	 */
 	@Override
 	public boolean keyPressed (int keyCode, int scanCode, int modifiers) {
 		if (!super.keyPressed(keyCode,scanCode,modifiers)) getGUI().handleKey(keyCode);
 		return true;
 	}
 	
-	/**
-	 * Returns false.
-	 * @return returns false
-	 */
 	@Override
 	public boolean isPauseScreen() {
 		return false;
 	}
 	
 	/**
-	 * Get the GUI to be rendered.
-	 * @return current ClickGUI
+	 * Get the {@link GUI} to be rendered.
+	 * @return current GUI
 	 */
 	protected abstract GUI getGUI();
+	
 	/**
 	 * Get current {@link GUIInterface}.
 	 * @return the current interface
 	 */
 	protected abstract GUIInterface getInterface();
+	
 	/**
 	 * Get current scroll speed.
 	 * @return the scroll speed
 	 */
 	protected abstract int getScrollSpeed();
 	
+	
 	/**
 	 * Implementation of {@link GLInterface} to be used with {@link MinecraftGUI}
 	 * @author lukflug
 	 */
 	public abstract class GUIInterface extends GLInterface {
+		/**
+		 * Constructor.
+		 * @param clipX whether to clip in the horizontal direction
+		 */
 		public GUIInterface (boolean clipX) {
 			super(clipX);
+		}
+		
+		@Override
+		public long getTime() {
+			return lastTime;
 		}
 		
 		@Override
@@ -202,6 +198,11 @@ public abstract class MinecraftGUI extends Screen {
 		@Override
 		protected float getZLevel() {
 			return getZOffset();
+		}
+		
+		@Override
+		protected MatrixStack getMatrixStack() {
+			return matrixStack;
 		}
 	}
 }

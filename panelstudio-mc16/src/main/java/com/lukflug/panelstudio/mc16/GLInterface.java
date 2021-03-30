@@ -1,6 +1,7 @@
 package com.lukflug.panelstudio.mc16;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.Stack;
 import java.util.concurrent.ExecutionException;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 
 import com.lukflug.panelstudio.base.IInterface;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -17,38 +19,26 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
 /**
- * Implementation of Interface for OpenGL in minecraft.
+ * Implementation of {@link IInterface} for OpenGL in Minecraft.
  * @author lukflug
  */
 public abstract class GLInterface implements IInterface {
 	/**
-	 * Buffer to store current modelview matrix.
-	 */
-	private static final float[] MODELVIEW=new float[16];
-	/**
-	 * Buffer to store current projection matrix.
-	 */
-	private static final float[] PROJECTION=new float[16];
-	/**
-	 * Buffer to store current viewport.
-	 */
-	private static final int[] VIEWPORT=new int[16];
-	/**
-	 * Buffer used to calculate coordinates using gluProject.
-	 */
-	private static final float[] COORDS=new float[4];
-	/**
 	 * Clipping rectangle stack.
 	 */
-	private Stack<Rectangle> clipRect=new Stack<Rectangle>();
+	private final Stack<Rectangle> clipRect=new Stack<Rectangle>();
 	/**
-	 * Boolean indicating whether to clip in the horizontal direction 
+	 * Boolean indicating whether to clip in the horizontal direction. 
 	 */
 	protected boolean clipX;
-	protected List<Identifier> textures=new ArrayList<Identifier>();
+	/**
+	 * List of loaded images.
+	 */
+	protected final List<Identifier> textures=new ArrayList<Identifier>();
 	
 	/**
 	 * Constructor.
@@ -56,6 +46,31 @@ public abstract class GLInterface implements IInterface {
 	 */
 	public GLInterface (boolean clipX) {
 		this.clipX=clipX;
+	}
+	
+	@Override
+	public Dimension getWindowSize() {
+		return new Dimension((int)Math.ceil(getScreenWidth()),(int)Math.ceil(getScreenHeight()));
+	}
+
+	@SuppressWarnings("resource")
+	@Override
+	public void drawString(Point pos, int height, String s, Color c) {
+		GlStateManager.pushMatrix();
+		GlStateManager.translatef(pos.x,pos.y,0);
+		double scale=height/(double)MinecraftClient.getInstance().textRenderer.fontHeight;
+		GlStateManager.scaled(scale,scale,1);
+		end(false);
+		MinecraftClient.getInstance().textRenderer.drawWithShadow(getMatrixStack(),s,0,0,c.getRGB());
+		begin(false);
+		GlStateManager.popMatrix();
+	}
+
+	@SuppressWarnings("resource")
+	@Override
+	public int getFontWidth(int height, String s) {
+		double scale=height/(double)MinecraftClient.getInstance().textRenderer.fontHeight;
+		return (int)Math.round(MinecraftClient.getInstance().textRenderer.getWidth(s)*scale);
 	}
 
 	@Override
@@ -122,7 +137,7 @@ public abstract class GLInterface implements IInterface {
 	}
 
 	@Override
-	public void drawImage(Rectangle r, int rotation, boolean parity, int image) {
+	public void drawImage(Rectangle r, int rotation, boolean parity, int image, Color color) {
 		if (image==0) return;
 		int texCoords[][]={{0,1},{1,1},{1,0},{0,0}};
 		for (int i=0;i<rotation%4;i++) {
@@ -151,7 +166,9 @@ public abstract class GLInterface implements IInterface {
 		}
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
+		float[] colorBuffer={color.getRed()/255.0f,color.getGreen()/255.0f,color.getBlue()/255.0f,color.getAlpha()/255.0f};
 		MinecraftClient.getInstance().getTextureManager().bindTexture(textures.get(image));
+		GL11.glTexEnvfv(GL11.GL_TEXTURE_ENV,GL11.GL_TEXTURE_ENV_COLOR,colorBuffer);
 		GlStateManager.enableTexture();
 		bufferbuilder.begin(GL11.GL_QUADS, VertexFormats.POSITION_TEXTURE);
 			bufferbuilder.vertex(r.x,r.y+r.height,getZLevel()).texture(texCoords[0][0],texCoords[0][1]).next();
@@ -163,40 +180,7 @@ public abstract class GLInterface implements IInterface {
 	}
 	
 	/**
-	 * Transform {@link #COORDS} with matrix.
-	 * @param matrix matrix to multiply with {@link #COORDS} 
-	 */
-	private void transform (float[] matrix) {
-		float[] coords={0,0,0,0};
-		for (int i=0;i<4;i++) {
-			for (int j=0;j<4;j++) {
-				coords[i]+=matrix[i+4*j]*COORDS[j];
-			}
-		}
-		for (int i=0;i<4;i++) COORDS[i]=coords[i];
-	}
-	
-	/**
-	 * Project vector and store in {@link #COORDS}
-	 * @param x first component
-	 * @param y second component
-	 * @param z fourth component
-	 * @param w fifth component
-	 */
-	private void project (float x, float y, float z, float w) {
-		COORDS[0]=x;
-		COORDS[1]=y;
-		COORDS[2]=z;
-		COORDS[3]=w;
-		transform(MODELVIEW);
-		transform(PROJECTION);
-		for (int i=0;i<4;i++) COORDS[i]=(COORDS[i]/COORDS[3]+1)/2;
-		COORDS[0]=COORDS[0]*VIEWPORT[2]+VIEWPORT[0];
-		COORDS[1]=COORDS[1]*VIEWPORT[3]+VIEWPORT[1];
-	}
-	
-	/**
-	 * Utility function to set clipping rectangle by projecting the coordinates using gluProject.
+	 * Utility function to set clipping rectangle.
 	 * @param r the clipping rectangle
 	 */
 	protected void scissor (Rectangle r) {
@@ -205,18 +189,12 @@ public abstract class GLInterface implements IInterface {
 			GL11.glEnable(GL11.GL_SCISSOR_TEST);
 			return;
 		}
-		float x1,y1,x2,y2;
-		project(r.x,r.y,getZLevel(),1);
-		x1=COORDS[0];
-		y1=COORDS[1];
-		project(r.x+r.width,r.y+r.height,getZLevel(),1);
-		x2=COORDS[0];
-		y2=COORDS[1];
+		Point a=guiToScreen(r.getLocation()),b=guiToScreen(new Point(r.x+r.width,r.y+r.height));
 		if (!clipX) {
-			x1=VIEWPORT[0];
-			x2=x1+VIEWPORT[2];
+			a.x=0;
+			b.x=MinecraftClient.getInstance().getWindow().getWidth();
 		}
-		GL11.glScissor(Math.round(Math.min(x1,x2)),Math.round(Math.min(y1,y2)),Math.round(Math.abs(x2-x1)),Math.round(Math.abs(y2-y1)));
+		GL11.glScissor(Math.min(a.x,b.x),Math.min(a.y,b.y),Math.abs(b.x-a.x),Math.abs(b.y-a.y));
 		GL11.glEnable(GL11.GL_SCISSOR_TEST);
 	}
 
@@ -258,34 +236,97 @@ public abstract class GLInterface implements IInterface {
 	}
 	
 	/**
-	 * Update the matrix buffers.
+	 * Utility function to convert screen pixel coordinates to PanelStudio GUI coordinates.
+	 * @param p the screen coordinates 
+	 * @return the corresponding GUI coordinates
 	 */
-	public void getMatrices() {
-		GL11.glGetFloatv(GL11.GL_MODELVIEW_MATRIX,MODELVIEW);
-		GL11.glGetFloatv(GL11.GL_PROJECTION_MATRIX,PROJECTION);
-		GL11.glGetIntegerv(GL11.GL_VIEWPORT,VIEWPORT);
+	public Point screenToGui (Point p) {
+		int resX=getWindowSize().width;
+		int resY=getWindowSize().height;
+		return new Point(p.x*resX/MinecraftClient.getInstance().getWindow().getWidth(),resY-p.y*resY/MinecraftClient.getInstance().getWindow().getHeight()-1);
+	}
+	
+	/**
+	 * Utility function to convert PanelStudio GUI coordinates to screen pixel coordinates.
+	 * @param p the GUI coordinates 
+	 * @return the corresponding screen coordinates
+	 */
+	public Point guiToScreen (Point p) {
+		double resX=getScreenWidth();
+		double resY=getScreenHeight();
+		return new Point((int)Math.round(p.x*MinecraftClient.getInstance().getWindow().getWidth()/resX),(int)Math.round((resY-p.y)*MinecraftClient.getInstance().getWindow().getWidth()/resY));
+	}
+	
+	/**
+	 * Get the current screen width.
+	 * @return the screen width
+	 */
+	protected double getScreenWidth() {
+		return MinecraftClient.getInstance().getWindow().getScaledWidth();
+	}
+	
+	/**
+	 * Get the current screen height.
+	 * @return the screen height
+	 */
+	protected double getScreenHeight() {
+		return MinecraftClient.getInstance().getWindow().getScaledHeight();
 	}
 	
 	/**
 	 * Set OpenGL to the state used by the rendering methods.
 	 * Should be called before rendering.
+	 * @param matrix whether to set up the modelview matrix
 	 */
-	public static void begin() {
+	public void begin (boolean matrix) {
+		if (matrix) {
+			GlStateManager.matrixMode(GL11.GL_PROJECTION);
+			GlStateManager.pushMatrix();
+			GlStateManager.loadIdentity();
+			GlStateManager.ortho(0,getScreenWidth(),getScreenHeight(),0,-3000,3000);
+			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+			GlStateManager.pushMatrix();
+			GlStateManager.loadIdentity();
+		}
 		GlStateManager.enableBlend();
 		GlStateManager.disableTexture();
 		GlStateManager.blendFuncSeparate(GL11.GL_SRC_ALPHA,GL11.GL_ONE_MINUS_SRC_ALPHA,GL11.GL_ONE,GL11.GL_ZERO);
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		GlStateManager.lineWidth(2);
+		// Set texture env mode to combine
+		GL11.glPushAttrib(GL11.GL_TEXTURE_BIT);
+		GL11.glTexEnvi(GL11.GL_TEXTURE_ENV,GL11.GL_TEXTURE_ENV_MODE,GL13.GL_COMBINE);
+		// Set combine mode to modulate
+		GL11.glTexEnvi(GL11.GL_TEXTURE_ENV,GL13.GL_COMBINE_RGB,GL11.GL_MODULATE);
+		GL11.glTexEnvi(GL11.GL_TEXTURE_ENV,GL13.GL_COMBINE_ALPHA,GL11.GL_MODULATE);
+		// Set first argument to sampled texture
+		GL11.glTexEnvi(GL11.GL_TEXTURE_ENV,GL13.GL_SOURCE0_RGB,GL11.GL_TEXTURE);
+		GL11.glTexEnvi(GL11.GL_TEXTURE_ENV,GL13.GL_OPERAND0_RGB,GL11.GL_SRC_COLOR);
+		GL11.glTexEnvi(GL11.GL_TEXTURE_ENV,GL13.GL_SOURCE0_ALPHA,GL11.GL_TEXTURE);
+		GL11.glTexEnvi(GL11.GL_TEXTURE_ENV,GL13.GL_OPERAND0_ALPHA,GL11.GL_SRC_ALPHA);
+		// Set second argument to env color
+		GL11.glTexEnvi(GL11.GL_TEXTURE_ENV,GL13.GL_SOURCE1_RGB,GL13.GL_CONSTANT);
+		GL11.glTexEnvi(GL11.GL_TEXTURE_ENV,GL13.GL_OPERAND1_RGB,GL11.GL_SRC_COLOR);
+		GL11.glTexEnvi(GL11.GL_TEXTURE_ENV,GL13.GL_SOURCE1_ALPHA,GL13.GL_CONSTANT);
+		GL11.glTexEnvi(GL11.GL_TEXTURE_ENV,GL13.GL_OPERAND1_ALPHA,GL11.GL_SRC_ALPHA);
 	}
 	
 	/**
 	 * Restore OpenGL to the state expected by Minecraft.
 	 * Should be called after rendering.
+	 * @param matrix whether to restore the modelview matrix
 	 */
-	public static void end() {
+	public void end (boolean matrix) {
+		GL11.glPopAttrib();
 		GlStateManager.shadeModel(GL11.GL_FLAT);
 		GlStateManager.enableTexture();
 		GlStateManager.disableBlend();
+		if (matrix) {
+			GlStateManager.matrixMode(GL11.GL_PROJECTION);
+			GlStateManager.popMatrix();
+			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+			GlStateManager.popMatrix();
+		}
 	}
 	
 	/**
@@ -293,6 +334,13 @@ public abstract class GLInterface implements IInterface {
 	 * @return the z-level
 	 */
 	protected abstract float getZLevel();
+	
+	/**
+	 * Get the matrix stack to be used.
+	 * @return the current matrix stack
+	 */
+	protected abstract MatrixStack getMatrixStack();
+	
 	/**
 	 * Get the Minecraft resource location string.
 	 * @return the resource prefix

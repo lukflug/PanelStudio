@@ -12,7 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 
 /**
- * Implementation of Minecraft's GuiScreen that renders a PanelStudio GUI.
+ * Implementation of Minecraft's {@link GuiScreen} that renders a PanelStudio GUI.
  * @author lukflug
  */
 public abstract class MinecraftGUI extends GuiScreen {
@@ -34,7 +34,7 @@ public abstract class MinecraftGUI extends GuiScreen {
 	private long lastTime;
 	
 	/**
-	 * Opens the GUI.
+	 * Displays the GUI.
 	 */
 	public void enterGUI() {
 		Minecraft.getMinecraft().displayGuiScreen(this);
@@ -48,7 +48,7 @@ public abstract class MinecraftGUI extends GuiScreen {
 	}
 	
 	/**
-	 * Updates the matrix buffers and renders the GUI.
+	 * Renders the GUI.
 	 */
 	protected void renderGUI() {
 		lastTime=System.currentTimeMillis();
@@ -118,8 +118,8 @@ public abstract class MinecraftGUI extends GuiScreen {
 	}
 	
 	/**
-	 * Get the GUI to be rendered.
-	 * @return current ClickGUI
+	 * Get the {@link GUI} to be rendered.
+	 * @return current GUI
 	 */
 	protected abstract GUI getGUI();
 	

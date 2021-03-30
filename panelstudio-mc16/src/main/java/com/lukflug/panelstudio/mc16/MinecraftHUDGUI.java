@@ -1,6 +1,6 @@
-package com.lukflug.panelstudio.mc12;
+package com.lukflug.panelstudio.mc16;
 
-import org.lwjgl.input.Keyboard;
+import org.lwjgl.glfw.GLFW;
 
 import com.lukflug.panelstudio.container.GUI;
 import com.lukflug.panelstudio.hud.HUDGUI;
@@ -39,11 +39,11 @@ public abstract class MinecraftHUDGUI extends MinecraftGUI {
 	}
 	
 	@Override
-	public void initGui() {
+	public void init() {
 	}
 	
 	@Override
-	public void onGuiClosed() {
+	public void removed() {
 	}
 	
 	@Override
@@ -65,7 +65,7 @@ public abstract class MinecraftHUDGUI extends MinecraftGUI {
 	 * @param scancode the key scancode
 	 */
 	public void handleKeyEvent (int scancode) {
-		if (scancode!=Keyboard.KEY_ESCAPE && !getHUDGUI().getGUIVisibility().isOn() && !getHUDGUI().getGUIVisibility().isOn()) getHUDGUI().handleKey(scancode);
+		if (scancode!=GLFW.GLFW_KEY_ESCAPE && !getHUDGUI().getGUIVisibility().isOn() && !getHUDGUI().getGUIVisibility().isOn()) getHUDGUI().handleKey(scancode);
 	}
 	
 	/**
