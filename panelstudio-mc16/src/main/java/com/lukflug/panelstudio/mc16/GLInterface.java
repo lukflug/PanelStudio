@@ -254,7 +254,7 @@ public abstract class GLInterface implements IInterface {
 	public Point guiToScreen (Point p) {
 		double resX=getScreenWidth();
 		double resY=getScreenHeight();
-		return new Point((int)Math.round(p.x*MinecraftClient.getInstance().getWindow().getWidth()/resX),(int)Math.round((resY-p.y)*MinecraftClient.getInstance().getWindow().getWidth()/resY));
+		return new Point((int)Math.round(p.x*MinecraftClient.getInstance().getWindow().getWidth()/resX),(int)Math.round((resY-p.y)*MinecraftClient.getInstance().getWindow().getHeight()/resY));
 	}
 	
 	/**
