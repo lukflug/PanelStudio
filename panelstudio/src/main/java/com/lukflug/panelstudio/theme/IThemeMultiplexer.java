@@ -54,12 +54,6 @@ public interface IThemeMultiplexer extends ITheme {
 	}
 
 	@Override
-	public default IButtonRenderer<Boolean> getCheckMarkRenderer(int logicalLevel, int graphicalLevel, boolean container) {
-		IButtonRendererProxy<Boolean> proxy=()->getTheme().getCheckMarkRenderer(logicalLevel,graphicalLevel,container);
-		return proxy;
-	}
-
-	@Override
 	public default IButtonRenderer<String> getKeybindRenderer(int logicalLevel, int graphicalLevel, boolean container) {
 		IButtonRendererProxy<String> proxy=()->getTheme().getKeybindRenderer(logicalLevel,graphicalLevel,container);
 		return proxy;

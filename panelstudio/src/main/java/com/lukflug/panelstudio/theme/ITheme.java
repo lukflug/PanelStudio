@@ -66,15 +66,6 @@ public interface ITheme {
 	public <T> IButtonRenderer<T> getButtonRenderer (Class<T> type, int logicalLevel, int graphicalLevel, boolean container);
 	
 	/**
-	 * Returns the renderer for check marks.
-	 * @param level the panel nesting level
-	 * @param type the state class
-	 * @param container whether this is the title of a panel
-	 * @return the check mark renderer
-	 */
-	public IButtonRenderer<Boolean> getCheckMarkRenderer (int logicalLevel, int graphicalLevel, boolean container);
-	
-	/**
 	 * Returns the renderer for keybinds.
 	 * @param level the panel nesting level
 	 * @param container whether this is the title of a panel

@@ -177,11 +177,6 @@ public class ClearTheme extends ThemeBase {
 	}
 
 	@Override
-	public IButtonRenderer<Boolean> getCheckMarkRenderer(int logicalLevel, int graphicalLevel, boolean container) {
-		return getButtonRenderer(Boolean.class,logicalLevel,graphicalLevel,container);
-	}
-
-	@Override
 	public IButtonRenderer<String> getKeybindRenderer(int logicalLevel, int graphicalLevel, boolean container) {
 		return new IButtonRenderer<String>() {
 			@Override
