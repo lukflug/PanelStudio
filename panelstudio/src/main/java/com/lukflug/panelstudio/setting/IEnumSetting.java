@@ -1,7 +1,5 @@
 package com.lukflug.panelstudio.setting;
 
-import java.util.stream.Stream;
-
 /**
  * A setting representing an enumeration.
  * @author lukflug
@@ -18,7 +16,16 @@ public interface IEnumSetting extends ISetting<String> {
 	 */
 	public String getValueName();
 	
-	public Stream<String> getAllowedValues();
+	public default int getValueIndex() {
+		String stuff[]=getAllowedValues();
+		String compare=getValueName();
+		for (int i=0;i<stuff.length;i++) {
+			if (stuff[i].equals(compare)) return i; 
+		}
+		return -1;
+	}
+	
+	public String[] getAllowedValues();
 	
 	@Override
 	public default String getSettingState() {
