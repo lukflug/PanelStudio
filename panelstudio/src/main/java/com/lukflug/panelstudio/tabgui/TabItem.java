@@ -1,5 +1,6 @@
 package com.lukflug.panelstudio.tabgui;
 
+import java.util.List;
 import java.util.function.IntPredicate;
 import java.util.function.Supplier;
 
@@ -9,12 +10,12 @@ import com.lukflug.panelstudio.component.ComponentBase;
 import com.lukflug.panelstudio.setting.ILabeled;
 
 public abstract class TabItem<S extends Supplier<T>,T> extends ComponentBase {
-	protected TabGUIRenderer<T> renderer;
-	protected ContentItem<S,T>[] contents;
+	protected ITabGUIRenderer<T> renderer;
+	protected List<ContentItem<S,T>> contents;
 	protected Animation tabState;
-	protected IntPredicate up,down,enter,exit;
+	protected final IntPredicate up,down,enter,exit;
 	
-	public TabItem (ILabeled label, TabGUIRenderer<T> renderer, Animation animation, IntPredicate up, IntPredicate down, IntPredicate enter, IntPredicate exit) {
+	public TabItem (ILabeled label, ITabGUIRenderer<T> renderer, Animation animation, IntPredicate up, IntPredicate down, IntPredicate enter, IntPredicate exit) {
 		super(label);
 		this.renderer=renderer;
 		tabState=animation;
@@ -27,8 +28,10 @@ public abstract class TabItem<S extends Supplier<T>,T> extends ComponentBase {
 	@Override
 	public void render (Context context) {
 		super.render(context);
-		renderer.renderTab(context,contents.length,tabState.getValue());
-		for (int i=0;i<contents.length;i++) renderer.renderItem(context,contents.length,tabState.getValue(),i,contents[i].name,contents[i].content.get());
+		renderer.renderTab(context,contents.size(),tabState.getValue());
+		for (int i=0;i<contents.size();i++) {
+			renderer.renderItem(context,contents.size(),tabState.getValue(),i,contents.get(i).name,contents.get(i).content.get());
+		}
 	}
 	
 	@Override
@@ -36,14 +39,14 @@ public abstract class TabItem<S extends Supplier<T>,T> extends ComponentBase {
 		super.handleKey(context,key);
 		if (up.test(key)) {
 			int nextState=(int)tabState.getTarget()+1;
-			if (nextState>=contents.length) nextState=0;
+			if (nextState>=contents.size()) nextState=0;
 			tabState.setValue(nextState);
 		} else if (down.test(key)) {
 			int nextState=(int)tabState.getTarget()-1;
-			if (nextState<contents.length) nextState=contents.length-1;
+			if (nextState<contents.size()) nextState=contents.size()-1;
 			tabState.setValue(nextState);
-		} else if (enter.test(key)) handleSelect();
-		else if (exit.test(key)) handleExit();
+		} else if (enter.test(key)) handleSelect(context);
+		else if (exit.test(key)) handleExit(context);
 	}
 
 	@Override
@@ -52,12 +55,12 @@ public abstract class TabItem<S extends Supplier<T>,T> extends ComponentBase {
 
 	@Override
 	protected int getHeight() {
-		return renderer.getTabHeight(contents.length);
+		return renderer.getTabHeight(contents.size());
 	}
 	
-	public abstract void handleSelect();
+	public abstract void handleSelect (Context context);
 	
-	public abstract void handleExit();
+	public abstract void handleExit (Context context);
 	
 	
 	protected static final class ContentItem<S extends Supplier<T>,T> {
