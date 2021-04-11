@@ -3,6 +3,7 @@ package com.lukflug.panelstudio.tabgui;
 import java.awt.Point;
 import java.util.function.IntPredicate;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.Context;
@@ -21,27 +22,36 @@ public class TabGUI extends TabItem<TabGUI.ChildTab,Void> {
 	protected IPopupPositioner positioner;
 	protected ITabGUIRenderer<Boolean> childRenderer;
 	
-	public TabGUI(IClient client, ILabeled label, int width, IContainer<? super FixedComponent<Tab>> container, IPopupPositioner positioner, ITabGUITheme theme, Supplier<Animation> animation, IntPredicate up, IntPredicate down, IntPredicate enter, IntPredicate exit) {
+	public TabGUI (ILabeled label, IClient client, ITabGUITheme theme, IContainer<? super FixedComponent<Tab>> container, Supplier<Animation> animation, IntPredicate up, IntPredicate down, IntPredicate enter, IntPredicate exit) {
 		super(label,theme.getParentRenderer(),animation.get(),up,down,enter,exit);
-		this.width=width;
+		this.width=theme.getTabWidth();
 		this.container=container;
-		this.positioner=positioner;
+		this.positioner=theme.getPositioner();
 		childRenderer=theme.getChildRenderer();
+		contents=client.getCategories().map(category->new ContentItem<ChildTab,Void>(category.getDisplayName(),new ChildTab(category))).collect(Collectors.toList());
 	}
 	
 	public FixedComponent<TabGUI> getWrappedComponent (Point position) {
 		return new FixedComponent<TabGUI>(this,position,width,null,false,description);
 	}
+	
+	@Override
+	protected boolean hasChildren() {
+		for (ContentItem<ChildTab,Void> tab: contents) {
+			if (tab.content.visible.isOn()) return true;
+		}
+		return false;
+	}
 
 	@Override
-	public void handleSelect (Context context) {
+	protected void handleSelect (Context context) {
 		ChildTab tab=contents.get((int)tabState.getTarget()).content;
-		tab.tab.setPosition(context.getInterface(),null,context.getRect(),null);
+		tab.tab.setPosition(context.getInterface(),renderer.getItemRect(context,contents.size(),tabState.getTarget()),context.getRect(),positioner);
 		if (!tab.visible.isOn()) tab.visible.toggle();
 	}
 
 	@Override
-	public void handleExit (Context context) {
+	protected void handleExit (Context context) {
 		ChildTab tab=contents.get((int)tabState.getTarget()).content;
 		if (tab.visible.isOn()) tab.visible.toggle();
 	}

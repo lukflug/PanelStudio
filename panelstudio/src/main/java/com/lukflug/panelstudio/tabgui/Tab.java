@@ -15,11 +15,11 @@ public class Tab extends TabItem<IToggleable,Boolean> {
 	}
 
 	@Override
-	public void handleSelect (Context context) {
+	protected void handleSelect (Context context) {
 		contents.get((int)tabState.getTarget()).content.toggle();
 	}
 
 	@Override
-	public void handleExit (Context context) {
+	protected void handleExit (Context context) {
 	}
 }
