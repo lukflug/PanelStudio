@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 
 import com.lukflug.panelstudio.base.Context;
+import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.popup.IPopupPositioner;
 import com.lukflug.panelstudio.popup.PanelPositioner;
 import com.lukflug.panelstudio.theme.IColorScheme;
@@ -70,8 +71,8 @@ public class StandardTheme implements ITabGUITheme {
 			Color fill=scheme.getColor("Background Color");
 			Color border=scheme.getColor("Outline Color");
 			context.getInterface().fillRect(context.getRect(),fill,fill,fill,fill);
-			context.getInterface().fillRect(getItemRect(context,amount,tabState),color,color,color,color);
-			context.getInterface().drawRect(getItemRect(context,amount,tabState),border,border,border,border);
+			context.getInterface().fillRect(getItemRect(context.getInterface(),context.getRect(),amount,tabState),color,color,color,color);
+			context.getInterface().drawRect(getItemRect(context.getInterface(),context.getRect(),amount,tabState),border,border,border,border);
 			context.getInterface().drawRect(context.getRect(),border,border,border,border);
 		}
 
@@ -86,8 +87,8 @@ public class StandardTheme implements ITabGUITheme {
 		}
 
 		@Override
-		public Rectangle getItemRect (Context context, int amount, double tabState) {
-			return new Rectangle(context.getPos().x,context.getPos().y+(int)Math.round(context.getSize().height*tabState/amount),context.getSize().width,height+2*padding);
+		public Rectangle getItemRect (IInterface inter, Rectangle rect, int amount, double tabState) {
+			return new Rectangle(rect.x,rect.y+(int)Math.round(rect.height*tabState/amount),rect.width,height+2*padding);
 		}
 		
 		protected abstract Color getFontColor (T itemState);

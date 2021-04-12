@@ -43,11 +43,6 @@ public class HUDPanel<T extends IFixedComponent> extends DraggableComponent<HUDP
 		else super.getHeight(context);
 	}
 	
-	public void handleKey (Context context, int scancode) {
-		if (renderState.isOn()) super.handleKey(context,scancode);
-		else super.getHeight(context);
-	}
-	
 	public void handleScroll (Context context, int diff) {
 		if (renderState.isOn()) super.handleScroll(context,diff);
 		else super.getHeight(context);

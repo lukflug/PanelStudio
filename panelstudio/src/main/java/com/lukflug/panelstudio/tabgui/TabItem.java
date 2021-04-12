@@ -37,16 +37,18 @@ public abstract class TabItem<S extends Supplier<T>,T> extends ComponentBase {
 	@Override
 	public void handleKey (Context context, int key) {
 		super.handleKey(context,key);
-		if (up.test(key)&&!hasChildren()) {
-			int nextState=(int)tabState.getTarget()-1;
-			if (nextState<0) nextState=contents.size()-1;
-			tabState.setValue(nextState);
-		} else if (down.test(key)&&!hasChildren()) {
-			int nextState=(int)tabState.getTarget()+1;
-			if (nextState>=contents.size()) nextState=0;
-			tabState.setValue(nextState);
-		} else if (enter.test(key)&&!hasChildren()) handleSelect(context);
-		else if (exit.test(key)) handleExit(context);
+		if (!hasChildren()) {
+			if (up.test(key)) {
+				int nextState=(int)tabState.getTarget()-1;
+				if (nextState<0) nextState=contents.size()-1;
+				tabState.setValue(nextState);
+			} else if (down.test(key)) {
+				int nextState=(int)tabState.getTarget()+1;
+				if (nextState>=contents.size()) nextState=0;
+				tabState.setValue(nextState);
+			} else if (enter.test(key)) handleSelect(context);
+		}
+		if (exit.test(key)) handleExit(context);
 	}
 
 	@Override

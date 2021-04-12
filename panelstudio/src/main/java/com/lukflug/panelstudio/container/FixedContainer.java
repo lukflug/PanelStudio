@@ -100,12 +100,10 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 	@Override
 	protected void doContextlessLoop (Consumer<IFixedComponent> function) {
 		List<ComponentState> components=new ArrayList<ComponentState>();
-		for (ComponentState state: this.components) {
-			components.add(state);
-		}
+		for (ComponentState state: this.components) components.add(state);
+		for (ComponentState state: components) state.update();
 		for (int i=components.size()-1;i>=0;i--) {
 			ComponentState state=components.get(i);
-			state.update();
 			if (state.lastVisible()) function.accept(state.component);
 		}
 	}

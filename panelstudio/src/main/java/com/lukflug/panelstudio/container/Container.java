@@ -143,11 +143,9 @@ public abstract class Container<T extends IComponent> extends ComponentBase impl
 	 */
 	protected void doContextlessLoop (Consumer<T> function) {
 		List<ComponentState> components=new ArrayList<ComponentState>();
-		for (ComponentState state: this.components) {
-			components.add(state);
-		}
+		for (ComponentState state: this.components) components.add(state);
+		for (ComponentState state: components) state.update();
 		for (ComponentState state: components) {
-			state.update();
 			if (state.lastVisible()) function.accept(state.component);
 		}
 	}

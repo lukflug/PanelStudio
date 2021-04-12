@@ -25,12 +25,16 @@ public class HUDGUI extends GUI {
 	}
 
 	@Override
-	public boolean addComponent(IFixedComponent component, IBoolean visible) {
+	public boolean addComponent (IFixedComponent component, IBoolean visible) {
 		return container.addComponent(component,()->guiVisibility.isOn()&&visible.isOn());
 	}
 	
-	public void addHUDComponent (IFixedComponent component, IToggleable state, Animation animation, ITheme theme, int border) {
-		container.addComponent(new HUDPanel<IFixedComponent>(component,state,animation,theme,hudVisibility,border),()->true);
+	public boolean addHUDComponent (IFixedComponent component, IBoolean visible) {
+		return container.addComponent(component,visible);
+	}
+	
+	public boolean addHUDComponent (IFixedComponent component, IToggleable state, Animation animation, ITheme theme, int border) {
+		return container.addComponent(new HUDPanel<IFixedComponent>(component,state,animation,theme,hudVisibility,border),()->true);
 	}
 	
 	public IToggleable getGUIVisibility() {
