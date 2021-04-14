@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IInterface;
+import com.lukflug.panelstudio.setting.ILabeled;
 
 public class Windows31Theme extends ThemeBase {
 	protected int height,padding,scroll;
@@ -225,6 +226,21 @@ public class Windows31Theme extends ThemeBase {
 			@Override
 			public int getDefaultHeight() {
 				return container?getBaseHeight():getBaseHeight()+6;
+			}
+		};
+	}
+
+	@Override
+	public IRadioRenderer getRadioRenderer(int logicalLevel, int graphicalLevel, boolean container) {
+		return new IRadioRenderer() {
+			@Override
+			public void renderItem (Context context, ILabeled[] items, boolean focus, int target, double state, boolean horizontal) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public int getDefaultHeight (ILabeled[] items, boolean horizontal) {
+				return (horizontal?1:items.length)*(container?getBaseHeight()+6:getBaseHeight());
 			}
 		};
 	}

@@ -8,6 +8,7 @@ import java.awt.Rectangle;
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IInterface;
+import com.lukflug.panelstudio.setting.ILabeled;
 
 /**
  * Theme corresponding to the appearance GameSense 2.0 and 2.1 had.
@@ -211,6 +212,22 @@ public class ClearTheme extends ThemeBase {
 			@Override
 			public int getDefaultHeight() {
 				return getBaseHeight();
+			}
+		};
+	}
+
+	@Override
+	public IRadioRenderer getRadioRenderer(int logicalLevel, int graphicalLevel, boolean container) {
+		return new IRadioRenderer() {
+			@Override
+			public void renderItem(Context context, ILabeled[] items, boolean focus, int target, double state, boolean horizontal) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public int getDefaultHeight(ILabeled[] items, boolean horizontal) {
+				return (horizontal?1:items.length)*getBaseHeight();
 			}
 		};
 	}

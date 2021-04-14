@@ -64,6 +64,12 @@ public interface IThemeMultiplexer extends ITheme {
 		ISliderRendererProxy proxy=()->getTheme().getSliderRenderer(logicalLevel,graphicalLevel,container);
 		return proxy;
 	}
+	
+	@Override
+	public default IRadioRenderer getRadioRenderer (int logicalLevel, int graphicalLevel, boolean container) {
+		IRadioRendererProxy proxy=()->getTheme().getRadioRenderer(logicalLevel,graphicalLevel,container);
+		return proxy;
+	}
 
 	@Override
 	public default int getBaseHeight() {

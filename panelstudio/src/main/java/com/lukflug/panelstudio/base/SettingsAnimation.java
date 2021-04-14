@@ -1,8 +1,6 @@
-package com.lukflug.panelstudio.setting;
+package com.lukflug.panelstudio.base;
 
 import java.util.function.Supplier;
-
-import com.lukflug.panelstudio.base.Animation;
 
 /**
  * Implementation of {@link Animation} using a supplier.

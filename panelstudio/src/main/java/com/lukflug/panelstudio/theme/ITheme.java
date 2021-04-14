@@ -81,6 +81,8 @@ public interface ITheme {
 	 */
 	public ISliderRenderer getSliderRenderer (int logicalLevel, int graphicalLevel, boolean container);
 	
+	public IRadioRenderer getRadioRenderer (int logicalLevel, int graphicalLevel, boolean container);
+	
 	/**
 	 * Get the common height of a component.
 	 * @return the base height

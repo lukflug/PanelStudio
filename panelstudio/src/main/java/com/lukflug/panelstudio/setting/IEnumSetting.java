@@ -17,15 +17,17 @@ public interface IEnumSetting extends ISetting<String> {
 	public String getValueName();
 	
 	public default int getValueIndex() {
-		String stuff[]=getAllowedValues();
+		ILabeled stuff[]=getAllowedValues();
 		String compare=getValueName();
 		for (int i=0;i<stuff.length;i++) {
-			if (stuff[i].equals(compare)) return i; 
+			if (stuff[i].getDisplayName().equals(compare)) return i; 
 		}
 		return -1;
 	}
 	
-	public String[] getAllowedValues();
+	public void setValueIndex (int index);
+	
+	public ILabeled[] getAllowedValues();
 	
 	@Override
 	public default String getSettingState() {

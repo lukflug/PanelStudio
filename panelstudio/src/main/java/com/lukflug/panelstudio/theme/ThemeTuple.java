@@ -44,4 +44,8 @@ public final class ThemeTuple {
 	public ISliderRenderer getSliderRenderer (boolean container) {
 		return theme.getSliderRenderer(logicalLevel,graphicalLevel,container);
 	}
+	
+	public IRadioRenderer getRadioRenderer (boolean container) {
+		return theme.getRadioRenderer(logicalLevel,graphicalLevel,container);
+	}
 }
