@@ -3,16 +3,24 @@ package com.lukflug.panelstudio.layout;
 import java.awt.Point;
 import java.util.function.IntPredicate;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
+import com.lukflug.panelstudio.base.AnimatedToggleable;
 import com.lukflug.panelstudio.base.Animation;
+import com.lukflug.panelstudio.base.Context;
+import com.lukflug.panelstudio.base.IInterface;
+import com.lukflug.panelstudio.base.SimpleToggleable;
+import com.lukflug.panelstudio.component.ComponentProxy;
+import com.lukflug.panelstudio.component.IComponent;
 import com.lukflug.panelstudio.container.HorizontalContainer;
 import com.lukflug.panelstudio.container.VerticalContainer;
 import com.lukflug.panelstudio.setting.IClient;
 import com.lukflug.panelstudio.setting.ILabeled;
+import com.lukflug.panelstudio.setting.Labeled;
 import com.lukflug.panelstudio.theme.ITheme;
+import com.lukflug.panelstudio.theme.RendererTuple;
 import com.lukflug.panelstudio.theme.ThemeTuple;
 import com.lukflug.panelstudio.widget.Button;
+import com.lukflug.panelstudio.widget.ClosableComponent;
 
 public class CSGOLayout implements ILayout {
 	protected ILabeled label;
@@ -40,10 +48,11 @@ public class CSGOLayout implements ILayout {
 		});
 	}
 	
-	protected <T> void addContainer (Stream<ILabeled> label, Supplier<T> state, Class<T> stateClass, VerticalContainer parent, HorizontalContainer window, ThemeTuple theme, boolean mode) {
-		/*IFixedComponent popup;
-		IToggleable toggle;
+	protected <T> VerticalContainer addContainer (ILabeled label, Supplier<T> state, Class<T> stateClass, IComponent title, VerticalContainer parent, HorizontalContainer window, ThemeTuple theme, boolean mode) {
+		VerticalContainer container=new VerticalContainer(label,theme.getContainerRenderer(false));
 		if (mode) {
+			parent.addComponent(new ClosableComponent<>(title,container,state,new AnimatedToggleable(new SimpleToggleable(false),animation.get()),theme.getPanelRenderer(stateClass)));
+		} else {
 			toggle=new SimpleToggleable(false);
 			Button button=new Button(new Labeled(label.getDisplayName(),label.getDescription(),()->drawTitle&&label.isVisible().isOn()),theme.getButtonRenderer(Void.class,true));
 			if (popupType.dynamicPopup) popup=ClosableComponent.createDynamicPopup(button,container,state,animation.get(),new RendererTuple<T>(stateClass,theme),popupType.popupSize,toggle,width);
@@ -59,8 +68,7 @@ public class CSGOLayout implements ILayout {
 				}
 			});
 			gui.addPopup(popup);
-		} else {
-			parent.addComponent(new ClosableComponent<>(title,container,state,new AnimatedToggleable(new SimpleToggleable(false),animation.get()),theme.getPanelRenderer(stateClass)));
-		}*/
+		}
+		return container;
 	}
 }
