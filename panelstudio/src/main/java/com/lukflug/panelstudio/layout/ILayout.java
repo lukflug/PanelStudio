@@ -14,5 +14,5 @@ public interface ILayout {
 	 * @param gui the GUI to populate
 	 * @param client the client defining the module and setting hierarchy
 	 */
-	public void populateGUI (IComponentAdder gui, IClient client, ITheme theme);
+	public void populateGUI (IComponentAdder gui, IComponentGenerator components, IClient client, ITheme theme);
 }

@@ -2,7 +2,6 @@ package com.lukflug.panelstudio.layout;
 
 import java.awt.Point;
 import java.util.function.Function;
-import java.util.function.IntPredicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -13,10 +12,12 @@ import com.lukflug.panelstudio.component.IComponent;
 import com.lukflug.panelstudio.container.HorizontalContainer;
 import com.lukflug.panelstudio.container.IContainer;
 import com.lukflug.panelstudio.container.VerticalContainer;
+import com.lukflug.panelstudio.layout.ChildUtil.ChildMode;
+import com.lukflug.panelstudio.popup.PopupTuple;
 import com.lukflug.panelstudio.setting.IClient;
 import com.lukflug.panelstudio.setting.IEnumSetting;
 import com.lukflug.panelstudio.setting.ILabeled;
-import com.lukflug.panelstudio.setting.Labeled;
+import com.lukflug.panelstudio.setting.ISetting;
 import com.lukflug.panelstudio.theme.ITheme;
 import com.lukflug.panelstudio.theme.ThemeTuple;
 import com.lukflug.panelstudio.widget.Button;
@@ -28,40 +29,43 @@ public class CSGOLayout implements ILayout {
 	protected Point position;
 	protected int width;
 	protected Supplier<Animation> animation;
-	protected IntPredicate deleteKey;
 	protected boolean horizontal,moduleColumn;
 	protected int weight;
+	protected ChildMode colorType;
+	protected ChildUtil util;
 	
-	public CSGOLayout (ILabeled label, Point position, int width, Supplier<Animation> animation, IntPredicate deleteKey, boolean horizontal, boolean moduleColumn, int weight) {
+	public CSGOLayout (ILabeled label, Point position, int width, Supplier<Animation> animation, boolean horizontal, boolean moduleColumn, int weight, ChildMode colorType, PopupTuple popupType) {
 		this.label=label;
 		this.position=position;
 		this.width=width;
 		this.animation=animation;
-		this.deleteKey=deleteKey;
 		this.horizontal=horizontal;
 		this.moduleColumn=moduleColumn;
 		this.weight=weight;
+		this.colorType=colorType;
+		util=new ChildUtil(width,animation,popupType);
 	}
 	
 	@Override
-	public void populateGUI (IComponentAdder gui, IClient client, ITheme theme) {
+	public void populateGUI (IComponentAdder gui, IComponentGenerator components, IClient client, ITheme theme) {
 		Button title=new Button(label,theme.getButtonRenderer(Void.class,0,0,true));
 		HorizontalContainer window=new HorizontalContainer(label,theme.getContainerRenderer(0,0,true));
 		IEnumSetting catSelect;
 		if (horizontal) {
 			VerticalContainer container=new VerticalContainer(label,theme.getContainerRenderer(0,0,false));
-			catSelect=addContainer(label,client.getCategories().map(cat->cat),container,new ThemeTuple(theme,0,1),true,button->button);
+			catSelect=addContainer(label,client.getCategories().map(cat->cat),container,new ThemeTuple(theme,0,1),true,button->button,()->true);
 			container.addComponent(window);
 		} else {
-			catSelect=addContainer(label,client.getCategories().map(cat->cat),window,new ThemeTuple(theme,0,1),false,button->wrapColumn(button,new ThemeTuple(theme,0,1),1));
+			catSelect=addContainer(label,client.getCategories().map(cat->cat),window,new ThemeTuple(theme,0,1),false,button->wrapColumn(button,new ThemeTuple(theme,0,1),1),()->true);
 			gui.addComponent(title,window,new ThemeTuple(theme,0,0),position,width,animation);
 		}
 		client.getCategories().forEach(category->{
-			ILabeled label=new Labeled(category.getDisplayName(),category.getDescription(),()->category.isVisible().isOn()&&catSelect.getValueName()==category.getDisplayName());
-			// TODO add module settings method and weight
 			if (moduleColumn) {
-				IEnumSetting modSelect=addContainer(label,category.getModules().map(mod->mod),window,new ThemeTuple(theme,1,1),false,button->wrapColumn(button,new ThemeTuple(theme,1,1),1));
+				IEnumSetting modSelect=addContainer(category,category.getModules().map(mod->mod),window,new ThemeTuple(theme,0,1),false,button->wrapColumn(button,new ThemeTuple(theme,1,1),1),()->catSelect.getValueName()==category.getDisplayName());
 				category.getModules().forEach(module->{
+					VerticalContainer container=new VerticalContainer(module,theme.getContainerRenderer(1,1,false));
+					window.addComponent(wrapColumn(container,new ThemeTuple(theme,1,1),weight),()->catSelect.getValueName()==category.getDisplayName()&&modSelect.getValueName()==module.getDisplayName());
+					module.getSettings().forEach(setting->addSettingsComponent(setting,container,gui,components,new ThemeTuple(theme,2,2)));
 				});
 			} else {
 				category.getModules().forEach(module->{
@@ -70,7 +74,26 @@ public class CSGOLayout implements ILayout {
 		});
 	}
 	
-	protected <T extends IComponent> IEnumSetting addContainer (ILabeled label, Stream<ILabeled> labels, IContainer<T> window, ThemeTuple theme, boolean horizontal, Function<RadioButton,T> container) {
+	protected <T> void addSettingsComponent (ISetting<T> setting, VerticalContainer container, IComponentAdder gui, IComponentGenerator components, ThemeTuple theme) {
+		int nextLevel=theme.graphicalLevel;
+		int colorLevel=(colorType==ChildMode.DOWN)?theme.graphicalLevel:0;
+		boolean isContainer=setting.getSubSettings()!=null;
+		IComponent component=components.getComponent(setting,animation,new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel),isContainer);
+		if (component instanceof VerticalContainer) {
+			VerticalContainer colorContainer=(VerticalContainer)component;
+			Button button=new Button(setting,theme.getButtonRenderer(Void.class,colorType==ChildMode.DOWN));
+			util.addContainer(setting,button,colorContainer,()->setting.getSettingState(),setting.getSettingClass(),container,gui,new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel),colorType);
+			if (setting.getSubSettings()!=null) setting.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,colorContainer,gui,components,new ThemeTuple(theme,1,1)));
+		} else if (setting.getSubSettings()!=null) {
+			VerticalContainer settingContainer=new VerticalContainer(setting,theme.theme.getContainerRenderer(theme.logicalLevel,nextLevel,false));
+			util.addContainer(setting,component,settingContainer,()->setting.getSettingState(),setting.getSettingClass(),container,gui,new ThemeTuple(theme.theme,theme.logicalLevel,nextLevel),ChildMode.DOWN);
+			setting.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,settingContainer,gui,components,new ThemeTuple(theme,1,1)));
+		} else {
+			container.addComponent(component);
+		}
+	}
+	
+	protected <T extends IComponent> IEnumSetting addContainer (ILabeled label, Stream<ILabeled> labels, IContainer<T> window, ThemeTuple theme, boolean horizontal, Function<RadioButton,T> container, IBoolean visible) {
 		IEnumSetting setting=new IEnumSetting() {
 			private int state=0;
 			private ILabeled array[]=labels.toArray(ILabeled[]::new);
@@ -116,12 +139,12 @@ public class CSGOLayout implements ILayout {
 			}
 		};
 		RadioButton button=new RadioButton(setting,theme.getRadioRenderer(true),animation.get(),horizontal);
-		window.addComponent(container.apply(button));
+		window.addComponent(container.apply(button),visible);
 		return setting;
 	}
 	
-	protected static HorizontalComponent<ScrollBarComponent<Void,RadioButton>> wrapColumn (RadioButton button, ThemeTuple theme, int weight) {
-		return new HorizontalComponent<ScrollBarComponent<Void,RadioButton>>(new ScrollBarComponent<Void,RadioButton>(button,theme.getScrollBarRenderer(Void.class),theme.getEmptySpaceRenderer(Void.class)) {
+	protected static HorizontalComponent<ScrollBarComponent<Void,IComponent>> wrapColumn (IComponent button, ThemeTuple theme, int weight) {
+		return new HorizontalComponent<ScrollBarComponent<Void,IComponent>>(new ScrollBarComponent<Void,IComponent>(button,theme.getScrollBarRenderer(Void.class),theme.getEmptySpaceRenderer(Void.class)) {
 			@Override
 			protected Void getState() {
 				return null;
