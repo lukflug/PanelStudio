@@ -6,9 +6,12 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import com.lukflug.panelstudio.base.Animation;
+import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IBoolean;
+import com.lukflug.panelstudio.component.FocusableComponent;
 import com.lukflug.panelstudio.component.HorizontalComponent;
 import com.lukflug.panelstudio.component.IComponent;
+import com.lukflug.panelstudio.component.IScrollSize;
 import com.lukflug.panelstudio.container.HorizontalContainer;
 import com.lukflug.panelstudio.container.IContainer;
 import com.lukflug.panelstudio.container.VerticalContainer;
@@ -23,8 +26,9 @@ import com.lukflug.panelstudio.theme.ThemeTuple;
 import com.lukflug.panelstudio.widget.Button;
 import com.lukflug.panelstudio.widget.RadioButton;
 import com.lukflug.panelstudio.widget.ScrollBarComponent;
+import com.lukflug.panelstudio.widget.ToggleButton;
 
-public class CSGOLayout implements ILayout {
+public class CSGOLayout implements ILayout,IScrollSize {
 	protected ILabeled label;
 	protected Point position;
 	protected int width;
@@ -55,20 +59,31 @@ public class CSGOLayout implements ILayout {
 			VerticalContainer container=new VerticalContainer(label,theme.getContainerRenderer(0,0,false));
 			catSelect=addContainer(label,client.getCategories().map(cat->cat),container,new ThemeTuple(theme,0,1),true,button->button,()->true);
 			container.addComponent(window);
+			gui.addComponent(title,container,new ThemeTuple(theme,0,0),position,width,animation);
 		} else {
 			catSelect=addContainer(label,client.getCategories().map(cat->cat),window,new ThemeTuple(theme,0,1),false,button->wrapColumn(button,new ThemeTuple(theme,0,1),1),()->true);
 			gui.addComponent(title,window,new ThemeTuple(theme,0,0),position,width,animation);
 		}
 		client.getCategories().forEach(category->{
 			if (moduleColumn) {
-				IEnumSetting modSelect=addContainer(category,category.getModules().map(mod->mod),window,new ThemeTuple(theme,0,1),false,button->wrapColumn(button,new ThemeTuple(theme,1,1),1),()->catSelect.getValueName()==category.getDisplayName());
+				IEnumSetting modSelect=addContainer(category,category.getModules().map(mod->mod),window,new ThemeTuple(theme,0,1),false,button->wrapColumn(button,new ThemeTuple(theme,0,1),1),()->catSelect.getValueName()==category.getDisplayName());
 				category.getModules().forEach(module->{
 					VerticalContainer container=new VerticalContainer(module,theme.getContainerRenderer(1,1,false));
 					window.addComponent(wrapColumn(container,new ThemeTuple(theme,1,1),weight),()->catSelect.getValueName()==category.getDisplayName()&&modSelect.getValueName()==module.getDisplayName());
 					module.getSettings().forEach(setting->addSettingsComponent(setting,container,gui,components,new ThemeTuple(theme,2,2)));
 				});
 			} else {
+				VerticalContainer categoryContent=new VerticalContainer(category,theme.getContainerRenderer(0,1,false));
+				window.addComponent(wrapColumn(categoryContent,new ThemeTuple(theme,0,1),1),()->catSelect.getValueName()==category.getDisplayName());
 				category.getModules().forEach(module->{
+					int graphicalLevel=1;
+					FocusableComponent moduleTitle;
+					if (module.isEnabled()==null) moduleTitle=new Button(module,theme.getButtonRenderer(Void.class,1,1,true));
+					else moduleTitle=new ToggleButton(module,module.isEnabled(),theme.getButtonRenderer(Boolean.class,1,1,true));
+					VerticalContainer moduleContainer=new VerticalContainer(module,theme.getContainerRenderer(1,graphicalLevel,false));
+					if (module.isEnabled()==null) util.addContainer(module,moduleTitle,moduleContainer,()->null,Void.class,categoryContent,gui,new ThemeTuple(theme,1,graphicalLevel),ChildMode.DOWN);
+					else util.addContainer(module,moduleTitle,moduleContainer,()->module.isEnabled(),IBoolean.class,categoryContent,gui,new ThemeTuple(theme,1,graphicalLevel),ChildMode.DOWN);
+					module.getSettings().forEach(setting->addSettingsComponent(setting,moduleContainer,gui,components,new ThemeTuple(theme,2,graphicalLevel+1)));
 				});
 			}
 		});
@@ -143,8 +158,13 @@ public class CSGOLayout implements ILayout {
 		return setting;
 	}
 	
-	protected static HorizontalComponent<ScrollBarComponent<Void,IComponent>> wrapColumn (IComponent button, ThemeTuple theme, int weight) {
+	protected HorizontalComponent<ScrollBarComponent<Void,IComponent>> wrapColumn (IComponent button, ThemeTuple theme, int weight) {
 		return new HorizontalComponent<ScrollBarComponent<Void,IComponent>>(new ScrollBarComponent<Void,IComponent>(button,theme.getScrollBarRenderer(Void.class),theme.getEmptySpaceRenderer(Void.class)) {
+			@Override
+			public int getScrollHeight (Context context, int componentHeight) {
+				return CSGOLayout.this.getScrollHeight(context,componentHeight);
+			}
+			
 			@Override
 			protected Void getState() {
 				return null;
