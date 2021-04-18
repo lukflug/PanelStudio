@@ -3,4 +3,4 @@
  * This library only depends on the Fabric Yarn mappings and not on the Fabric Mod Loader or the Fabric API.
  * @author lukflug
  */
-package com.lukflug.panelstudio.mc16;
+package com.lukflug.panelstudio.mc16fabric;

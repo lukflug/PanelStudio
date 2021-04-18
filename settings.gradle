@@ -1,6 +1,6 @@
 
 include "panelstudio"
 include "panelstudio-mc12"
-include "panelstudio-mc16"
+include "panelstudio-mc16-fabric"
 include "panelstudio-mc8-fabric"
 include "panelstudio-mc8-forge"
