@@ -53,7 +53,7 @@ public interface ITheme {
 	 * @param level the panel nesting level
 	 * @return the empty space renderer
 	 */
-	public <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer (Class<T> type, int logicalLevel, int graphicalLevel);
+	public <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer (Class<T> type, int logicalLevel, int graphicalLevel, boolean container);
 	
 	/**
 	 * Returns the renderer for buttons.

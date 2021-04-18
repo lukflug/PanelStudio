@@ -154,7 +154,7 @@ public class ClosableComponent<S extends IComponent,T extends IComponent> extend
 	}
 	
 	public static <S extends IComponent,T extends IComponent,U> ClosableComponent<S,ScrollBarComponent<U,T>> createScrollableComponent (S title, T content, Supplier<U> state, AnimatedToggleable open, RendererTuple<U> renderer, IScrollSize scrollSize) {
-		return new ClosableComponent<S,ScrollBarComponent<U,T>>(title,new ScrollBarComponent<U,T>(content,renderer.scrollRenderer,renderer.emptyRenderer) {
+		return new ClosableComponent<S,ScrollBarComponent<U,T>>(title,new ScrollBarComponent<U,T>(content,renderer.scrollRenderer,renderer.cornerRenderer,renderer.emptyRenderer) {
 			@Override
 			public int getScrollHeight (Context context, int componentHeight) {
 				return scrollSize.getScrollHeight(context,componentHeight); 

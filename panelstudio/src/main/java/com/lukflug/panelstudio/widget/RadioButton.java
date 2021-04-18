@@ -43,7 +43,7 @@ public class RadioButton extends FocusableComponent {
 
 	@Override
 	protected int getHeight() {
-		return renderer.getDefaultHeight(setting.getAllowedValues(),isVisible());
+		return renderer.getDefaultHeight(setting.getAllowedValues(),horizontal);
 	}
 
 }

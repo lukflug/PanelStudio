@@ -39,7 +39,7 @@ public class SinglePanelAdder implements IComponentAdder,IScrollSize {
 	@Override
 	public <S extends IComponent,T extends IComponent> void addComponent(S title, T content, ThemeTuple theme, Point position, int width, Supplier<Animation> animation) {
 		this.title.addComponent(new HorizontalComponent<S>(title,0,1));
-		this.content.addComponent(new HorizontalComponent<>(new ScrollBarComponent<Void,T>(content,theme.getScrollBarRenderer(Void.class),theme.getEmptySpaceRenderer(Void.class)) {
+		this.content.addComponent(new HorizontalComponent<>(new ScrollBarComponent<Void,T>(content,theme.getScrollBarRenderer(Void.class),theme.getEmptySpaceRenderer(Void.class,false),theme.getEmptySpaceRenderer(Void.class,true)) {
 			@Override
 			public int getScrollHeight(Context context, int componentHeight) {
 				return SinglePanelAdder.this.getScrollHeight(context,componentHeight);

@@ -1,5 +1,7 @@
 package com.lukflug.panelstudio.widget;
 
+import java.awt.Rectangle;
+
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.component.HorizontalComponent;
@@ -27,7 +29,7 @@ public abstract class ScrollBarComponent<S,T extends IComponent> extends Horizon
 	 * @param renderer the renderer to use for the scroll bars
 	 * @param emptyRenderer the renderer to use for the corners
 	 */
-	public ScrollBarComponent (T component, IScrollBarRenderer<S> renderer, IEmptySpaceRenderer<S> emptyRenderer) {
+	public ScrollBarComponent (T component, IScrollBarRenderer<S> renderer, IEmptySpaceRenderer<S> cornerRenderer, IEmptySpaceRenderer<S> emptyRenderer) {
 		super(new Labeled(component.getTitle(),null,()->component.isVisible()),new IContainerRenderer(){});
 		this.component=component;
 		// Component containing content
@@ -45,6 +47,13 @@ public abstract class ScrollBarComponent<S,T extends IComponent> extends Horizon
 			@Override
 			public int getComponentWidth (Context context) {
 				return ScrollBarComponent.this.getComponentWidth(context);
+			}
+			
+			@Override
+			public void fillEmptySpace (Context context, Rectangle rect) {
+				Context subContext=new Context(context.getInterface(),rect.width,rect.getLocation(),context.hasFocus(),context.onTop());
+				subContext.setHeight(rect.height);
+				emptyRenderer.renderSpace(subContext,context.hasFocus(),getState());
 			}
 		};
 		// Vertical scroll bar
@@ -107,7 +116,7 @@ public abstract class ScrollBarComponent<S,T extends IComponent> extends Horizon
 		leftContainer.addComponent(horizontalBar);
 		VerticalContainer rightContainer=new VerticalContainer(new Labeled(component.getTitle(),null,()->true),new IContainerRenderer(){});
 		rightContainer.addComponent(verticalBar);
-		rightContainer.addComponent(new EmptySpace<S>(new Labeled("Empty",null,()->scrollComponent.isScrollingX()&&scrollComponent.isScrollingY()),()->renderer.getThickness(),emptyRenderer) {
+		rightContainer.addComponent(new EmptySpace<S>(new Labeled("Empty",null,()->scrollComponent.isScrollingX()&&scrollComponent.isScrollingY()),()->renderer.getThickness(),cornerRenderer) {
 			@Override
 			protected S getState() {
 				return ScrollBarComponent.this.getState();

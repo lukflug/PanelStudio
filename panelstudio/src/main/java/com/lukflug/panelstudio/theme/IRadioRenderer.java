@@ -13,9 +13,13 @@ public interface IRadioRenderer {
 	public default Rectangle getItemRect (Context context, ILabeled[] items, int index, boolean horizontal) {
 		Rectangle rect=context.getRect();
 		if (horizontal) {
-			return new Rectangle(rect.x+rect.width/items.length*index,rect.y,rect.width/items.length,rect.height);
+			int start=(int)Math.round(rect.width/(double)items.length*index);
+			int end=(int)Math.round(rect.width/(double)items.length*(index+1));
+			return new Rectangle(rect.x+start,rect.y,end-start,rect.height);
 		} else {
-			return new Rectangle(rect.x,rect.y+rect.height/items.length*index,rect.width,rect.height/items.length);
+			int start=(int)Math.round(rect.height/(double)items.length*index);
+			int end=(int)Math.round(rect.height/(double)items.length*(index+1));
+			return new Rectangle(rect.x,rect.y+start,rect.width,end-start);
 		}
 	}
 }

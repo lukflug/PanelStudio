@@ -38,7 +38,7 @@ public class CSGOLayout implements ILayout,IScrollSize {
 	protected ChildMode colorType;
 	protected ChildUtil util;
 	
-	public CSGOLayout (ILabeled label, Point position, int width, Supplier<Animation> animation, boolean horizontal, boolean moduleColumn, int weight, ChildMode colorType, PopupTuple popupType) {
+	public CSGOLayout (ILabeled label, Point position, int width, int popupWidth, Supplier<Animation> animation, boolean horizontal, boolean moduleColumn, int weight, ChildMode colorType, PopupTuple popupType) {
 		this.label=label;
 		this.position=position;
 		this.width=width;
@@ -47,7 +47,7 @@ public class CSGOLayout implements ILayout,IScrollSize {
 		this.moduleColumn=moduleColumn;
 		this.weight=weight;
 		this.colorType=colorType;
-		util=new ChildUtil(width,animation,popupType);
+		util=new ChildUtil(popupWidth,animation,popupType);
 	}
 	
 	@Override
@@ -66,7 +66,7 @@ public class CSGOLayout implements ILayout,IScrollSize {
 		}
 		client.getCategories().forEach(category->{
 			if (moduleColumn) {
-				IEnumSetting modSelect=addContainer(category,category.getModules().map(mod->mod),window,new ThemeTuple(theme,0,1),false,button->wrapColumn(button,new ThemeTuple(theme,0,1),1),()->catSelect.getValueName()==category.getDisplayName());
+				IEnumSetting modSelect=addContainer(category,category.getModules().map(mod->mod),window,new ThemeTuple(theme,1,1),false,button->wrapColumn(button,new ThemeTuple(theme,1,1),1),()->catSelect.getValueName()==category.getDisplayName());
 				category.getModules().forEach(module->{
 					VerticalContainer container=new VerticalContainer(module,theme.getContainerRenderer(1,1,false));
 					window.addComponent(wrapColumn(container,new ThemeTuple(theme,1,1),weight),()->catSelect.getValueName()==category.getDisplayName()&&modSelect.getValueName()==module.getDisplayName());
@@ -90,18 +90,17 @@ public class CSGOLayout implements ILayout,IScrollSize {
 	}
 	
 	protected <T> void addSettingsComponent (ISetting<T> setting, VerticalContainer container, IComponentAdder gui, IComponentGenerator components, ThemeTuple theme) {
-		int nextLevel=theme.graphicalLevel;
 		int colorLevel=(colorType==ChildMode.DOWN)?theme.graphicalLevel:0;
 		boolean isContainer=setting.getSubSettings()!=null;
-		IComponent component=components.getComponent(setting,animation,new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel),isContainer);
+		IComponent component=components.getComponent(setting,animation,theme,colorLevel,isContainer);
 		if (component instanceof VerticalContainer) {
 			VerticalContainer colorContainer=(VerticalContainer)component;
 			Button button=new Button(setting,theme.getButtonRenderer(Void.class,colorType==ChildMode.DOWN));
 			util.addContainer(setting,button,colorContainer,()->setting.getSettingState(),setting.getSettingClass(),container,gui,new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel),colorType);
-			if (setting.getSubSettings()!=null) setting.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,colorContainer,gui,components,new ThemeTuple(theme,1,1)));
+			if (setting.getSubSettings()!=null) setting.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,colorContainer,gui,components,new ThemeTuple(theme.theme,theme.logicalLevel+1,colorLevel+1)));
 		} else if (setting.getSubSettings()!=null) {
-			VerticalContainer settingContainer=new VerticalContainer(setting,theme.theme.getContainerRenderer(theme.logicalLevel,nextLevel,false));
-			util.addContainer(setting,component,settingContainer,()->setting.getSettingState(),setting.getSettingClass(),container,gui,new ThemeTuple(theme.theme,theme.logicalLevel,nextLevel),ChildMode.DOWN);
+			VerticalContainer settingContainer=new VerticalContainer(setting,theme.getContainerRenderer(false));
+			util.addContainer(setting,component,settingContainer,()->setting.getSettingState(),setting.getSettingClass(),container,gui,theme,ChildMode.DOWN);
 			setting.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,settingContainer,gui,components,new ThemeTuple(theme,1,1)));
 		} else {
 			container.addComponent(component);
@@ -159,7 +158,7 @@ public class CSGOLayout implements ILayout,IScrollSize {
 	}
 	
 	protected HorizontalComponent<ScrollBarComponent<Void,IComponent>> wrapColumn (IComponent button, ThemeTuple theme, int weight) {
-		return new HorizontalComponent<ScrollBarComponent<Void,IComponent>>(new ScrollBarComponent<Void,IComponent>(button,theme.getScrollBarRenderer(Void.class),theme.getEmptySpaceRenderer(Void.class)) {
+		return new HorizontalComponent<ScrollBarComponent<Void,IComponent>>(new ScrollBarComponent<Void,IComponent>(button,theme.getScrollBarRenderer(Void.class),theme.getEmptySpaceRenderer(Void.class,false),theme.getEmptySpaceRenderer(Void.class,true)) {
 			@Override
 			public int getScrollHeight (Context context, int componentHeight) {
 				return CSGOLayout.this.getScrollHeight(context,componentHeight);

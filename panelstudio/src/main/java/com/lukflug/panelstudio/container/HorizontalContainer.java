@@ -24,7 +24,7 @@ public class HorizontalContainer extends Container<IHorizontalComponent> {
 	
 	@Override
 	protected void doContextSensitiveLoop (Context context, ContextSensitiveConsumer<IHorizontalComponent> function) {
-		AtomicInteger availableWidth=new AtomicInteger(context.getSize().width-renderer.getLeft()-renderer.getRight());
+		AtomicInteger availableWidth=new AtomicInteger(context.getSize().width-renderer.getLeft()-renderer.getRight()+renderer.getBorder());
 		AtomicInteger totalWeight=new AtomicInteger(0);
 		doContextlessLoop(component->{
 		    availableWidth.addAndGet(-component.getWidth(context.getInterface())-renderer.getBorder());
@@ -35,8 +35,10 @@ public class HorizontalContainer extends Container<IHorizontalComponent> {
 		AtomicInteger spentWeight=new AtomicInteger(0);
 		AtomicInteger height=new AtomicInteger(0);
 		doContextlessLoop(component->{
-		    int componentWidth=(int)(component.getWidth(context.getInterface())+component.getWeight()*weightFactor);
-		    int componentPosition=(int)(x.get()+spentWeight.get()*weightFactor);
+			int start=(int)Math.round(spentWeight.get()*weightFactor);
+			int end=(int)Math.round((spentWeight.get()+component.getWeight())*weightFactor);
+		    int componentWidth=component.getWidth(context.getInterface())+end-start;
+		    int componentPosition=x.get()+start;
 		    Context subContext=getSubContext(context,componentPosition,componentWidth);
 			function.accept(subContext,component);
 			if (subContext.focusReleased()) context.releaseFocus();

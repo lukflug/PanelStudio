@@ -25,10 +25,10 @@ public class PanelLayout implements ILayout {
 	protected int skipX,skipY;
 	protected Supplier<Animation> animation;
 	protected IntFunction<ChildMode> layoutType;
-	protected ChildMode colorType;
+	protected IntFunction<ChildMode> colorType;
 	protected ChildUtil util;
 	
-	public PanelLayout (int width, Point start, int skipX, int skipY, Supplier<Animation> animation, IntFunction<ChildMode> layoutType, ChildMode colorType, PopupTuple popupType) {
+	public PanelLayout (int width, Point start, int skipX, int skipY, Supplier<Animation> animation, IntFunction<ChildMode> layoutType, IntFunction<ChildMode> colorType, PopupTuple popupType) {
 		this.width=width;
 		this.start=start;
 		this.skipX=skipX;
@@ -65,18 +65,18 @@ public class PanelLayout implements ILayout {
 	
 	protected <T> void addSettingsComponent (ISetting<T> setting, VerticalContainer container, IComponentAdder gui, IComponentGenerator components, ThemeTuple theme) {
 		int nextLevel=(layoutType.apply(theme.logicalLevel-1)==ChildMode.DOWN)?theme.graphicalLevel:0;
-		int colorLevel=(colorType==ChildMode.DOWN)?theme.graphicalLevel:0;
+		int colorLevel=(colorType.apply(theme.logicalLevel-1)==ChildMode.DOWN)?theme.graphicalLevel:0;
 		boolean isContainer=(setting.getSubSettings()!=null)&&(layoutType.apply(theme.logicalLevel-1)==ChildMode.DOWN);
-		IComponent component=components.getComponent(setting,animation,new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel),isContainer);
+		IComponent component=components.getComponent(setting,animation,new ThemeTuple(theme.theme,theme.logicalLevel,theme.graphicalLevel),colorLevel,isContainer);
 		if (component instanceof VerticalContainer) {
 			VerticalContainer colorContainer=(VerticalContainer)component;
-			Button button=new Button(setting,theme.getButtonRenderer(Void.class,colorType==ChildMode.DOWN));
-			util.addContainer(setting,button,colorContainer,()->setting.getSettingState(),setting.getSettingClass(),container,gui,new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel),colorType);
-			if (setting.getSubSettings()!=null) setting.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,colorContainer,gui,components,new ThemeTuple(theme,1,1)));
+			Button button=new Button(setting,theme.getButtonRenderer(Void.class,colorType.apply(theme.logicalLevel-1)==ChildMode.DOWN));
+			util.addContainer(setting,button,colorContainer,()->setting.getSettingState(),setting.getSettingClass(),container,gui,new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel),colorType.apply(theme.logicalLevel-1));
+			if (setting.getSubSettings()!=null) setting.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,colorContainer,gui,components,new ThemeTuple(theme.theme,theme.logicalLevel+1,colorLevel+1)));
 		} else if (setting.getSubSettings()!=null) {
 			VerticalContainer settingContainer=new VerticalContainer(setting,theme.theme.getContainerRenderer(theme.logicalLevel,nextLevel,false));
 			util.addContainer(setting,component,settingContainer,()->setting.getSettingState(),setting.getSettingClass(),container,gui,new ThemeTuple(theme.theme,theme.logicalLevel,nextLevel),layoutType.apply(theme.logicalLevel-1));
-			setting.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,settingContainer,gui,components,new ThemeTuple(theme,1,1)));
+			setting.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,settingContainer,gui,components,new ThemeTuple(theme.theme,theme.logicalLevel+1,nextLevel+1)));
 		} else {
 			container.addComponent(component);
 		}

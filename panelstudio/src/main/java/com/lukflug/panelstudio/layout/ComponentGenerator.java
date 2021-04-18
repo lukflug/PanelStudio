@@ -17,7 +17,7 @@ public class ComponentGenerator implements IComponentGenerator {
 	}
 	
 	@Override
-	public IComponent getKeybindComponent (IKeybindSetting setting, Supplier<Animation> animation, ThemeTuple theme, boolean isContainer) {
+	public IComponent getKeybindComponent (IKeybindSetting setting, Supplier<Animation> animation, ThemeTuple theme, int colorLevel, boolean isContainer) {
 		return new KeybindComponent(setting,theme.getKeybindRenderer(isContainer)) {
 			@Override
 			public int transformKey (int scancode) {

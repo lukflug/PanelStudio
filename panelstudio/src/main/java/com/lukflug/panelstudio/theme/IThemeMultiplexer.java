@@ -42,8 +42,8 @@ public interface IThemeMultiplexer extends ITheme {
 	}
 	
 	@Override
-	public default <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer (Class<T> type, int logicalLevel, int graphicalLevel) {
-		IEmptySpaceRendererProxy<T> proxy=()->getTheme().getEmptySpaceRenderer(type,logicalLevel,graphicalLevel);
+	public default <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer (Class<T> type, int logicalLevel, int graphicalLevel, boolean container) {
+		IEmptySpaceRendererProxy<T> proxy=()->getTheme().getEmptySpaceRenderer(type,logicalLevel,graphicalLevel,container);
 		return proxy;
 	}
 

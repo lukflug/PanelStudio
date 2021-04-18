@@ -150,9 +150,13 @@ public class GameSenseTheme extends ThemeBase {
 	}
 	
 	@Override
-	public <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer (Class<T> type, int logicalLevel, int graphicalLevel) {
+	public <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer (Class<T> type, int logicalLevel, int graphicalLevel, boolean container) {
 		return (context,focus,state)->{
-			Color color=scheme.getColor("Outline Color");
+			Color color;
+			if (container) {
+				if (logicalLevel>0) color=getBackgroundColor(focus);
+				else color=getMainColor(focus,false);
+			} else color=scheme.getColor("Outline Color");
 			context.getInterface().fillRect(context.getRect(),color,color,color,color);
 		};
 	}
@@ -224,7 +228,12 @@ public class GameSenseTheme extends ThemeBase {
 			@Override
 			public void renderItem (Context context, ILabeled[] items, boolean focus, int target, double state, boolean horizontal) {
 				for (int i=0;i<items.length;i++) {
-					fillBaseRect(context, horizontal, horizontal,logicalLevel,graphicalLevel);
+					Rectangle rect=getItemRect(context,items,i,horizontal);
+					Context subContext=new Context(context.getInterface(),rect.width,rect.getLocation(),context.hasFocus(),context.onTop());
+					subContext.setHeight(rect.height);
+					fillBaseRect(subContext,focus,i==target,logicalLevel,graphicalLevel);
+					renderOverlay(subContext);
+					context.getInterface().drawString(new Point(rect.x+padding,rect.y+padding),height,items[i].getDisplayName(),getFontColor(focus));
 				}
 			}
 

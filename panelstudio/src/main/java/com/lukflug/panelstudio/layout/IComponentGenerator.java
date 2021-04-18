@@ -19,39 +19,39 @@ import com.lukflug.panelstudio.widget.NumberSlider;
 import com.lukflug.panelstudio.widget.ToggleButton;
 
 public interface IComponentGenerator {
-	public default IComponent getComponent (ISetting<?> setting, Supplier<Animation> animation, ThemeTuple theme, boolean isContainer) {
+	public default IComponent getComponent (ISetting<?> setting, Supplier<Animation> animation, ThemeTuple theme, int colorLevel, boolean isContainer) {
 		if (setting instanceof IBooleanSetting) {
-			return getBooleanComponent((IBooleanSetting)setting,animation,theme,isContainer);
+			return getBooleanComponent((IBooleanSetting)setting,animation,theme,colorLevel,isContainer);
 		} else if (setting instanceof INumberSetting) {
-			return getNumberComponent((INumberSetting)setting,animation,theme,isContainer);
+			return getNumberComponent((INumberSetting)setting,animation,theme,colorLevel,isContainer);
 		} else if (setting instanceof IEnumSetting) {
-			return getEnumComponent((IEnumSetting)setting,animation,theme,isContainer);
+			return getEnumComponent((IEnumSetting)setting,animation,theme,colorLevel,isContainer);
 		} else if (setting instanceof IColorSetting) {
-			return getColorComponent((IColorSetting)setting,animation,theme,isContainer);
+			return getColorComponent((IColorSetting)setting,animation,theme,colorLevel,isContainer);
 		} else if (setting instanceof IKeybindSetting) {
-			return getKeybindComponent((IKeybindSetting)setting,animation,theme,isContainer);
+			return getKeybindComponent((IKeybindSetting)setting,animation,theme,colorLevel,isContainer);
 		} else {
 			return new Button(setting,theme.getButtonRenderer(Void.class,isContainer));
 		}
 	}
 	
-	public default IComponent getBooleanComponent (IBooleanSetting setting, Supplier<Animation> animation, ThemeTuple theme, boolean isContainer) {
+	public default IComponent getBooleanComponent (IBooleanSetting setting, Supplier<Animation> animation, ThemeTuple theme, int colorLevel, boolean isContainer) {
 		return new ToggleButton(setting,theme.getButtonRenderer(Boolean.class,isContainer));
 	}
 	
-	public default IComponent getNumberComponent (INumberSetting setting, Supplier<Animation> animation, ThemeTuple theme, boolean isContainer) {
+	public default IComponent getNumberComponent (INumberSetting setting, Supplier<Animation> animation, ThemeTuple theme, int colorLevel, boolean isContainer) {
 		return new NumberSlider(setting,theme.getSliderRenderer(isContainer));
 	}
 	
-	public default IComponent getEnumComponent (IEnumSetting setting, Supplier<Animation> animation, ThemeTuple theme, boolean isContainer) {
+	public default IComponent getEnumComponent (IEnumSetting setting, Supplier<Animation> animation, ThemeTuple theme, int colorLevel, boolean isContainer) {
 		return new CycleButton(setting,theme.getButtonRenderer(String.class,isContainer));
 	}
 	
-	public default IComponent getColorComponent (IColorSetting setting, Supplier<Animation> animation, ThemeTuple theme, boolean isContainer) {
-		return new ColorComponent((IColorSetting)setting,animation.get(),new ThemeTuple(theme,theme.logicalLevel,theme.graphicalLevel));
+	public default IComponent getColorComponent (IColorSetting setting, Supplier<Animation> animation, ThemeTuple theme, int colorLevel, boolean isContainer) {
+		return new ColorComponent((IColorSetting)setting,animation.get(),new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel));
 	}
 	
-	public default IComponent getKeybindComponent (IKeybindSetting setting, Supplier<Animation> animation, ThemeTuple theme, boolean isContainer) {
+	public default IComponent getKeybindComponent (IKeybindSetting setting, Supplier<Animation> animation, ThemeTuple theme, int colorLevel, boolean isContainer) {
 		return new KeybindComponent(setting,theme.getKeybindRenderer(isContainer));
 	}
 }

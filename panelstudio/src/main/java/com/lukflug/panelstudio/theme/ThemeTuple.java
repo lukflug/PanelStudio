@@ -29,8 +29,8 @@ public final class ThemeTuple {
 		return theme.getScrollBarRenderer(type,logicalLevel,graphicalLevel);
 	}
 	
-	public <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer (Class<T> type) {
-		return theme.getEmptySpaceRenderer(type,logicalLevel,graphicalLevel);
+	public <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer (Class<T> type, boolean container) {
+		return theme.getEmptySpaceRenderer(type,logicalLevel,graphicalLevel,container);
 	}
 	
 	public <T> IButtonRenderer<T> getButtonRenderer (Class<T> type, boolean container) {

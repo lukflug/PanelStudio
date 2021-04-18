@@ -2,6 +2,7 @@ package com.lukflug.panelstudio.component;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.function.Consumer;
 
 import com.lukflug.panelstudio.base.Context;
@@ -34,6 +35,16 @@ public abstract class ScrollableComponent<T extends IComponent> implements IComp
 		doOperation(context,subContext->{
 			context.getInterface().window(context.getRect());
 			getComponent().render(subContext);
+			Rectangle a=context.getRect(),b=subContext.getRect();
+			if (b.width<a.width) {
+				fillEmptySpace(context,new Rectangle(a.x+b.width,a.y,a.width-b.width,b.height));
+			}
+			if (b.height<a.height) {
+				fillEmptySpace(context,new Rectangle(a.x,a.y+b.height,b.width,a.height-b.height));
+			}
+			if (b.width<a.width && b.height<a.height) {
+				fillEmptySpace(context,new Rectangle(a.x+b.width,a.y+b.height,a.width-b.width,a.height-b.height));
+			}
 			context.getInterface().restore();
 		});
 	}
@@ -145,4 +156,6 @@ public abstract class ScrollableComponent<T extends IComponent> implements IComp
 	public final int getHeight (int height) {
 		return getScrollHeight(tempContext,height);
 	}
+	
+	public abstract void fillEmptySpace (Context context, Rectangle rect);
 }

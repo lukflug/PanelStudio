@@ -142,7 +142,7 @@ public class ClearTheme extends ThemeBase {
 	}
 
 	@Override
-	public <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer(Class<T> type, int logicalLevel, int graphicalLevel) {
+	public <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer(Class<T> type, int logicalLevel, int graphicalLevel, boolean container) {
 		return new IEmptySpaceRenderer<T>() {
 			@Override
 			public void renderSpace(Context context, boolean focus, T state) {
@@ -221,8 +221,13 @@ public class ClearTheme extends ThemeBase {
 		return new IRadioRenderer() {
 			@Override
 			public void renderItem(Context context, ILabeled[] items, boolean focus, int target, double state, boolean horizontal) {
-				// TODO Auto-generated method stub
-				
+				for (int i=0;i<items.length;i++) {
+					Rectangle rect=getItemRect(context,items,i,horizontal);
+					Context subContext=new Context(context.getInterface(),rect.width,rect.getLocation(),context.hasFocus(),context.onTop());
+					subContext.setHeight(rect.height);
+					renderOverlay(subContext);
+					context.getInterface().drawString(new Point(rect.x+padding,rect.y+padding),height,items[i].getDisplayName(),i==target?getMainColor(focus,true):getFontColor(focus));
+				}
 			}
 
 			@Override
