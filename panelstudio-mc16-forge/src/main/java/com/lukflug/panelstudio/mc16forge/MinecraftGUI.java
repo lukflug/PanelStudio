@@ -1,14 +1,14 @@
-package com.lukflug.panelstudio.mc16fabric;
+package com.lukflug.panelstudio.mc16forge;
 
 import java.awt.Point;
 
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.container.GUI;
+import com.mojang.blaze3d.matrix.MatrixStack;
 
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
+import net.minecraft.util.text.StringTextComponent;
 
 /**
  * Implementation of Minecraft's {@link Screen} that renders a PanelStudio GUI.
@@ -40,21 +40,21 @@ public abstract class MinecraftGUI extends Screen {
 	 * Constructor.
 	 */
 	public MinecraftGUI() {
-		super(new LiteralText("PanelStudio GUI"));
+		super(new StringTextComponent("PanelStudio GUI"));
 	}
 	
 	/**
 	 * Displays the GUI.
 	 */
 	public void enterGUI() {
-		MinecraftClient.getInstance().openScreen(this);
+		Minecraft.getInstance().displayGuiScreen(this);
 	}
 	
 	/**
 	 * Closes the GUI.
 	 */
 	public void exitGUI() {
-		MinecraftClient.getInstance().openScreen(null);
+		Minecraft.getInstance().displayGuiScreen(null);
 	}
 	
 	/**
@@ -73,8 +73,9 @@ public abstract class MinecraftGUI extends Screen {
 	}
 	
 	@Override
-	public void removed() {
+	public void onClose() {
 		getGUI().exit();
+		super.onClose();
 	}
 	
 	@Override
@@ -196,7 +197,7 @@ public abstract class MinecraftGUI extends Screen {
 
 		@Override
 		protected float getZLevel() {
-			return getZOffset();
+			return this.getZLevel();
 		}
 		
 		@Override
