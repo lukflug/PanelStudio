@@ -21,6 +21,7 @@ import com.lukflug.panelstudio.setting.IClient;
 import com.lukflug.panelstudio.setting.IEnumSetting;
 import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.setting.ISetting;
+import com.lukflug.panelstudio.setting.Labeled;
 import com.lukflug.panelstudio.theme.ITheme;
 import com.lukflug.panelstudio.theme.ThemeTuple;
 import com.lukflug.panelstudio.widget.Button;
@@ -33,16 +34,18 @@ public class CSGOLayout implements ILayout,IScrollSize {
 	protected Point position;
 	protected int width;
 	protected Supplier<Animation> animation;
+	protected String enabledButton;
 	protected boolean horizontal,moduleColumn;
 	protected int weight;
 	protected ChildMode colorType;
 	protected ChildUtil util;
 	
-	public CSGOLayout (ILabeled label, Point position, int width, int popupWidth, Supplier<Animation> animation, boolean horizontal, boolean moduleColumn, int weight, ChildMode colorType, PopupTuple popupType) {
+	public CSGOLayout (ILabeled label, Point position, int width, int popupWidth, Supplier<Animation> animation, String enabledButton, boolean horizontal, boolean moduleColumn, int weight, ChildMode colorType, PopupTuple popupType) {
 		this.label=label;
 		this.position=position;
 		this.width=width;
 		this.animation=animation;
+		this.enabledButton=enabledButton;
 		this.horizontal=horizontal;
 		this.moduleColumn=moduleColumn;
 		this.weight=weight;
@@ -53,7 +56,7 @@ public class CSGOLayout implements ILayout,IScrollSize {
 	@Override
 	public void populateGUI (IComponentAdder gui, IComponentGenerator components, IClient client, ITheme theme) {
 		Button title=new Button(label,theme.getButtonRenderer(Void.class,0,0,true));
-		HorizontalContainer window=new HorizontalContainer(label,theme.getContainerRenderer(0,0,true));
+		HorizontalContainer window=new HorizontalContainer(label,theme.getContainerRenderer(0,horizontal?1:0,true));
 		IEnumSetting catSelect;
 		if (horizontal) {
 			VerticalContainer container=new VerticalContainer(label,theme.getContainerRenderer(0,0,false));
@@ -66,10 +69,11 @@ public class CSGOLayout implements ILayout,IScrollSize {
 		}
 		client.getCategories().forEach(category->{
 			if (moduleColumn) {
-				IEnumSetting modSelect=addContainer(category,category.getModules().map(mod->mod),window,new ThemeTuple(theme,1,1),false,button->wrapColumn(button,new ThemeTuple(theme,1,1),1),()->catSelect.getValueName()==category.getDisplayName());
+				IEnumSetting modSelect=addContainer(category,category.getModules().map(mod->mod),window,new ThemeTuple(theme,1,1),false,button->wrapColumn(button,new ThemeTuple(theme,0,1),1),()->catSelect.getValueName()==category.getDisplayName());
 				category.getModules().forEach(module->{
 					VerticalContainer container=new VerticalContainer(module,theme.getContainerRenderer(1,1,false));
 					window.addComponent(wrapColumn(container,new ThemeTuple(theme,1,1),weight),()->catSelect.getValueName()==category.getDisplayName()&&modSelect.getValueName()==module.getDisplayName());
+					if (module.isEnabled()!=null) container.addComponent(new ToggleButton(new Labeled(enabledButton,null,()->true),module.isEnabled(),theme.getButtonRenderer(Boolean.class,1,2,false)));
 					module.getSettings().forEach(setting->addSettingsComponent(setting,container,gui,components,new ThemeTuple(theme,2,2)));
 				});
 			} else {
