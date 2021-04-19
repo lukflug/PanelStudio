@@ -15,7 +15,7 @@ buildscript {
 apply plugin: "net.minecraftforge.gradle"
 
 minecraft {
-	mappings("snapshot",project.mappings16forge)
+	mappings("official",project.mappings16forge)
 }
 
 dependencies {
