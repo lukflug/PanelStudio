@@ -3,7 +3,7 @@ A simple yet flexible library to create ClickGUIs designed for use in Minecraft 
 
 <details>
 <summary>Themes</summary>
-*CyberHack Theme:
+- CyberHack Theme:
 <img src=https://cdn.discordapp.com/attachments/780094001331961901/796061322261168198/2021-01-05_17.57.02.png>
 * GameSense 2.0 Theme:
 ![gamesense20](https://cdn.discordapp.com/attachments/780094001331961901/796061336156373062/2021-01-05_17.57.07.png)
