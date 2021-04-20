@@ -1,22 +1,25 @@
 # PanelStudio
 A simple yet flexible library to create ClickGUIs designed for use in Minecraft utility mods. It was originally designed for a private client, but made open source, so that it could be used for [GameSense](https://github.com/IUDevman/gamesense-client). Here are some screenshots of what is possible with this library (note that these themes are examples and that one can make the GUI look like basically anything):
 
-* CyberHack Theme:
-![cyberhack](https://cdn.discordapp.com/attachments/780094001331961901/796061322261168198/2021-01-05_17.57.02.png)
-* GameSense 2.0 Theme:
-![gamesense20](https://cdn.discordapp.com/attachments/780094001331961901/796061336156373062/2021-01-05_17.57.07.png)
-* GameSense 2.1 Theme:
-![gamesense21](https://cdn.discordapp.com/attachments/780094001331961901/796061343086149662/2021-01-05_17.57.11.png)
-* PepsiMod Theme:
-![pepsimod](https://cdn.discordapp.com/attachments/780094001331961901/796061349981323274/2021-01-05_17.57.19.png)
-* GameSense 2.2 Theme:
-![gamesense22](https://cdn.discordapp.com/attachments/780094001331961901/796061357858488450/2021-01-05_17.57.23.png)
-* Future Theme:
-![future](https://cdn.discordapp.com/attachments/780094001331961901/796061366057435166/2021-01-05_17.57.27.png)
-* KAMI Blue Theme:
-![kamiblue](https://cdn.discordapp.com/attachments/780094001331961901/796061373058646058/2021-01-05_17.57.36.png)
-* Windows Theme:
-![windows](https://cdn.discordapp.com/attachments/780094001331961901/796061378686615572/2021-01-05_17.57.42.png)
+<details>
+	<summary>Themes</summary>
+	* CyberHack Theme:
+	![cyberhack](https://cdn.discordapp.com/attachments/780094001331961901/796061322261168198/2021-01-05_17.57.02.png)
+	* GameSense 2.0 Theme:
+	![gamesense20](https://cdn.discordapp.com/attachments/780094001331961901/796061336156373062/2021-01-05_17.57.07.png)
+	* GameSense 2.1 Theme:
+	![gamesense21](https://cdn.discordapp.com/attachments/780094001331961901/796061343086149662/2021-01-05_17.57.11.png)
+	* PepsiMod Theme:
+	![pepsimod](https://cdn.discordapp.com/attachments/780094001331961901/796061349981323274/2021-01-05_17.57.19.png)
+	* GameSense 2.2 Theme:
+	![gamesense22](https://cdn.discordapp.com/attachments/780094001331961901/796061357858488450/2021-01-05_17.57.23.png)
+	* Future Theme:
+	![future](https://cdn.discordapp.com/attachments/780094001331961901/796061366057435166/2021-01-05_17.57.27.png)
+	* KAMI Blue Theme:
+	![kamiblue](https://cdn.discordapp.com/attachments/780094001331961901/796061373058646058/2021-01-05_17.57.36.png)
+	* Windows Theme:
+	![windows](https://cdn.discordapp.com/attachments/780094001331961901/796061378686615572/2021-01-05_17.57.42.png)
+</details>
 
 This repository only includes the GameSense themes, however, since Cyber didn't want me to publish the other themes. The library has no depedencies (aside from Java 8), so it can be easily used for other purposes, aside from Minecraft utility mods. Thanks to Go_Hoosiers, for suggesting the name of this library. If you use this library, some attribution would be greatly appreciated. Consider visiting the PanelStudio discord server: https://discord.gg/E3DrF4XvUE.
 
