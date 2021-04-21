@@ -27,9 +27,11 @@ jobs:
           ${{ runner.os }}-gradle-v2-
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+    - name: Stop Gradle Deamon 1
+      run: ./gradlew --stop
     - name: SetupDecompWorkspace
-      run: ./gradlew setupDecompWorkspace --refresh-dependencies
-    - name: Stop Gradle Deamon
+      run: ./gradlew setupDecompWorkspace
+    - name: Stop Gradle Deamon 2
       run: ./gradlew --stop
     - name: Build with Gradle
       run: ./gradlew build
