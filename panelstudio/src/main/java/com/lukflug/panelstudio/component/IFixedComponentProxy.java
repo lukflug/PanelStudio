@@ -8,7 +8,7 @@ import com.lukflug.panelstudio.config.IPanelConfig;
 import com.lukflug.panelstudio.popup.IPopupPositioner;
 
 @FunctionalInterface
-public interface IFixedComponentProxy extends IComponentProxy<IFixedComponent>,IFixedComponent {
+public interface IFixedComponentProxy<T extends IFixedComponent> extends IComponentProxy<T>,IFixedComponent {
 	@Override
 	public default Point getPosition (IInterface inter) {
 		return getComponent().getPosition(inter);
