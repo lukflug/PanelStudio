@@ -4,7 +4,7 @@ buildscript {
 		jcenter()
 		maven {
 			name = "forge"
-			url = "https://maven.minecraftforge.net"
+			url = "https://maven.minecraftforge.net/"
 		}
 	}
 	dependencies {
