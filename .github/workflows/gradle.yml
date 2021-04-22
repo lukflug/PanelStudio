@@ -22,13 +22,11 @@ jobs:
         path: |
           ~/.gradle/caches
           ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*','**/gradle-wrapper.properties') }}
+        key: ${{ runner.os }}-gradle-v2-${{ hashFiles('**/*.gradle*','**/gradle-wrapper.properties') }}
         restore-keys: |
-          ${{ runner.os }}-gradle-
+          ${{ runner.os }}-gradle-v2-
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-    - name: Setup Decomp Workspace
-      run: ./gradlew setupDecompWorkspace
     - name: Build with Gradle
       run: ./gradlew build
     - name: Upload package
