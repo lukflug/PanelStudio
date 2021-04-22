@@ -4,7 +4,7 @@ buildscript {
 		jcenter()
 		maven {
 			name = "lukflug"
-			url = "https://lukflug.github.io/"
+			url = "https://lukflug.github.io/maven/"
 		}
 		maven {
 			name = "forge"
