@@ -70,6 +70,12 @@ public interface IThemeMultiplexer extends ITheme {
 		IRadioRendererProxy proxy=()->getTheme().getRadioRenderer(logicalLevel,graphicalLevel,container);
 		return proxy;
 	}
+	
+	@Override
+	public default IResizeBorderRenderer getResizeRenderer() {
+		IResizeBorderRendererProxy proxy=()->getTheme().getResizeRenderer();
+		return proxy;
+	}
 
 	@Override
 	public default int getBaseHeight() {

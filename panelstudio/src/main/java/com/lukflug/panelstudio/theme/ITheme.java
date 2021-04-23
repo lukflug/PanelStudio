@@ -83,6 +83,8 @@ public interface ITheme {
 	
 	public IRadioRenderer getRadioRenderer (int logicalLevel, int graphicalLevel, boolean container);
 	
+	public IResizeBorderRenderer getResizeRenderer();
+	
 	/**
 	 * Get the common height of a component.
 	 * @return the base height

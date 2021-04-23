@@ -60,7 +60,7 @@ public class ChildUtil {
 		}
 	}
 	
-	public enum ChildMode {
+	public static enum ChildMode {
 		DOWN,POPUP,DRAG_POPUP;
 	}
 }

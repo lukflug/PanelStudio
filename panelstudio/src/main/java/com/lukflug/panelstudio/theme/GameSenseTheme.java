@@ -245,6 +245,26 @@ public class GameSenseTheme extends ThemeBase {
 	}
 
 	@Override
+	public IResizeBorderRenderer getResizeRenderer() {
+		return new IResizeBorderRenderer() {
+			@Override
+			public void drawBorder(Context context, boolean focus) {
+				Color color=ITheme.combineColors(scheme.getColor("Outline Color"),scheme.getColor("Enabled Color"));
+				Rectangle rect=context.getRect();
+				context.getInterface().fillRect(new Rectangle(rect.x,rect.y,rect.width,getBorder()),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(rect.x,rect.y+rect.height-getBorder(),rect.width,getBorder()),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(rect.x,rect.y+getBorder(),getBorder(),rect.height-2*getBorder()),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(rect.x+rect.width-getBorder(),rect.y+getBorder(),getBorder(),rect.height-2*getBorder()),color,color,color,color);
+			}
+
+			@Override
+			public int getBorder() {
+				return 2;
+			}
+		};
+	}
+
+	@Override
 	public int getBaseHeight() {
 		return height+2*padding;
 	}

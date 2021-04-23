@@ -238,6 +238,12 @@ public class ClearTheme extends ThemeBase {
 	}
 
 	@Override
+	public IResizeBorderRenderer getResizeRenderer() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public int getBaseHeight() {
 		return height+2*padding;
 	}
