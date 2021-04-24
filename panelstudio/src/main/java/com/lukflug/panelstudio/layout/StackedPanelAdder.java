@@ -9,6 +9,7 @@ import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.SimpleToggleable;
 import com.lukflug.panelstudio.component.IComponent;
 import com.lukflug.panelstudio.component.IFixedComponent;
+import com.lukflug.panelstudio.component.IResizable;
 import com.lukflug.panelstudio.component.IScrollSize;
 import com.lukflug.panelstudio.container.IContainer;
 import com.lukflug.panelstudio.container.VerticalContainer;
@@ -21,7 +22,7 @@ import com.lukflug.panelstudio.theme.ITheme;
 import com.lukflug.panelstudio.theme.RendererTuple;
 import com.lukflug.panelstudio.theme.ThemeTuple;
 import com.lukflug.panelstudio.widget.Button;
-import com.lukflug.panelstudio.widget.ClosableComponent;
+import com.lukflug.panelstudio.widget.ResizableComponent;
 
 public class StackedPanelAdder implements IComponentAdder,IScrollSize {
 	protected IContainer<? super IFixedComponent> container;
@@ -35,7 +36,9 @@ public class StackedPanelAdder implements IComponentAdder,IScrollSize {
 		this.mode=mode;
 		this.isVisible=isVisible;
 		content=new VerticalContainer(label,theme.getContainerRenderer(-1,-1,true));
-		container.addComponent(ClosableComponent.createDraggableComponent(new Button(label,theme.getButtonRenderer(Void.class,-1,-1,true)),content,()->null,new AnimatedToggleable(new SimpleToggleable(true),animation.get()),new RendererTuple<Void>(Void.class,new ThemeTuple(theme,-1,-1)),this,position,width,true,configName),isVisible);
+		IResizable size=getResizable(width);
+		IScrollSize scrollSize=getScrollSize(size);
+		container.addComponent(ResizableComponent.createResizableComponent(new Button(label,theme.getButtonRenderer(Void.class,-1,-1,true)),content,()->null,new AnimatedToggleable(new SimpleToggleable(true),animation.get()),new RendererTuple<Void>(Void.class,new ThemeTuple(theme,-1,-1)),theme.getResizeRenderer(),size,scrollSize,position,width,true,configName),isVisible);
 		util=new ChildUtil(width,animation,new PopupTuple(popupPos,false,this));
 	}
 	
@@ -47,5 +50,13 @@ public class StackedPanelAdder implements IComponentAdder,IScrollSize {
 	@Override
 	public void addPopup(IFixedComponent popup) {
 		container.addComponent(popup,isVisible);
+	}
+	
+	protected IResizable getResizable (int width) {
+		return null;
+	}
+	
+	protected IScrollSize getScrollSize (IResizable size) {
+		return new IScrollSize(){};
 	}
 }
