@@ -8,7 +8,7 @@ import com.lukflug.panelstudio.setting.AnimatedEnum;
 import com.lukflug.panelstudio.setting.IEnumSetting;
 import com.lukflug.panelstudio.theme.IRadioRenderer;
 
-public class RadioButton extends FocusableComponent {
+public abstract class RadioButton extends FocusableComponent {
 	protected IEnumSetting setting;
 	protected IRadioRenderer renderer;
 	protected AnimatedEnum animation;
@@ -40,10 +40,22 @@ public class RadioButton extends FocusableComponent {
 			}
 		}
 	}
+	
+	@Override
+	public void handleKey (Context context, int key) {
+		super.handleKey(context,key);
+		if (context.hasFocus()) {
+			if (isUpKey(key)) setting.decrement();
+			else if (isDownKey(key)) setting.increment();
+		}
+	}
 
 	@Override
 	protected int getHeight() {
 		return renderer.getDefaultHeight(setting.getAllowedValues(),horizontal);
 	}
-
+	
+	protected abstract boolean isUpKey (int key);
+	
+	protected abstract boolean isDownKey (int key);
 }

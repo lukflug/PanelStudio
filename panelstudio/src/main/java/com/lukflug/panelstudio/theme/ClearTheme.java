@@ -165,6 +165,7 @@ public class ClearTheme extends ThemeBase {
 				}
 				Color color=getFontColor(focus);
 				if (type==Boolean.class && (Boolean)state==true) color=getMainColor(focus,true);
+				else if (type==Color.class) color=(Color)state;
 				if (graphicalLevel>0) renderOverlay(context);
 				if (type==String.class) context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title+separator+state,color);
 				else context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title,color);
@@ -239,8 +240,22 @@ public class ClearTheme extends ThemeBase {
 
 	@Override
 	public IResizeBorderRenderer getResizeRenderer() {
-		// TODO Auto-generated method stub
-		return null;
+		return new IResizeBorderRenderer() {
+			@Override
+			public void drawBorder(Context context, boolean focus) {
+				Color color=getBackgroundColor(focus);
+				Rectangle rect=context.getRect();
+				context.getInterface().fillRect(new Rectangle(rect.x,rect.y,rect.width,getBorder()),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(rect.x,rect.y+rect.height-getBorder(),rect.width,getBorder()),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(rect.x,rect.y+getBorder(),getBorder(),rect.height-2*getBorder()),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(rect.x+rect.width-getBorder(),rect.y+getBorder(),getBorder(),rect.height-2*getBorder()),color,color,color,color);
+			}
+
+			@Override
+			public int getBorder() {
+				return 2;
+			}
+		};
 	}
 
 	@Override

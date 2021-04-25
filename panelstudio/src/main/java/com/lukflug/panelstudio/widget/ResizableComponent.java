@@ -63,23 +63,22 @@ public class ResizableComponent<T extends IFixedComponent> implements IFixedComp
 	
 	@Override
 	public int getHeight (int height) {
-		return size.getSize().height+2*renderer.getBorder();
+		return height+2*renderer.getBorder();
 	}
 	
 	@Override
 	public Context getContext (Context context) {
 		if (resizing[0]) {
-			getComponent().setPosition(context.getInterface(),new Point(attachRect.x,attachRect.y+context.getInterface().getMouse().y-attachPoint.y));
-			size.setSize(new Dimension(attachRect.width,attachRect.height-context.getInterface().getMouse().y+attachPoint.y));
+			getComponent().setPosition(context.getInterface(),new Point(getComponent().getPosition(context.getInterface()).x,attachRect.y+context.getInterface().getMouse().y-attachPoint.y));
+			size.setSize(new Dimension(size.getSize().width,attachRect.height-context.getInterface().getMouse().y+attachPoint.y));
 		} else if (resizing[1]) {
-			size.setSize(new Dimension(attachRect.width,attachRect.height+context.getInterface().getMouse().y-attachPoint.y));
+			size.setSize(new Dimension(size.getSize().width,attachRect.height+context.getInterface().getMouse().y-attachPoint.y));
 		}
 		if (resizing[2]) {
-			Point p=getComponent().getPosition(context.getInterface());
-			getComponent().setPosition(context.getInterface(),new Point(p.x+context.getInterface().getMouse().x-attachPoint.x,p.y));
-			size.setSize(new Dimension(attachRect.width-context.getInterface().getMouse().x+attachPoint.x,attachRect.height));
+			getComponent().setPosition(context.getInterface(),new Point(attachRect.x+context.getInterface().getMouse().x-attachPoint.x,getComponent().getPosition(context.getInterface()).y));
+			size.setSize(new Dimension(attachRect.width-context.getInterface().getMouse().x+attachPoint.x,size.getSize().height));
 		} else if (resizing[3]) {
-			size.setSize(new Dimension(attachRect.width+context.getInterface().getMouse().x-attachPoint.x,attachRect.height));
+			size.setSize(new Dimension(attachRect.width+context.getInterface().getMouse().x-attachPoint.x,size.getSize().height));
 		}
 		return new Context(context,context.getSize().width-2*renderer.getBorder(),new Point(renderer.getBorder(),renderer.getBorder()),true,true);
 	}

@@ -55,7 +55,7 @@ public class CSGOLayout implements ILayout,IScrollSize {
 	
 	@Override
 	public void populateGUI (IComponentAdder gui, IComponentGenerator components, IClient client, ITheme theme) {
-		Button title=new Button(label,theme.getButtonRenderer(Void.class,0,0,true));
+		Button<Void> title=new Button<Void>(label,()->null,theme.getButtonRenderer(Void.class,0,0,true));
 		HorizontalContainer window=new HorizontalContainer(label,theme.getContainerRenderer(0,horizontal?1:0,true));
 		IEnumSetting catSelect;
 		if (horizontal) {
@@ -82,7 +82,7 @@ public class CSGOLayout implements ILayout,IScrollSize {
 				category.getModules().forEach(module->{
 					int graphicalLevel=1;
 					FocusableComponent moduleTitle;
-					if (module.isEnabled()==null) moduleTitle=new Button(module,theme.getButtonRenderer(Void.class,1,1,true));
+					if (module.isEnabled()==null) moduleTitle=new Button<Void>(module,()->null,theme.getButtonRenderer(Void.class,1,1,true));
 					else moduleTitle=new ToggleButton(module,module.isEnabled(),theme.getButtonRenderer(Boolean.class,1,1,true));
 					VerticalContainer moduleContainer=new VerticalContainer(module,theme.getContainerRenderer(1,graphicalLevel,false));
 					if (module.isEnabled()==null) util.addContainer(module,moduleTitle,moduleContainer,()->null,Void.class,categoryContent,gui,new ThemeTuple(theme,1,graphicalLevel),ChildMode.DOWN);
@@ -99,7 +99,7 @@ public class CSGOLayout implements ILayout,IScrollSize {
 		IComponent component=components.getComponent(setting,animation,theme,colorLevel,isContainer);
 		if (component instanceof VerticalContainer) {
 			VerticalContainer colorContainer=(VerticalContainer)component;
-			Button button=new Button(setting,theme.getButtonRenderer(Void.class,colorType==ChildMode.DOWN));
+			Button<T> button=new Button<T>(setting,()->setting.getSettingState(),theme.getButtonRenderer(setting.getSettingClass(),colorType==ChildMode.DOWN));
 			util.addContainer(setting,button,colorContainer,()->setting.getSettingState(),setting.getSettingClass(),container,gui,new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel),colorType);
 			if (setting.getSubSettings()!=null) setting.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,colorContainer,gui,components,new ThemeTuple(theme.theme,theme.logicalLevel+1,colorLevel+1)));
 		} else if (setting.getSubSettings()!=null) {
@@ -135,6 +135,12 @@ public class CSGOLayout implements ILayout,IScrollSize {
 			public void increment() {
 				state=(state+1)%array.length;
 			}
+			
+			@Override
+			public void decrement() {
+				state-=1;
+				if (state<0) state=array.length-1;
+			}
 
 			@Override
 			public String getValueName() {
@@ -156,7 +162,19 @@ public class CSGOLayout implements ILayout,IScrollSize {
 				return array;
 			}
 		};
-		RadioButton button=new RadioButton(setting,theme.getRadioRenderer(true),animation.get(),horizontal);
+		RadioButton button=new RadioButton(setting,theme.getRadioRenderer(true),animation.get(),horizontal) {
+			@Override
+			protected boolean isUpKey (int key) {
+				if (horizontal) return isLeftKey(key);
+				else return CSGOLayout.this.isUpKey(key);
+			}
+
+			@Override
+			protected boolean isDownKey (int key) {
+				if (horizontal) return isRightKey(key);
+				else return CSGOLayout.this.isDownKey(key);
+			}
+		};
 		window.addComponent(container.apply(button),visible);
 		return setting;
 	}
@@ -173,5 +191,21 @@ public class CSGOLayout implements ILayout,IScrollSize {
 				return null;
 			}
 		},0,weight);
+	}
+	
+	protected boolean isUpKey (int key) {
+		return false;
+	}
+	
+	protected boolean isDownKey (int key) {
+		return false;
+	}
+	
+	protected boolean isLeftKey (int key) {
+		return false;
+	}
+	
+	protected boolean isRightKey (int key) {
+		return false;
 	}
 }

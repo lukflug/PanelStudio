@@ -31,10 +31,11 @@ public class GameSenseTheme extends ThemeBase {
 		scheme.createSetting(this,"Font Color","The main color for text.",false,true,new Color(255,255,255),false);
 	}
 	
-	protected void fillBaseRect (Context context, boolean focus, boolean active, int logicalLevel, int graphicalLevel) {
+	protected void fillBaseRect (Context context, boolean focus, boolean active, int logicalLevel, int graphicalLevel, Color colorState) {
 		Color color=getMainColor(focus,active);
 		if (logicalLevel>1 && !active) color=getBackgroundColor(focus);
 		else if (graphicalLevel<=0 && active) color=ITheme.combineColors(getColor(scheme.getColor("Title Color")),scheme.getColor("Enabled Color"));
+		if (colorState!=null) color=ITheme.combineColors(colorState,scheme.getColor("Enabled Color"));
 		context.getInterface().fillRect(context.getRect(),color,color,color,color);
 	}
 	
@@ -166,8 +167,9 @@ public class GameSenseTheme extends ThemeBase {
 		return new IButtonRenderer<T>() {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, T state) {
-				if (type==Boolean.class) fillBaseRect(context,focus,(Boolean)state,logicalLevel,graphicalLevel);
-				else fillBaseRect(context,focus,graphicalLevel<=0,logicalLevel,graphicalLevel);
+				if (type==Boolean.class) fillBaseRect(context,focus,(Boolean)state,logicalLevel,graphicalLevel,null);
+				else if (type==Color.class) fillBaseRect(context,focus,graphicalLevel<=0,logicalLevel,graphicalLevel,(Color)state);
+				else fillBaseRect(context,focus,graphicalLevel<=0,logicalLevel,graphicalLevel,null);
 				if (graphicalLevel<=0 && container) {
 					Color color=scheme.getColor("Outline Color");
 					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+context.getSize().height-1,context.getSize().width,1),color,color,color,color);
@@ -189,7 +191,7 @@ public class GameSenseTheme extends ThemeBase {
 		return new IButtonRenderer<String>() {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, String state) {
-				fillBaseRect(context,focus,focus,logicalLevel,graphicalLevel);
+				fillBaseRect(context,focus,focus,logicalLevel,graphicalLevel,null);
 				renderOverlay(context);
 				context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title+separator+(focus?"...":state),getFontColor(focus));
 			}
@@ -231,7 +233,7 @@ public class GameSenseTheme extends ThemeBase {
 					Rectangle rect=getItemRect(context,items,i,horizontal);
 					Context subContext=new Context(context.getInterface(),rect.width,rect.getLocation(),context.hasFocus(),context.onTop());
 					subContext.setHeight(rect.height);
-					fillBaseRect(subContext,focus,i==target,logicalLevel,graphicalLevel);
+					fillBaseRect(subContext,focus,i==target,logicalLevel,graphicalLevel,null);
 					renderOverlay(subContext);
 					context.getInterface().drawString(new Point(rect.x+padding,rect.y+padding),height,items[i].getDisplayName(),getFontColor(focus));
 				}

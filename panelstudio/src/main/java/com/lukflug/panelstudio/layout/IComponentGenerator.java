@@ -31,7 +31,7 @@ public interface IComponentGenerator {
 		} else if (setting instanceof IKeybindSetting) {
 			return getKeybindComponent((IKeybindSetting)setting,animation,theme,colorLevel,isContainer);
 		} else {
-			return new Button(setting,theme.getButtonRenderer(Void.class,isContainer));
+			return new Button<Void>(setting,()->null,theme.getButtonRenderer(Void.class,isContainer));
 		}
 	}
 	

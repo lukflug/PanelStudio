@@ -6,7 +6,7 @@ import java.awt.Color;
  * Setting representing a color.
  * @author lukflug
  */
-public interface IColorSetting extends ISetting<Void> {
+public interface IColorSetting extends ISetting<Color> {
 	/**
 	 * Get the current value for the color setting.
 	 * @return the current color
@@ -62,12 +62,12 @@ public interface IColorSetting extends ISetting<Void> {
 	}
 	
 	@Override
-	public default Void getSettingState() {
-		return null;
+	public default Color getSettingState() {
+		return getValue();
 	}
 	
 	@Override
-	public default Class<Void> getSettingClass() {
-		return Void.class;
+	public default Class<Color> getSettingClass() {
+		return Color.class;
 	}
 }

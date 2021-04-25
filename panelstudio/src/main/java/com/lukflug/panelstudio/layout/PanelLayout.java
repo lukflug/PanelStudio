@@ -44,7 +44,7 @@ public class PanelLayout implements ILayout {
 		Point pos=start;
 		AtomicInteger skipY=new AtomicInteger(this.skipY);
 		client.getCategories().forEach(category->{
-			Button categoryTitle=new Button(category,theme.getButtonRenderer(Void.class,0,0,true));
+			Button<Void> categoryTitle=new Button<Void>(category,()->null,theme.getButtonRenderer(Void.class,0,0,true));
 			VerticalContainer categoryContent=new VerticalContainer(category,theme.getContainerRenderer(0,0,false));
 			gui.addComponent(categoryTitle,categoryContent,new ThemeTuple(theme,0,0),new Point(pos),width,animation);
 			pos.translate(skipX,skipY.get());
@@ -53,7 +53,7 @@ public class PanelLayout implements ILayout {
 				ChildMode mode=layoutType.apply(0);
 				int graphicalLevel=(mode==ChildMode.DOWN)?1:0;
 				FocusableComponent moduleTitle;
-				if (module.isEnabled()==null) moduleTitle=new Button(module,theme.getButtonRenderer(Void.class,1,1,mode==ChildMode.DOWN));
+				if (module.isEnabled()==null) moduleTitle=new Button<Void>(module,()->null,theme.getButtonRenderer(Void.class,1,1,mode==ChildMode.DOWN));
 				else moduleTitle=new ToggleButton(module,module.isEnabled(),theme.getButtonRenderer(Boolean.class,1,1,mode==ChildMode.DOWN));
 				VerticalContainer moduleContainer=new VerticalContainer(module,theme.getContainerRenderer(1,graphicalLevel,false));
 				if (module.isEnabled()==null) util.addContainer(module,moduleTitle,moduleContainer,()->null,Void.class,categoryContent,gui,new ThemeTuple(theme,1,graphicalLevel),layoutType.apply(0));
@@ -70,7 +70,7 @@ public class PanelLayout implements ILayout {
 		IComponent component=components.getComponent(setting,animation,new ThemeTuple(theme.theme,theme.logicalLevel,theme.graphicalLevel),colorLevel,isContainer);
 		if (component instanceof VerticalContainer) {
 			VerticalContainer colorContainer=(VerticalContainer)component;
-			Button button=new Button(setting,theme.getButtonRenderer(Void.class,colorType.apply(theme.logicalLevel-1)==ChildMode.DOWN));
+			Button<T> button=new Button<T>(setting,()->setting.getSettingState(),theme.getButtonRenderer(setting.getSettingClass(),colorType.apply(theme.logicalLevel-1)==ChildMode.DOWN));
 			util.addContainer(setting,button,colorContainer,()->setting.getSettingState(),setting.getSettingClass(),container,gui,new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel),colorType.apply(theme.logicalLevel-1));
 			if (setting.getSubSettings()!=null) setting.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,colorContainer,gui,components,new ThemeTuple(theme.theme,theme.logicalLevel+1,colorLevel+1)));
 		} else if (setting.getSubSettings()!=null) {

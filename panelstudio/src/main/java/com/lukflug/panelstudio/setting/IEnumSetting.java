@@ -10,6 +10,8 @@ public interface IEnumSetting extends ISetting<String> {
 	 */
 	public void increment();
 	
+	public void decrement();
+	
 	/**
 	 * Get the current value.
 	 * @return the name of the current enum value

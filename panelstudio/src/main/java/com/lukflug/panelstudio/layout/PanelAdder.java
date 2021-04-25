@@ -1,6 +1,5 @@
 package com.lukflug.panelstudio.layout;
 
-import java.awt.Dimension;
 import java.awt.Point;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
@@ -23,7 +22,6 @@ public class PanelAdder implements IComponentAdder {
 	protected boolean open;
 	protected IBoolean isVisible;
 	protected UnaryOperator<String> configName;
-	protected Dimension minSize=new Dimension(20,20);
 	
 	public PanelAdder (IContainer<? super IFixedComponent> container, boolean open, IBoolean isVisible, UnaryOperator<String> configName) {
 		this.container=container;

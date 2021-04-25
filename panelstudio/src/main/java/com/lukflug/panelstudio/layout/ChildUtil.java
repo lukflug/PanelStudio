@@ -42,7 +42,7 @@ public class ChildUtil {
 		case POPUP:
 		case DRAG_POPUP:
 			toggle=new SimpleToggleable(false);
-			Button button=new Button(new Labeled(label.getDisplayName(),label.getDescription(),()->drawTitle&&label.isVisible().isOn()),theme.getButtonRenderer(Void.class,true));
+			Button<T> button=new Button<T>(new Labeled(label.getDisplayName(),label.getDescription(),()->drawTitle&&label.isVisible().isOn()),state,theme.getButtonRenderer(stateClass,true));
 			if (popupType.dynamicPopup) popup=ClosableComponent.createDynamicPopup(button,container,state,animation.get(),new RendererTuple<T>(stateClass,theme),popupType.popupSize,toggle,width);
 			else popup=ClosableComponent.createStaticPopup(button,container,state,animation.get(),new RendererTuple<T>(stateClass,theme),popupType.popupSize,toggle,width,false,"");
 			parent.addComponent(new ComponentProxy<IComponent>(title) {
