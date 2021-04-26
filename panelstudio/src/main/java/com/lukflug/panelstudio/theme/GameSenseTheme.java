@@ -265,6 +265,37 @@ public class GameSenseTheme extends ThemeBase {
 			}
 		};
 	}
+	
+	@Override
+	public ITextFieldRenderer getTextRenderer (int logicalLevel, int graphicalLevel, boolean container) {
+		return new ITextFieldRenderer() {
+			@Override
+			public int renderTextField (Context context, String title, boolean focus, String content, int position, int boxPosition, boolean insertMode) {
+				context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title,getFontColor(focus));
+				Rectangle rect=getTextArea(context);
+				Color color=focus?scheme.getColor("Outline Color"):scheme.getColor("Settings Color");
+				context.getInterface().fillRect(new Rectangle(rect.x,rect.y,rect.width,1),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(rect.x,rect.y+rect.height-1,rect.width,1),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(rect.x,rect.y,1,rect.height),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(rect.x+rect.width-1,rect.y,1,rect.height),color,color,color,color);
+				context.getInterface().window(rect);
+				context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title,getFontColor(focus));
+				context.getInterface().restore();
+				return boxPosition;
+			}
+
+			@Override
+			public int getDefaultHeight() {
+				return 2*getBaseHeight();
+			}
+
+			@Override
+			public Rectangle getTextArea(Context context) {
+				Rectangle rect=context.getRect();
+				return new Rectangle(rect.x+height+padding,rect.y+getBaseHeight(),rect.width-2*padding,rect.height-getBaseHeight()-padding);
+			}
+		};
+	}
 
 	@Override
 	public int getBaseHeight() {

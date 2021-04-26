@@ -257,6 +257,26 @@ public class ClearTheme extends ThemeBase {
 			}
 		};
 	}
+	
+	@Override
+	public ITextFieldRenderer getTextRenderer (int logicalLevel, int graphicalLevel, boolean container) {
+		return new ITextFieldRenderer() {
+			@Override
+			public int renderTextField (Context context, String title, boolean focus, String content, int position, int boxPosition, boolean insertMode) {
+				return boxPosition;
+			}
+
+			@Override
+			public int getDefaultHeight() {
+				return getBaseHeight();
+			}
+
+			@Override
+			public Rectangle getTextArea(Context context) {
+				return context.getRect();
+			}
+		};
+	}
 
 	@Override
 	public int getBaseHeight() {

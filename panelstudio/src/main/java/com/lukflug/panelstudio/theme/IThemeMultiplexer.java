@@ -76,6 +76,12 @@ public interface IThemeMultiplexer extends ITheme {
 		IResizeBorderRendererProxy proxy=()->getTheme().getResizeRenderer();
 		return proxy;
 	}
+	
+	@Override
+	public default ITextFieldRenderer getTextRenderer (int logicalLevel, int graphicalLevel, boolean container) {
+		ITextFieldRendererProxy proxy=()->getTheme().getTextRenderer(logicalLevel,graphicalLevel,container);
+		return proxy;
+	}
 
 	@Override
 	public default int getBaseHeight() {

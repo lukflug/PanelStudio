@@ -85,6 +85,8 @@ public interface ITheme {
 	
 	public IResizeBorderRenderer getResizeRenderer();
 	
+	public ITextFieldRenderer getTextRenderer (int logicalLevel, int graphicalLevel, boolean container);
+	
 	/**
 	 * Get the common height of a component.
 	 * @return the base height
