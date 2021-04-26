@@ -29,6 +29,11 @@ public interface IComponentProxy<T extends IComponent> extends IComponent {
 	public default void handleKey(Context context, int scancode) {
 		doOperation(context,subContext->getComponent().handleKey(subContext,scancode));
 	}
+	
+	@Override
+	public default void handleChar(Context context, char character) {
+		doOperation(context,subContext->getComponent().handleChar(subContext,character));
+	}
 
 	@Override
 	public default void handleScroll(Context context, int diff) {

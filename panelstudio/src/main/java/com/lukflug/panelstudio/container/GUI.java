@@ -91,6 +91,10 @@ public class GUI implements IContainer<IFixedComponent> {
 		container.handleKey(getContext(),scancode);
 	}
 	
+	public void handleChar (char character) {
+		container.handleChar(getContext(),character);
+	}
+	
 	/**
 	 * Handle the mouse wheel being scrolled
 	 * @param diff the amount by which the wheel was moved

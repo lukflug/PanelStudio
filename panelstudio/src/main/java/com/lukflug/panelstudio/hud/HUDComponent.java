@@ -45,6 +45,11 @@ public abstract class HUDComponent implements IFixedComponent {
 	public void handleKey(Context context, int scancode) {
 		context.setHeight(getSize(context.getInterface()).height);
 	}
+	
+	@Override
+	public void handleChar(Context context, char character) {
+		context.setHeight(getSize(context.getInterface()).height);
+	}
 
 	@Override
 	public void handleScroll(Context context, int diff) {

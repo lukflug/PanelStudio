@@ -92,6 +92,11 @@ public abstract class Container<T extends IComponent> extends ComponentBase impl
 	public void handleKey (Context context, int scancode) {
 		doContextSensitiveLoop(context,(subContext,component)->component.handleKey(subContext,scancode));
 	}
+	
+	@Override
+	public void handleChar (Context context, char character) {
+		doContextSensitiveLoop(context,(subContext,component)->component.handleChar(subContext,character));
+	}
 
 	@Override
 	public void handleScroll (Context context, int diff) {

@@ -53,6 +53,11 @@ public abstract class ComponentBase implements IComponent {
 	public void handleKey(Context context, int scancode) {
 		context.setHeight(getHeight());
 	}
+	
+	@Override
+	public void handleChar(Context context, char character) {
+		context.setHeight(getHeight());
+	}
 
 	@Override
 	public void handleScroll(Context context, int diff) {

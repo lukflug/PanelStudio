@@ -39,6 +39,8 @@ public interface IComponent {
 	 */
 	public void handleKey (Context context, int scancode);
 	
+	public void handleChar (Context context, char character);
+	
 	/**
 	 * Should be called by the parent when the mouse wheel is scrolled.
 	 * The current height of the component should be set by this method via {@link Context#setHeight(int)}.

@@ -137,6 +137,12 @@ public abstract class MinecraftGUI extends Screen {
 	}
 	
 	@Override
+	public boolean charTyped (char chr, int modifiers) {
+		getGUI().handleChar(chr);
+		return true;
+	}
+	
+	@Override
 	public boolean isPauseScreen() {
 		return false;
 	}

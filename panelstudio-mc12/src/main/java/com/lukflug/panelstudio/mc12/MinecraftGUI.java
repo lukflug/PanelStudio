@@ -109,7 +109,10 @@ public abstract class MinecraftGUI extends GuiScreen {
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) {
 		if (keyCode == Keyboard.KEY_ESCAPE) exitGUI();
-		else getGUI().handleKey(keyCode);
+		else {
+			getGUI().handleKey(keyCode);
+			getGUI().handleChar(typedChar);
+		}
 	}
 
 	@Override
