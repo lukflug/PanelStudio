@@ -19,6 +19,8 @@ KAMI Blue Theme:
 <img alt="kamiblue" src=https://cdn.discordapp.com/attachments/780094001331961901/796061373058646058/2021-01-05_17.57.36.png> <br>
 Windows Theme:
 <img alt="windows" src=https://cdn.discordapp.com/attachments/780094001331961901/796061378686615572/2021-01-05_17.57.42.png> <br>
+<img alt="lukflug" src=https://cdn.discordapp.com/
+attachments/749986691149856869/836334131435667486/tensortheme.png> <br>
 </details>
 
 This repository only includes the GameSense themes, however, since Cyber didn't want me to publish the other themes. The library has no depedencies (aside from Java 8), so it can be easily used for other purposes, aside from Minecraft utility mods. Thanks to Go_Hoosiers, for suggesting the name of this library. If you use this library, some attribution would be greatly appreciated. Consider visiting the PanelStudio discord server: https://discord.gg/E3DrF4XvUE.
