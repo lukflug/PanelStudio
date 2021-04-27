@@ -262,7 +262,7 @@ public class ClearTheme extends ThemeBase {
 	public ITextFieldRenderer getTextRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new ITextFieldRenderer() {
 			@Override
-			public int renderTextField (Context context, String title, boolean focus, String content, int position, int boxPosition, boolean insertMode) {
+			public int renderTextField (Context context, String title, boolean focus, String content, int position, int select, int boxPosition, boolean insertMode) {
 				return boxPosition;
 			}
 
@@ -274,6 +274,12 @@ public class ClearTheme extends ThemeBase {
 			@Override
 			public Rectangle getTextArea(Context context) {
 				return context.getRect();
+			}
+			
+			@Override
+			public int transformToCharPos(Context context, String content, int boxPosition) {
+				// TODO Auto-generated method stub
+				return -1;
 			}
 		};
 	}

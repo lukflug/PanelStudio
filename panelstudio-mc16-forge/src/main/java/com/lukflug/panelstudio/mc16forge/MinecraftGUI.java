@@ -2,6 +2,8 @@ package com.lukflug.panelstudio.mc16forge;
 
 import java.awt.Point;
 
+import org.lwjgl.glfw.GLFW;
+
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.container.GUI;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -27,6 +29,10 @@ public abstract class MinecraftGUI extends Screen {
 	 * Current right mouse button state.
 	 */
 	private boolean rButton=false;
+	/**
+	 * Current GLFW modifier bits.
+	 */
+	private int modifiers=0;
 	/**
 	 * Last rendering time.
 	 */
@@ -133,12 +139,14 @@ public abstract class MinecraftGUI extends Screen {
 	
 	@Override
 	public boolean keyPressed (int keyCode, int scanCode, int modifiers) {
+		this.modifiers=modifiers;
 		if (!super.keyPressed(keyCode,scanCode,modifiers)) getGUI().handleKey(keyCode);
 		return true;
 	}
 	
 	@Override
 	public boolean charTyped (char chr, int modifiers) {
+		this.modifiers=modifiers;
 		getGUI().handleChar(chr);
 		return true;
 	}
@@ -178,6 +186,21 @@ public abstract class MinecraftGUI extends Screen {
 		 */
 		public GUIInterface (boolean clipX) {
 			super(clipX);
+		}
+		
+		@Override
+		public boolean getModifier (int modifier) {
+			switch (modifier) {
+			case SHIFT:
+				return (modifiers&GLFW.GLFW_MOD_SHIFT)!=0;
+			case CTRL:
+				return (modifiers&GLFW.GLFW_MOD_CONTROL)!=0;
+			case ALT:
+				return (modifiers&GLFW.GLFW_MOD_ALT)!=0;
+			case SUPER:
+				return (modifiers&GLFW.GLFW_MOD_SUPER)!=0;
+			}
+			return false;
 		}
 		
 		@Override

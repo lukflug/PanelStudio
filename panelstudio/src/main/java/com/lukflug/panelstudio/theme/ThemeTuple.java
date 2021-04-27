@@ -48,4 +48,8 @@ public final class ThemeTuple {
 	public IRadioRenderer getRadioRenderer (boolean container) {
 		return theme.getRadioRenderer(logicalLevel,graphicalLevel,container);
 	}
+	
+	public ITextFieldRenderer getTextRenderer (boolean container) {
+		return theme.getTextRenderer(logicalLevel,graphicalLevel,container);
+	}
 }

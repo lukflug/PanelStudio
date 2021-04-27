@@ -13,6 +13,7 @@ import java.util.Stack;
 import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 
@@ -47,6 +48,21 @@ public abstract class GLInterface implements IInterface {
 	 */
 	public GLInterface (boolean clipX) {
 		this.clipX=clipX;
+	}
+	
+	@Override
+	public boolean getModifier (int modifier) {
+		switch (modifier) {
+		case SHIFT:
+			return Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)||Keyboard.isKeyDown(Keyboard.KEY_RSHIFT);
+		case CTRL:
+			return Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)||Keyboard.isKeyDown(Keyboard.KEY_RCONTROL);
+		case ALT:
+			return Keyboard.isKeyDown(Keyboard.KEY_LMENU)||Keyboard.isKeyDown(Keyboard.KEY_RMENU);
+		case SUPER:
+			return Keyboard.isKeyDown(Keyboard.KEY_LMETA)||Keyboard.isKeyDown(Keyboard.KEY_RMETA);
+		}
+		return false;
 	}
 	
 	@Override

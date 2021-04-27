@@ -20,6 +20,10 @@ public interface IInterface {
 	 * @see #getButton(int)
 	 */
 	public static final int RBUTTON=1;
+	public static final int SHIFT=0;
+	public static final int CTRL=1;
+	public static final int ALT=2;
+	public static final int SUPER=3;
 	
 	/**
 	 * Returns the time in milliseconds of the start of rendering.
@@ -44,6 +48,8 @@ public interface IInterface {
 	 * @see #RBUTTON
 	 */
 	public boolean getButton (int button);
+	
+	public boolean getModifier (int modifier);
 	
 	/**
 	 * Draw a string on the screen.
