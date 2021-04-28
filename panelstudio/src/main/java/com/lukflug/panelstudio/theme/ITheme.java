@@ -87,6 +87,10 @@ public interface ITheme {
 	
 	public ITextFieldRenderer getTextRenderer (int logicalLevel, int graphicalLevel, boolean container);
 	
+	public ISwitchRenderer<Boolean> getToggleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container);
+	
+	public ISwitchRenderer<String> getCycleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container);
+	
 	/**
 	 * Get the common height of a component.
 	 * @return the base height

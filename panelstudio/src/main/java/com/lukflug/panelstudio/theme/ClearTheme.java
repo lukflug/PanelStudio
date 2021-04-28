@@ -283,6 +283,58 @@ public class ClearTheme extends ThemeBase {
 			}
 		};
 	}
+	
+	public ISwitchRenderer<Boolean> getToggleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container) {
+		return new ISwitchRenderer<Boolean>() {
+			@Override
+			public void renderButton(Context context, String title, boolean focus, Boolean state) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public int getDefaultHeight() {
+				return getBaseHeight();
+			}
+
+			@Override
+			public Rectangle getOnField(Context context) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public Rectangle getOffField(Context context) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};
+	}
+	
+	public ISwitchRenderer<String> getCycleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container) {
+		return new ISwitchRenderer<String>() {
+			@Override
+			public void renderButton(Context context, String title, boolean focus, String state) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public int getDefaultHeight() {
+				return getBaseHeight();
+			}
+
+			@Override
+			public Rectangle getOnField(Context context) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public Rectangle getOffField(Context context) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};
+	}
 
 	@Override
 	public int getBaseHeight() {

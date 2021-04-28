@@ -52,4 +52,12 @@ public final class ThemeTuple {
 	public ITextFieldRenderer getTextRenderer (boolean container) {
 		return theme.getTextRenderer(logicalLevel,graphicalLevel,container);
 	}
+	
+	public ISwitchRenderer<Boolean> getToggleSwitchRenderer (boolean container) {
+		return theme.getToggleSwitchRenderer(logicalLevel,graphicalLevel,container);
+	}
+	
+	public ISwitchRenderer<String> getCycleSwitchRenderer (boolean container) {
+		return theme.getCycleSwitchRenderer(logicalLevel,graphicalLevel,container);
+	}
 }

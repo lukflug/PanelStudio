@@ -17,11 +17,11 @@ import com.lukflug.panelstudio.container.IContainer;
 import com.lukflug.panelstudio.container.VerticalContainer;
 import com.lukflug.panelstudio.layout.ChildUtil.ChildMode;
 import com.lukflug.panelstudio.popup.PopupTuple;
+import com.lukflug.panelstudio.setting.IBooleanSetting;
 import com.lukflug.panelstudio.setting.IClient;
 import com.lukflug.panelstudio.setting.IEnumSetting;
 import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.setting.ISetting;
-import com.lukflug.panelstudio.setting.Labeled;
 import com.lukflug.panelstudio.theme.ITheme;
 import com.lukflug.panelstudio.theme.ThemeTuple;
 import com.lukflug.panelstudio.widget.Button;
@@ -73,7 +73,22 @@ public class CSGOLayout implements ILayout,IScrollSize {
 				category.getModules().forEach(module->{
 					VerticalContainer container=new VerticalContainer(module,theme.getContainerRenderer(1,1,false));
 					window.addComponent(wrapColumn(container,new ThemeTuple(theme,1,1),weight),()->catSelect.getValueName()==category.getDisplayName()&&modSelect.getValueName()==module.getDisplayName());
-					if (module.isEnabled()!=null) container.addComponent(new ToggleButton(new Labeled(enabledButton,null,()->true),module.isEnabled(),theme.getButtonRenderer(Boolean.class,1,2,false)));
+					if (module.isEnabled()!=null) container.addComponent(components.getComponent(new IBooleanSetting() {
+						@Override
+						public String getDisplayName() {
+							return enabledButton;
+						}
+
+						@Override
+						public void toggle() {
+							module.isEnabled().toggle();
+						}
+
+						@Override
+						public boolean isOn() {
+							return module.isEnabled().isOn();
+						}
+					},animation,new ThemeTuple(theme,1,2),2,false));
 					module.getSettings().forEach(setting->addSettingsComponent(setting,container,gui,components,new ThemeTuple(theme,2,2)));
 				});
 			} else {

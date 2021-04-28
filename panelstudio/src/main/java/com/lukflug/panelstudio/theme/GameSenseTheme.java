@@ -354,6 +354,96 @@ public class GameSenseTheme extends ThemeBase {
 			}
 		};
 	}
+	
+	public ISwitchRenderer<Boolean> getToggleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container) {
+		return new ISwitchRenderer<Boolean>() {
+			@Override
+			public void renderButton(Context context, String title, boolean focus, Boolean state) {
+				fillBaseRect(context,focus,false,logicalLevel,graphicalLevel,null);
+				Color color=scheme.getColor("Outline Color");
+				if (graphicalLevel<=0 && container) {
+					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+context.getSize().height-1,context.getSize().width,1),color,color,color,color);
+				}
+				renderOverlay(context);
+				context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title+separator+(state?"On":"Off"),getFontColor(focus));
+				Color fillColor=getMainColor(focus,true);
+				Rectangle rect=state?getOnField(context):getOffField(context);
+				context.getInterface().fillRect(rect,fillColor,fillColor,fillColor,fillColor);
+				rect=context.getRect();
+				rect=new Rectangle(rect.x+rect.width-2*rect.height+3*padding,rect.y+padding,2*rect.height-4*padding,rect.height-2*padding);
+				context.getInterface().fillRect(new Rectangle(rect.x,rect.y,rect.width,1),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(rect.x,rect.y+rect.height-1,rect.width,1),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(rect.x,rect.y,1,rect.height),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(rect.x+rect.width-1,rect.y,1,rect.height),color,color,color,color);
+			}
+
+			@Override
+			public int getDefaultHeight() {
+				return getBaseHeight();
+			}
+
+			@Override
+			public Rectangle getOnField(Context context) {
+				Rectangle rect=context.getRect();
+				return new Rectangle(rect.x+rect.width-rect.height+padding,rect.y+padding,rect.height-2*padding,rect.height-2*padding);
+			}
+
+			@Override
+			public Rectangle getOffField(Context context) {
+				Rectangle rect=context.getRect();
+				return new Rectangle(rect.x+rect.width-2*rect.height+3*padding,rect.y+padding,rect.height-2*padding,rect.height-2*padding);
+			}
+		};
+	}
+	
+	public ISwitchRenderer<String> getCycleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container) {
+		return new ISwitchRenderer<String>() {
+			@Override
+			public void renderButton(Context context, String title, boolean focus, String state) {
+				fillBaseRect(context,focus,false,logicalLevel,graphicalLevel,null);
+				Color color=scheme.getColor("Outline Color");
+				if (graphicalLevel<=0 && container) {
+					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+context.getSize().height-1,context.getSize().width,1),color,color,color,color);
+				}
+				renderOverlay(context);
+				Color textColor=getFontColor(focus);
+				context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title+separator+state,textColor);
+				Color fillColor=getMainColor(focus,true);
+				Rectangle rect=getOnField(context);
+				context.getInterface().fillRect(rect,fillColor,fillColor,fillColor,fillColor);
+				context.getInterface().fillRect(new Rectangle(rect.x,rect.y,rect.width,1),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(rect.x,rect.y+rect.height-1,rect.width,1),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(rect.x,rect.y,1,rect.height),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(rect.x+rect.width-1,rect.y,1,rect.height),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(rect.x+1,rect.y+rect.height/2-1,rect.width-2,2),textColor,textColor,textColor,textColor);
+				context.getInterface().fillRect(new Rectangle(rect.x+rect.width/2-1,rect.y+1,2,rect.height-2),textColor,textColor,textColor,textColor);
+				rect=getOffField(context);
+				context.getInterface().fillRect(rect,fillColor,fillColor,fillColor,fillColor);
+				context.getInterface().fillRect(new Rectangle(rect.x,rect.y,rect.width,1),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(rect.x,rect.y+rect.height-1,rect.width,1),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(rect.x,rect.y,1,rect.height),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(rect.x+rect.width-1,rect.y,1,rect.height),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(rect.x+1,rect.y+rect.height/2-1,rect.width-2,2),textColor,textColor,textColor,textColor);
+			}
+
+			@Override
+			public int getDefaultHeight() {
+				return getBaseHeight();
+			}
+
+			@Override
+			public Rectangle getOnField(Context context) {
+				Rectangle rect=context.getRect();
+				return new Rectangle(rect.x+rect.width-rect.height+1,rect.y+1,rect.height-2,rect.height-2);
+			}
+
+			@Override
+			public Rectangle getOffField(Context context) {
+				Rectangle rect=context.getRect();
+				return new Rectangle(rect.x+rect.width-2*rect.height+2,rect.y+1,rect.height-2,rect.height-2);
+			}
+		};
+	}
 
 	@Override
 	public int getBaseHeight() {

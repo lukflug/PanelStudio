@@ -82,6 +82,18 @@ public interface IThemeMultiplexer extends ITheme {
 		ITextFieldRendererProxy proxy=()->getTheme().getTextRenderer(logicalLevel,graphicalLevel,container);
 		return proxy;
 	}
+	
+	@Override
+	public default ISwitchRenderer<Boolean> getToggleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container) {
+		ISwitchRendererProxy<Boolean> proxy=()->getTheme().getToggleSwitchRenderer(logicalLevel,graphicalLevel,container);
+		return proxy;
+	}
+	
+	@Override
+	public default ISwitchRenderer<String> getCycleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container) {
+		ISwitchRendererProxy<String> proxy=()->getTheme().getCycleSwitchRenderer(logicalLevel,graphicalLevel,container);
+		return proxy;
+	}
 
 	@Override
 	public default int getBaseHeight() {
