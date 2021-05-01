@@ -17,8 +17,8 @@ public interface ITextFieldRendererProxy extends ITextFieldRenderer {
 	}
 	
 	@Override
-	public default Rectangle getTextArea (Context context) {
-		return getRenderer().getTextArea(context);
+	public default Rectangle getTextArea (Context context, String title) {
+		return getRenderer().getTextArea(context,title);
 	}
 	
 	@Override

@@ -9,7 +9,7 @@ public interface ITextFieldRenderer {
 	
 	public int getDefaultHeight();
 	
-	public Rectangle getTextArea (Context context);
+	public Rectangle getTextArea (Context context, String title);
 	
 	public int transformToCharPos (Context context, String content, int boxPosition);
 }

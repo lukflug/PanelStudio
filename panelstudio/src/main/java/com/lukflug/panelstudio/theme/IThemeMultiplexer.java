@@ -52,6 +52,12 @@ public interface IThemeMultiplexer extends ITheme {
 		IButtonRendererProxy<T> proxy=()->getTheme().getButtonRenderer(type,logicalLevel,graphicalLevel,container);
 		return proxy;
 	}
+	
+	@Override
+	public default IButtonRenderer<Void> getSmallButtonRenderer(int symbol, int logicalLevel, int graphicalLevel, boolean container) {
+		IButtonRendererProxy<Void> proxy=()->getTheme().getSmallButtonRenderer(symbol,logicalLevel,graphicalLevel,container);
+		return proxy;
+	}
 
 	@Override
 	public default IButtonRenderer<String> getKeybindRenderer(int logicalLevel, int graphicalLevel, boolean container) {

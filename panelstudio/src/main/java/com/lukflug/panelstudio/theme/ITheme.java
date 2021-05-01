@@ -9,6 +9,15 @@ import com.lukflug.panelstudio.base.IInterface;
  * @author lukflug
  */
 public interface ITheme {
+	public static final int NONE=0;
+	public static final int CLOSE=1;
+	public static final int MINIMIZE=2;
+	public static final int ADD=3;
+	public static final int LEFT=4;
+	public static final int RIGHT=5;
+	public static final int UP=6;
+	public static final int DOWN=7;
+	
 	/**
 	 * Function to be called in order to load images.
 	 * @param inter the interface to use
@@ -64,6 +73,8 @@ public interface ITheme {
 	 * @return the title renderer
 	 */
 	public <T> IButtonRenderer<T> getButtonRenderer (Class<T> type, int logicalLevel, int graphicalLevel, boolean container);
+	
+	public IButtonRenderer<Void> getSmallButtonRenderer (int symbol, int logicalLevel, int graphicalLevel, boolean container);
 	
 	/**
 	 * Returns the renderer for keybinds.

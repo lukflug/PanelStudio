@@ -179,6 +179,12 @@ public class ClearTheme extends ThemeBase {
 	}
 
 	@Override
+	public IButtonRenderer<Void> getSmallButtonRenderer(int symbol, int logicalLevel, int graphicalLevel, boolean container) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public IButtonRenderer<String> getKeybindRenderer(int logicalLevel, int graphicalLevel, boolean container) {
 		return new IButtonRenderer<String>() {
 			@Override
@@ -272,7 +278,7 @@ public class ClearTheme extends ThemeBase {
 			}
 
 			@Override
-			public Rectangle getTextArea(Context context) {
+			public Rectangle getTextArea (Context context, String title) {
 				return context.getRect();
 			}
 			
