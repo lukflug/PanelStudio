@@ -24,7 +24,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
-import net.minecraft.client.texture.TextureUtils;
+import net.minecraft.client.texture.TextureUtil;
 import net.minecraft.client.util.Window;
 import net.minecraft.util.Identifier;
 
@@ -139,8 +139,8 @@ public abstract class GLInterface implements IInterface {
 			Identifier rl=new Identifier(getResourcePrefix()+name);
 			InputStream stream=MinecraftClient.getInstance().getResourceManager().getResource(rl).getInputStream();
 			BufferedImage image=ImageIO.read(stream);
-			int texture=TextureUtils.getTexLevelParameter();
-			TextureUtils.method_4289(texture,image,false,false);
+			int texture=TextureUtil.getTexLevelParameter();
+			TextureUtil.method_4289(texture,image,false,false);
 			return texture;
 		} catch (IOException e) {
 			e.printStackTrace();
