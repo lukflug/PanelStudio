@@ -3,10 +3,6 @@ buildscript {
 	repositories {
 		jcenter()
 		maven {
-			name = "lukflug"
-			url = "https://lukflug.github.io/maven/"
-		}
-		maven {
 			name = "forge"
 			url = "https://maven.minecraftforge.net/"
 		}
