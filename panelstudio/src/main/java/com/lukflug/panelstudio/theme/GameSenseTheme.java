@@ -195,10 +195,11 @@ public class GameSenseTheme extends ThemeBase {
 				fillBaseRect(context,focus,true,logicalLevel,graphicalLevel,null);
 				renderOverlay(context);
 				Point points[]=new Point[3];
-				Rectangle rect=new Rectangle(context.getRect().x+padding,context.getRect().y+padding,context.getRect().height-2*padding,context.getRect().height-2*padding);
+				Rectangle rect=new Rectangle(context.getRect().x+padding/2,context.getRect().y+padding/2,context.getRect().height-2*padding/2,context.getRect().height-2*padding/2);
 				if (title==null) rect.x+=context.getRect().width/2-context.getRect().height/2;
 				switch (symbol) {
 				case ITheme.CLOSE:
+					
 					break;
 				case ITheme.MINIMIZE:
 					break;
@@ -224,9 +225,9 @@ public class GameSenseTheme extends ThemeBase {
 					break;
 				case ITheme.DOWN:
 					if (rect.width%2==1) rect.width-=1;
-					points[0]=new Point(rect.x,rect.y);
+					points[2]=new Point(rect.x,rect.y);
 					points[1]=new Point(rect.x+rect.width,rect.y);
-					points[2]=new Point(rect.x+rect.width/2,rect.y+rect.height);
+					points[0]=new Point(rect.x+rect.width/2,rect.y+rect.height);
 					break;
 				}
 				if (symbol>=ITheme.LEFT && symbol<=ITheme.DOWN) {

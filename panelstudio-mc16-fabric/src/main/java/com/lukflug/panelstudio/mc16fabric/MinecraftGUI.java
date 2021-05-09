@@ -139,7 +139,8 @@ public abstract class MinecraftGUI extends Screen {
 	@Override
 	public boolean keyPressed (int keyCode, int scanCode, int modifiers) {
 		this.modifiers=modifiers;
-		if (!super.keyPressed(keyCode,scanCode,modifiers)) getGUI().handleKey(keyCode);
+		if (keyCode==GLFW.GLFW_KEY_ESCAPE) exitGUI();
+		else getGUI().handleKey(keyCode);
 		return true;
 	}
 	
