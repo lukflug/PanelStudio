@@ -17,14 +17,14 @@ apply plugin: "fabric-loom"
 repositories {
 	maven {
 		name = "legacy-fabric"
-		url = "https://dl.bintray.com/legacy-fabric/Legacy-Fabric-Maven"
+		url = "https://maven.legacyfabric.net/"
 	}
 }
 
 
 minecraft {
 	intermediaryUrl = {
-		return "https://dl.bintray.com/legacy-fabric/Legacy-Fabric-Maven/net/fabricmc/intermediary/" + it + "/intermediary-" + it + "-v2.jar";
+		return "https://maven.legacyfabric.net/net/fabricmc/intermediary/" + it + "/intermediary-" + it + "-v2.jar";
 	}
 	remapMod=false
 }
