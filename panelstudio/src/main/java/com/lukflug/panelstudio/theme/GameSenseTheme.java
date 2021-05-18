@@ -197,25 +197,32 @@ public class GameSenseTheme extends ThemeBase {
 				Point points[]=new Point[3];
 				Rectangle rect=new Rectangle(context.getRect().x+padding/2,context.getRect().y+padding/2,context.getRect().height-2*padding/2,context.getRect().height-2*padding/2);
 				if (title==null) rect.x+=context.getRect().width/2-context.getRect().height/2;
+				Color color=getFontColor(focus);
 				switch (symbol) {
 				case ITheme.CLOSE:
-					
+					context.getInterface().drawLine(new Point(rect.x,rect.y),new Point(rect.x+rect.width,rect.y+rect.height),color,color);
+					context.getInterface().drawLine(new Point(rect.x,rect.y+rect.height),new Point(rect.x+rect.width,rect.y),color,color);
 					break;
 				case ITheme.MINIMIZE:
+					context.getInterface().fillRect(new Rectangle(rect.x,rect.y+rect.height-2,rect.width,2),color,color,color,color);
 					break;
 				case ITheme.ADD:
+					if (rect.width%2==1) rect.width-=1;
+					if (rect.height%2==1) rect.height-=1;
+					context.getInterface().fillRect(new Rectangle(rect.x+rect.width/2-1,rect.y,2,rect.height),color,color,color,color);
+					context.getInterface().fillRect(new Rectangle(rect.x,rect.y+rect.height/2-1,rect.width,2),color,color,color,color);
 					break;
 				case ITheme.LEFT:
-					if (rect.height%2==1) rect.height-=1;
-					points[0]=new Point(rect.x,rect.y);
-					points[1]=new Point(rect.x,rect.y+rect.height);
-					points[2]=new Point(rect.x+rect.width,rect.y+rect.height/2);
-					break;
-				case ITheme.RIGHT:
 					if (rect.height%2==1) rect.height-=1;
 					points[2]=new Point(rect.x+rect.width,rect.y);
 					points[1]=new Point(rect.x+rect.width,rect.y+rect.height);
 					points[0]=new Point(rect.x,rect.y+rect.height/2);
+					break;
+				case ITheme.RIGHT:
+					if (rect.height%2==1) rect.height-=1;
+					points[0]=new Point(rect.x,rect.y);
+					points[1]=new Point(rect.x,rect.y+rect.height);
+					points[2]=new Point(rect.x+rect.width,rect.y+rect.height/2);
 					break;
 				case ITheme.UP:
 					if (rect.width%2==1) rect.width-=1;
@@ -231,7 +238,6 @@ public class GameSenseTheme extends ThemeBase {
 					break;
 				}
 				if (symbol>=ITheme.LEFT && symbol<=ITheme.DOWN) {
-					Color color=getFontColor(focus);
 					context.getInterface().fillTriangle(points[0],points[1],points[2],color,color,color);
 				}
 				if (title!=null) context.getInterface().drawString(new Point(context.getRect().x+(symbol==ITheme.NONE?padding:context.getRect().height),context.getRect().y+padding),height,title,getFontColor(focus));
@@ -468,11 +474,11 @@ public class GameSenseTheme extends ThemeBase {
 				Rectangle rect=getOnField(context);
 				Context subContext=new Context(context,rect.width,new Point(rect.x-context.getRect().x,0),true,true);
 				subContext.setHeight(rect.height);
-				getSmallButtonRenderer(ITheme.LEFT,logicalLevel,graphicalLevel,container).renderButton(subContext,null,focus,null);
+				getSmallButtonRenderer(ITheme.RIGHT,logicalLevel,graphicalLevel,container).renderButton(subContext,null,focus,null);
 				rect=getOffField(context);
 				subContext=new Context(context,rect.width,new Point(rect.x-context.getRect().x,0),true,true);
 				subContext.setHeight(rect.height);
-				getSmallButtonRenderer(ITheme.RIGHT,logicalLevel,graphicalLevel,container).renderButton(subContext,null,focus,null);
+				getSmallButtonRenderer(ITheme.LEFT,logicalLevel,graphicalLevel,container).renderButton(subContext,null,focus,null);
 			}
 
 			@Override
