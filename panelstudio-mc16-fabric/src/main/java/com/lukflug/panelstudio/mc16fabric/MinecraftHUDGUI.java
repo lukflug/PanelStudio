@@ -17,15 +17,15 @@ public abstract class MinecraftHUDGUI extends MinecraftGUI {
 	
 	@Override
 	public void enterGUI() {
-		if (!getHUDGUI().getGUIVisibility().isOn()) getHUDGUI().getGUIVisibility().toggle();
-		if (!getHUDGUI().getHUDVisibility().isOn()) getHUDGUI().getHUDVisibility().toggle();
+		if (!getGUI().getGUIVisibility().isOn()) getGUI().getGUIVisibility().toggle();
+		if (!getGUI().getHUDVisibility().isOn()) getGUI().getHUDVisibility().toggle();
 		super.enterGUI();
 	}
 	
 	@Override
 	public void exitGUI() {
-		if (getHUDGUI().getGUIVisibility().isOn()) getHUDGUI().getGUIVisibility().toggle();
-		if (getHUDGUI().getHUDVisibility().isOn()) getHUDGUI().getHUDVisibility().toggle();
+		if (getGUI().getGUIVisibility().isOn()) getGUI().getGUIVisibility().toggle();
+		if (getGUI().getHUDVisibility().isOn()) getGUI().getHUDVisibility().toggle();
 		super.exitGUI();
 	}
 
@@ -33,8 +33,8 @@ public abstract class MinecraftHUDGUI extends MinecraftGUI {
 	 * Open the HUD editor.
 	 */
 	public void enterHUDEditor() {
-		if (getHUDGUI().getGUIVisibility().isOn()) getHUDGUI().getGUIVisibility().toggle();
-		if (!getHUDGUI().getHUDVisibility().isOn()) getHUDGUI().getHUDVisibility().toggle();
+		if (getGUI().getGUIVisibility().isOn()) getGUI().getGUIVisibility().toggle();
+		if (!getGUI().getHUDVisibility().isOn()) getGUI().getHUDVisibility().toggle();
 		super.enterGUI();
 	}
 	
@@ -57,7 +57,7 @@ public abstract class MinecraftHUDGUI extends MinecraftGUI {
 	 * Render function to be called even when the GUI is closed.
 	 */
 	public void render() {
-		if (!getHUDGUI().getGUIVisibility().isOn() && !getHUDGUI().getHUDVisibility().isOn()) renderGUI();
+		if (!getGUI().getGUIVisibility().isOn() && !getGUI().getHUDVisibility().isOn()) renderGUI();
 	}
 	
 	/**
@@ -65,17 +65,9 @@ public abstract class MinecraftHUDGUI extends MinecraftGUI {
 	 * @param scancode the key scancode
 	 */
 	public void handleKeyEvent (int scancode) {
-		if (scancode!=GLFW.GLFW_KEY_ESCAPE && !getHUDGUI().getGUIVisibility().isOn() && !getHUDGUI().getGUIVisibility().isOn()) getHUDGUI().handleKey(scancode);
+		if (scancode!=GLFW.GLFW_KEY_ESCAPE && !getGUI().getGUIVisibility().isOn() && !getGUI().getGUIVisibility().isOn()) getGUI().handleKey(scancode);
 	}
 	
-	/**
-	 * Get the {@link HUDGUI} to be rendered.
-	 * @return current GUI
-	 */
-	protected abstract HUDGUI getHUDGUI();
-
 	@Override
-	protected final GUI getGUI() {
-		return getHUDGUI();
-	}
+	protected abstract HUDGUI getGUI();
 }
