@@ -12,8 +12,8 @@ public interface ITextFieldRendererProxy extends ITextFieldRenderer {
 	}
 	
 	@Override
-	public default int getDefaultHeight() {
-		return getRenderer().getDefaultHeight();
+	public default int getDefaultHeight (String title) {
+		return getRenderer().getDefaultHeight(title);
 	}
 	
 	@Override

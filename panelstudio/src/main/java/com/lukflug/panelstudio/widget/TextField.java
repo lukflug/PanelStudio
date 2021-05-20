@@ -118,7 +118,7 @@ public abstract class TextField extends FocusableComponent {
 
 	@Override
 	protected int getHeight() {
-		return renderer.getDefaultHeight();
+		return renderer.getDefaultHeight(title);
 	}
 	
 	protected int getPosition() {

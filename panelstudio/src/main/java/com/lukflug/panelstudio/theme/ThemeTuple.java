@@ -37,6 +37,10 @@ public final class ThemeTuple {
 		return theme.getButtonRenderer(type,logicalLevel,graphicalLevel,container);
 	}
 	
+	public IButtonRenderer<Void> getSmallButtonRenderer (int symbol, boolean container) {
+		return theme.getSmallButtonRenderer(symbol,logicalLevel,graphicalLevel,container);
+	}
+	
 	public IButtonRenderer<String> getKeybindRenderer (boolean container) {
 		return theme.getKeybindRenderer(logicalLevel,graphicalLevel,container);
 	}

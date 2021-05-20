@@ -273,7 +273,7 @@ public class ClearTheme extends ThemeBase {
 			}
 
 			@Override
-			public int getDefaultHeight() {
+			public int getDefaultHeight (String title) {
 				return getBaseHeight();
 			}
 

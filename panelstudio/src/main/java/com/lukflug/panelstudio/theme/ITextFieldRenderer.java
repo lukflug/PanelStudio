@@ -7,7 +7,7 @@ import com.lukflug.panelstudio.base.Context;
 public interface ITextFieldRenderer {
 	public int renderTextField (Context context, String title, boolean focus, String content, int position, int select, int boxPosition, boolean insertMode);
 	
-	public int getDefaultHeight();
+	public int getDefaultHeight (String title);
 	
 	public Rectangle getTextArea (Context context, String title);
 	

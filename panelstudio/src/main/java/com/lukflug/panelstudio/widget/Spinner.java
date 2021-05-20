@@ -1,16 +1,21 @@
 package com.lukflug.panelstudio.widget;
 
+import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.SimpleToggleable;
 import com.lukflug.panelstudio.component.HorizontalComponent;
 import com.lukflug.panelstudio.container.HorizontalContainer;
+import com.lukflug.panelstudio.container.VerticalContainer;
 import com.lukflug.panelstudio.setting.INumberSetting;
 import com.lukflug.panelstudio.setting.IStringSetting;
+import com.lukflug.panelstudio.setting.Labeled;
+import com.lukflug.panelstudio.theme.IContainerRenderer;
+import com.lukflug.panelstudio.theme.ITheme;
 import com.lukflug.panelstudio.theme.ThemeTuple;
 
 public class Spinner extends HorizontalContainer {
-	public Spinner(INumberSetting setting, ThemeTuple theme) {
-		super(setting,theme.getContainerRenderer(true));
-		new IStringSetting() {
+	public Spinner (INumberSetting setting, ThemeTuple theme) {
+		super(setting,new IContainerRenderer(){});
+		TextField textField=new TextField(new IStringSetting() {
 			@Override
 			public String getDisplayName() {
 				return null;
@@ -18,17 +23,13 @@ public class Spinner extends HorizontalContainer {
 
 			@Override
 			public String getValue() {
-				// TODO Auto-generated method stub
-				return null;
+				return setting.getSettingState();
 			}
 
 			@Override
 			public void setValue(String string) {
-				// TODO Auto-generated method stub
-				
 			}
-		};
-		this.addComponent(new HorizontalComponent<TextField>(new TextField(null,0,new SimpleToggleable(false),theme.getTextRenderer(false)) {
+		},0,new SimpleToggleable(false),theme.getTextRenderer(false)) {
 			@Override
 			public boolean allowCharacter(char character) {
 				// TODO Auto-generated method stub
@@ -76,7 +77,38 @@ public class Spinner extends HorizontalContainer {
 				// TODO Auto-generated method stub
 				return false;
 			}
-		},0,1));
+		};
+		addComponent(new HorizontalComponent<>(textField,0,1));
+		VerticalContainer buttons=new VerticalContainer(setting,new IContainerRenderer(){});
+		buttons.addComponent(new Button<Void>(new Labeled(null,null,()->true),()->null,theme.getSmallButtonRenderer(ITheme.UP,false)) {
+			@Override
+			public void handleButton (Context context, int button) {
+				super.handleButton(context,button);
+				double number=setting.getNumber();
+				number+=Math.pow(10,-setting.getPrecision());
+				if (number<=setting.getMaximumValue()) setting.setNumber(number);
+			}
+			
+			@Override
+			public int getHeight() {
+				return textField.getHeight()/2;
+			}
+		});
+		buttons.addComponent(new Button<Void>(new Labeled(null,null,()->true),()->null,theme.getSmallButtonRenderer(ITheme.DOWN,false)) {
+			@Override
+			public void handleButton (Context context, int button) {
+				super.handleButton(context,button);
+				double number=setting.getNumber();
+				number-=Math.pow(10,-setting.getPrecision());
+				if (number>=setting.getMinimumValue()) setting.setNumber(number);
+			}
+			
+			@Override
+			public int getHeight() {
+				return textField.getHeight()/2;
+			}
+		});
+		addComponent(new HorizontalComponent<>(buttons,textField.getHeight(),0));
 	}
 
 }

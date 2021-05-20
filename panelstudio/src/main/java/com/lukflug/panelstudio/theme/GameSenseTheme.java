@@ -377,7 +377,7 @@ public class GameSenseTheme extends ThemeBase {
 					context.getInterface().fillRect(new Rectangle(Math.min(x1,x3),rect.y+padding/2,Math.abs(x3-x1),height),highlightColor,highlightColor,highlightColor,highlightColor);
 				}
 				context.getInterface().drawString(new Point(rect.x+padding/2-offset,rect.y+padding/2),height,content,textColor);
-				if ((System.currentTimeMillis()/500)%2==0) {
+				if ((System.currentTimeMillis()/500)%2==0 && focus) {
 					if (insertMode) context.getInterface().fillRect(new Rectangle(x1,rect.y+padding/2+height,x2-x1,1),textColor,textColor,textColor,textColor);
 					else context.getInterface().fillRect(new Rectangle(x1,rect.y+padding/2,1,height),textColor,textColor,textColor,textColor);
 				}
@@ -390,8 +390,8 @@ public class GameSenseTheme extends ThemeBase {
 			}
 
 			@Override
-			public int getDefaultHeight() {
-				return 2*getBaseHeight();
+			public int getDefaultHeight (String title) {
+				return title==null?getBaseHeight():2*getBaseHeight();
 			}
 
 			@Override

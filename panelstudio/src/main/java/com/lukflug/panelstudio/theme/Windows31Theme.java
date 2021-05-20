@@ -260,7 +260,7 @@ public class Windows31Theme extends ThemeBase {
 			}
 
 			@Override
-			public int getDefaultHeight() {
+			public int getDefaultHeight (String title) {
 				return getBaseHeight();
 			}
 
