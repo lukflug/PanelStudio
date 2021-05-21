@@ -53,8 +53,8 @@ public final class ThemeTuple {
 		return theme.getRadioRenderer(logicalLevel,graphicalLevel,container);
 	}
 	
-	public ITextFieldRenderer getTextRenderer (boolean container) {
-		return theme.getTextRenderer(logicalLevel,graphicalLevel,container);
+	public ITextFieldRenderer getTextRenderer (boolean embed, boolean container) {
+		return theme.getTextRenderer(embed,logicalLevel,graphicalLevel,container);
 	}
 	
 	public ISwitchRenderer<Boolean> getToggleSwitchRenderer (boolean container) {

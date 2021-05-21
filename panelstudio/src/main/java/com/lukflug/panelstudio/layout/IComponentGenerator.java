@@ -61,7 +61,7 @@ public interface IComponentGenerator {
 	}
 	
 	public default IComponent getStringComponent (IStringSetting setting, Supplier<Animation> animation, ThemeTuple theme, int colorLevel, boolean isContainer) {
-		return new TextField(setting,0,new SimpleToggleable(false),theme.getTextRenderer(isContainer)) {
+		return new TextField(setting,0,new SimpleToggleable(false),theme.getTextRenderer(false,isContainer)) {
 			@Override
 			public boolean allowCharacter(char character) {
 				return false;

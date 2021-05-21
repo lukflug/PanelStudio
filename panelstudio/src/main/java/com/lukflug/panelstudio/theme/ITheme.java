@@ -96,7 +96,7 @@ public interface ITheme {
 	
 	public IResizeBorderRenderer getResizeRenderer();
 	
-	public ITextFieldRenderer getTextRenderer (int logicalLevel, int graphicalLevel, boolean container);
+	public ITextFieldRenderer getTextRenderer (boolean embed, int logicalLevel, int graphicalLevel, boolean container);
 	
 	public ISwitchRenderer<Boolean> getToggleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container);
 	

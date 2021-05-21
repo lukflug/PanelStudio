@@ -12,8 +12,8 @@ public interface ITextFieldRendererProxy extends ITextFieldRenderer {
 	}
 	
 	@Override
-	public default int getDefaultHeight (String title) {
-		return getRenderer().getDefaultHeight(title);
+	public default int getDefaultHeight() {
+		return getRenderer().getDefaultHeight();
 	}
 	
 	@Override
@@ -22,8 +22,8 @@ public interface ITextFieldRendererProxy extends ITextFieldRenderer {
 	}
 	
 	@Override
-	public default int transformToCharPos (Context context, String content, int boxPosition) {
-		return getRenderer().transformToCharPos(context,content,boxPosition);
+	public default int transformToCharPos (Context context, String title, String content, int boxPosition) {
+		return getRenderer().transformToCharPos(context,title,content,boxPosition);
 	}
 
 	/**

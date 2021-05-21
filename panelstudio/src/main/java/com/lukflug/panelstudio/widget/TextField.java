@@ -32,7 +32,7 @@ public abstract class TextField extends FocusableComponent {
 	public void handleButton (Context context, int button) {
 		super.handleButton(context,button);
 		if (context.isClicked()) {
-			int pos=renderer.transformToCharPos(context,setting.getValue(),boxPosition);
+			int pos=renderer.transformToCharPos(context,title,setting.getValue(),boxPosition);
 			if (pos>=0) setPosition(context.getInterface(),pos);
 			unselect();
 		}
@@ -118,7 +118,7 @@ public abstract class TextField extends FocusableComponent {
 
 	@Override
 	protected int getHeight() {
-		return renderer.getDefaultHeight(title);
+		return renderer.getDefaultHeight();
 	}
 	
 	protected int getPosition() {

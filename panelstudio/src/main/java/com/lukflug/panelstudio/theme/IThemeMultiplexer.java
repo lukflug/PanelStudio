@@ -84,8 +84,8 @@ public interface IThemeMultiplexer extends ITheme {
 	}
 	
 	@Override
-	public default ITextFieldRenderer getTextRenderer (int logicalLevel, int graphicalLevel, boolean container) {
-		ITextFieldRendererProxy proxy=()->getTheme().getTextRenderer(logicalLevel,graphicalLevel,container);
+	public default ITextFieldRenderer getTextRenderer (boolean embed, int logicalLevel, int graphicalLevel, boolean container) {
+		ITextFieldRendererProxy proxy=()->getTheme().getTextRenderer(embed,logicalLevel,graphicalLevel,container);
 		return proxy;
 	}
 	

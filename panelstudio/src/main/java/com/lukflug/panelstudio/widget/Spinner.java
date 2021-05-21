@@ -1,6 +1,9 @@
 package com.lukflug.panelstudio.widget;
 
+import java.util.function.IntPredicate;
+
 import com.lukflug.panelstudio.base.Context;
+import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.base.SimpleToggleable;
 import com.lukflug.panelstudio.component.HorizontalComponent;
 import com.lukflug.panelstudio.container.HorizontalContainer;
@@ -13,12 +16,12 @@ import com.lukflug.panelstudio.theme.ITheme;
 import com.lukflug.panelstudio.theme.ThemeTuple;
 
 public class Spinner extends HorizontalContainer {
-	public Spinner (INumberSetting setting, ThemeTuple theme) {
+	public Spinner (INumberSetting setting, ThemeTuple theme, IntPredicate backspace, IntPredicate delete, IntPredicate insert, IntPredicate left, IntPredicate right, IntPredicate home, IntPredicate end) {
 		super(setting,new IContainerRenderer(){});
 		TextField textField=new TextField(new IStringSetting() {
 			@Override
 			public String getDisplayName() {
-				return null;
+				return setting.getDisplayName();
 			}
 
 			@Override
@@ -29,53 +32,45 @@ public class Spinner extends HorizontalContainer {
 			@Override
 			public void setValue(String string) {
 			}
-		},0,new SimpleToggleable(false),theme.getTextRenderer(false)) {
+		},0,new SimpleToggleable(false),theme.getTextRenderer(true,false)) {
 			@Override
 			public boolean allowCharacter(char character) {
-				// TODO Auto-generated method stub
-				return false;
+				return (character>='0' && character>='9') || (character=='.'&&setting.getSettingState().contains("."));
 			}
 
 			@Override
 			public boolean isBackspaceKey(int scancode) {
-				// TODO Auto-generated method stub
-				return false;
+				return backspace.test(scancode);
 			}
 
 			@Override
 			public boolean isDeleteKey(int scancode) {
-				// TODO Auto-generated method stub
-				return false;
+				return delete.test(scancode);
 			}
 
 			@Override
 			public boolean isInsertKey(int scancode) {
-				// TODO Auto-generated method stub
-				return false;
+				return insert.test(scancode);
 			}
 
 			@Override
 			public boolean isLeftKey(int scancode) {
-				// TODO Auto-generated method stub
-				return false;
+				return left.test(scancode);
 			}
 
 			@Override
 			public boolean isRightKey(int scancode) {
-				// TODO Auto-generated method stub
-				return false;
+				return right.test(scancode);
 			}
 
 			@Override
 			public boolean isHomeKey(int scancode) {
-				// TODO Auto-generated method stub
-				return false;
+				return home.test(scancode);
 			}
 
 			@Override
 			public boolean isEndKey(int scancode) {
-				// TODO Auto-generated method stub
-				return false;
+				return end.test(scancode);
 			}
 		};
 		addComponent(new HorizontalComponent<>(textField,0,1));
@@ -84,9 +79,11 @@ public class Spinner extends HorizontalContainer {
 			@Override
 			public void handleButton (Context context, int button) {
 				super.handleButton(context,button);
-				double number=setting.getNumber();
-				number+=Math.pow(10,-setting.getPrecision());
-				if (number<=setting.getMaximumValue()) setting.setNumber(number);
+				if (button==IInterface.LBUTTON && context.isClicked()) {
+					double number=setting.getNumber();
+					number+=Math.pow(10,-setting.getPrecision());
+					if (number<=setting.getMaximumValue()) setting.setNumber(number);
+				}
 			}
 			
 			@Override
@@ -98,9 +95,11 @@ public class Spinner extends HorizontalContainer {
 			@Override
 			public void handleButton (Context context, int button) {
 				super.handleButton(context,button);
-				double number=setting.getNumber();
-				number-=Math.pow(10,-setting.getPrecision());
-				if (number>=setting.getMinimumValue()) setting.setNumber(number);
+				if (button==IInterface.LBUTTON && context.isClicked()) {
+					double number=setting.getNumber();
+					number-=Math.pow(10,-setting.getPrecision());
+					if (number>=setting.getMinimumValue()) setting.setNumber(number);
+				}
 			}
 			
 			@Override

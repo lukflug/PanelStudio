@@ -195,7 +195,8 @@ public class GameSenseTheme extends ThemeBase {
 				fillBaseRect(context,focus,true,logicalLevel,graphicalLevel,null);
 				renderOverlay(context);
 				Point points[]=new Point[3];
-				Rectangle rect=new Rectangle(context.getRect().x+padding/2,context.getRect().y+padding/2,context.getRect().height-2*padding/2,context.getRect().height-2*padding/2);
+				int padding=context.getRect().height<=2*GameSenseTheme.this.padding?2:GameSenseTheme.this.padding;
+				Rectangle rect=new Rectangle(context.getRect().x+padding/2,context.getRect().y+padding/2,context.getRect().height-2*(padding/2),context.getRect().height-2*(padding/2));
 				if (title==null) rect.x+=context.getRect().width/2-context.getRect().height/2;
 				Color color=getFontColor(focus);
 				switch (symbol) {
@@ -331,7 +332,7 @@ public class GameSenseTheme extends ThemeBase {
 	}
 	
 	@Override
-	public ITextFieldRenderer getTextRenderer (int logicalLevel, int graphicalLevel, boolean container) {
+	public ITextFieldRenderer getTextRenderer (boolean embed, int logicalLevel, int graphicalLevel, boolean container) {
 		return new ITextFieldRenderer() {
 			@Override
 			public int renderTextField (Context context, String title, boolean focus, String content, int position, int select, int boxPosition, boolean insertMode) {
@@ -339,7 +340,7 @@ public class GameSenseTheme extends ThemeBase {
 				Color color=focus?scheme.getColor("Outline Color"):scheme.getColor("Settings Color");
 				Color textColor=getFontColor(focus);
 				Color highlightColor=scheme.getColor("Highlight Color");
-				Rectangle rect=getTextArea(context,content);
+				Rectangle rect=getTextArea(context,title);
 				int strlen=context.getInterface().getFontWidth(height,content.substring(0,position));
 				// Deal with box render offset
 				if (boxPosition<position) {
@@ -369,7 +370,7 @@ public class GameSenseTheme extends ThemeBase {
 				// Draw stuff around the box
 				fillBaseRect(context,focus,false,logicalLevel,graphicalLevel,null);
 				renderOverlay(context);
-				if (title!=null) context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title,textColor);
+				context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding/(embed?2:1)),height,title+(embed?separator:""),textColor);
 				// Draw the box
 				context.getInterface().window(rect);
 				if (select>=0) {
@@ -390,19 +391,27 @@ public class GameSenseTheme extends ThemeBase {
 			}
 
 			@Override
-			public int getDefaultHeight (String title) {
-				return title==null?getBaseHeight():2*getBaseHeight();
+			public int getDefaultHeight() {
+				if (embed) {
+					int height=getBaseHeight()-padding;
+					if (height%2==1) height+=1;
+					return height;
+				} else return 2*getBaseHeight();
 			}
 
 			@Override
 			public Rectangle getTextArea (Context context, String title) {
 				Rectangle rect=context.getRect();
-				return title==null?rect:new Rectangle(rect.x+padding,rect.y+getBaseHeight(),rect.width-2*padding,rect.height-getBaseHeight()-padding);
+				if (embed) {
+					int length=padding+context.getInterface().getFontWidth(height,title+separator);
+					return new Rectangle(rect.x+length,rect.y,rect.width-length,rect.height);
+				}
+				else return new Rectangle(rect.x+padding,rect.y+getBaseHeight(),rect.width-2*padding,rect.height-getBaseHeight()-padding);
 			}
 
 			@Override
-			public int transformToCharPos(Context context, String content, int boxPosition) {
-				Rectangle rect=getTextArea(context,content);
+			public int transformToCharPos(Context context, String title, String content, int boxPosition) {
+				Rectangle rect=getTextArea(context,title);
 				Point mouse=context.getInterface().getMouse();
 				int offset=context.getInterface().getFontWidth(height,content.substring(0,boxPosition));
 				if (rect.contains(mouse)) {
@@ -468,11 +477,13 @@ public class GameSenseTheme extends ThemeBase {
 				if (graphicalLevel<=0 && container) {
 					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+context.getSize().height-1,context.getSize().width,1),color,color,color,color);
 				}
-				renderOverlay(context);
+				Context subContext=new Context(context,context.getRect().width-2*context.getRect().height,new Point(0,0),true,true);
+				subContext.setHeight(context.getRect().height);
+				renderOverlay(subContext);
 				Color textColor=getFontColor(focus);
 				context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title+separator+state,textColor);
 				Rectangle rect=getOnField(context);
-				Context subContext=new Context(context,rect.width,new Point(rect.x-context.getRect().x,0),true,true);
+				subContext=new Context(context,rect.width,new Point(rect.x-context.getRect().x,0),true,true);
 				subContext.setHeight(rect.height);
 				getSmallButtonRenderer(ITheme.RIGHT,logicalLevel,graphicalLevel,container).renderButton(subContext,null,focus,null);
 				rect=getOffField(context);
