@@ -16,7 +16,7 @@ import com.lukflug.panelstudio.theme.ITheme;
 import com.lukflug.panelstudio.theme.ThemeTuple;
 
 public class Spinner extends HorizontalContainer {
-	public Spinner (INumberSetting setting, ThemeTuple theme, IntPredicate backspace, IntPredicate delete, IntPredicate insert, IntPredicate left, IntPredicate right, IntPredicate home, IntPredicate end) {
+	public Spinner (INumberSetting setting, ThemeTuple theme, IntPredicate backspace, IntPredicate delete, IntPredicate insert, IntPredicate left, IntPredicate right, IntPredicate home, IntPredicate end, IntPredicate copy, IntPredicate paste, IntPredicate cut, IntPredicate all) {
 		super(setting,new IContainerRenderer(){});
 		TextField textField=new TextField(new IStringSetting() {
 			String value=null;
@@ -86,6 +86,26 @@ public class Spinner extends HorizontalContainer {
 			@Override
 			public boolean isEndKey(int scancode) {
 				return end.test(scancode);
+			}
+
+			@Override
+			public boolean isCopyKey(int scancode) {
+				return copy.test(scancode);
+			}
+
+			@Override
+			public boolean isPasteKey(int scancode) {
+				return paste.test(scancode);
+			}
+
+			@Override
+			public boolean isCutKey(int scancode) {
+				return cut.test(scancode);
+			}
+
+			@Override
+			public boolean isAllKey(int scancode) {
+				return all.test(scancode);
 			}
 		};
 		addComponent(new HorizontalComponent<>(textField,0,1));

@@ -101,6 +101,26 @@ public interface IComponentGenerator {
 			public boolean isEndKey(int scancode) {
 				return false;
 			}
+
+			@Override
+			public boolean isCopyKey(int scancode) {
+				return false;
+			}
+
+			@Override
+			public boolean isPasteKey(int scancode) {
+				return false;
+			}
+
+			@Override
+			public boolean isCutKey(int scancode) {
+				return false;
+			}
+
+			@Override
+			public boolean isAllKey(int scancode) {
+				return false;
+			}
 		};
 	}
 }

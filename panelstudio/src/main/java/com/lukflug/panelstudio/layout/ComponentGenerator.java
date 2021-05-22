@@ -13,9 +13,9 @@ import com.lukflug.panelstudio.widget.KeybindComponent;
 import com.lukflug.panelstudio.widget.TextField;
 
 public class ComponentGenerator implements IComponentGenerator {
-	protected final IntPredicate keybindKey,charFilter,backspaceKey,deleteKey,insertKey,leftKey,rightKey,homeKey,endKey;
+	protected final IntPredicate keybindKey,charFilter,backspaceKey,deleteKey,insertKey,leftKey,rightKey,homeKey,endKey,copyKey,pasteKey,cutKey,allKey;
 	
-	public ComponentGenerator (IntPredicate keybindKey, IntPredicate charFilter, IntPredicate backspaceKey, IntPredicate deleteKey, IntPredicate insertKey, IntPredicate leftKey, IntPredicate rightKey, IntPredicate homeKey, IntPredicate endKey) {
+	public ComponentGenerator (IntPredicate keybindKey, IntPredicate charFilter, IntPredicate backspaceKey, IntPredicate deleteKey, IntPredicate insertKey, IntPredicate leftKey, IntPredicate rightKey, IntPredicate homeKey, IntPredicate endKey, IntPredicate copyKey, IntPredicate pasteKey, IntPredicate cutKey, IntPredicate allKey) {
 		this.keybindKey=keybindKey;
 		this.charFilter=charFilter;
 		this.backspaceKey=backspaceKey;
@@ -25,6 +25,10 @@ public class ComponentGenerator implements IComponentGenerator {
 		this.rightKey=rightKey;
 		this.homeKey=homeKey;
 		this.endKey=endKey;
+		this.copyKey=copyKey;
+		this.pasteKey=pasteKey;
+		this.cutKey=cutKey;
+		this.allKey=allKey;
 	}
 	
 	@Override
@@ -78,6 +82,26 @@ public class ComponentGenerator implements IComponentGenerator {
 			@Override
 			public boolean isEndKey(int scancode) {
 				return endKey.test(scancode);
+			}
+
+			@Override
+			public boolean isCopyKey(int scancode) {
+				return copyKey.test(scancode);
+			}
+
+			@Override
+			public boolean isPasteKey(int scancode) {
+				return pasteKey.test(scancode);
+			}
+
+			@Override
+			public boolean isCutKey(int scancode) {
+				return cutKey.test(scancode);
+			}
+
+			@Override
+			public boolean isAllKey(int scancode) {
+				return allKey.test(scancode);
 			}
 		};
 	}
