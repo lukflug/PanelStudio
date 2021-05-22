@@ -19,6 +19,9 @@ public class Spinner extends HorizontalContainer {
 	public Spinner (INumberSetting setting, ThemeTuple theme, IntPredicate backspace, IntPredicate delete, IntPredicate insert, IntPredicate left, IntPredicate right, IntPredicate home, IntPredicate end) {
 		super(setting,new IContainerRenderer(){});
 		TextField textField=new TextField(new IStringSetting() {
+			String value=null;
+			long lastTime;
+			
 			@Override
 			public String getDisplayName() {
 				return setting.getDisplayName();
@@ -26,16 +29,28 @@ public class Spinner extends HorizontalContainer {
 
 			@Override
 			public String getValue() {
-				return setting.getSettingState();
+				if (value!=null && System.currentTimeMillis()-lastTime>500) {
+					if (value.isEmpty()) value="0";
+					if (value.endsWith(".")) value+='0';
+					double number=Double.parseDouble(value);
+					if (number>setting.getMaximumValue()) number=setting.getMaximumValue();
+					else if (number<setting.getMinimumValue()) number=setting.getMinimumValue();
+					setting.setNumber(number);
+					value=null;
+				}
+				if (value==null) return setting.getSettingState();
+				else return value;
 			}
 
 			@Override
 			public void setValue(String string) {
+				if (value==null) lastTime=System.currentTimeMillis();
+				value=new String(string);
 			}
 		},0,new SimpleToggleable(false),theme.getTextRenderer(true,false)) {
 			@Override
 			public boolean allowCharacter(char character) {
-				return (character>='0' && character>='9') || (character=='.'&&setting.getSettingState().contains("."));
+				return (character>='0' && character<='9') || (character=='.'&&!setting.getSettingState().contains("."));
 			}
 
 			@Override
