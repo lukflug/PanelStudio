@@ -53,7 +53,7 @@ public abstract class TextField extends FocusableComponent {
 			int pos=getPosition();
 			int sel=getSelect();
 			String s=setting.getValue();
-			if (isBackspaceKey(scancode) && (getPosition()>0||sel>=0)) {
+			if (isBackspaceKey(scancode) && (pos>0||sel>=0)) {
 				if (sel<0) {
 					setPosition(context.getInterface(),pos-1);
 					setting.setValue(s.substring(0,pos-1)+s.substring(pos));
@@ -67,7 +67,7 @@ public abstract class TextField extends FocusableComponent {
 					setting.setValue(s.substring(0,pos)+s.substring(sel));
 				}
 				unselect();
-			} else if (isDeleteKey(scancode) && (getPosition()<setting.getValue().length()||sel>=0)) {
+			} else if (isDeleteKey(scancode) && (pos<setting.getValue().length()||sel>=0)) {
 				if (sel<0) {
 					setting.setValue(s.substring(0,pos)+s.substring(pos+1));
 				} else {
@@ -81,14 +81,18 @@ public abstract class TextField extends FocusableComponent {
 				}
 				unselect();
 			} else if (isInsertKey(scancode)) insertMode.toggle();
-			else if (isLeftKey(scancode)) setPosition(context.getInterface(),getPosition()-1);
-			else if (isRightKey(scancode)) setPosition(context.getInterface(),getPosition()+1);
-			else if (isHomeKey(scancode)) setPosition(context.getInterface(),0);
+			else if (isLeftKey(scancode)) {
+				if (sel<0||context.getInterface().getModifier(IInterface.SHIFT)) setPosition(context.getInterface(),pos-1);
+				else setPosition(context.getInterface(),Math.min(pos,sel));
+			} else if (isRightKey(scancode)) {
+				if (sel<0||context.getInterface().getModifier(IInterface.SHIFT)) setPosition(context.getInterface(),getPosition()+1);
+				else setPosition(context.getInterface(),Math.max(pos,sel));
+			} else if (isHomeKey(scancode)) setPosition(context.getInterface(),0);
 			else if (isEndKey(scancode)) setPosition(context.getInterface(),setting.getValue().length());
-			else if (isCopyKey(scancode) && sel>=0) {
+			else if (context.getInterface().getModifier(IInterface.CTRL) && isCopyKey(scancode) && sel>=0) {
 				StringSelection selection=new StringSelection(s.substring(Math.min(pos,sel),Math.max(pos,sel)));
 				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection,selection);
-			} else if (isPasteKey(scancode)) {
+			} else if (context.getInterface().getModifier(IInterface.CTRL) && isPasteKey(scancode)) {
 				try {
 					Transferable t=Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
 					if (t.isDataFlavorSupported(DataFlavor.stringFlavor)) {
@@ -110,7 +114,7 @@ public abstract class TextField extends FocusableComponent {
 				} catch (IOException e) {
 				} catch (UnsupportedFlavorException e) {
 				}
-			} else if (isCutKey(scancode) && sel>=0) {
+			} else if (context.getInterface().getModifier(IInterface.CTRL) && isCutKey(scancode) && sel>=0) {
 				StringSelection selection=new StringSelection(s.substring(Math.min(pos,sel),Math.max(pos,sel)));
 				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection,selection);
 				if (pos>sel) {
@@ -120,7 +124,7 @@ public abstract class TextField extends FocusableComponent {
 					setPosition(context.getInterface(),pos);
 				}
 				setting.setValue(s.substring(0,pos)+s.substring(sel));
-			} else if (isAllKey(scancode)) {
+			} else if (context.getInterface().getModifier(IInterface.CTRL) && isAllKey(scancode)) {
 				select=0;
 				position=s.length();
 			}
