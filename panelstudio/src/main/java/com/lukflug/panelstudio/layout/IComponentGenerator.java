@@ -16,6 +16,7 @@ import com.lukflug.panelstudio.theme.ThemeTuple;
 import com.lukflug.panelstudio.widget.Button;
 import com.lukflug.panelstudio.widget.ColorComponent;
 import com.lukflug.panelstudio.widget.CycleButton;
+import com.lukflug.panelstudio.widget.ITextFieldKeys;
 import com.lukflug.panelstudio.widget.KeybindComponent;
 import com.lukflug.panelstudio.widget.NumberSlider;
 import com.lukflug.panelstudio.widget.TextField;
@@ -61,12 +62,7 @@ public interface IComponentGenerator {
 	}
 	
 	public default IComponent getStringComponent (IStringSetting setting, Supplier<Animation> animation, ThemeTuple theme, int colorLevel, boolean isContainer) {
-		return new TextField(setting,0,new SimpleToggleable(false),theme.getTextRenderer(false,isContainer)) {
-			@Override
-			public boolean allowCharacter(char character) {
-				return false;
-			}
-
+		return new TextField(setting, new ITextFieldKeys() {
 			@Override
 			public boolean isBackspaceKey(int scancode) {
 				return false;
@@ -119,6 +115,11 @@ public interface IComponentGenerator {
 
 			@Override
 			public boolean isAllKey(int scancode) {
+				return false;
+			}
+		},0,new SimpleToggleable(false),theme.getTextRenderer(false,isContainer)) {
+			@Override
+			public boolean allowCharacter(char character) {
 				return false;
 			}
 		};

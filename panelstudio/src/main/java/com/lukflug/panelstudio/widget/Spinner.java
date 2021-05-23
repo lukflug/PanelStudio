@@ -1,7 +1,5 @@
 package com.lukflug.panelstudio.widget;
 
-import java.util.function.IntPredicate;
-
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.base.SimpleToggleable;
@@ -16,7 +14,7 @@ import com.lukflug.panelstudio.theme.ITheme;
 import com.lukflug.panelstudio.theme.ThemeTuple;
 
 public class Spinner extends HorizontalContainer {
-	public Spinner (INumberSetting setting, ThemeTuple theme, IntPredicate backspace, IntPredicate delete, IntPredicate insert, IntPredicate left, IntPredicate right, IntPredicate home, IntPredicate end, IntPredicate copy, IntPredicate paste, IntPredicate cut, IntPredicate all) {
+	public Spinner (INumberSetting setting, ThemeTuple theme, ITextFieldKeys keys) {
 		super(setting,new IContainerRenderer(){});
 		TextField textField=new TextField(new IStringSetting() {
 			String value=null;
@@ -47,65 +45,10 @@ public class Spinner extends HorizontalContainer {
 				if (value==null) lastTime=System.currentTimeMillis();
 				value=new String(string);
 			}
-		},0,new SimpleToggleable(false),theme.getTextRenderer(true,false)) {
+		},keys,0,new SimpleToggleable(false),theme.getTextRenderer(true,false)) {
 			@Override
 			public boolean allowCharacter(char character) {
 				return (character>='0' && character<='9') || (character=='.'&&!setting.getSettingState().contains("."));
-			}
-
-			@Override
-			public boolean isBackspaceKey(int scancode) {
-				return backspace.test(scancode);
-			}
-
-			@Override
-			public boolean isDeleteKey(int scancode) {
-				return delete.test(scancode);
-			}
-
-			@Override
-			public boolean isInsertKey(int scancode) {
-				return insert.test(scancode);
-			}
-
-			@Override
-			public boolean isLeftKey(int scancode) {
-				return left.test(scancode);
-			}
-
-			@Override
-			public boolean isRightKey(int scancode) {
-				return right.test(scancode);
-			}
-
-			@Override
-			public boolean isHomeKey(int scancode) {
-				return home.test(scancode);
-			}
-
-			@Override
-			public boolean isEndKey(int scancode) {
-				return end.test(scancode);
-			}
-
-			@Override
-			public boolean isCopyKey(int scancode) {
-				return copy.test(scancode);
-			}
-
-			@Override
-			public boolean isPasteKey(int scancode) {
-				return paste.test(scancode);
-			}
-
-			@Override
-			public boolean isCutKey(int scancode) {
-				return cut.test(scancode);
-			}
-
-			@Override
-			public boolean isAllKey(int scancode) {
-				return all.test(scancode);
 			}
 		};
 		addComponent(new HorizontalComponent<>(textField,0,1));
