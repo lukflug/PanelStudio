@@ -34,14 +34,14 @@ public abstract class TextField extends FocusableComponent {
 	@Override
 	public void render (Context context) {
 		super.render(context);
-		boxPosition=renderer.renderTextField(context,title,hasFocus(context),setting.getValue(),getPosition(),getSelect(),boxPosition,insertMode.isOn());
+		boxPosition=renderer.renderTextField(context,getTitle(),hasFocus(context),setting.getValue(),getPosition(),getSelect(),boxPosition,insertMode.isOn());
 	}
 	
 	@Override
 	public void handleButton (Context context, int button) {
 		super.handleButton(context,button);
 		if (context.isClicked()) {
-			int pos=renderer.transformToCharPos(context,title,setting.getValue(),boxPosition);
+			int pos=renderer.transformToCharPos(context,getTitle(),setting.getValue(),boxPosition);
 			if (pos>=0) setPosition(context.getInterface(),pos);
 			unselect();
 		}

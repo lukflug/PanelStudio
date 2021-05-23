@@ -14,7 +14,7 @@ import com.lukflug.panelstudio.setting.ISetting;
 import com.lukflug.panelstudio.setting.IStringSetting;
 import com.lukflug.panelstudio.theme.ThemeTuple;
 import com.lukflug.panelstudio.widget.Button;
-import com.lukflug.panelstudio.widget.ColorComponent;
+import com.lukflug.panelstudio.widget.ColorSliderComponent;
 import com.lukflug.panelstudio.widget.CycleButton;
 import com.lukflug.panelstudio.widget.ITextFieldKeys;
 import com.lukflug.panelstudio.widget.KeybindComponent;
@@ -54,7 +54,7 @@ public interface IComponentGenerator {
 	}
 	
 	public default IComponent getColorComponent (IColorSetting setting, Supplier<Animation> animation, ThemeTuple theme, int colorLevel, boolean isContainer) {
-		return new ColorComponent((IColorSetting)setting,animation.get(),new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel));
+		return new ColorSliderComponent((IColorSetting)setting,new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel));
 	}
 	
 	public default IComponent getKeybindComponent (IKeybindSetting setting, Supplier<Animation> animation, ThemeTuple theme, int colorLevel, boolean isContainer) {

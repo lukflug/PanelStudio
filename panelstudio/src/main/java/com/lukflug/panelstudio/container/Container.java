@@ -78,7 +78,7 @@ public abstract class Container<T extends IComponent> extends ComponentBase impl
 			component.render(subContext);
 			if (subContext.isHovered() && subContext.getDescription()!=null) context.setDescription(new Description(subContext.getDescription(),subContext.getRect()));
 		});
-		if (context.getDescription()==null && description!=null) context.setDescription(new Description(context.getRect(),description));
+		if (context.getDescription()==null && label.getDescription()!=null) context.setDescription(new Description(context.getRect(),label.getDescription()));
 	}
 
 	@Override

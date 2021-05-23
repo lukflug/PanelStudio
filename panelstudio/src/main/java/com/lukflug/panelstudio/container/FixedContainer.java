@@ -92,7 +92,7 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 			if (removeComponent(focusComponent.get())) addComponent(focusComponent.get());
 		}
 		// Use container description, if necessary
-		if (context.getDescription()==null && description!=null) context.setDescription(new Description(context.getRect(),description));
+		if (context.getDescription()==null && label.getDescription()!=null) context.setDescription(new Description(context.getRect(),label.getDescription()));
 		// Restore clipping
 		if (clip) context.getInterface().restore();
 	}

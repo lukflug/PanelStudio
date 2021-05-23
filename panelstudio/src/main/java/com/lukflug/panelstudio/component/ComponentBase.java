@@ -2,7 +2,6 @@ package com.lukflug.panelstudio.component;
 
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.Description;
-import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.setting.ILabeled;
 
 /**
@@ -11,37 +10,27 @@ import com.lukflug.panelstudio.setting.ILabeled;
  */
 public abstract class ComponentBase implements IComponent {
 	/**
-	 * The title of the component.
+	 * The label of the component.
 	 */
-	protected String title;
-	/**
-	 * Get description of the component.
-	 */
-	protected String description;
-	/**
-	 * Boolean indicating visibility of component.
-	 */
-	protected IBoolean visible;
+	protected final ILabeled label;
 	
 	/**
 	 * Constructor.
 	 * @param label the label for the component
 	 */
 	public ComponentBase (ILabeled label) {
-		this.title=label.getDisplayName();
-		this.description=label.getDescription();
-		this.visible=label.isVisible();
+		this.label=label;
 	}
 
 	@Override
 	public String getTitle() {
-		return title;
+		return label.getDisplayName();
 	}
 
 	@Override
 	public void render(Context context) {
 		context.setHeight(getHeight());
-		if (context.isHovered() && description!=null) context.setDescription(new Description(context.getRect(),description));
+		if (context.isHovered() && label.getDescription()!=null) context.setDescription(new Description(context.getRect(),label.getDescription()));
 	}
 
 	@Override
@@ -79,7 +68,7 @@ public abstract class ComponentBase implements IComponent {
 
 	@Override
 	public boolean isVisible() {
-		return visible.isOn();
+		return label.isVisible().isOn();
 	}
 	
 	/**
