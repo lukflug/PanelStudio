@@ -29,28 +29,28 @@ public abstract class ComponentBase implements IComponent {
 
 	@Override
 	public void render(Context context) {
-		context.setHeight(getHeight());
+		getHeight(context);
 		if (context.isHovered() && label.getDescription()!=null) context.setDescription(new Description(context.getRect(),label.getDescription()));
 	}
 
 	@Override
 	public void handleButton(Context context, int button) {
-		context.setHeight(getHeight());
+		getHeight(context);
 	}
 
 	@Override
 	public void handleKey(Context context, int scancode) {
-		context.setHeight(getHeight());
+		getHeight(context);
 	}
 	
 	@Override
 	public void handleChar(Context context, char character) {
-		context.setHeight(getHeight());
+		getHeight(context);
 	}
 
 	@Override
 	public void handleScroll(Context context, int diff) {
-		context.setHeight(getHeight());
+		getHeight(context);
 	}
 
 	@Override

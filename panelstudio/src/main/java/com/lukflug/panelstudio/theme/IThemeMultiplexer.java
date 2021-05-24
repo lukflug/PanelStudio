@@ -100,6 +100,12 @@ public interface IThemeMultiplexer extends ITheme {
 		ISwitchRendererProxy<String> proxy=()->getTheme().getCycleSwitchRenderer(logicalLevel,graphicalLevel,container);
 		return proxy;
 	}
+	
+	@Override
+	public default IColorPickerRenderer getColorPickerRenderer() {
+		IColorPickerRendererProxy proxy=()->getTheme().getColorPickerRenderer();
+		return proxy;
+	}
 
 	@Override
 	public default int getBaseHeight() {

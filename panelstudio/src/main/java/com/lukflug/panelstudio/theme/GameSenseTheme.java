@@ -510,6 +510,42 @@ public class GameSenseTheme extends ThemeBase {
 			}
 		};
 	}
+	
+	@Override
+	public IColorPickerRenderer getColorPickerRenderer() {
+		return new IColorPickerRenderer() {
+			@Override
+			public void renderPicker(Context context, boolean focus, Color color) {
+				float[] hsb=Color.RGBtoHSB(color.getRed(),color.getGreen(),color.getBlue(),null);
+				Color colorA=Color.getHSBColor(hsb[0],0,1),colorB=Color.getHSBColor(hsb[0],1,1);
+				context.getInterface().fillRect(context.getRect(),colorA,colorB,colorB,colorA);
+				Color colorC=new Color(0,0,0,0),colorD=new Color(0,0,0);
+				context.getInterface().fillRect(context.getRect(),colorC,colorC,colorD,colorD);
+				Point p=new Point((int)(context.getPos().x+hsb[1]*context.getSize().width),(int)(context.getPos().y+context.getSize().height-hsb[2]*context.getSize().height));
+				Color fontColor=getFontColor(focus);
+				context.getInterface().fillRect(new Rectangle(p.x,p.y-padding,1,2*padding+1),fontColor,fontColor,fontColor,fontColor);
+				context.getInterface().fillRect(new Rectangle(p.x-padding,p.y,2*padding+1,1),fontColor,fontColor,fontColor,fontColor);
+			}
+
+			@Override
+			public Color transformPoint(Context context, Color color, Point point) {
+				float hue=Color.RGBtoHSB(color.getRed(),color.getGreen(),color.getBlue(),null)[0];
+				float saturation=(point.x-context.getPos().x)/(float)context.getSize().width;
+				float brightness=1+(context.getPos().y-point.y)/(float)context.getSize().height;
+				if (saturation>1) saturation=1;
+				else if (saturation<0) saturation=0;
+				if (brightness>1) brightness=1;
+				else if (brightness<0) brightness=0;
+				Color value=Color.getHSBColor(hue,saturation,brightness);
+				return ITheme.combineColors(value,color);
+			}
+
+			@Override
+			public int getDefaultHeight(int width) {
+				return width;
+			}
+		};
+	}
 
 	@Override
 	public int getBaseHeight() {

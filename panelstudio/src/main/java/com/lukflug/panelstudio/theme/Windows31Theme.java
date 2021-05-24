@@ -334,6 +334,29 @@ public class Windows31Theme extends ThemeBase {
 			}
 		};
 	}
+	
+	@Override
+	public IColorPickerRenderer getColorPickerRenderer() {
+		return new IColorPickerRenderer() {
+			@Override
+			public void renderPicker(Context context, boolean focus, Color color) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public Color transformPoint(Context context, Color color, Point point) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public int getDefaultHeight(int width) {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+		};
+	}
 
 	@Override
 	public int getBaseHeight() {

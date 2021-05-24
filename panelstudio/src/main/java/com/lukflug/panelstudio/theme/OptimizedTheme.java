@@ -24,6 +24,7 @@ public final class OptimizedTheme implements ITheme {
 	private final Map<ParameterTuple<Boolean,Boolean>,ITextFieldRenderer> textRenderer=new HashMap<>();
 	private final Map<ParameterTuple<Void,Boolean>,ISwitchRenderer<Boolean>> toggleSwitchRenderer=new HashMap<>();
 	private final Map<ParameterTuple<Void,Boolean>,ISwitchRenderer<String>> cycleSwitchRenderer=new HashMap<>();
+	private IColorPickerRenderer colorPickerRenderer=null;
 	
 	public OptimizedTheme (ITheme theme) {
 		this.theme=theme;
@@ -105,6 +106,12 @@ public final class OptimizedTheme implements ITheme {
 	public ISwitchRenderer<String> getCycleSwitchRenderer(int logicalLevel, int graphicalLevel, boolean container) {
 		return getRenderer(cycleSwitchRenderer,()->theme.getCycleSwitchRenderer(logicalLevel,graphicalLevel,container),null,logicalLevel,graphicalLevel,container);
 	}
+	
+	@Override
+	public IColorPickerRenderer getColorPickerRenderer() {
+		if (colorPickerRenderer==null) colorPickerRenderer=theme.getColorPickerRenderer();
+		return colorPickerRenderer;
+	};
 
 	@Override
 	public int getBaseHeight() {
@@ -163,5 +170,5 @@ public final class OptimizedTheme implements ITheme {
 				return type.equals(other.type) && logicalLevel==other.logicalLevel && graphicalLevel==other.graphicalLevel && container.equals(other.container);
 			} else return false;
 		}
-	};
+	}
 }

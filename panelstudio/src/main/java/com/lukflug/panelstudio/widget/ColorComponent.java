@@ -75,22 +75,24 @@ public abstract class ColorComponent extends VerticalContainer {
 		 * Number indicating the index of the component for the color model.
 		 */
 		private final int value;
+		private final IBoolean model;
 		
-		public ColorNumber (int value) {
+		public ColorNumber (int value, IBoolean model) {
 			this.value=value;
+			this.model=model;
 		}
 		
 		@Override
 		public String getDisplayName() {
 			switch (value) {
 			case 0:
-				return (setting.hasHSBModel()?"Hue":"Red");
+				return (model.isOn()?"Hue":"Red");
 			case 1:
-				return (setting.hasHSBModel()?"Saturation":"Green");
+				return (model.isOn()?"Saturation":"Green");
 			case 2:
-				return (setting.hasHSBModel()?"Brightness":"Blue");
+				return (model.isOn()?"Brightness":"Blue");
 			case 3:
-				return (setting.hasHSBModel()?"Opacity":"Alpha");
+				return (model.isOn()?"Opacity":"Alpha");
 			}
 			return "";
 		}
@@ -104,7 +106,7 @@ public abstract class ColorComponent extends VerticalContainer {
 		public double getNumber() {
 			Color c=setting.getColor();
 			if (value<3) {
-				if (setting.hasHSBModel()) return Color.RGBtoHSB(c.getRed(),c.getGreen(),c.getBlue(),null)[value]*getMaximumValue();
+				if (model.isOn()) return Color.RGBtoHSB(c.getRed(),c.getGreen(),c.getBlue(),null)[value]*getMaximumValue();
 				switch (value) {
 				case 0:
 					return c.getRed();
@@ -123,19 +125,19 @@ public abstract class ColorComponent extends VerticalContainer {
 			float[] color=Color.RGBtoHSB(c.getRed(),c.getGreen(),c.getBlue(),null);
 			switch (this.value) {
 			case 0:
-				if (setting.hasHSBModel()) c=Color.getHSBColor((float)value/360,color[1],color[2]);
+				if (model.isOn()) c=Color.getHSBColor((float)value/360,color[1],color[2]);
 				else c=new Color((int)Math.round(value),c.getGreen(),c.getBlue());
 				if (setting.hasAlpha()) setting.setValue(new Color(c.getRed(),c.getGreen(),c.getBlue(),setting.getColor().getAlpha()));
 				else setting.setValue(c);
 				break;
 			case 1:
-				if (setting.hasHSBModel()) c=Color.getHSBColor(color[0],(float)value/100,color[2]);
+				if (model.isOn()) c=Color.getHSBColor(color[0],(float)value/100,color[2]);
 				else c=new Color(c.getRed(),(int)Math.round(value),c.getBlue());
 				if (setting.hasAlpha()) setting.setValue(new Color(c.getRed(),c.getGreen(),c.getBlue(),setting.getColor().getAlpha()));
 				else setting.setValue(c);
 				break;
 			case 2:
-				if (setting.hasHSBModel()) c=Color.getHSBColor(color[0],color[1],(float)value/100);
+				if (model.isOn()) c=Color.getHSBColor(color[0],color[1],(float)value/100);
 				else c=new Color(c.getRed(),c.getGreen(),(int)Math.round(value));
 				if (setting.hasAlpha()) setting.setValue(new Color(c.getRed(),c.getGreen(),c.getBlue(),setting.getColor().getAlpha()));
 				else setting.setValue(c);
@@ -149,7 +151,7 @@ public abstract class ColorComponent extends VerticalContainer {
 		@Override
 		public double getMaximumValue() {
 			int max=100;
-			if (!setting.hasHSBModel()) max=255;
+			if (!model.isOn()) max=255;
 			else if (value==0) max=360;
 			return max;
 		}

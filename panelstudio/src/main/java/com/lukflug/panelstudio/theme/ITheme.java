@@ -102,6 +102,8 @@ public interface ITheme {
 	
 	public ISwitchRenderer<String> getCycleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container);
 	
+	public IColorPickerRenderer getColorPickerRenderer();
+	
 	/**
 	 * Get the common height of a component.
 	 * @return the base height

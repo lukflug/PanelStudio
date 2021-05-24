@@ -14,10 +14,10 @@ public class ColorSliderComponent extends ColorComponent {
 	@Override
 	public void populate (ThemeTuple theme) {
 		addComponent(getRainbowComponent(theme,new RainbowToggle()));
-		addComponent(getColorComponent(theme,0,new ColorNumber(0)));
-		addComponent(getColorComponent(theme,1,new ColorNumber(1)));
-		addComponent(getColorComponent(theme,2,new ColorNumber(2)));
-		addComponent(getColorComponent(theme,3,new ColorNumber(3)));
+		addComponent(getColorComponent(theme,0,new ColorNumber(0,()->setting.hasHSBModel())));
+		addComponent(getColorComponent(theme,1,new ColorNumber(1,()->setting.hasHSBModel())));
+		addComponent(getColorComponent(theme,2,new ColorNumber(2,()->setting.hasHSBModel())));
+		addComponent(getColorComponent(theme,3,new ColorNumber(3,()->setting.hasHSBModel())));
 	}
 	
 	public IComponent getRainbowComponent (ThemeTuple theme, IBooleanSetting toggle) {
