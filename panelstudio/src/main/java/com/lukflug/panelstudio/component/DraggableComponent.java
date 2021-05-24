@@ -66,7 +66,7 @@ public abstract class DraggableComponent<T extends IFixedComponent> implements I
 			@Override
 			public void handleButton (Context context, int button) {
 				super.handleButton(context,button);
-				if (context.isClicked() && button==IInterface.LBUTTON) {
+				if (context.isClicked(button) && button==IInterface.LBUTTON) {
 					dragging=true;
 					attachPoint=context.getInterface().getMouse();
 				} else if (!context.getInterface().getButton(IInterface.LBUTTON) && dragging) {

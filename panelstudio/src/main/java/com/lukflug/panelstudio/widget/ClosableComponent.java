@@ -70,7 +70,7 @@ public class ClosableComponent<S extends IComponent,T extends IComponent> extend
 			@Override
 			public void handleButton (Context context, int button) {
 				super.handleButton(context,button);
-				if (button==IInterface.RBUTTON && context.isHovered() && context.getInterface().getButton(IInterface.RBUTTON)) {
+				if (button==IInterface.RBUTTON && context.isClicked(button)) {
 					collapsible.getToggle().toggle();
 				}
 			}

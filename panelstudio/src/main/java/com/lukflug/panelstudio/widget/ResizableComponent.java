@@ -39,7 +39,7 @@ public class ResizableComponent<T extends IFixedComponent> implements IFixedComp
 	@Override
 	public void handleButton (Context context, int button) {
 		IFixedComponentProxy.super.handleButton(context,button);
-		if (context.isClicked()) {
+		if (button==IInterface.LBUTTON && context.isClicked(button)) {
 			attachPoint=context.getInterface().getMouse();
 			attachRect=new Rectangle(getComponent().getPosition(context.getInterface()),size.getSize());
 			Rectangle r=context.getRect();

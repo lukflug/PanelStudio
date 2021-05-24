@@ -51,7 +51,7 @@ public abstract class Slider extends FocusableComponent {
 	@Override
 	public void handleButton (Context context, int button) {
 		super.handleButton(context,button);
-		if (button==IInterface.LBUTTON && context.isClicked() && renderer.getSlideArea(context).contains(context.getInterface().getMouse())) {
+		if (button==IInterface.LBUTTON && context.isClicked(button) && renderer.getSlideArea(context).contains(context.getInterface().getMouse())) {
 			attached=true;
 		}
 	}

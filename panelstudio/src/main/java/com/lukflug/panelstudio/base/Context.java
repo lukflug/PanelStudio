@@ -175,8 +175,8 @@ public final class Context {
 	 * Get mouse click state.
 	 * @return set to true, if {@link #isHovered()} is true and the left mouse button is clicked
 	 */
-	public boolean isClicked() {
-		return isHovered() && inter.getButton(IInterface.LBUTTON);
+	public boolean isClicked (int button) {
+		return isHovered() && inter.getButton(button);
 	}
 	
 	/**

@@ -1,9 +1,7 @@
 package com.lukflug.panelstudio.layout;
 
 import java.util.function.IntPredicate;
-import java.util.function.Supplier;
 
-import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.SimpleToggleable;
 import com.lukflug.panelstudio.component.IComponent;
 import com.lukflug.panelstudio.setting.IKeybindSetting;
@@ -24,7 +22,7 @@ public class ComponentGenerator implements IComponentGenerator {
 	}
 	
 	@Override
-	public IComponent getKeybindComponent (IKeybindSetting setting, Supplier<Animation> animation, ThemeTuple theme, int colorLevel, boolean isContainer) {
+	public IComponent getKeybindComponent (IKeybindSetting setting, ThemeTuple theme, int colorLevel, boolean isContainer) {
 		return new KeybindComponent(setting,theme.getKeybindRenderer(isContainer)) {
 			@Override
 			public int transformKey (int scancode) {
@@ -34,7 +32,7 @@ public class ComponentGenerator implements IComponentGenerator {
 	}
 	
 	@Override
-	public IComponent getStringComponent (IStringSetting setting, Supplier<Animation> animation, ThemeTuple theme, int colorLevel, boolean isContainer) {
+	public IComponent getStringComponent (IStringSetting setting, ThemeTuple theme, int colorLevel, boolean isContainer) {
 		return new TextField(setting,keys,0,new SimpleToggleable(false),theme.getTextRenderer(false,isContainer)) {
 			@Override
 			public boolean allowCharacter(char character) {

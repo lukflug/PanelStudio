@@ -48,7 +48,7 @@ public abstract class ScrollBar<T> extends FocusableComponent {
 	@Override
 	public void handleButton (Context context, int button) {
 		super.handleButton(context,button);
-		if (button==IInterface.LBUTTON && context.isClicked()) attached=true;
+		if (button==IInterface.LBUTTON && context.isClicked(button)) attached=true;
 	}
 	
 	@Override

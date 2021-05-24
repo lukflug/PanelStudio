@@ -49,7 +49,7 @@ public class ChildUtil {
 				@Override
 				public void handleButton (Context context, int button) {
 					super.handleButton(context,button);
-					if (button==IInterface.RBUTTON && context.isHovered() && !context.getInterface().getButton(IInterface.RBUTTON)) {
+					if (button==IInterface.RBUTTON && context.isClicked(button)) {
 						context.getPopupDisplayer().displayPopup(popup,context.getRect(),toggle,popupType.popupPos);
 						context.releaseFocus();
 					}

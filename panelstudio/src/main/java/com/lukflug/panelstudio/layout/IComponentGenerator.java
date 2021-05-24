@@ -1,8 +1,5 @@
 package com.lukflug.panelstudio.layout;
 
-import java.util.function.Supplier;
-
-import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.SimpleToggleable;
 import com.lukflug.panelstudio.component.IComponent;
 import com.lukflug.panelstudio.setting.IBooleanSetting;
@@ -23,45 +20,45 @@ import com.lukflug.panelstudio.widget.TextField;
 import com.lukflug.panelstudio.widget.ToggleButton;
 
 public interface IComponentGenerator {
-	public default IComponent getComponent (ISetting<?> setting, Supplier<Animation> animation, ThemeTuple theme, int colorLevel, boolean isContainer) {
+	public default IComponent getComponent (ISetting<?> setting, ThemeTuple theme, int colorLevel, boolean isContainer) {
 		if (setting instanceof IBooleanSetting) {
-			return getBooleanComponent((IBooleanSetting)setting,animation,theme,colorLevel,isContainer);
+			return getBooleanComponent((IBooleanSetting)setting,theme,colorLevel,isContainer);
 		} else if (setting instanceof INumberSetting) {
-			return getNumberComponent((INumberSetting)setting,animation,theme,colorLevel,isContainer);
+			return getNumberComponent((INumberSetting)setting,theme,colorLevel,isContainer);
 		} else if (setting instanceof IEnumSetting) {
-			return getEnumComponent((IEnumSetting)setting,animation,theme,colorLevel,isContainer);
+			return getEnumComponent((IEnumSetting)setting,theme,colorLevel,isContainer);
 		} else if (setting instanceof IColorSetting) {
-			return getColorComponent((IColorSetting)setting,animation,theme,colorLevel,isContainer);
+			return getColorComponent((IColorSetting)setting,theme,colorLevel,isContainer);
 		} else if (setting instanceof IKeybindSetting) {
-			return getKeybindComponent((IKeybindSetting)setting,animation,theme,colorLevel,isContainer);
+			return getKeybindComponent((IKeybindSetting)setting,theme,colorLevel,isContainer);
 		} else if (setting instanceof IStringSetting) {
-			return getStringComponent((IStringSetting)setting,animation,theme,colorLevel,isContainer);
+			return getStringComponent((IStringSetting)setting,theme,colorLevel,isContainer);
 		} else {
 			return new Button<Void>(setting,()->null,theme.getButtonRenderer(Void.class,isContainer));
 		}
 	}
 	
-	public default IComponent getBooleanComponent (IBooleanSetting setting, Supplier<Animation> animation, ThemeTuple theme, int colorLevel, boolean isContainer) {
+	public default IComponent getBooleanComponent (IBooleanSetting setting, ThemeTuple theme, int colorLevel, boolean isContainer) {
 		return new ToggleButton(setting,theme.getButtonRenderer(Boolean.class,isContainer));
 	}
 	
-	public default IComponent getNumberComponent (INumberSetting setting, Supplier<Animation> animation, ThemeTuple theme, int colorLevel, boolean isContainer) {
+	public default IComponent getNumberComponent (INumberSetting setting, ThemeTuple theme, int colorLevel, boolean isContainer) {
 		return new NumberSlider(setting,theme.getSliderRenderer(isContainer));
 	}
 	
-	public default IComponent getEnumComponent (IEnumSetting setting, Supplier<Animation> animation, ThemeTuple theme, int colorLevel, boolean isContainer) {
+	public default IComponent getEnumComponent (IEnumSetting setting, ThemeTuple theme, int colorLevel, boolean isContainer) {
 		return new CycleButton(setting,theme.getButtonRenderer(String.class,isContainer));
 	}
 	
-	public default IComponent getColorComponent (IColorSetting setting, Supplier<Animation> animation, ThemeTuple theme, int colorLevel, boolean isContainer) {
+	public default IComponent getColorComponent (IColorSetting setting, ThemeTuple theme, int colorLevel, boolean isContainer) {
 		return new ColorSliderComponent((IColorSetting)setting,new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel));
 	}
 	
-	public default IComponent getKeybindComponent (IKeybindSetting setting, Supplier<Animation> animation, ThemeTuple theme, int colorLevel, boolean isContainer) {
+	public default IComponent getKeybindComponent (IKeybindSetting setting, ThemeTuple theme, int colorLevel, boolean isContainer) {
 		return new KeybindComponent(setting,theme.getKeybindRenderer(isContainer));
 	}
 	
-	public default IComponent getStringComponent (IStringSetting setting, Supplier<Animation> animation, ThemeTuple theme, int colorLevel, boolean isContainer) {
+	public default IComponent getStringComponent (IStringSetting setting, ThemeTuple theme, int colorLevel, boolean isContainer) {
 		return new TextField(setting, new ITextFieldKeys() {
 			@Override
 			public boolean isBackspaceKey(int scancode) {

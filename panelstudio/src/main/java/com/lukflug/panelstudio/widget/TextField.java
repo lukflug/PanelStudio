@@ -40,7 +40,7 @@ public abstract class TextField extends FocusableComponent {
 	@Override
 	public void handleButton (Context context, int button) {
 		super.handleButton(context,button);
-		if (context.isClicked()) {
+		if (button==IInterface.LBUTTON && context.isClicked(button)) {
 			int pos=renderer.transformToCharPos(context,getTitle(),setting.getValue(),boxPosition);
 			if (pos>=0) setPosition(context.getInterface(),pos);
 			unselect();

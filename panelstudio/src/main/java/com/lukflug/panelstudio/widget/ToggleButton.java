@@ -54,7 +54,7 @@ public class ToggleButton extends FocusableComponent {
 	@Override
 	public void handleButton (Context context, int button) {
 		super.handleButton(context,button);
-		if (button==IInterface.LBUTTON && context.isClicked()) {
+		if (button==IInterface.LBUTTON && context.isClicked(button)) {
 			toggle.toggle();
 		}
 	}

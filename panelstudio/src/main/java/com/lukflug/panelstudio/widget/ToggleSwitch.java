@@ -50,7 +50,7 @@ public class ToggleSwitch extends FocusableComponent {
 	@Override
 	public void handleButton (Context context, int button) {
 		super.handleButton(context,button);
-		if (button==IInterface.LBUTTON && context.isClicked()) {
+		if (button==IInterface.LBUTTON && context.isClicked(button)) {
 			if (renderer.getOnField(context).contains(context.getInterface().getMouse()) && !toggle.isOn()) toggle.toggle();
 			else if (renderer.getOffField(context).contains(context.getInterface().getMouse()) && toggle.isOn()) toggle.toggle();
 		}

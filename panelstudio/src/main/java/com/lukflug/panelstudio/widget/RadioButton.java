@@ -31,7 +31,7 @@ public abstract class RadioButton extends FocusableComponent {
 	@Override
 	public void handleButton (Context context, int button) {
 		super.handleButton(context,button);
-		if (button==IInterface.LBUTTON && context.isClicked()) {
+		if (button==IInterface.LBUTTON && context.isClicked(button)) {
 			for (int i=0;i<setting.getAllowedValues().length;i++) {
 				if (renderer.getItemRect(context,setting.getAllowedValues(),i,horizontal).contains(context.getInterface().getMouse())) {
 					setting.setValueIndex(i);

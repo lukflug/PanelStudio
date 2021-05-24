@@ -57,7 +57,7 @@ public class Spinner extends HorizontalContainer {
 			@Override
 			public void handleButton (Context context, int button) {
 				super.handleButton(context,button);
-				if (button==IInterface.LBUTTON && context.isClicked()) {
+				if (button==IInterface.LBUTTON && context.isClicked(button)) {
 					double number=setting.getNumber();
 					number+=Math.pow(10,-setting.getPrecision());
 					if (number<=setting.getMaximumValue()) setting.setNumber(number);
@@ -73,7 +73,7 @@ public class Spinner extends HorizontalContainer {
 			@Override
 			public void handleButton (Context context, int button) {
 				super.handleButton(context,button);
-				if (button==IInterface.LBUTTON && context.isClicked()) {
+				if (button==IInterface.LBUTTON && context.isClicked(button)) {
 					double number=setting.getNumber();
 					number-=Math.pow(10,-setting.getPrecision());
 					if (number>=setting.getMinimumValue()) setting.setNumber(number);
