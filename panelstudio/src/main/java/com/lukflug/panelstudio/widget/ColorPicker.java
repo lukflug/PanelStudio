@@ -20,8 +20,8 @@ public class ColorPicker extends FocusableComponent {
 	@Override
 	public void render (Context context) {
 		super.render(context);
+		if (dragging && context.getInterface().getButton(IInterface.LBUTTON)) setting.setValue(renderer.transformPoint(context,setting.getColor(),context.getInterface().getMouse()));
 		renderer.renderPicker(context,hasFocus(context),setting.getColor());
-		if (dragging && context.isClicked(IInterface.LBUTTON)) setting.setValue(renderer.transformPoint(context,setting.getColor(),context.getInterface().getMouse()));
 	}
 	
 	@Override
@@ -34,6 +34,12 @@ public class ColorPicker extends FocusableComponent {
 	@Override
 	public void getHeight (Context context) {
 		context.setHeight(renderer.getDefaultHeight(context.getSize().width));
+	}
+	
+	@Override
+	public void exit() {
+		super.exit();
+		dragging=false;
 	}
 
 	@Override
