@@ -68,7 +68,7 @@ public abstract class MinecraftGUI extends Screen {
 	}
 	
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
+	public void render (int mouseX, int mouseY, float partialTicks) {
 		mouse=getInterface().screenToGui(new Point(Mouse.getX(),Mouse.getY()));
 		renderGUI();
 		int scroll=Mouse.getDWheel();
@@ -79,7 +79,7 @@ public abstract class MinecraftGUI extends Screen {
 	}
 
 	@Override
-	public void mouseClicked(int mouseX, int mouseY, int clickedButton) {
+	public void mouseClicked (int mouseX, int mouseY, int clickedButton) {
 		mouse=getInterface().screenToGui(new Point(Mouse.getX(),Mouse.getY()));
 		switch (clickedButton) {
 		case IInterface.LBUTTON:
@@ -93,7 +93,7 @@ public abstract class MinecraftGUI extends Screen {
 	}
 
 	@Override
-	public void mouseReleased(int mouseX, int mouseY, int releaseButton) {
+	public void mouseReleased (int mouseX, int mouseY, int releaseButton) {
 		mouse=getInterface().screenToGui(new Point(Mouse.getX(),Mouse.getY()));
 		switch (releaseButton) {
 		case IInterface.LBUTTON:
@@ -107,7 +107,7 @@ public abstract class MinecraftGUI extends Screen {
 	}
 	
 	@Override
-	protected void keyPressed(char typedChar, int keyCode) {
+	protected void keyPressed (char typedChar, int keyCode) {
 		if (keyCode == Keyboard.KEY_ESCAPE) exitGUI();
 		else {
 			getGUI().handleKey(keyCode);
@@ -158,7 +158,7 @@ public abstract class MinecraftGUI extends Screen {
 		}
 		
 		@Override
-		public boolean getButton(int button) {
+		public boolean getButton (int button) {
 			switch (button) {
 			case IInterface.LBUTTON:
 				return lButton;

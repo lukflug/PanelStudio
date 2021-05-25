@@ -55,7 +55,7 @@ public abstract class GLInterface implements IInterface {
 
 	@SuppressWarnings("resource")
 	@Override
-	public void drawString(Point pos, int height, String s, Color c) {
+	public void drawString (Point pos, int height, String s, Color c) {
 		GlStateManager.pushMatrix();
 		GlStateManager.translatef(pos.x,pos.y,0);
 		double scale=height/(double)MinecraftClient.getInstance().textRenderer.fontHeight;
@@ -68,13 +68,13 @@ public abstract class GLInterface implements IInterface {
 
 	@SuppressWarnings("resource")
 	@Override
-	public int getFontWidth(int height, String s) {
+	public int getFontWidth (int height, String s) {
 		double scale=height/(double)MinecraftClient.getInstance().textRenderer.fontHeight;
 		return (int)Math.round(MinecraftClient.getInstance().textRenderer.getWidth(s)*scale);
 	}
 
 	@Override
-	public void fillTriangle(Point pos1, Point pos2, Point pos3, Color c1, Color c2, Color c3) {
+	public void fillTriangle (Point pos1, Point pos2, Point pos3, Color c1, Color c2, Color c3) {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		bufferbuilder.begin(GL11.GL_TRIANGLES,VertexFormats.POSITION_COLOR);
@@ -85,7 +85,7 @@ public abstract class GLInterface implements IInterface {
 	}
 
 	@Override
-	public void drawLine(Point a, Point b, Color c1, Color c2) {
+	public void drawLine (Point a, Point b, Color c1, Color c2) {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		bufferbuilder.begin(GL11.GL_LINES,VertexFormats.POSITION_COLOR);
@@ -95,7 +95,7 @@ public abstract class GLInterface implements IInterface {
 	}
 
 	@Override
-	public void fillRect(Rectangle r, Color c1, Color c2, Color c3, Color c4) {
+	public void fillRect (Rectangle r, Color c1, Color c2, Color c3, Color c4) {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		bufferbuilder.begin(GL11.GL_QUADS, VertexFormats.POSITION_COLOR);
@@ -107,7 +107,7 @@ public abstract class GLInterface implements IInterface {
 	}
 
 	@Override
-	public void drawRect(Rectangle r, Color c1, Color c2, Color c3, Color c4) {
+	public void drawRect (Rectangle r, Color c1, Color c2, Color c3, Color c4) {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		bufferbuilder.begin(GL11.GL_LINE_LOOP, VertexFormats.POSITION_COLOR);
@@ -119,7 +119,7 @@ public abstract class GLInterface implements IInterface {
 	}
 	
 	@Override
-	public synchronized int loadImage(String name) {
+	public synchronized int loadImage (String name) {
 		try {
 			Identifier rl=new Identifier(getResourcePrefix()+name);
 			if (!textures.contains(rl)) {
@@ -137,7 +137,7 @@ public abstract class GLInterface implements IInterface {
 	}
 
 	@Override
-	public void drawImage(Rectangle r, int rotation, boolean parity, int image, Color color) {
+	public void drawImage (Rectangle r, int rotation, boolean parity, int image, Color color) {
 		if (image==0) return;
 		int texCoords[][]={{0,1},{1,1},{1,0},{0,0}};
 		for (int i=0;i<rotation%4;i++) {
@@ -290,6 +290,7 @@ public abstract class GLInterface implements IInterface {
 		}
 		GlStateManager.enableBlend();
 		GlStateManager.disableTexture();
+		GlStateManager.disableAlphaTest();
 		GlStateManager.blendFuncSeparate(GL11.GL_SRC_ALPHA,GL11.GL_ONE_MINUS_SRC_ALPHA,GL11.GL_ONE,GL11.GL_ZERO);
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		GlStateManager.lineWidth(2);
@@ -319,6 +320,7 @@ public abstract class GLInterface implements IInterface {
 	public void end (boolean matrix) {
 		GL11.glPopAttrib();
 		GlStateManager.shadeModel(GL11.GL_FLAT);
+		GlStateManager.enableAlphaTest();
 		GlStateManager.enableTexture();
 		GlStateManager.disableBlend();
 		if (matrix) {

@@ -104,7 +104,7 @@ public abstract class MinecraftGUI extends Screen {
 	}
 
 	@Override
-	public boolean mouseClicked(double mouseX, double mouseY, int clickedButton) {
+	public boolean mouseClicked (double mouseX, double mouseY, int clickedButton) {
 		if (!super.mouseReleased(mouseX,mouseY,clickedButton)) {
 			mouse=new Point((int)Math.round(mouseX),(int)Math.round(mouseY));
 			switch (clickedButton) {
@@ -121,7 +121,7 @@ public abstract class MinecraftGUI extends Screen {
 	}
 
 	@Override
-	public boolean mouseReleased(double mouseX, double mouseY, int releaseButton) {
+	public boolean mouseReleased (double mouseX, double mouseY, int releaseButton) {
 		if (!super.mouseReleased(mouseX,mouseY,releaseButton)) {
 			mouse=new Point((int)Math.round(mouseX),(int)Math.round(mouseY));
 			switch (releaseButton) {
@@ -210,7 +210,7 @@ public abstract class MinecraftGUI extends Screen {
 		}
 		
 		@Override
-		public boolean getButton(int button) {
+		public boolean getButton (int button) {
 			switch (button) {
 			case IInterface.LBUTTON:
 				return lButton;
