@@ -44,7 +44,7 @@ public class ChildUtil {
 			toggle=new SimpleToggleable(false);
 			Button<T> button=new Button<T>(new Labeled(label.getDisplayName(),label.getDescription(),()->drawTitle&&label.isVisible().isOn()),state,theme.getButtonRenderer(stateClass,true));
 			if (popupType.dynamicPopup) popup=ClosableComponent.createDynamicPopup(button,container,state,animation.get(),new RendererTuple<T>(stateClass,theme),popupType.popupSize,toggle,width);
-			else popup=ClosableComponent.createStaticPopup(button,container,state,animation.get(),new RendererTuple<T>(stateClass,theme),popupType.popupSize,toggle,width,false,"");
+			else popup=ClosableComponent.createStaticPopup(button,container,state,animation.get(),new RendererTuple<T>(stateClass,theme),popupType.popupSize,toggle,()->width,false,"",false);
 			parent.addComponent(new ComponentProxy<IComponent>(title) {
 				@Override
 				public void handleButton (Context context, int button) {

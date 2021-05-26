@@ -2,6 +2,7 @@ package com.lukflug.panelstudio.widget;
 
 import java.awt.Point;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
 import com.lukflug.panelstudio.base.AnimatedToggleable;
@@ -92,7 +93,7 @@ public class ClosableComponent<S extends IComponent,T extends IComponent> extend
 	}
 	
 	
-	public static <S extends IComponent,T extends IComponent,U> DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>> createStaticPopup (S title, T content, Supplier<U> state, Animation animation, RendererTuple<U> renderer, IScrollSize popupSize, IToggleable shown, int width, boolean savesState, String configName) {
+	public static <S extends IComponent,T extends IComponent,U> DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>> createStaticPopup (S title, T content, Supplier<U> state, Animation animation, RendererTuple<U> renderer, IScrollSize popupSize, IToggleable shown, IntSupplier widthSupplier, boolean savesState, String configName, boolean closeOnClick) {
 		AtomicReference<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>> panel=new AtomicReference<>(null);
 		DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>> draggable=new DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>>() {
 			FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>> fixedComponent=null;
@@ -100,7 +101,7 @@ public class ClosableComponent<S extends IComponent,T extends IComponent> extend
 			@Override
 			public void handleButton (Context context, int button) {
 				super.handleButton(context,button);
-				if (context.getInterface().getButton(button) && !context.isHovered() && shown.isOn()) shown.toggle();
+				if (context.getInterface().getButton(button) && (!context.isHovered()||closeOnClick) && shown.isOn()) shown.toggle();
 			}
 			
 			@Override
@@ -110,7 +111,12 @@ public class ClosableComponent<S extends IComponent,T extends IComponent> extend
 			
 			@Override
 			public FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>> getComponent() {
-				if (fixedComponent==null) fixedComponent=new FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>(panel.get(),new Point(0,0),width,panel.get().getCollapsible().getToggle(),savesState,configName);
+				if (fixedComponent==null) fixedComponent=new FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>(panel.get(),new Point(0,0),widthSupplier.getAsInt(),panel.get().getCollapsible().getToggle(),savesState,configName) {
+					@Override
+					public int getWidth (IInterface inter) {
+						return widthSupplier.getAsInt();
+					}
+				};
 				return fixedComponent;
 			}
 		};

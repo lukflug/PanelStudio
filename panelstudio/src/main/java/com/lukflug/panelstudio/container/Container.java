@@ -83,9 +83,7 @@ public abstract class Container<T extends IComponent> extends ComponentBase impl
 
 	@Override
 	public void handleButton (Context context, int button) {
-		doContextSensitiveLoop(context,(subContext,component)->{
-			component.handleButton(subContext,button);
-		});
+		doContextSensitiveLoop(context,(subContext,component)->component.handleButton(subContext,button));
 	}
 
 	@Override

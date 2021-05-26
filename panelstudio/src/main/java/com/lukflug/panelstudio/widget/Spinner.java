@@ -14,7 +14,7 @@ import com.lukflug.panelstudio.theme.ITheme;
 import com.lukflug.panelstudio.theme.ThemeTuple;
 
 public class Spinner extends HorizontalContainer {
-	public Spinner (INumberSetting setting, ThemeTuple theme, ITextFieldKeys keys) {
+	public Spinner (INumberSetting setting, ThemeTuple theme, boolean allowInput, ITextFieldKeys keys) {
 		super(setting,new IContainerRenderer(){});
 		TextField textField=new TextField(new IStringSetting() {
 			String value=null;
@@ -48,6 +48,7 @@ public class Spinner extends HorizontalContainer {
 		},keys,0,new SimpleToggleable(false),theme.getTextRenderer(true,false)) {
 			@Override
 			public boolean allowCharacter(char character) {
+				if (!allowInput) return false;
 				return (character>='0' && character<='9') || (character=='.'&&!setting.getSettingState().contains("."));
 			}
 		};
@@ -87,5 +88,4 @@ public class Spinner extends HorizontalContainer {
 		});
 		addComponent(new HorizontalComponent<>(buttons,textField.getHeight(),0));
 	}
-
 }
