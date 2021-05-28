@@ -88,7 +88,7 @@ public class CSGOLayout implements ILayout,IScrollSize {
 						public boolean isOn() {
 							return module.isEnabled().isOn();
 						}
-					},new ThemeTuple(theme,1,2),2,false));
+					},animation,gui,new ThemeTuple(theme,1,2),2,false));
 					module.getSettings().forEach(setting->addSettingsComponent(setting,container,gui,components,new ThemeTuple(theme,2,2)));
 				});
 			} else {
@@ -111,7 +111,7 @@ public class CSGOLayout implements ILayout,IScrollSize {
 	protected <T> void addSettingsComponent (ISetting<T> setting, VerticalContainer container, IComponentAdder gui, IComponentGenerator components, ThemeTuple theme) {
 		int colorLevel=(colorType==ChildMode.DOWN)?theme.graphicalLevel:0;
 		boolean isContainer=setting.getSubSettings()!=null;
-		IComponent component=components.getComponent(setting,theme,colorLevel,isContainer);
+		IComponent component=components.getComponent(setting,animation,gui,theme,colorLevel,isContainer);
 		if (component instanceof VerticalContainer) {
 			VerticalContainer colorContainer=(VerticalContainer)component;
 			Button<T> button=new Button<T>(setting,()->setting.getSettingState(),theme.getButtonRenderer(setting.getSettingClass(),colorType==ChildMode.DOWN));

@@ -24,10 +24,12 @@ import com.lukflug.panelstudio.theme.RendererTuple;
 import com.lukflug.panelstudio.theme.ThemeTuple;
 
 public abstract class DropDownList extends HorizontalContainer {
-	protected Rectangle rect;
+	protected Rectangle rect=new Rectangle();
+	protected boolean transferFocus=false;
 	
 	public DropDownList (IEnumSetting setting, ThemeTuple theme, ITextFieldKeys keys, IScrollSize popupSize, Consumer<IFixedComponent> popupAdder) {
 		super(setting,new IContainerRenderer(){});
+		IToggleable toggle=new SimpleToggleable(false);
 		TextField textField=new TextField(new IStringSetting() {
 			/*String value=null;
 			long lastTime;*/
@@ -60,13 +62,24 @@ public abstract class DropDownList extends HorizontalContainer {
 			}
 		},keys,0,new SimpleToggleable(false),theme.getTextRenderer(true,false)) {
 			@Override
+			public void handleButton (Context context, int button) {
+				super.handleButton(context,button);
+				rect=renderer.getTextArea(context,getTitle());
+				if (super.hasFocus(context)) transferFocus=true;
+			}
+			
+			@Override
+			public boolean hasFocus (Context context) {
+				return super.hasFocus(context)||toggle.isOn();
+			}
+			
+			@Override
 			public boolean allowCharacter(char character) {
 				return DropDownList.this.allowCharacter(character);
 			}
 		};
 		addComponent(new HorizontalComponent<>(textField,0,1));
 		ThemeTuple popupTheme=new ThemeTuple(theme.theme,theme.logicalLevel,0);
-		IToggleable toggle=new SimpleToggleable(false);
 		Button<Void> title=new Button<Void>(new Labeled("",null,()->false),()->null,popupTheme.getButtonRenderer(Void.class,false));
 		RadioButton content=new RadioButton(setting,popupTheme.getRadioRenderer(false),getAnimation(),false) {
 			@Override
@@ -91,8 +104,10 @@ public abstract class DropDownList extends HorizontalContainer {
 			@Override
 			public void handleButton (Context context, int button) {
 				super.handleButton(context,button);
-				if (button==IInterface.LBUTTON && context.isClicked(button)) {
+				rect=new Rectangle(rect.x,context.getPos().y,context.getPos().x+context.getSize().width-rect.x,context.getSize().height);
+				if ((button==IInterface.LBUTTON && context.isClicked(button)) || transferFocus) {
 					context.getPopupDisplayer().displayPopup(popup,rect,toggle,positioner);
+					transferFocus=false;
 				}
 			}
 			
@@ -102,13 +117,6 @@ public abstract class DropDownList extends HorizontalContainer {
 			}
 		};
 		addComponent(new HorizontalComponent<>(button,textField.getHeight(),0));
-	}
-	
-	@Override
-	public void handleButton (Context context, int button) {
-		getHeight(context);
-		rect=context.getRect();
-		super.handleButton(context,button);
 	}
 	
 	protected abstract Animation getAnimation();
