@@ -17,8 +17,8 @@ public class Spinner extends HorizontalContainer {
 	public Spinner (INumberSetting setting, ThemeTuple theme, boolean allowInput, ITextFieldKeys keys) {
 		super(setting,new IContainerRenderer(){});
 		TextField textField=new TextField(new IStringSetting() {
-			String value=null;
-			long lastTime;
+			private String value=null;
+			private long lastTime;
 			
 			@Override
 			public String getDisplayName() {

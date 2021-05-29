@@ -1,11 +1,14 @@
 package com.lukflug.panelstudio.widget;
 
+import java.util.Arrays;
+
 import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.component.FocusableComponent;
 import com.lukflug.panelstudio.setting.AnimatedEnum;
 import com.lukflug.panelstudio.setting.IEnumSetting;
+import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.theme.IRadioRenderer;
 
 public abstract class RadioButton extends FocusableComponent {
@@ -25,17 +28,22 @@ public abstract class RadioButton extends FocusableComponent {
 	@Override
 	public void render (Context context) {
 		super.render(context);
-		renderer.renderItem(context,setting.getAllowedValues(),hasFocus(context),(int)setting.getValueIndex(),animation.getValue(),horizontal);
+		renderer.renderItem(context,Arrays.stream(setting.getAllowedValues()).filter(value->value.isVisible().isOn()).toArray(ILabeled[]::new),hasFocus(context),(int)setting.getValueIndex(),animation.getValue(),horizontal);
 	}
 	
 	@Override
 	public void handleButton (Context context, int button) {
 		super.handleButton(context,button);
 		if (button==IInterface.LBUTTON && context.isClicked(button)) {
-			for (int i=0;i<setting.getAllowedValues().length;i++) {
-				if (renderer.getItemRect(context,setting.getAllowedValues(),i,horizontal).contains(context.getInterface().getMouse())) {
-					setting.setValueIndex(i);
-					return;
+			int index=0;
+			ILabeled[] values=setting.getAllowedValues();
+			for (int i=0;i<values.length;i++) {
+				if (values[i].isVisible().isOn()) {
+					if (renderer.getItemRect(context,values,index,horizontal).contains(context.getInterface().getMouse())) {
+						setting.setValueIndex(i);
+						return;
+					}
+					index++;
 				}
 			}
 		}
