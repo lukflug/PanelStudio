@@ -18,7 +18,7 @@ import com.lukflug.panelstudio.theme.ThemeTuple;
 public abstract class SearchableRadioButton extends VerticalContainer {
 	protected boolean transferFocus=false;
 	
-	public SearchableRadioButton(IEnumSetting setting, ThemeTuple theme, ITextFieldKeys keys) {
+	public SearchableRadioButton(IEnumSetting setting, ThemeTuple theme, boolean container, ITextFieldKeys keys) {
 		super(setting,new IContainerRenderer(){});
 		AtomicReference<String> searchTerm=new AtomicReference<String>("");
 		TextField textField=new TextField(new IStringSetting() {
@@ -36,7 +36,7 @@ public abstract class SearchableRadioButton extends VerticalContainer {
 			public void setValue(String string) {
 				searchTerm.set(string);
 			}
-		},keys,0,new SimpleToggleable(false),theme.getTextRenderer(true,false)) {
+		},keys,0,new SimpleToggleable(false),theme.getTextRenderer(true,container)) {
 			@Override
 			public void handleButton (Context context, int button) {
 				super.handleButton(context,button);
@@ -95,7 +95,7 @@ public abstract class SearchableRadioButton extends VerticalContainer {
 			public ILabeled[] getAllowedValues() {
 				return values;
 			}
-		},theme.getRadioRenderer(false),getAnimation(),false) {
+		},theme.getRadioRenderer(container),getAnimation(),false) {
 			@Override
 			protected boolean isUpKey(int key) {
 				return SearchableRadioButton.this.isUpKey(key);

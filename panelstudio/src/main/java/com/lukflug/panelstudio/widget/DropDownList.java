@@ -32,7 +32,7 @@ public abstract class DropDownList extends HorizontalContainer {
 	protected boolean transferFocus=false;
 	IToggleable toggle=new SimpleToggleable(false);
 	
-	public DropDownList (IEnumSetting setting, ThemeTuple theme, boolean allowSearch, ITextFieldKeys keys, IScrollSize popupSize, Consumer<IFixedComponent> popupAdder) {
+	public DropDownList (IEnumSetting setting, ThemeTuple theme, boolean container, boolean allowSearch, ITextFieldKeys keys, IScrollSize popupSize, Consumer<IFixedComponent> popupAdder) {
 		super(setting,new IContainerRenderer(){});
 		AtomicReference<String> searchTerm=new AtomicReference<String>(null);
 		TextField textField=new TextField(new IStringSetting() {
@@ -52,7 +52,7 @@ public abstract class DropDownList extends HorizontalContainer {
 			public void setValue(String string) {
 				searchTerm.set(string);
 			}
-		},keys,0,new SimpleToggleable(false),theme.getTextRenderer(true,false)) {
+		},keys,0,new SimpleToggleable(false),theme.getTextRenderer(true,container)) {
 			@Override
 			public void handleButton (Context context, int button) {
 				super.handleButton(context,button);
