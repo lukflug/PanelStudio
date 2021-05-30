@@ -1,7 +1,5 @@
 package com.lukflug.panelstudio.widget;
 
-import java.util.Arrays;
-
 import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IInterface;
@@ -28,7 +26,16 @@ public abstract class RadioButton extends FocusableComponent {
 	@Override
 	public void render (Context context) {
 		super.render(context);
-		renderer.renderItem(context,Arrays.stream(setting.getAllowedValues()).filter(value->value.isVisible().isOn()).toArray(ILabeled[]::new),hasFocus(context),(int)setting.getValueIndex(),animation.getValue(),horizontal);
+		ILabeled[] values=IEnumSetting.getVisibleValues(setting);
+		String compare=setting.getValueName();
+		int value=-1;
+		for (int i=0;i<values.length;i++) {
+			if (values[i].getDisplayName().equals(compare)) {
+				value=i;
+				break;
+			}
+		}
+		renderer.renderItem(context,values,hasFocus(context),value,animation.getValue(),horizontal);
 	}
 	
 	@Override
@@ -37,9 +44,10 @@ public abstract class RadioButton extends FocusableComponent {
 		if (button==IInterface.LBUTTON && context.isClicked(button)) {
 			int index=0;
 			ILabeled[] values=setting.getAllowedValues();
+			ILabeled[] visibleValues=IEnumSetting.getVisibleValues(setting);
 			for (int i=0;i<values.length;i++) {
 				if (values[i].isVisible().isOn()) {
-					if (renderer.getItemRect(context,values,index,horizontal).contains(context.getInterface().getMouse())) {
+					if (renderer.getItemRect(context,visibleValues,index,horizontal).contains(context.getInterface().getMouse())) {
 						setting.setValueIndex(i);
 						return;
 					}
@@ -60,7 +68,7 @@ public abstract class RadioButton extends FocusableComponent {
 
 	@Override
 	protected int getHeight() {
-		return renderer.getDefaultHeight(setting.getAllowedValues(),horizontal);
+		return renderer.getDefaultHeight(IEnumSetting.getVisibleValues(setting),horizontal);
 	}
 	
 	protected abstract boolean isUpKey (int key);

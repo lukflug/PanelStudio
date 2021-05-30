@@ -30,10 +30,10 @@ import com.lukflug.panelstudio.theme.ThemeTuple;
 public abstract class DropDownList extends HorizontalContainer {
 	protected Rectangle rect=new Rectangle();
 	protected boolean transferFocus=false;
+	IToggleable toggle=new SimpleToggleable(false);
 	
 	public DropDownList (IEnumSetting setting, ThemeTuple theme, boolean allowSearch, ITextFieldKeys keys, IScrollSize popupSize, Consumer<IFixedComponent> popupAdder) {
 		super(setting,new IContainerRenderer(){});
-		IToggleable toggle=new SimpleToggleable(false);
 		AtomicReference<String> searchTerm=new AtomicReference<String>(null);
 		TextField textField=new TextField(new IStringSetting() {
 			@Override
@@ -158,11 +158,21 @@ public abstract class DropDownList extends HorizontalContainer {
 		addComponent(new HorizontalComponent<>(button,textField.getHeight(),0));
 	}
 	
+	@Override
+	public void handleKey (Context context, int scancode) {
+		super.handleKey(context,scancode);
+		if (toggle.isOn() && isEnterKey(scancode)) {
+			toggle.toggle();
+		}
+	}
+	
 	protected abstract Animation getAnimation();
 	
-	public abstract boolean allowCharacter(char character);
+	public abstract boolean allowCharacter (char character);
 	
-	protected abstract boolean isUpKey(int key);
+	protected abstract boolean isUpKey (int key);
 
-	protected abstract boolean isDownKey(int key);
+	protected abstract boolean isDownKey (int key);
+	
+	protected abstract boolean isEnterKey (int key);
 }

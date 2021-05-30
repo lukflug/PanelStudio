@@ -1,5 +1,7 @@
 package com.lukflug.panelstudio.setting;
 
+import java.util.Arrays;
+
 /**
  * A setting representing an enumeration.
  * @author lukflug
@@ -39,5 +41,9 @@ public interface IEnumSetting extends ISetting<String> {
 	@Override
 	public default Class<String> getSettingClass() {
 		return String.class;
+	}
+	
+	public static ILabeled[] getVisibleValues (IEnumSetting setting) {
+		return Arrays.stream(setting.getAllowedValues()).filter(value->value.isVisible().isOn()).toArray(ILabeled[]::new);
 	}
 }
