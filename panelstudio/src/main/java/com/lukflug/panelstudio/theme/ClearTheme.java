@@ -32,6 +32,7 @@ public class ClearTheme extends ThemeBase {
 		scheme.createSetting(this,"Background Color","The background color.",true,true,new Color(195,195,195,150),false);
 		scheme.createSetting(this,"Font Color","The main color for text.",false,true,new Color(255,255,255),false);
 		scheme.createSetting(this,"Scroll Bar Color","The color for the scroll bar.",false,true,new Color(90,145,240),false);
+		scheme.createSetting(this,"Highlight Color","The color for highlighted text.",false,true,new Color(0,0,255),false);
 	}
 	
 	protected void renderOverlay (Context context) {
@@ -180,8 +181,19 @@ public class ClearTheme extends ThemeBase {
 
 	@Override
 	public IButtonRenderer<Void> getSmallButtonRenderer(int symbol, int logicalLevel, int graphicalLevel, boolean container) {
-		// TODO Auto-generated method stub
-		return null;
+		return new IButtonRenderer<Void>() {
+			@Override
+			public void renderButton(Context context, String title, boolean focus, Void state) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public int getDefaultHeight() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+		};
 	}
 
 	@Override
@@ -269,22 +281,86 @@ public class ClearTheme extends ThemeBase {
 		return new ITextFieldRenderer() {
 			@Override
 			public int renderTextField (Context context, String title, boolean focus, String content, int position, int select, int boxPosition, boolean insertMode) {
+				// Declare and assign variables
+				//Color color=focus?scheme.getColor("Outline Color"):scheme.getColor("Settings Color");
+				Color textColor=getFontColor(focus);
+				Color highlightColor=scheme.getColor("Highlight Color");
+				Rectangle rect=getTextArea(context,title);
+				int strlen=context.getInterface().getFontWidth(height,content.substring(0,position));
+				// Deal with box render offset
+				if (boxPosition<position) {
+					int minPosition=boxPosition;
+					while (minPosition<position) {
+						if (context.getInterface().getFontWidth(height,content.substring(0,minPosition))+rect.width-padding>=strlen) break;
+						minPosition++;
+					}
+					if (boxPosition<minPosition) boxPosition=minPosition;
+				} else if (boxPosition>position) boxPosition=position-1;
+				int maxPosition=content.length();
+				while (maxPosition>0) {
+					if (context.getInterface().getFontWidth(height,content.substring(maxPosition))>=rect.width-padding) {
+						maxPosition++;
+						break;
+					}
+					maxPosition--;
+				}
+				if (boxPosition>maxPosition) boxPosition=maxPosition;
+				else if (boxPosition<0) boxPosition=0;
+				int offset=context.getInterface().getFontWidth(height,content.substring(0,boxPosition));
+				// Deal with highlighted text
+				int x1=rect.x+padding/2-offset+strlen;
+				int x2=rect.x+padding/2-offset;
+				if (position<content.length()) x2+=context.getInterface().getFontWidth(height,content.substring(0,position+1));
+				else x2+=context.getInterface().getFontWidth(height,content+"X");
+				// Draw stuff around the box
+				renderOverlay(context);
+				context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding/2),height,title+separator,textColor);
+				// Draw the box
+				context.getInterface().window(rect);
+				if (select>=0) {
+					int x3=rect.x+padding/2-offset+context.getInterface().getFontWidth(height,content.substring(0,select));
+					context.getInterface().fillRect(new Rectangle(Math.min(x1,x3),rect.y+padding/2,Math.abs(x3-x1),height),highlightColor,highlightColor,highlightColor,highlightColor);
+				}
+				context.getInterface().drawString(new Point(rect.x+padding/2-offset,rect.y+padding/2),height,content,textColor);
+				if ((System.currentTimeMillis()/500)%2==0 && focus) {
+					if (insertMode) context.getInterface().fillRect(new Rectangle(x1,rect.y+padding/2+height,x2-x1,1),textColor,textColor,textColor,textColor);
+					else context.getInterface().fillRect(new Rectangle(x1,rect.y+padding/2,1,height),textColor,textColor,textColor,textColor);
+				}
+				//context.getInterface().fillRect(new Rectangle(rect.x,rect.y,rect.width,1),color,color,color,color);
+				//context.getInterface().fillRect(new Rectangle(rect.x,rect.y+rect.height-1,rect.width,1),color,color,color,color);
+				//context.getInterface().fillRect(new Rectangle(rect.x,rect.y,1,rect.height),color,color,color,color);
+				//context.getInterface().fillRect(new Rectangle(rect.x+rect.width-1,rect.y,1,rect.height),color,color,color,color);
+				context.getInterface().restore();
 				return boxPosition;
 			}
 
 			@Override
 			public int getDefaultHeight() {
-				return getBaseHeight();
+				int height=getBaseHeight()-padding;
+				if (height%2==1) height+=1;
+				return height;
 			}
 
 			@Override
 			public Rectangle getTextArea (Context context, String title) {
-				return context.getRect();
+				Rectangle rect=context.getRect();
+				int length=padding+context.getInterface().getFontWidth(height,title+separator);
+				return new Rectangle(rect.x+length,rect.y,rect.width-length,rect.height);
 			}
-			
+
 			@Override
 			public int transformToCharPos(Context context, String title, String content, int boxPosition) {
-				// TODO Auto-generated method stub
+				Rectangle rect=getTextArea(context,title);
+				Point mouse=context.getInterface().getMouse();
+				int offset=context.getInterface().getFontWidth(height,content.substring(0,boxPosition));
+				if (rect.contains(mouse)) {
+					for (int i=1;i<=content.length();i++) {
+						if (rect.x+padding/2-offset+context.getInterface().getFontWidth(height,content.substring(0,i))>mouse.x) {
+							return i-1;
+						}
+					}
+					return content.length();
+				}
 				return -1;
 			}
 		};

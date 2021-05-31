@@ -167,7 +167,10 @@ public final class OptimizedTheme implements ITheme {
 		public boolean equals (Object o) {
 			if (o instanceof ParameterTuple) {
 				ParameterTuple<?,?> other=(ParameterTuple<?,?>)o;
-				return type.equals(other.type) && logicalLevel==other.logicalLevel && graphicalLevel==other.graphicalLevel && container.equals(other.container);
+				boolean sEqual=type==null?other.type==null:type.equals(other.type);
+				boolean tEqual=container==null?other.container==null:container.equals(other.container);
+				System.out.print(Boolean.toString(sEqual)+" "+Boolean.toString(tEqual));
+				return sEqual && logicalLevel==other.logicalLevel && graphicalLevel==other.graphicalLevel && tEqual;
 			} else return false;
 		}
 	}

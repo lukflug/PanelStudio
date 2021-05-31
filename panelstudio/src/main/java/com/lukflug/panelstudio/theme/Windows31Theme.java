@@ -198,8 +198,19 @@ public class Windows31Theme extends ThemeBase {
 
 	@Override
 	public IButtonRenderer<Void> getSmallButtonRenderer(int symbol, int logicalLevel, int graphicalLevel, boolean container) {
-		// TODO Auto-generated method stub
-		return null;
+		return new IButtonRenderer<Void>() {
+			@Override
+			public void renderButton(Context context, String title, boolean focus, Void state) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public int getDefaultHeight() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+		};
 	}
 
 	@Override
