@@ -152,10 +152,10 @@ public final class OptimizedTheme implements ITheme {
 
 	
 	private static class ParameterTuple<S,T> {
-		public final S type;
-		public final int logicalLevel;
-		public final int graphicalLevel;
-		public final T container;
+		private final S type;
+		private final int logicalLevel;
+		private final int graphicalLevel;
+		private final T container;
 		
 		public ParameterTuple (S type, int logicalLevel, int graphicalLevel, T container) {
 			this.type=type;
@@ -164,14 +164,20 @@ public final class OptimizedTheme implements ITheme {
 			this.container=container;
 		}
 		
+		@Override
+		public int hashCode() {
+			return toString().hashCode();
+		}
+		
+		@Override
 		public boolean equals (Object o) {
-			if (o instanceof ParameterTuple) {
-				ParameterTuple<?,?> other=(ParameterTuple<?,?>)o;
-				boolean sEqual=type==null?other.type==null:type.equals(other.type);
-				boolean tEqual=container==null?other.container==null:container.equals(other.container);
-				System.out.print(Boolean.toString(sEqual)+" "+Boolean.toString(tEqual));
-				return sEqual && logicalLevel==other.logicalLevel && graphicalLevel==other.graphicalLevel && tEqual;
-			} else return false;
+			if (o instanceof ParameterTuple) return toString().equals(o.toString());
+			else return false;
+		}
+		
+		@Override
+		public String toString() {
+			return "("+type+","+logicalLevel+","+graphicalLevel+","+container+")";
 		}
 	}
 }
