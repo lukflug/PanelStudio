@@ -28,9 +28,9 @@ import com.lukflug.panelstudio.theme.RendererTuple;
 import com.lukflug.panelstudio.theme.ThemeTuple;
 
 public abstract class DropDownList extends HorizontalContainer {
-	protected Rectangle rect=new Rectangle();
-	protected boolean transferFocus=false;
-	IToggleable toggle=new SimpleToggleable(false);
+	private Rectangle rect=new Rectangle();
+	private boolean transferFocus=false;
+	protected IToggleable toggle=new SimpleToggleable(false);
 	
 	public DropDownList (IEnumSetting setting, ThemeTuple theme, boolean container, boolean allowSearch, ITextFieldKeys keys, IScrollSize popupSize, Consumer<IFixedComponent> popupAdder) {
 		super(setting,new IContainerRenderer(){});
@@ -57,7 +57,7 @@ public abstract class DropDownList extends HorizontalContainer {
 			public void handleButton (Context context, int button) {
 				super.handleButton(context,button);
 				rect=renderer.getTextArea(context,getTitle());
-				if (super.hasFocus(context)) transferFocus=true;
+				if (button==IInterface.LBUTTON && context.isClicked(button)) transferFocus=true;
 			}
 			
 			@Override

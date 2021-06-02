@@ -39,6 +39,13 @@ public class ClearTheme extends ThemeBase {
 		Color color=context.isHovered()?new Color(0,0,0,64):new Color(0,0,0,0);
 		context.getInterface().fillRect(context.getRect(),color,color,color,color);
 	}
+	
+	protected void renderBackground (Context context, boolean focus, int graphicalLevel) {
+		if (graphicalLevel==0) {
+			Color color=getBackgroundColor(focus);
+			context.getInterface().fillRect(context.getRect(),color,color,color,color);
+		}
+	}
 
 	@Override
 	public IDescriptionRenderer getDescriptionRenderer() {
@@ -58,10 +65,7 @@ public class ClearTheme extends ThemeBase {
 		return new IContainerRenderer() {
 			@Override
 			public void renderBackground (Context context, boolean focus) {
-				if (graphicalLevel==0) {
-					Color color=getBackgroundColor(focus);
-					context.getInterface().fillRect(context.getRect(),color,color,color,color);
-				}
+				ClearTheme.this.renderBackground(context,focus,graphicalLevel);
 			}
 			
 			@Override
@@ -115,10 +119,7 @@ public class ClearTheme extends ThemeBase {
 		return new IScrollBarRenderer<T>() {
 			@Override
 			public int renderScrollBar (Context context, boolean focus, T state, boolean horizontal, int height, int position) {
-				if (graphicalLevel==0) {
-					Color color=getBackgroundColor(focus);
-					context.getInterface().fillRect(context.getRect(),color,color,color,color);
-				}
+				ClearTheme.this.renderBackground(context,focus,graphicalLevel);
 				Color color=ITheme.combineColors(scheme.getColor("Scroll Bar Color"),getBackgroundColor(focus));
 				if (horizontal) {
 					int a=(int)(position/(double)height*context.getSize().width);
@@ -147,10 +148,7 @@ public class ClearTheme extends ThemeBase {
 		return new IEmptySpaceRenderer<T>() {
 			@Override
 			public void renderSpace(Context context, boolean focus, T state) {
-				if (graphicalLevel==0) {
-					Color color=getBackgroundColor(focus);
-					context.getInterface().fillRect(context.getRect(),color,color,color,color);
-				}
+				ClearTheme.this.renderBackground(context,focus,graphicalLevel);
 			}
 		};
 	}
@@ -163,7 +161,7 @@ public class ClearTheme extends ThemeBase {
 				if (container && graphicalLevel<=0) {
 					Color colorA=getColor(scheme.getColor("Title Color")),colorB=gradient.isOn()?getBackgroundColor(focus):colorA;
 					context.getInterface().fillRect(context.getRect(),colorA,colorA,colorB,colorB);
-				}
+				} else ClearTheme.this.renderBackground(context,focus,graphicalLevel);
 				Color color=getFontColor(focus);
 				if (type==Boolean.class && (Boolean)state==true) color=getMainColor(focus,true);
 				else if (type==Color.class) color=(Color)state;
@@ -201,6 +199,10 @@ public class ClearTheme extends ThemeBase {
 		return new IButtonRenderer<String>() {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, String state) {
+				if (container && graphicalLevel<=0) {
+					Color colorA=getColor(scheme.getColor("Title Color")),colorB=gradient.isOn()?getBackgroundColor(focus):colorA;
+					context.getInterface().fillRect(context.getRect(),colorA,colorA,colorB,colorB);
+				} else ClearTheme.this.renderBackground(context,focus,graphicalLevel);
 				Color color=getFontColor(focus);
 				if (focus) color=getMainColor(focus,true);
 				renderOverlay(context);
@@ -219,6 +221,7 @@ public class ClearTheme extends ThemeBase {
 		return new ISliderRenderer() {
 			@Override
 			public void renderSlider(Context context, String title, String state, boolean focus, double value) {
+				ClearTheme.this.renderBackground(context,focus,graphicalLevel);
 				Color color=getFontColor(focus);
 				Color colorA=getMainColor(focus,true);
 				Rectangle rect=getSlideArea(context);
@@ -240,6 +243,7 @@ public class ClearTheme extends ThemeBase {
 		return new IRadioRenderer() {
 			@Override
 			public void renderItem(Context context, ILabeled[] items, boolean focus, int target, double state, boolean horizontal) {
+				ClearTheme.this.renderBackground(context,focus,graphicalLevel);
 				for (int i=0;i<items.length;i++) {
 					Rectangle rect=getItemRect(context,items,i,horizontal);
 					Context subContext=new Context(context.getInterface(),rect.width,rect.getLocation(),context.hasFocus(),context.onTop());
@@ -281,12 +285,14 @@ public class ClearTheme extends ThemeBase {
 		return new ITextFieldRenderer() {
 			@Override
 			public int renderTextField (Context context, String title, boolean focus, String content, int position, int select, int boxPosition, boolean insertMode) {
+				ClearTheme.this.renderBackground(context,focus,graphicalLevel);
 				// Declare and assign variables
 				//Color color=focus?scheme.getColor("Outline Color"):scheme.getColor("Settings Color");
 				Color textColor=getFontColor(focus);
 				Color highlightColor=scheme.getColor("Highlight Color");
 				Rectangle rect=getTextArea(context,title);
 				int strlen=context.getInterface().getFontWidth(height,content.substring(0,position));
+				context.getInterface().fillRect(rect,new Color(0,0,0,64),new Color(0,0,0,64),new Color(0,0,0,64),new Color(0,0,0,64));
 				// Deal with box render offset
 				if (boxPosition<position) {
 					int minPosition=boxPosition;
@@ -326,10 +332,6 @@ public class ClearTheme extends ThemeBase {
 					if (insertMode) context.getInterface().fillRect(new Rectangle(x1,rect.y+padding/2+height,x2-x1,1),textColor,textColor,textColor,textColor);
 					else context.getInterface().fillRect(new Rectangle(x1,rect.y+padding/2,1,height),textColor,textColor,textColor,textColor);
 				}
-				//context.getInterface().fillRect(new Rectangle(rect.x,rect.y,rect.width,1),color,color,color,color);
-				//context.getInterface().fillRect(new Rectangle(rect.x,rect.y+rect.height-1,rect.width,1),color,color,color,color);
-				//context.getInterface().fillRect(new Rectangle(rect.x,rect.y,1,rect.height),color,color,color,color);
-				//context.getInterface().fillRect(new Rectangle(rect.x+rect.width-1,rect.y,1,rect.height),color,color,color,color);
 				context.getInterface().restore();
 				return boxPosition;
 			}
