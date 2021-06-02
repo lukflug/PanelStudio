@@ -67,7 +67,7 @@ public class PanelLayout implements ILayout {
 		int nextLevel=(layoutType.apply(theme.logicalLevel-1)==ChildMode.DOWN)?theme.graphicalLevel:0;
 		int colorLevel=(colorType.apply(theme.logicalLevel-1)==ChildMode.DOWN)?theme.graphicalLevel:0;
 		boolean isContainer=(setting.getSubSettings()!=null)&&(layoutType.apply(theme.logicalLevel-1)==ChildMode.DOWN);
-		IComponent component=components.getComponent(setting,animation,gui,new ThemeTuple(theme.theme,theme.logicalLevel,theme.graphicalLevel),colorLevel,isContainer);
+		IComponent component=components.getComponent(setting,animation,gui,theme,colorLevel,isContainer);
 		if (component instanceof VerticalContainer) {
 			VerticalContainer colorContainer=(VerticalContainer)component;
 			Button<T> button=new Button<T>(setting,()->setting.getSettingState(),theme.getButtonRenderer(setting.getSettingClass(),colorType.apply(theme.logicalLevel-1)==ChildMode.DOWN));
