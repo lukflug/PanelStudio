@@ -521,7 +521,7 @@ public class GameSenseTheme extends ThemeBase {
 				context.getInterface().fillRect(context.getRect(),colorA,colorB,colorB,colorA);
 				Color colorC=new Color(0,0,0,0),colorD=new Color(0,0,0);
 				context.getInterface().fillRect(context.getRect(),colorC,colorC,colorD,colorD);
-				Point p=new Point((int)(context.getPos().x+hsb[1]*(context.getSize().width-1)),(int)(context.getPos().y+(1-hsb[2])*(context.getSize().height-1)));
+				Point p=new Point((int)Math.round(context.getPos().x+hsb[1]*(context.getSize().width-1)),(int)Math.round(context.getPos().y+(1-hsb[2])*(context.getSize().height-1)));
 				Color fontColor=new Color(255-color.getRed(),255-color.getGreen(),255-color.getBlue());
 				context.getInterface().fillRect(new Rectangle(p.x,p.y-padding,1,2*padding+1),fontColor,fontColor,fontColor,fontColor);
 				context.getInterface().fillRect(new Rectangle(p.x-padding,p.y,2*padding+1,1),fontColor,fontColor,fontColor,fontColor);

@@ -14,7 +14,7 @@ import com.lukflug.panelstudio.theme.ITheme;
 import com.lukflug.panelstudio.theme.ThemeTuple;
 
 public class Spinner extends HorizontalContainer {
-	public Spinner (INumberSetting setting, ThemeTuple theme, boolean allowInput, ITextFieldKeys keys) {
+	public Spinner (INumberSetting setting, ThemeTuple theme, boolean container, boolean allowInput, ITextFieldKeys keys) {
 		super(setting,new IContainerRenderer(){});
 		TextField textField=new TextField(new IStringSetting() {
 			private String value=null;
@@ -45,7 +45,7 @@ public class Spinner extends HorizontalContainer {
 				if (value==null) lastTime=System.currentTimeMillis();
 				value=new String(string);
 			}
-		},keys,0,new SimpleToggleable(false),theme.getTextRenderer(true,false)) {
+		},keys,0,new SimpleToggleable(false),theme.getTextRenderer(true,container)) {
 			@Override
 			public boolean allowCharacter(char character) {
 				if (!allowInput) return false;
@@ -54,7 +54,7 @@ public class Spinner extends HorizontalContainer {
 		};
 		addComponent(new HorizontalComponent<>(textField,0,1));
 		VerticalContainer buttons=new VerticalContainer(setting,new IContainerRenderer(){});
-		buttons.addComponent(new Button<Void>(new Labeled(null,null,()->true),()->null,theme.getSmallButtonRenderer(ITheme.UP,false)) {
+		buttons.addComponent(new Button<Void>(new Labeled(null,null,()->true),()->null,theme.getSmallButtonRenderer(ITheme.UP,container)) {
 			@Override
 			public void handleButton (Context context, int button) {
 				super.handleButton(context,button);
@@ -70,7 +70,7 @@ public class Spinner extends HorizontalContainer {
 				return textField.getHeight()/2;
 			}
 		});
-		buttons.addComponent(new Button<Void>(new Labeled(null,null,()->true),()->null,theme.getSmallButtonRenderer(ITheme.DOWN,false)) {
+		buttons.addComponent(new Button<Void>(new Labeled(null,null,()->true),()->null,theme.getSmallButtonRenderer(ITheme.DOWN,container)) {
 			@Override
 			public void handleButton (Context context, int button) {
 				super.handleButton(context,button);

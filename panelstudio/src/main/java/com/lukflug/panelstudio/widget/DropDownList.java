@@ -139,7 +139,7 @@ public abstract class DropDownList extends HorizontalContainer {
 				return new Point(component.x,component.y+component.height);
 			}
 		};
-		Button<Void> button=new Button<Void>(new Labeled(null,null,()->true),()->null,theme.getSmallButtonRenderer(ITheme.DOWN,false)) {
+		Button<Void> button=new Button<Void>(new Labeled(null,null,()->true),()->null,theme.getSmallButtonRenderer(ITheme.DOWN,container)) {
 			@Override
 			public void handleButton (Context context, int button) {
 				super.handleButton(context,button);

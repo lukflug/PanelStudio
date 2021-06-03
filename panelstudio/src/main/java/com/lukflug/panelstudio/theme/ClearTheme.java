@@ -29,6 +29,7 @@ public class ClearTheme extends ThemeBase {
 		this.separator=separator;
 		scheme.createSetting(this,"Title Color","The color for panel titles.",false,true,new Color(90,145,240),false);
 		scheme.createSetting(this,"Enabled Color","The main color for enabled components.",false,true,new Color(90,145,240),false);
+		scheme.createSetting(this,"Disabled Color","The main color for disabled switches.",false,true,new Color(64,64,64),false);
 		scheme.createSetting(this,"Background Color","The background color.",true,true,new Color(195,195,195,150),false);
 		scheme.createSetting(this,"Font Color","The main color for text.",false,true,new Color(255,255,255),false);
 		scheme.createSetting(this,"Scroll Bar Color","The color for the scroll bar.",false,true,new Color(90,145,240),false);
@@ -45,6 +46,57 @@ public class ClearTheme extends ThemeBase {
 			Color color=getBackgroundColor(focus);
 			context.getInterface().fillRect(context.getRect(),color,color,color,color);
 		}
+	}
+	
+	protected void renderSmallButton(Context context, String title, int symbol, boolean focus) {
+		Point points[]=new Point[3];
+		int padding=context.getRect().height<=8?2:4;
+		Rectangle rect=new Rectangle(context.getRect().x+padding/2,context.getRect().y+padding/2,context.getRect().height-2*(padding/2),context.getRect().height-2*(padding/2));
+		if (title==null) rect.x+=context.getRect().width/2-context.getRect().height/2;
+		Color color=getFontColor(focus);
+		switch (symbol) {
+		case ITheme.CLOSE:
+			context.getInterface().drawLine(new Point(rect.x,rect.y),new Point(rect.x+rect.width,rect.y+rect.height),color,color);
+			context.getInterface().drawLine(new Point(rect.x,rect.y+rect.height),new Point(rect.x+rect.width,rect.y),color,color);
+			break;
+		case ITheme.MINIMIZE:
+			context.getInterface().fillRect(new Rectangle(rect.x,rect.y+rect.height-2,rect.width,2),color,color,color,color);
+			break;
+		case ITheme.ADD:
+			if (rect.width%2==1) rect.width-=1;
+			if (rect.height%2==1) rect.height-=1;
+			context.getInterface().fillRect(new Rectangle(rect.x+rect.width/2-1,rect.y,2,rect.height),color,color,color,color);
+			context.getInterface().fillRect(new Rectangle(rect.x,rect.y+rect.height/2-1,rect.width,2),color,color,color,color);
+			break;
+		case ITheme.LEFT:
+			if (rect.height%2==1) rect.height-=1;
+			points[2]=new Point(rect.x+rect.width,rect.y);
+			points[1]=new Point(rect.x+rect.width,rect.y+rect.height);
+			points[0]=new Point(rect.x,rect.y+rect.height/2);
+			break;
+		case ITheme.RIGHT:
+			if (rect.height%2==1) rect.height-=1;
+			points[0]=new Point(rect.x,rect.y);
+			points[1]=new Point(rect.x,rect.y+rect.height);
+			points[2]=new Point(rect.x+rect.width,rect.y+rect.height/2);
+			break;
+		case ITheme.UP:
+			if (rect.width%2==1) rect.width-=1;
+			points[0]=new Point(rect.x,rect.y+rect.height);
+			points[1]=new Point(rect.x+rect.width,rect.y+rect.height);
+			points[2]=new Point(rect.x+rect.width/2,rect.y);
+			break;
+		case ITheme.DOWN:
+			if (rect.width%2==1) rect.width-=1;
+			points[2]=new Point(rect.x,rect.y);
+			points[1]=new Point(rect.x+rect.width,rect.y);
+			points[0]=new Point(rect.x+rect.width/2,rect.y+rect.height);
+			break;
+		}
+		if (symbol>=ITheme.LEFT && symbol<=ITheme.DOWN) {
+			context.getInterface().fillTriangle(points[0],points[1],points[2],color,color,color);
+		}
+		if (title!=null) context.getInterface().drawString(new Point(context.getRect().x+(symbol==ITheme.NONE?padding:context.getRect().height),context.getRect().y+padding),height,title,getFontColor(focus));
 	}
 
 	@Override
@@ -90,25 +142,17 @@ public class ClearTheme extends ThemeBase {
 			@Override
 			public void renderTitleOverlay(Context context, boolean focus, T state, boolean open) {
 				if (graphicalLevel>0) {
-					Color color=getFontColor(focus);
 					Rectangle rect=context.getRect();
-					rect=new Rectangle(rect.x+rect.width-rect.height+2,rect.y+2,rect.height-4,rect.height-4);
+					rect=new Rectangle(rect.width-rect.height,0,rect.height,rect.height);
 					if (rect.width%2!=0) {
 						rect.width--;
 						rect.height--;
 						rect.x++;
-					} 
-					Point p1,p2,p3;
-					if (open) {
-						p3=new Point(rect.x+rect.width,rect.y);
-						p2=new Point(rect.x+rect.width/2,rect.y+rect.height);
-						p1=new Point(rect.x,rect.y);
-					} else  {
-						p3=new Point(rect.x,rect.y);
-						p2=new Point(rect.x+rect.width,rect.y+rect.height/2);
-						p1=new Point(rect.x,rect.y+rect.height);
 					}
-					context.getInterface().fillTriangle(p1,p2,p3,color,color,color);
+					Context subContext=new Context(context,rect.width,rect.getLocation(),true,true);
+					subContext.setHeight(rect.height);
+					if (open) renderSmallButton(subContext,null,ITheme.DOWN,focus);
+					else renderSmallButton(subContext,null,ITheme.RIGHT,focus);
 				}
 			}
 		};
@@ -119,7 +163,7 @@ public class ClearTheme extends ThemeBase {
 		return new IScrollBarRenderer<T>() {
 			@Override
 			public int renderScrollBar (Context context, boolean focus, T state, boolean horizontal, int height, int position) {
-				ClearTheme.this.renderBackground(context,focus,graphicalLevel);
+				renderBackground(context,focus,graphicalLevel);
 				Color color=ITheme.combineColors(scheme.getColor("Scroll Bar Color"),getBackgroundColor(focus));
 				if (horizontal) {
 					int a=(int)(position/(double)height*context.getSize().width);
@@ -148,7 +192,7 @@ public class ClearTheme extends ThemeBase {
 		return new IEmptySpaceRenderer<T>() {
 			@Override
 			public void renderSpace(Context context, boolean focus, T state) {
-				ClearTheme.this.renderBackground(context,focus,graphicalLevel);
+				renderBackground(context,focus,graphicalLevel);
 			}
 		};
 	}
@@ -161,7 +205,7 @@ public class ClearTheme extends ThemeBase {
 				if (container && graphicalLevel<=0) {
 					Color colorA=getColor(scheme.getColor("Title Color")),colorB=gradient.isOn()?getBackgroundColor(focus):colorA;
 					context.getInterface().fillRect(context.getRect(),colorA,colorA,colorB,colorB);
-				} else ClearTheme.this.renderBackground(context,focus,graphicalLevel);
+				} else renderBackground(context,focus,graphicalLevel);
 				Color color=getFontColor(focus);
 				if (type==Boolean.class && (Boolean)state==true) color=getMainColor(focus,true);
 				else if (type==Color.class) color=(Color)state;
@@ -182,14 +226,14 @@ public class ClearTheme extends ThemeBase {
 		return new IButtonRenderer<Void>() {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, Void state) {
-				// TODO Auto-generated method stub
-				
+				renderBackground(context,focus,graphicalLevel);
+				renderOverlay(context);
+				if (!container || logicalLevel<=0) renderSmallButton(context,title,symbol,focus);
 			}
 
 			@Override
 			public int getDefaultHeight() {
-				// TODO Auto-generated method stub
-				return 0;
+				return getBaseHeight();
 			}
 		};
 	}
@@ -202,7 +246,7 @@ public class ClearTheme extends ThemeBase {
 				if (container && graphicalLevel<=0) {
 					Color colorA=getColor(scheme.getColor("Title Color")),colorB=gradient.isOn()?getBackgroundColor(focus):colorA;
 					context.getInterface().fillRect(context.getRect(),colorA,colorA,colorB,colorB);
-				} else ClearTheme.this.renderBackground(context,focus,graphicalLevel);
+				} else renderBackground(context,focus,graphicalLevel);
 				Color color=getFontColor(focus);
 				if (focus) color=getMainColor(focus,true);
 				renderOverlay(context);
@@ -221,7 +265,7 @@ public class ClearTheme extends ThemeBase {
 		return new ISliderRenderer() {
 			@Override
 			public void renderSlider(Context context, String title, String state, boolean focus, double value) {
-				ClearTheme.this.renderBackground(context,focus,graphicalLevel);
+				renderBackground(context,focus,graphicalLevel);
 				Color color=getFontColor(focus);
 				Color colorA=getMainColor(focus,true);
 				Rectangle rect=getSlideArea(context);
@@ -243,7 +287,7 @@ public class ClearTheme extends ThemeBase {
 		return new IRadioRenderer() {
 			@Override
 			public void renderItem(Context context, ILabeled[] items, boolean focus, int target, double state, boolean horizontal) {
-				ClearTheme.this.renderBackground(context,focus,graphicalLevel);
+				renderBackground(context,focus,graphicalLevel);
 				for (int i=0;i<items.length;i++) {
 					Rectangle rect=getItemRect(context,items,i,horizontal);
 					Context subContext=new Context(context.getInterface(),rect.width,rect.getLocation(),context.hasFocus(),context.onTop());
@@ -285,9 +329,8 @@ public class ClearTheme extends ThemeBase {
 		return new ITextFieldRenderer() {
 			@Override
 			public int renderTextField (Context context, String title, boolean focus, String content, int position, int select, int boxPosition, boolean insertMode) {
-				ClearTheme.this.renderBackground(context,focus,graphicalLevel);
+				renderBackground(context,focus,graphicalLevel);
 				// Declare and assign variables
-				//Color color=focus?scheme.getColor("Outline Color"):scheme.getColor("Settings Color");
 				Color textColor=getFontColor(focus);
 				Color highlightColor=scheme.getColor("Highlight Color");
 				Rectangle rect=getTextArea(context,title);
@@ -372,7 +415,16 @@ public class ClearTheme extends ThemeBase {
 		return new ISwitchRenderer<Boolean>() {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, Boolean state) {
-				// TODO Auto-generated method stub
+				renderBackground(context,focus,graphicalLevel);
+				renderOverlay(context);
+				context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title+separator+(state?"On":"Off"),getFontColor(focus));
+				Color color=state?scheme.getColor("Enabled Color"):scheme.getColor("Disabled Color");
+				Color fillColor=ITheme.combineColors(color,getBackgroundColor(focus));
+				Rectangle rect=state?getOnField(context):getOffField(context);
+				context.getInterface().fillRect(rect,fillColor,fillColor,fillColor,fillColor);
+				rect=context.getRect();
+				rect=new Rectangle(rect.x+rect.width-2*rect.height+3*padding,rect.y+padding,2*rect.height-4*padding,rect.height-2*padding);
+				context.getInterface().drawRect(rect,color,color,color,color);
 			}
 
 			@Override
@@ -382,14 +434,14 @@ public class ClearTheme extends ThemeBase {
 
 			@Override
 			public Rectangle getOnField(Context context) {
-				// TODO Auto-generated method stub
-				return null;
+				Rectangle rect=context.getRect();
+				return new Rectangle(rect.x+rect.width-rect.height+padding,rect.y+padding,rect.height-2*padding,rect.height-2*padding);
 			}
 
 			@Override
 			public Rectangle getOffField(Context context) {
-				// TODO Auto-generated method stub
-				return null;
+				Rectangle rect=context.getRect();
+				return new Rectangle(rect.x+rect.width-2*rect.height+3*padding,rect.y+padding,rect.height-2*padding,rect.height-2*padding);
 			}
 		};
 	}
@@ -398,7 +450,20 @@ public class ClearTheme extends ThemeBase {
 		return new ISwitchRenderer<String>() {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, String state) {
-				// TODO Auto-generated method stub
+				renderBackground(context,focus,graphicalLevel);
+				Context subContext=new Context(context,context.getRect().width-2*context.getRect().height,new Point(0,0),true,true);
+				subContext.setHeight(context.getRect().height);
+				renderOverlay(subContext);
+				Color textColor=getFontColor(focus);
+				context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title+separator+state,textColor);
+				Rectangle rect=getOnField(context);
+				subContext=new Context(context,rect.width,new Point(rect.x-context.getRect().x,0),true,true);
+				subContext.setHeight(rect.height);
+				getSmallButtonRenderer(ITheme.RIGHT,logicalLevel,graphicalLevel,container).renderButton(subContext,null,focus,null);
+				rect=getOffField(context);
+				subContext=new Context(context,rect.width,new Point(rect.x-context.getRect().x,0),true,true);
+				subContext.setHeight(rect.height);
+				getSmallButtonRenderer(ITheme.LEFT,logicalLevel,graphicalLevel,container).renderButton(subContext,null,focus,null);
 			}
 
 			@Override
@@ -408,14 +473,14 @@ public class ClearTheme extends ThemeBase {
 
 			@Override
 			public Rectangle getOnField(Context context) {
-				// TODO Auto-generated method stub
-				return null;
+				Rectangle rect=context.getRect();
+				return new Rectangle(rect.x+rect.width-rect.height,rect.y,rect.height,rect.height);
 			}
 
 			@Override
 			public Rectangle getOffField(Context context) {
-				// TODO Auto-generated method stub
-				return null;
+				Rectangle rect=context.getRect();
+				return new Rectangle(rect.x+rect.width-2*rect.height,rect.y,rect.height,rect.height);
 			}
 		};
 	}
@@ -425,20 +490,33 @@ public class ClearTheme extends ThemeBase {
 		return new IColorPickerRenderer() {
 			@Override
 			public void renderPicker(Context context, boolean focus, Color color) {
-				// TODO Auto-generated method stub
-				
+				float[] hsb=Color.RGBtoHSB(color.getRed(),color.getGreen(),color.getBlue(),null);
+				Color colorA=Color.getHSBColor(hsb[0],0,1),colorB=Color.getHSBColor(hsb[0],1,1);
+				context.getInterface().fillRect(context.getRect(),colorA,colorB,colorB,colorA);
+				Color colorC=new Color(0,0,0,0),colorD=new Color(0,0,0);
+				context.getInterface().fillRect(context.getRect(),colorC,colorC,colorD,colorD);
+				Point p=new Point((int)Math.round(context.getPos().x+hsb[1]*(context.getSize().width-1)),(int)Math.round(context.getPos().y+(1-hsb[2])*(context.getSize().height-1)));
+				Color fontColor=new Color(255-color.getRed(),255-color.getGreen(),255-color.getBlue());
+				context.getInterface().fillRect(new Rectangle(p.x,p.y-padding,1,2*padding+1),fontColor,fontColor,fontColor,fontColor);
+				context.getInterface().fillRect(new Rectangle(p.x-padding,p.y,2*padding+1,1),fontColor,fontColor,fontColor,fontColor);
 			}
 
 			@Override
 			public Color transformPoint(Context context, Color color, Point point) {
-				// TODO Auto-generated method stub
-				return null;
+				float hue=Color.RGBtoHSB(color.getRed(),color.getGreen(),color.getBlue(),null)[0];
+				float saturation=(point.x-context.getPos().x)/(float)(context.getSize().width-1);
+				float brightness=1+(context.getPos().y-point.y)/(float)(context.getSize().height-1);
+				if (saturation>1) saturation=1;
+				else if (saturation<0) saturation=0;
+				if (brightness>1) brightness=1;
+				else if (brightness<0) brightness=0;
+				Color value=Color.getHSBColor(hue,saturation,brightness);
+				return ITheme.combineColors(value,color);
 			}
 
 			@Override
 			public int getDefaultHeight(int width) {
-				// TODO Auto-generated method stub
-				return 0;
+				return Math.min(width,8*getBaseHeight());
 			}
 		};
 	}
