@@ -34,7 +34,7 @@ public abstract class TextField extends FocusableComponent {
 	@Override
 	public void render (Context context) {
 		super.render(context);
-		boxPosition=renderer.renderTextField(context,getTitle(),hasFocus(context),setting.getValue(),getPosition(),getSelect(),boxPosition,insertMode.isOn());
+		boxPosition=renderer.renderTextField(context,getTitle(),hasFocus(context),context.hasFocus(),setting.getValue(),getPosition(),getSelect(),boxPosition,insertMode.isOn());
 	}
 	
 	@Override

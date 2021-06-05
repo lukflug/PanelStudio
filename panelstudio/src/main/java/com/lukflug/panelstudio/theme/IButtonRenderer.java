@@ -15,7 +15,7 @@ public interface IButtonRenderer<T> {
 	 * @param focus the focus state of the button
 	 * @param state the state of the button
 	 */
-	public void renderButton (Context context, String title, boolean focus, T state);
+	public void renderButton (Context context, String title, boolean focus, boolean containerFocus, T state);
 	
 	/**
 	 * Returns the default height.

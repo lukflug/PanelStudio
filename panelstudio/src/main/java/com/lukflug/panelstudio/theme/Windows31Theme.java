@@ -26,22 +26,33 @@ public class Windows31Theme extends ThemeBase {
 		scheme.createSetting(this,"Font Color","The main color for text.",false,true,new Color(0,0,0),false);
 	}
 	
-	protected void drawButton (IInterface inter, Rectangle rect, boolean focus) {
-		Color c0=getFontColor(focus);
+	protected void drawButtonBase (IInterface inter, Rectangle rect, boolean focus, boolean clicked) {
 		Color c1=scheme.getColor("Shadow Color");
 		Color c3=getBackgroundColor(focus);
-		// Outline
+		if (clicked) {
+			// Shadow
+			inter.fillRect(new Rectangle(rect.x+rect.width-1,rect.y+1,1,rect.height-2),c1,c1,c1,c1);
+			inter.fillRect(new Rectangle(rect.x+1,rect.y+rect.height-1,rect.width-2,1),c1,c1,c1,c1);
+			inter.fillRect(new Rectangle(rect.x+rect.width-2,rect.y+2,1,rect.height-3),c1,c1,c1,c1);
+			inter.fillRect(new Rectangle(rect.x+2,rect.y+rect.height-2,rect.width-3,1),c1,c1,c1,c1);
+			// Content
+			inter.fillRect(new Rectangle(rect.x+2,rect.y+2,rect.width-4,rect.height-4),c3,c3,c3,c3);
+		} else {
+			//Shadow
+			inter.fillRect(new Rectangle(rect.x,rect.y,1,rect.height),c1,c1,c1,c1);
+			inter.fillRect(new Rectangle(rect.x,rect.y,rect.width,1),c1,c1,c1,c1);
+			//Content
+			inter.fillRect(new Rectangle(rect.x+1,rect.y+1,rect.width-1,rect.height-1),c3,c3,c3,c3);
+		}
+	}
+	
+	protected void drawButton (IInterface inter, Rectangle rect, boolean focus, boolean clicked) {
+		Color c0=getFontColor(focus);
 		inter.fillRect(new Rectangle(rect.x,rect.y+1,1,rect.height-2),c0,c0,c0,c0);
 		inter.fillRect(new Rectangle(rect.x+1,rect.y,rect.width-2,1),c0,c0,c0,c0);
 		inter.fillRect(new Rectangle(rect.x+rect.width-1,rect.y+1,1,rect.height-2),c0,c0,c0,c0);
 		inter.fillRect(new Rectangle(rect.x+1,rect.y+rect.height-1,rect.width-2,1),c0,c0,c0,c0);
-		// Shadow
-		inter.fillRect(new Rectangle(rect.x+rect.width-2,rect.y+2,1,rect.height-3),c1,c1,c1,c1);
-		inter.fillRect(new Rectangle(rect.x+2,rect.y+rect.height-2,rect.width-3,1),c1,c1,c1,c1);
-		inter.fillRect(new Rectangle(rect.x+rect.width-3,rect.y+3,1,rect.height-5),c1,c1,c1,c1);
-		inter.fillRect(new Rectangle(rect.x+3,rect.y+rect.height-3,rect.width-5,1),c1,c1,c1,c1);
-		// Content
-		inter.fillRect(new Rectangle(rect.x+3,rect.y+3,rect.width-6,rect.height-6),c3,c3,c3,c3);
+		drawButtonBase(inter,new Rectangle(rect.x+1,rect.y+1,rect.width-2,rect.height-2),focus,clicked);
 	}
 
 	@Override
@@ -170,15 +181,16 @@ public class Windows31Theme extends ThemeBase {
 	public <T> IButtonRenderer<T> getButtonRenderer(Class<T> type, int logicalLevel, int graphicalLevel, boolean container) {
 		return new IButtonRenderer<T>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, T state) {
-				boolean active=type==Boolean.class?(Boolean)state:focus;
+			public void renderButton(Context context, String title, boolean focus, boolean containerFocus, T state) {
+				boolean effFocus=container?containerFocus:focus;
+				boolean active=type==Boolean.class?(Boolean)state:effFocus;
 				if (container) {
-					Color color=getMainColor(focus,active);
+					Color color=getMainColor(effFocus,active);
 					context.getInterface().fillRect(context.getRect(),color,color,color,color);
-					Color lineColor=getFontColor(focus);
+					Color lineColor=getFontColor(effFocus);
 					context.getInterface().fillRect(new Rectangle(context.getRect().x,context.getRect().y+context.getRect().height-1,context.getRect().width,1),lineColor,lineColor,lineColor,lineColor);
-				} else drawButton(context.getInterface(),context.getRect(),focus);
-				Color color=(container&&active)?getMainColor(focus,false):getFontColor(focus);
+				} else drawButton(context.getInterface(),context.getRect(),effFocus,context.isClicked(IInterface.LBUTTON));
+				Color color=(container&&active)?getMainColor(effFocus,false):getFontColor(effFocus);
 				String string=title;
 				if (type==Boolean.class && !container) {
 					if ((Boolean)state) {
@@ -202,7 +214,7 @@ public class Windows31Theme extends ThemeBase {
 	public IButtonRenderer<Void> getSmallButtonRenderer(int symbol, int logicalLevel, int graphicalLevel, boolean container) {
 		return new IButtonRenderer<Void>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, Void state) {
+			public void renderButton(Context context, String title, boolean focus, boolean containerFocus, Void state) {
 				// TODO Auto-generated method stub
 				
 			}
@@ -224,14 +236,14 @@ public class Windows31Theme extends ThemeBase {
 	public ISliderRenderer getSliderRenderer(int logicalLevel, int graphicalLevel, boolean container) {
 		return new ISliderRenderer() {
 			@Override
-			public void renderSlider(Context context, String title, String state, boolean focus, double value) {
-				if (!container) drawButton(context.getInterface(),context.getRect(),focus);
-				Color colorA=getMainColor(focus,true)/*,colorB=getMainColor(focus,false)*/;
+			public void renderSlider(Context context, String title, String state, boolean focus, boolean containerFocus, double value) {
+				boolean effFocus=container?containerFocus:focus;
+				if (!container) drawButton(context.getInterface(),context.getRect(),effFocus,context.isClicked(IInterface.LBUTTON));
+				Color colorA=getMainColor(effFocus,true);
 				Rectangle rect=getSlideArea(context);
 				int divider=(int)(rect.width*value);
 				context.getInterface().fillRect(new Rectangle(rect.x,rect.y,divider,rect.height),colorA,colorA,colorA,colorA);
-				//context.getInterface().fillRect(new Rectangle(rect.x+divider,rect.y,rect.width-divider,rect.height),colorB,colorB,colorB,colorB);
-				Color color=container?getMainColor(focus,false):getFontColor(focus);
+				Color color=container?getMainColor(effFocus,false):getFontColor(effFocus);
 				String string=title+separator+state; 
 				context.getInterface().drawString(new Point(context.getRect().x+context.getRect().width/2-context.getInterface().getFontWidth(height,string)/2,context.getRect().y+(container?0:3)+padding),height,string,color);
 			}
@@ -268,7 +280,7 @@ public class Windows31Theme extends ThemeBase {
 	public ITextFieldRenderer getTextRenderer (boolean embed, int logicalLevel, int graphicalLevel, boolean container) {
 		return new ITextFieldRenderer() {
 			@Override
-			public int renderTextField (Context context, String title, boolean focus, String content, int position, int select, int boxPosition, boolean insertMode) {
+			public int renderTextField (Context context, String title, boolean focus, boolean containerFocus, String content, int position, int select, int boxPosition, boolean insertMode) {
 				return boxPosition;
 			}
 
@@ -295,14 +307,21 @@ public class Windows31Theme extends ThemeBase {
 		return new IResizeBorderRenderer() {
 			@Override
 			public void drawBorder(Context context, boolean focus) {
-				// TODO Auto-generated method stub
-				
+				Color color=getBackgroundColor(focus);
+				Rectangle rect=context.getRect();
+				context.getInterface().fillRect(new Rectangle(rect.x,rect.y,rect.width,getBorder()),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(rect.x,rect.y+rect.height-getBorder(),rect.width,getBorder()),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(rect.x,rect.y+getBorder(),getBorder(),rect.height-2*getBorder()),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(rect.x+rect.width-getBorder(),rect.y+getBorder(),getBorder(),rect.height-2*getBorder()),color,color,color,color);
+				Color borderColor=getFontColor(focus);
+				ITheme.drawRect(context.getInterface(),rect,borderColor);
+				ITheme.drawRect(context.getInterface(),new Rectangle(rect.x,rect.y+getBorder(),rect.width,rect.height-2*getBorder()),borderColor);
+				ITheme.drawRect(context.getInterface(),new Rectangle(rect.x+getBorder(),rect.y,rect.width-2*getBorder(),rect.height),borderColor);
 			}
 
 			@Override
 			public int getBorder() {
-				// TODO Auto-generated method stub
-				return 0;
+				return 4;
 			}
 		};
 	}
@@ -310,7 +329,7 @@ public class Windows31Theme extends ThemeBase {
 	public ISwitchRenderer<Boolean> getToggleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new ISwitchRenderer<Boolean>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, Boolean state) {
+			public void renderButton(Context context, String title, boolean focus, boolean containerFocus, Boolean state) {
 				// TODO Auto-generated method stub
 			}
 
@@ -336,7 +355,7 @@ public class Windows31Theme extends ThemeBase {
 	public ISwitchRenderer<String> getCycleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new ISwitchRenderer<String>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, String state) {
+			public void renderButton(Context context, String title, boolean focus, boolean containerFocus, String state) {
 				// TODO Auto-generated method stub
 			}
 

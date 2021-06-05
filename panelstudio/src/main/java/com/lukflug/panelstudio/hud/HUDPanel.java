@@ -70,8 +70,8 @@ public class HUDPanel<T extends IFixedComponent> extends DraggableComponent<HUDP
 				}
 			},new IButtonRendererProxy<Boolean>() {
 				@Override
-				public void renderButton (Context context, String title, boolean focus, Boolean state) {
-					if (renderState.isOn()) IButtonRendererProxy.super.renderButton(context,title,focus,state);
+				public void renderButton (Context context, String title, boolean focus, boolean containerFocus, Boolean state) {
+					if (renderState.isOn()) IButtonRendererProxy.super.renderButton(context,title,focus,containerFocus,state);
 				}
 				
 				@Override

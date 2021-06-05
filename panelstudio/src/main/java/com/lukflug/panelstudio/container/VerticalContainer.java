@@ -42,6 +42,10 @@ public class VerticalContainer extends Container<IComponent> {
 	 * @return the context for the child component
 	 */
 	protected Context getSubContext (Context context, int posy) {
-		return new Context(context,context.getSize().width-renderer.getLeft()-renderer.getRight(),new Point(renderer.getLeft(),posy),context.hasFocus(),true);
+		return new Context(context,context.getSize().width-renderer.getLeft()-renderer.getRight(),new Point(renderer.getLeft(),posy),hasFocus(context),true);
+	}
+	
+	protected boolean hasFocus (Context context) {
+		return context.hasFocus();
 	}
 }

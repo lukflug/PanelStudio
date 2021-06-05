@@ -55,6 +55,11 @@ public class ClosableComponent<S extends IComponent,T extends IComponent> extend
 				super.render(context);
 				panelRenderer.renderPanelOverlay(context,hasFocus(context),state.get(),open.isOn());
 			}
+			
+			@Override
+			protected boolean hasFocus (Context context) {
+				return ClosableComponent.this.hasFocus(context);
+			}
 		};
 		collapsible=new CollapsibleComponent<T>(open) {
 			@Override
