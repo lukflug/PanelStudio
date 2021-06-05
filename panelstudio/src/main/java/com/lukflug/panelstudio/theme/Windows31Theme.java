@@ -30,6 +30,12 @@ public class Windows31Theme extends ThemeBase {
 		Color c1=scheme.getColor("Shadow Color");
 		Color c3=getBackgroundColor(focus);
 		if (clicked) {
+			//Shadow
+			inter.fillRect(new Rectangle(rect.x,rect.y,1,rect.height),c1,c1,c1,c1);
+			inter.fillRect(new Rectangle(rect.x,rect.y,rect.width,1),c1,c1,c1,c1);
+			//Content
+			inter.fillRect(new Rectangle(rect.x+1,rect.y+1,rect.width-1,rect.height-1),c3,c3,c3,c3);
+		} else {
 			// Shadow
 			inter.fillRect(new Rectangle(rect.x+rect.width-1,rect.y+1,1,rect.height-2),c1,c1,c1,c1);
 			inter.fillRect(new Rectangle(rect.x+1,rect.y+rect.height-1,rect.width-2,1),c1,c1,c1,c1);
@@ -37,12 +43,6 @@ public class Windows31Theme extends ThemeBase {
 			inter.fillRect(new Rectangle(rect.x+2,rect.y+rect.height-2,rect.width-3,1),c1,c1,c1,c1);
 			// Content
 			inter.fillRect(new Rectangle(rect.x+2,rect.y+2,rect.width-4,rect.height-4),c3,c3,c3,c3);
-		} else {
-			//Shadow
-			inter.fillRect(new Rectangle(rect.x,rect.y,1,rect.height),c1,c1,c1,c1);
-			inter.fillRect(new Rectangle(rect.x,rect.y,rect.width,1),c1,c1,c1,c1);
-			//Content
-			inter.fillRect(new Rectangle(rect.x+1,rect.y+1,rect.width-1,rect.height-1),c3,c3,c3,c3);
 		}
 	}
 	
@@ -52,7 +52,10 @@ public class Windows31Theme extends ThemeBase {
 		inter.fillRect(new Rectangle(rect.x+1,rect.y,rect.width-2,1),c0,c0,c0,c0);
 		inter.fillRect(new Rectangle(rect.x+rect.width-1,rect.y+1,1,rect.height-2),c0,c0,c0,c0);
 		inter.fillRect(new Rectangle(rect.x+1,rect.y+rect.height-1,rect.width-2,1),c0,c0,c0,c0);
-		drawButtonBase(inter,new Rectangle(rect.x+1,rect.y+1,rect.width-2,rect.height-2),focus,clicked);
+		if (focus) {
+			ITheme.drawRect(inter,new Rectangle(rect.x+1,rect.y+1,rect.width-2,rect.height-2),c0);
+			drawButtonBase(inter,new Rectangle(rect.x+2,rect.y+2,rect.width-4,rect.height-4),focus,clicked);
+		} else drawButtonBase(inter,new Rectangle(rect.x+1,rect.y+1,rect.width-2,rect.height-2),focus,clicked);
 	}
 
 	@Override
@@ -153,6 +156,8 @@ public class Windows31Theme extends ThemeBase {
 		return new IScrollBarRenderer<T>() {
 			@Override
 			public int renderScrollBar(Context context, boolean focus, T state, boolean horizontal, int height, int position) {
+				Color color=getBackgroundColor(focus);
+				context.getInterface().fillRect(context.getRect(),color,color,color,color);
 				// TODO Auto-generated method stub
 				return position;
 			}
@@ -184,7 +189,15 @@ public class Windows31Theme extends ThemeBase {
 			public void renderButton(Context context, String title, boolean focus, boolean containerFocus, T state) {
 				boolean effFocus=container?containerFocus:focus;
 				boolean active=type==Boolean.class?(Boolean)state:effFocus;
-				if (container) {
+				if (!container && type==Boolean.class) {
+					ITheme.drawRect(context.getInterface(),new Rectangle(context.getRect().x,context.getRect().y,height,height),getFontColor(effFocus));
+					if ((Boolean)state) {
+						context.getInterface().drawLine(context.getPos(),new Point(context.getRect().x+height-1,context.getRect().y+height-1),getFontColor(effFocus),getFontColor(effFocus));
+						context.getInterface().drawLine(new Point(context.getRect().x+height-1,context.getRect().y+1),new Point(context.getRect().x,context.getRect().y+height),getFontColor(effFocus),getFontColor(effFocus));
+					}
+					context.getInterface().drawString(new Point(context.getRect().x+height+padding,context.getRect().y),height,title,getFontColor(effFocus));
+					return;
+				} else if (container) {
 					Color color=getMainColor(effFocus,active);
 					context.getInterface().fillRect(context.getRect(),color,color,color,color);
 					Color lineColor=getFontColor(effFocus);
@@ -192,19 +205,14 @@ public class Windows31Theme extends ThemeBase {
 				} else drawButton(context.getInterface(),context.getRect(),effFocus,context.isClicked(IInterface.LBUTTON));
 				Color color=(container&&active)?getMainColor(effFocus,false):getFontColor(effFocus);
 				String string=title;
-				if (type==Boolean.class && !container) {
-					if ((Boolean)state) {
-						string+=separator+"On";
-					} else {
-						string+=separator+"Off";
-					}
-				} else if (type==String.class) string+=separator+state;
+				if (type==String.class) string+=separator+state;
 				else if (type==Color.class) color=(Color)state;
 				context.getInterface().drawString(new Point(context.getRect().x+context.getRect().width/2-context.getInterface().getFontWidth(height,string)/2,context.getRect().y+(container?0:3)+padding),height,string,color);
 			}
 
 			@Override
 			public int getDefaultHeight() {
+				if (!container && type==Boolean.class) return height;
 				return container?getBaseHeight():getBaseHeight()+6;
 			}
 		};
