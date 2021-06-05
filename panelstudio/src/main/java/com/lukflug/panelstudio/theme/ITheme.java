@@ -1,6 +1,7 @@
 package com.lukflug.panelstudio.theme;
 
 import java.awt.Color;
+import java.awt.Rectangle;
 
 import com.lukflug.panelstudio.base.IInterface;
 
@@ -151,5 +152,12 @@ public interface ITheme {
 	 */
 	public static Color combineColors (Color main, Color opacity) {
 		return new Color(main.getRed(),main.getGreen(),main.getBlue(),opacity.getAlpha());
+	}
+	
+	public static void drawRect (IInterface inter, Rectangle rect, Color color) {
+		inter.fillRect(new Rectangle(rect.x,rect.y,1,rect.height),color,color,color,color);
+		inter.fillRect(new Rectangle(rect.x,rect.y,rect.width,1),color,color,color,color);
+		inter.fillRect(new Rectangle(rect.x+rect.width-1,rect.y,1,rect.height),color,color,color,color);
+		inter.fillRect(new Rectangle(rect.x,rect.y+rect.height-1,rect.width,1),color,color,color,color);
 	}
 }

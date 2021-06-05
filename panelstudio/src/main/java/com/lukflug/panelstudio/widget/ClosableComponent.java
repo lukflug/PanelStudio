@@ -46,7 +46,8 @@ public class ClosableComponent<S extends IComponent,T extends IComponent> extend
 	 * @param panelRenderer the render to use for the overlay of this panel
 	 * @return a vertical container having the functionality of a panel
 	 */
-	public <U> ClosableComponent (S title, T content, Supplier<U> state, AnimatedToggleable open, IPanelRenderer<U> panelRenderer) {
+	public <U> ClosableComponent (S title, T content, Supplier<U> state, AnimatedToggleable open, IPanelRenderer<U> panelRenderer, boolean focus) {
+		super(focus);
 		this.title=title;
 		container=new VerticalContainer(new Labeled(content.getTitle(),null,()->content.isVisible()),panelRenderer) {
 			@Override
@@ -120,12 +121,12 @@ public class ClosableComponent<S extends IComponent,T extends IComponent> extend
 				return fixedComponent;
 			}
 		};
-		panel.set(createScrollableComponent(draggable.getWrappedDragComponent(title),content,state,new AnimatedToggleable(new ConstantToggleable(true),animation),renderer,popupSize));
+		panel.set(createScrollableComponent(draggable.getWrappedDragComponent(title),content,state,new AnimatedToggleable(new ConstantToggleable(true),animation),renderer,popupSize,true));
 		return draggable;
 	}
 	
 	public static <S extends IComponent,T extends IComponent,U> PopupComponent<ClosableComponent<S,ScrollBarComponent<U,T>>> createDynamicPopup (S title, T content, Supplier<U> state, Animation animation, RendererTuple<U> renderer, IScrollSize popupSize, IToggleable shown, int width) {
-		ClosableComponent<S,ScrollBarComponent<U,T>> panel=createScrollableComponent(title,content,state,new AnimatedToggleable(new ConstantToggleable(true),animation),renderer,popupSize);
+		ClosableComponent<S,ScrollBarComponent<U,T>> panel=createScrollableComponent(title,content,state,new AnimatedToggleable(new ConstantToggleable(true),animation),renderer,popupSize,true);
 		return new PopupComponent<ClosableComponent<S,ScrollBarComponent<U,T>>>(panel,width) {
 			@Override
 			public void handleButton (Context context, int button) {
@@ -143,7 +144,7 @@ public class ClosableComponent<S extends IComponent,T extends IComponent> extend
 	public static <S extends IComponent,T extends IComponent,U> DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>> createDraggableComponent (S title, T content, Supplier<U> state, AnimatedToggleable open, RendererTuple<U> renderer, IScrollSize scrollSize, Point position, int width, boolean savesState, String configName) {
 		AtomicReference<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>> panel=new AtomicReference<>(null);
 		DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>> draggable=createDraggableComponent(()->panel.get(),position,width,savesState,configName);
-		panel.set(createScrollableComponent(draggable.getWrappedDragComponent(title),content,state,open,renderer,scrollSize));
+		panel.set(createScrollableComponent(draggable.getWrappedDragComponent(title),content,state,open,renderer,scrollSize,false));
 		return draggable;
 	}
 	
@@ -159,7 +160,7 @@ public class ClosableComponent<S extends IComponent,T extends IComponent> extend
 		};
 	}
 	
-	public static <S extends IComponent,T extends IComponent,U> ClosableComponent<S,ScrollBarComponent<U,T>> createScrollableComponent (S title, T content, Supplier<U> state, AnimatedToggleable open, RendererTuple<U> renderer, IScrollSize scrollSize) {
+	public static <S extends IComponent,T extends IComponent,U> ClosableComponent<S,ScrollBarComponent<U,T>> createScrollableComponent (S title, T content, Supplier<U> state, AnimatedToggleable open, RendererTuple<U> renderer, IScrollSize scrollSize, boolean focus) {
 		return new ClosableComponent<S,ScrollBarComponent<U,T>>(title,new ScrollBarComponent<U,T>(content,renderer.scrollRenderer,renderer.cornerRenderer,renderer.emptyRenderer) {
 			@Override
 			public int getScrollHeight (Context context, int componentHeight) {
@@ -175,6 +176,6 @@ public class ClosableComponent<S extends IComponent,T extends IComponent> extend
 			protected U getState() {
 				return state.get();
 			}
-		},state,open,renderer.panelRenderer);
+		},state,open,renderer.panelRenderer,focus);
 	}
 }

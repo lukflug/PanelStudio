@@ -43,7 +43,8 @@ public abstract class FocusableComponent extends ComponentBase {
 	 * @return set to true, if the component has focus
 	 */
 	public boolean hasFocus (Context context) {
-		return context.hasFocus()&&focus;
+		if (!context.hasFocus()) focus=false;
+		return focus;
 	}
 	
 	/**

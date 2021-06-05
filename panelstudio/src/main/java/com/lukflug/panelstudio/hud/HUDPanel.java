@@ -108,7 +108,7 @@ public class HUDPanel<T extends IFixedComponent> extends DraggableComponent<HUDP
 				public IPanelRenderer<Boolean> getRenderer() {
 					return panelRenderer;
 				}
-			}));
+			},false));
 		}
 
 		@Override

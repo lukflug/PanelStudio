@@ -37,7 +37,7 @@ public class ChildUtil {
 		boolean drawTitle=mode==ChildMode.DRAG_POPUP;
 		switch (mode) {
 		case DOWN:
-			parent.addComponent(new ClosableComponent<>(title,container,state,new AnimatedToggleable(new SimpleToggleable(false),animation.get()),theme.getPanelRenderer(stateClass)));
+			parent.addComponent(new ClosableComponent<>(title,container,state,new AnimatedToggleable(new SimpleToggleable(false),animation.get()),theme.getPanelRenderer(stateClass),false));
 			break;
 		case POPUP:
 		case DRAG_POPUP:

@@ -56,8 +56,10 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 		if (renderer!=null) renderer.renderBackground(context,context.hasFocus());
 		// Find highest component
 		AtomicReference<IFixedComponent> highest=new AtomicReference<IFixedComponent>(null);
+		AtomicReference<IFixedComponent> first=new AtomicReference<IFixedComponent>(null);
 		doContextlessLoop(component->{
-			Context subContext=getSubContext(context,component,true);
+			if (first.get()==null) first.set(component);
+			Context subContext=getSubContext(context,component,true,true);
 			component.getHeight(subContext);
 			if (subContext.isHovered() && highest.get()==null) highest.set(component);
 		});
@@ -69,7 +71,7 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 			// Check onTop state
 			if (component==highest.get()) highestReached.set(true);
 			// Render component
-			Context subContext=getSubContext(context,component,highestReached.get());
+			Context subContext=getSubContext(context,component,component==first.get(),highestReached.get());
 			component.render(subContext);
 			// Check focus state
 			if (subContext.focusReleased()) context.releaseFocus();
@@ -114,10 +116,12 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 		context.setHeight(getHeight());
 		// Do loop in inverse order
 		AtomicBoolean highest=new AtomicBoolean(true);
+		AtomicBoolean first=new AtomicBoolean(true);
 		AtomicReference<IFixedComponent> focusComponent=new AtomicReference<IFixedComponent>(null);
 		doContextlessLoop(component->{
 			// Do payload operation
-			Context subContext=getSubContext(context,component,highest.get());
+			Context subContext=getSubContext(context,component,first.get(),highest.get());
+			first.set(false);
 			function.accept(subContext,component);
 			// Check focus state
 			if (subContext.focusReleased()) context.releaseFocus();
@@ -152,8 +156,8 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 	 * @param highest whether this component is the highest
 	 * @return the context for the child component
 	 */
-	protected Context getSubContext (Context context, IFixedComponent component, boolean highest) {
-		Context subContext=new Context(context,component.getWidth(context.getInterface()),component.getPosition(context.getInterface()),context.hasFocus()&&highest,highest);
+	protected Context getSubContext (Context context, IFixedComponent component, boolean focus, boolean highest) {
+		Context subContext=new Context(context,component.getWidth(context.getInterface()),component.getPosition(context.getInterface()),context.hasFocus()&&focus,highest);
 		subContext.setPopupDisplayer(this);
 		return subContext;
 	}
