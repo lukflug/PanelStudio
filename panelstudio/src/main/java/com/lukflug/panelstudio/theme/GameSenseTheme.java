@@ -159,8 +159,8 @@ public class GameSenseTheme extends ThemeBase {
 	public <T> IButtonRenderer<T> getButtonRenderer (Class<T> type, int logicalLevel, int graphicalLevel, boolean container) {
 		return new IButtonRenderer<T>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, boolean containerFocus, T state) {
-				boolean effFocus=container?containerFocus:focus;
+			public void renderButton(Context context, String title, boolean focus, T state) {
+				boolean effFocus=container?context.hasFocus():focus;
 				if (type==Boolean.class) fillBaseRect(context,effFocus,(Boolean)state,logicalLevel,graphicalLevel,null);
 				else if (type==Color.class) fillBaseRect(context,effFocus,graphicalLevel<=0,logicalLevel,graphicalLevel,(Color)state);
 				else fillBaseRect(context,effFocus,graphicalLevel<=0,logicalLevel,graphicalLevel,null);
@@ -184,8 +184,8 @@ public class GameSenseTheme extends ThemeBase {
 	public IButtonRenderer<Void> getSmallButtonRenderer (int symbol, int logicalLevel, int graphicalLevel, boolean container) {
 		return new IButtonRenderer<Void>() {
 			@Override
-			public void renderButton (Context context, String title, boolean focus, boolean containerFocus, Void state) {
-				boolean effFocus=container?containerFocus:focus;
+			public void renderButton (Context context, String title, boolean focus, Void state) {
+				boolean effFocus=container?context.hasFocus():focus;
 				fillBaseRect(context,effFocus,true,logicalLevel,graphicalLevel,null);
 				renderOverlay(context);
 				Point points[]=new Point[3];
@@ -249,8 +249,8 @@ public class GameSenseTheme extends ThemeBase {
 	public IButtonRenderer<String> getKeybindRenderer(int logicalLevel, int graphicalLevel, boolean container) {
 		return new IButtonRenderer<String>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, boolean containerFocus, String state) {
-				boolean effFocus=container?containerFocus:focus;
+			public void renderButton(Context context, String title, boolean focus, String state) {
+				boolean effFocus=container?context.hasFocus():focus;
 				fillBaseRect(context,effFocus,effFocus,logicalLevel,graphicalLevel,null);
 				renderOverlay(context);
 				context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title+separator+(focus?"...":state),getFontColor(focus));
@@ -267,8 +267,8 @@ public class GameSenseTheme extends ThemeBase {
 	public ISliderRenderer getSliderRenderer(int logicalLevel, int graphicalLevel, boolean container) {
 		return new ISliderRenderer() {
 			@Override
-			public void renderSlider(Context context, String title, String state, boolean focus, boolean containerFocus, double value) {
-				boolean effFocus=container?containerFocus:focus;
+			public void renderSlider(Context context, String title, String state, boolean focus, double value) {
+				boolean effFocus=container?context.hasFocus():focus;
 				Color colorA=getMainColor(effFocus,true),colorB=getBackgroundColor(effFocus);
 				Rectangle rect=getSlideArea(context);
 				int divider=(int)(rect.width*value);
@@ -331,9 +331,9 @@ public class GameSenseTheme extends ThemeBase {
 	public ITextFieldRenderer getTextRenderer (boolean embed, int logicalLevel, int graphicalLevel, boolean container) {
 		return new ITextFieldRenderer() {
 			@Override
-			public int renderTextField (Context context, String title, boolean focus, boolean containerFocus, String content, int position, int select, int boxPosition, boolean insertMode) {
+			public int renderTextField (Context context, String title, boolean focus, String content, int position, int select, int boxPosition, boolean insertMode) {
 				// Declare and assign variables
-				boolean effFocus=container?containerFocus:focus;
+				boolean effFocus=container?context.hasFocus():focus;
 				Color color=focus?scheme.getColor("Outline Color"):scheme.getColor("Settings Color");
 				Color textColor=getFontColor(effFocus);
 				Color highlightColor=scheme.getColor("Highlight Color");
@@ -425,8 +425,8 @@ public class GameSenseTheme extends ThemeBase {
 	public ISwitchRenderer<Boolean> getToggleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new ISwitchRenderer<Boolean>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, boolean containerFocus, Boolean state) {
-				boolean effFocus=container?containerFocus:focus;
+			public void renderButton(Context context, String title, boolean focus, Boolean state) {
+				boolean effFocus=container?context.hasFocus():focus;
 				fillBaseRect(context,effFocus,false,logicalLevel,graphicalLevel,null);
 				Color color=scheme.getColor("Outline Color");
 				if (graphicalLevel<=0 && container) {
@@ -464,8 +464,8 @@ public class GameSenseTheme extends ThemeBase {
 	public ISwitchRenderer<String> getCycleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new ISwitchRenderer<String>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, boolean containerFocus, String state) {
-				boolean effFocus=container?containerFocus:focus;
+			public void renderButton(Context context, String title, boolean focus, String state) {
+				boolean effFocus=container?context.hasFocus():focus;
 				fillBaseRect(context,effFocus,false,logicalLevel,graphicalLevel,null);
 				Color color=scheme.getColor("Outline Color");
 				if (graphicalLevel<=0 && container) {
@@ -479,11 +479,11 @@ public class GameSenseTheme extends ThemeBase {
 				Rectangle rect=getOnField(context);
 				subContext=new Context(context,rect.width,new Point(rect.x-context.getRect().x,0),true,true);
 				subContext.setHeight(rect.height);
-				getSmallButtonRenderer(ITheme.RIGHT,logicalLevel,graphicalLevel,container).renderButton(subContext,null,effFocus,containerFocus,null);
+				getSmallButtonRenderer(ITheme.RIGHT,logicalLevel,graphicalLevel,container).renderButton(subContext,null,effFocus,null);
 				rect=getOffField(context);
 				subContext=new Context(context,rect.width,new Point(rect.x-context.getRect().x,0),true,true);
 				subContext.setHeight(rect.height);
-				getSmallButtonRenderer(ITheme.LEFT,logicalLevel,graphicalLevel,container).renderButton(subContext,null,effFocus,containerFocus,null);
+				getSmallButtonRenderer(ITheme.LEFT,logicalLevel,graphicalLevel,container).renderButton(subContext,null,effFocus,null);
 			}
 
 			@Override

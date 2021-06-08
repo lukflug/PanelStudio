@@ -37,7 +37,7 @@ public class CycleButton extends FocusableComponent {
 	@Override
 	public void render (Context context) {
 		super.render(context);
-		renderer.renderButton(context,getTitle(),hasFocus(context),context.hasFocus(),setting.getValueName());
+		renderer.renderButton(context,getTitle(),hasFocus(context),setting.getValueName());
 	}
 	
 	/**

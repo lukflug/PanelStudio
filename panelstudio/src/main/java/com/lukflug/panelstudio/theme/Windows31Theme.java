@@ -186,8 +186,8 @@ public class Windows31Theme extends ThemeBase {
 	public <T> IButtonRenderer<T> getButtonRenderer(Class<T> type, int logicalLevel, int graphicalLevel, boolean container) {
 		return new IButtonRenderer<T>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, boolean containerFocus, T state) {
-				boolean effFocus=container?containerFocus:focus;
+			public void renderButton(Context context, String title, boolean focus, T state) {
+				boolean effFocus=container?context.hasFocus():focus;
 				boolean active=type==Boolean.class?(Boolean)state:effFocus;
 				if (!container && type==Boolean.class) {
 					ITheme.drawRect(context.getInterface(),new Rectangle(context.getRect().x,context.getRect().y,height,height),getFontColor(effFocus));
@@ -222,7 +222,7 @@ public class Windows31Theme extends ThemeBase {
 	public IButtonRenderer<Void> getSmallButtonRenderer(int symbol, int logicalLevel, int graphicalLevel, boolean container) {
 		return new IButtonRenderer<Void>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, boolean containerFocus, Void state) {
+			public void renderButton(Context context, String title, boolean focus, Void state) {
 				// TODO Auto-generated method stub
 				
 			}
@@ -244,8 +244,8 @@ public class Windows31Theme extends ThemeBase {
 	public ISliderRenderer getSliderRenderer(int logicalLevel, int graphicalLevel, boolean container) {
 		return new ISliderRenderer() {
 			@Override
-			public void renderSlider(Context context, String title, String state, boolean focus, boolean containerFocus, double value) {
-				boolean effFocus=container?containerFocus:focus;
+			public void renderSlider(Context context, String title, String state, boolean focus, double value) {
+				boolean effFocus=container?context.hasFocus():focus;
 				if (!container) drawButton(context.getInterface(),context.getRect(),effFocus,context.isClicked(IInterface.LBUTTON));
 				Color colorA=getMainColor(effFocus,true);
 				Rectangle rect=getSlideArea(context);
@@ -293,8 +293,8 @@ public class Windows31Theme extends ThemeBase {
 	public ITextFieldRenderer getTextRenderer (boolean embed, int logicalLevel, int graphicalLevel, boolean container) {
 		return new ITextFieldRenderer() {
 			@Override
-			public int renderTextField (Context context, String title, boolean focus, boolean containerFocus, String content, int position, int select, int boxPosition, boolean insertMode) {
-				boolean effFocus=container?containerFocus:focus;
+			public int renderTextField (Context context, String title, boolean focus, String content, int position, int select, int boxPosition, boolean insertMode) {
+				boolean effFocus=container?context.hasFocus():focus;
 				// Declare and assign variables
 				Color textColor=getFontColor(effFocus);
 				Color highlightColor=getMainColor(focus,true);
@@ -403,7 +403,7 @@ public class Windows31Theme extends ThemeBase {
 	public ISwitchRenderer<Boolean> getToggleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new ISwitchRenderer<Boolean>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, boolean containerFocus, Boolean state) {
+			public void renderButton(Context context, String title, boolean focus, Boolean state) {
 				// TODO Auto-generated method stub
 			}
 
@@ -430,7 +430,7 @@ public class Windows31Theme extends ThemeBase {
 	public ISwitchRenderer<String> getCycleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new ISwitchRenderer<String>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, boolean containerFocus, String state) {
+			public void renderButton(Context context, String title, boolean focus, String state) {
 				// TODO Auto-generated method stub
 			}
 

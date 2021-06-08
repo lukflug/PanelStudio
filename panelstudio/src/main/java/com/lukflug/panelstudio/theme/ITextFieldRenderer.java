@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 import com.lukflug.panelstudio.base.Context;
 
 public interface ITextFieldRenderer {
-	public int renderTextField (Context context, String title, boolean focus, boolean containerFocus, String content, int position, int select, int boxPosition, boolean insertMode);
+	public int renderTextField (Context context, String title, boolean focus, String content, int position, int select, int boxPosition, boolean insertMode);
 	
 	public int getDefaultHeight();
 	

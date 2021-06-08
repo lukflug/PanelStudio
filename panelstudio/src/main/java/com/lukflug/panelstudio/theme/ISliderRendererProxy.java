@@ -11,8 +11,8 @@ import com.lukflug.panelstudio.base.Context;
 @FunctionalInterface
 public interface ISliderRendererProxy extends ISliderRenderer {
 	@Override
-	public default void renderSlider(Context context, String title, String state, boolean focus, boolean containerFocus, double value) {
-		getRenderer().renderSlider(context,title,state,focus,containerFocus,value);
+	public default void renderSlider(Context context, String title, String state, boolean focus, double value) {
+		getRenderer().renderSlider(context,title,state,focus,value);
 	}
 
 	@Override

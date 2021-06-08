@@ -7,8 +7,8 @@ import com.lukflug.panelstudio.base.Context;
 @FunctionalInterface
 public interface ITextFieldRendererProxy extends ITextFieldRenderer {
 	@Override
-	public default int renderTextField (Context context, String title, boolean focus, boolean containerFocus, String content, int position, int select, int boxPosition, boolean insertMode) {
-		return getRenderer().renderTextField(context,title,focus,containerFocus,content,position,select,boxPosition,insertMode);
+	public default int renderTextField (Context context, String title, boolean focus, String content, int position, int select, int boxPosition, boolean insertMode) {
+		return getRenderer().renderTextField(context,title,focus,content,position,select,boxPosition,insertMode);
 	}
 	
 	@Override
