@@ -10,6 +10,7 @@ public class ColorPickerComponent extends ColorComponent {
 
 	@Override
 	public void populate (ThemeTuple theme) {
+		addComponent(new ToggleButton(new RainbowToggle(),theme.getButtonRenderer(Boolean.class,false)));
 		addComponent(new ColorPicker(setting,theme.theme.getColorPickerRenderer()));
 		addComponent(new NumberSlider(new ColorNumber(0,()->true),theme.getSliderRenderer(false)));
 		addComponent(new NumberSlider(new ColorNumber(3,()->true),theme.getSliderRenderer(false)));

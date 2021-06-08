@@ -274,12 +274,17 @@ public class Windows31Theme extends ThemeBase {
 		return new IRadioRenderer() {
 			@Override
 			public void renderItem (Context context, ILabeled[] items, boolean focus, int target, double state, boolean horizontal) {
-				// TODO Auto-generated method stub
+				for (int i=0;i<items.length;i++) {
+					Rectangle rect=getItemRect(context,items,i,horizontal);
+					Color color=getMainColor(focus,true);
+					if (i==target) context.getInterface().fillRect(rect,color,color,color,color);
+					context.getInterface().drawString(new Point(rect.x+padding,rect.y+padding),height,items[i].getDisplayName(),i==target?getMainColor(focus,false):getFontColor(focus));
+				}
 			}
 
 			@Override
 			public int getDefaultHeight (ILabeled[] items, boolean horizontal) {
-				return (horizontal?1:items.length)*(container?getBaseHeight()+6:getBaseHeight());
+				return (horizontal?1:items.length)*getBaseHeight();
 			}
 		};
 	}
@@ -289,22 +294,82 @@ public class Windows31Theme extends ThemeBase {
 		return new ITextFieldRenderer() {
 			@Override
 			public int renderTextField (Context context, String title, boolean focus, boolean containerFocus, String content, int position, int select, int boxPosition, boolean insertMode) {
+				boolean effFocus=container?containerFocus:focus;
+				// Declare and assign variables
+				Color textColor=getFontColor(effFocus);
+				Color highlightColor=getMainColor(focus,true);
+				Rectangle rect=getTextArea(context,title);
+				int strlen=context.getInterface().getFontWidth(height,content.substring(0,position));
+				// Deal with box render offset
+				if (boxPosition<position) {
+					int minPosition=boxPosition;
+					while (minPosition<position) {
+						if (context.getInterface().getFontWidth(height,content.substring(0,minPosition))+rect.width-padding>=strlen) break;
+						minPosition++;
+					}
+					if (boxPosition<minPosition) boxPosition=minPosition;
+				} else if (boxPosition>position) boxPosition=position-1;
+				int maxPosition=content.length();
+				while (maxPosition>0) {
+					if (context.getInterface().getFontWidth(height,content.substring(maxPosition))>=rect.width-padding) {
+						maxPosition++;
+						break;
+					}
+					maxPosition--;
+				}
+				if (boxPosition>maxPosition) boxPosition=maxPosition;
+				else if (boxPosition<0) boxPosition=0;
+				int offset=context.getInterface().getFontWidth(height,content.substring(0,boxPosition));
+				// Deal with highlighted text
+				int x1=rect.x+padding/2-offset+strlen;
+				int x2=rect.x+padding/2-offset;
+				if (position<content.length()) x2+=context.getInterface().getFontWidth(height,content.substring(0,position+1));
+				else x2+=context.getInterface().getFontWidth(height,content+"X");
+				// Draw stuff around the box
+				context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding/2),height,title+separator,textColor);
+				// Draw the box
+				context.getInterface().window(rect);
+				if (select>=0) {
+					int x3=rect.x+padding/2-offset+context.getInterface().getFontWidth(height,content.substring(0,select));
+					context.getInterface().fillRect(new Rectangle(Math.min(x1,x3),rect.y+padding/2,Math.abs(x3-x1),height),highlightColor,highlightColor,highlightColor,highlightColor);
+				}
+				context.getInterface().drawString(new Point(rect.x+padding/2-offset,rect.y+padding/2),height,content,textColor);
+				if ((System.currentTimeMillis()/500)%2==0 && focus) {
+					if (insertMode) context.getInterface().fillRect(new Rectangle(x1,rect.y+padding/2+height,x2-x1,1),textColor,textColor,textColor,textColor);
+					else context.getInterface().fillRect(new Rectangle(x1,rect.y+padding/2,1,height),textColor,textColor,textColor,textColor);
+				}
+				ITheme.drawRect(context.getInterface(),rect,getFontColor(effFocus));
+				context.getInterface().restore();
 				return boxPosition;
 			}
 
 			@Override
 			public int getDefaultHeight() {
-				return getBaseHeight();
+				int height=getBaseHeight()-padding;
+				if (height%2==1) height+=1;
+				return height;
 			}
 
 			@Override
 			public Rectangle getTextArea(Context context, String title) {
-				return context.getRect();
+				Rectangle rect=context.getRect();
+				int length=padding+context.getInterface().getFontWidth(height,title+separator);
+				return new Rectangle(rect.x+length,rect.y,rect.width-length,rect.height);
 			}
 			
 			@Override
 			public int transformToCharPos(Context context, String title, String content, int boxPosition) {
-				// TODO Auto-generated method stub
+				Rectangle rect=getTextArea(context,title);
+				Point mouse=context.getInterface().getMouse();
+				int offset=context.getInterface().getFontWidth(height,content.substring(0,boxPosition));
+				if (rect.contains(mouse)) {
+					for (int i=1;i<=content.length();i++) {
+						if (rect.x+padding/2-offset+context.getInterface().getFontWidth(height,content.substring(0,i))>mouse.x) {
+							return i-1;
+						}
+					}
+					return content.length();
+				}
 				return -1;
 			}
 		};
@@ -334,6 +399,7 @@ public class Windows31Theme extends ThemeBase {
 		};
 	}
 	
+	@Override
 	public ISwitchRenderer<Boolean> getToggleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new ISwitchRenderer<Boolean>() {
 			@Override
@@ -360,6 +426,7 @@ public class Windows31Theme extends ThemeBase {
 		};
 	}
 	
+	@Override
 	public ISwitchRenderer<String> getCycleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new ISwitchRenderer<String>() {
 			@Override
@@ -388,23 +455,15 @@ public class Windows31Theme extends ThemeBase {
 	
 	@Override
 	public IColorPickerRenderer getColorPickerRenderer() {
-		return new IColorPickerRenderer() {
+		return new StandardColorPicker() {
 			@Override
-			public void renderPicker(Context context, boolean focus, Color color) {
-				// TODO Auto-generated method stub
-				
+			public int getPadding() {
+				return padding;
 			}
 
 			@Override
-			public Color transformPoint(Context context, Color color, Point point) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			@Override
-			public int getDefaultHeight(int width) {
-				// TODO Auto-generated method stub
-				return 0;
+			public int getBaseHeight() {
+				return Windows31Theme.this.getBaseHeight();
 			}
 		};
 	}
