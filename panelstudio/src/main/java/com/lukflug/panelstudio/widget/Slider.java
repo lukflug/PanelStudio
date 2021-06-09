@@ -36,7 +36,7 @@ public abstract class Slider extends FocusableComponent {
 	public void render (Context context) {
 		super.render(context);
 		if (attached) {
-			Rectangle rect=renderer.getSlideArea(context);
+			Rectangle rect=renderer.getSlideArea(context,getTitle(),getDisplayState());
 			double value=(context.getInterface().getMouse().x-rect.x)/(double)(rect.width-1);
 			if (value<0) value=0;
 			else if (value>1) value=1;
@@ -51,7 +51,7 @@ public abstract class Slider extends FocusableComponent {
 	@Override
 	public void handleButton (Context context, int button) {
 		super.handleButton(context,button);
-		if (button==IInterface.LBUTTON && context.isClicked(button) && renderer.getSlideArea(context).contains(context.getInterface().getMouse())) {
+		if (button==IInterface.LBUTTON && context.isClicked(button) && renderer.getSlideArea(context,getTitle(),getDisplayState()).contains(context.getInterface().getMouse())) {
 			attached=true;
 		}
 	}

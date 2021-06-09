@@ -26,8 +26,9 @@ public class Windows31Theme extends ThemeBase {
 		scheme.createSetting(this,"Font Color","The main color for text.",false,true,new Color(0,0,0),false);
 	}
 	
-	protected void drawButtonBase (IInterface inter, Rectangle rect, boolean focus, boolean clicked) {
+	protected void drawButtonBase (IInterface inter, Rectangle rect, boolean focus, boolean clicked, boolean small) {
 		Color c1=scheme.getColor("Shadow Color");
+		Color c2=getMainColor(focus,false);
 		Color c3=getBackgroundColor(focus);
 		if (clicked) {
 			//Shadow
@@ -37,25 +38,36 @@ public class Windows31Theme extends ThemeBase {
 			inter.fillRect(new Rectangle(rect.x+1,rect.y+1,rect.width-1,rect.height-1),c3,c3,c3,c3);
 		} else {
 			// Shadow
-			inter.fillRect(new Rectangle(rect.x+rect.width-1,rect.y+1,1,rect.height-2),c1,c1,c1,c1);
-			inter.fillRect(new Rectangle(rect.x+1,rect.y+rect.height-1,rect.width-2,1),c1,c1,c1,c1);
-			inter.fillRect(new Rectangle(rect.x+rect.width-2,rect.y+2,1,rect.height-3),c1,c1,c1,c1);
-			inter.fillRect(new Rectangle(rect.x+2,rect.y+rect.height-2,rect.width-3,1),c1,c1,c1,c1);
+			inter.fillRect(new Rectangle(rect.x+rect.width-1,rect.y,1,rect.height),c1,c1,c1,c1);
+			inter.fillRect(new Rectangle(rect.x,rect.y+rect.height-1,rect.width,1),c1,c1,c1,c1);
+			inter.fillRect(new Rectangle(rect.x+rect.width-2,rect.y+1,1,rect.height-1),c1,c1,c1,c1);
+			inter.fillRect(new Rectangle(rect.x+1,rect.y+rect.height-2,rect.width-1,1),c1,c1,c1,c1);
 			// Content
-			inter.fillRect(new Rectangle(rect.x+2,rect.y+2,rect.width-4,rect.height-4),c3,c3,c3,c3);
+			if (small) inter.fillRect(new Rectangle(rect.x+1,rect.y+1,rect.width-3,rect.height-3),c3,c3,c3,c3);
+			else inter.fillRect(new Rectangle(rect.x+2,rect.y+2,rect.width-4,rect.height-4),c3,c3,c3,c3);
+			// Light
+			inter.fillRect(new Rectangle(rect.x,rect.y,rect.width-1,1),c2,c2,c2,c2);
+			inter.fillRect(new Rectangle(rect.x,rect.y,1,rect.height-1),c2,c2,c2,c2);
+			if (!small) {
+				inter.fillRect(new Rectangle(rect.x+1,rect.y+1,rect.width-3,1),c2,c2,c2,c2);
+				inter.fillRect(new Rectangle(rect.x+1,rect.y+1,1,rect.height-3),c2,c2,c2,c2);
+			}
 		}
 	}
 	
-	protected void drawButton (IInterface inter, Rectangle rect, boolean focus, boolean clicked) {
+	protected void drawButton (IInterface inter, Rectangle rect, boolean focus, boolean clicked, boolean small) {
 		Color c0=getFontColor(focus);
-		inter.fillRect(new Rectangle(rect.x,rect.y+1,1,rect.height-2),c0,c0,c0,c0);
-		inter.fillRect(new Rectangle(rect.x+1,rect.y,rect.width-2,1),c0,c0,c0,c0);
-		inter.fillRect(new Rectangle(rect.x+rect.width-1,rect.y+1,1,rect.height-2),c0,c0,c0,c0);
-		inter.fillRect(new Rectangle(rect.x+1,rect.y+rect.height-1,rect.width-2,1),c0,c0,c0,c0);
-		if (focus) {
+		if (small) ITheme.drawRect(inter,rect,c0);
+		else {
+			inter.fillRect(new Rectangle(rect.x,rect.y+1,1,rect.height-2),c0,c0,c0,c0);
+			inter.fillRect(new Rectangle(rect.x+1,rect.y,rect.width-2,1),c0,c0,c0,c0);
+			inter.fillRect(new Rectangle(rect.x+rect.width-1,rect.y+1,1,rect.height-2),c0,c0,c0,c0);
+			inter.fillRect(new Rectangle(rect.x+1,rect.y+rect.height-1,rect.width-2,1),c0,c0,c0,c0);
+		}
+		if (focus && !small) {
 			ITheme.drawRect(inter,new Rectangle(rect.x+1,rect.y+1,rect.width-2,rect.height-2),c0);
-			drawButtonBase(inter,new Rectangle(rect.x+2,rect.y+2,rect.width-4,rect.height-4),focus,clicked);
-		} else drawButtonBase(inter,new Rectangle(rect.x+1,rect.y+1,rect.width-2,rect.height-2),focus,clicked);
+			drawButtonBase(inter,new Rectangle(rect.x+2,rect.y+2,rect.width-4,rect.height-4),focus,clicked,small);
+		} else drawButtonBase(inter,new Rectangle(rect.x+1,rect.y+1,rect.width-2,rect.height-2),focus,clicked,small);
 	}
 
 	@Override
@@ -202,7 +214,7 @@ public class Windows31Theme extends ThemeBase {
 					context.getInterface().fillRect(context.getRect(),color,color,color,color);
 					Color lineColor=getFontColor(effFocus);
 					context.getInterface().fillRect(new Rectangle(context.getRect().x,context.getRect().y+context.getRect().height-1,context.getRect().width,1),lineColor,lineColor,lineColor,lineColor);
-				} else drawButton(context.getInterface(),context.getRect(),effFocus,context.isClicked(IInterface.LBUTTON));
+				} else drawButton(context.getInterface(),context.getRect(),effFocus,context.isClicked(IInterface.LBUTTON),false);
 				Color color=(container&&active)?getMainColor(effFocus,false):getFontColor(effFocus);
 				String string=title;
 				if (type==String.class) string+=separator+state;
@@ -246,25 +258,30 @@ public class Windows31Theme extends ThemeBase {
 			@Override
 			public void renderSlider(Context context, String title, String state, boolean focus, double value) {
 				boolean effFocus=container?context.hasFocus():focus;
-				if (!container) drawButton(context.getInterface(),context.getRect(),effFocus,context.isClicked(IInterface.LBUTTON));
 				Color colorA=getMainColor(effFocus,true);
-				Rectangle rect=getSlideArea(context);
-				int divider=(int)(rect.width*value);
-				context.getInterface().fillRect(new Rectangle(rect.x,rect.y,divider,rect.height),colorA,colorA,colorA,colorA);
-				Color color=container?getMainColor(effFocus,false):getFontColor(effFocus);
+				if (container && effFocus) context.getInterface().fillRect(context.getRect(),colorA,colorA,colorA,colorA);
+				Rectangle rect=getSlideArea(context,title,state);
+				Color colorB=getBackgroundColor(effFocus);
+				context.getInterface().fillRect(rect,colorB,colorB,colorB,colorB);
+				ITheme.drawRect(context.getInterface(),rect,getFontColor(effFocus));
+				int divider=(int)((rect.width-rect.height)*value);
+				Rectangle buttonRect=new Rectangle(rect.x+divider,rect.y,rect.height,rect.height);
+				boolean clicked=context.isClicked(IInterface.LBUTTON) && buttonRect.contains(context.getInterface().getMouse());
+				Windows31Theme.this.drawButton(context.getInterface(),buttonRect,effFocus,clicked,true);
+				Color color=(container&&effFocus)?getMainColor(effFocus,false):getFontColor(effFocus);
 				String string=title+separator+state; 
-				context.getInterface().drawString(new Point(context.getRect().x+context.getRect().width/2-context.getInterface().getFontWidth(height,string)/2,context.getRect().y+(container?0:3)+padding),height,string,color);
+				context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,string,color);
 			}
 			
 			@Override
-			public Rectangle getSlideArea (Context context) {
+			public Rectangle getSlideArea (Context context, String title, String state) {
 				if (container) return context.getRect();
-				else return new Rectangle(context.getRect().x+3,context.getRect().y+3,context.getRect().width-6,context.getRect().height-6);
+				else return new Rectangle(context.getRect().x,context.getRect().y+context.getRect().height-height,context.getRect().width,height);
 			}
 
 			@Override
 			public int getDefaultHeight() {
-				return container?getBaseHeight():getBaseHeight()+6;
+				return getBaseHeight()+height;
 			}
 		};
 	}
@@ -294,12 +311,17 @@ public class Windows31Theme extends ThemeBase {
 		return new ITextFieldRenderer() {
 			@Override
 			public int renderTextField (Context context, String title, boolean focus, String content, int position, int select, int boxPosition, boolean insertMode) {
-				boolean effFocus=container?context.hasFocus():focus;
+				boolean effFocus=container?(context.hasFocus()||focus):focus;
 				// Declare and assign variables
 				Color textColor=getFontColor(effFocus);
-				Color highlightColor=getMainColor(focus,true);
+				Color titleColor=(container&&effFocus)?getMainColor(effFocus,false):textColor;
+				Color highlightColor=getMainColor(effFocus,true);
 				Rectangle rect=getTextArea(context,title);
 				int strlen=context.getInterface().getFontWidth(height,content.substring(0,position));
+				if (container && effFocus) {
+					context.getInterface().fillRect(context.getRect(),highlightColor,highlightColor,highlightColor,highlightColor);
+					context.getInterface().fillRect(rect,titleColor,titleColor,titleColor,titleColor);
+				}
 				// Deal with box render offset
 				if (boxPosition<position) {
 					int minPosition=boxPosition;
@@ -326,19 +348,21 @@ public class Windows31Theme extends ThemeBase {
 				if (position<content.length()) x2+=context.getInterface().getFontWidth(height,content.substring(0,position+1));
 				else x2+=context.getInterface().getFontWidth(height,content+"X");
 				// Draw stuff around the box
-				context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding/2),height,title+separator,textColor);
+				context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding/2),height,title+separator,titleColor);
 				// Draw the box
 				context.getInterface().window(rect);
 				if (select>=0) {
 					int x3=rect.x+padding/2-offset+context.getInterface().getFontWidth(height,content.substring(0,select));
 					context.getInterface().fillRect(new Rectangle(Math.min(x1,x3),rect.y+padding/2,Math.abs(x3-x1),height),highlightColor,highlightColor,highlightColor,highlightColor);
-				}
-				context.getInterface().drawString(new Point(rect.x+padding/2-offset,rect.y+padding/2),height,content,textColor);
+					context.getInterface().drawString(new Point(rect.x+padding/2-offset,rect.y+padding/2),height,content.substring(0,Math.min(position,select)),textColor);
+					context.getInterface().drawString(new Point(Math.min(x1,x3),rect.y+padding/2),height,content.substring(Math.min(position,select),Math.max(position,select)),getMainColor(effFocus,false));
+					context.getInterface().drawString(new Point(Math.max(x1,x3),rect.y+padding/2),height,content.substring(Math.max(position,select)),textColor);
+				} else context.getInterface().drawString(new Point(rect.x+padding/2-offset,rect.y+padding/2),height,content,textColor);
 				if ((System.currentTimeMillis()/500)%2==0 && focus) {
 					if (insertMode) context.getInterface().fillRect(new Rectangle(x1,rect.y+padding/2+height,x2-x1,1),textColor,textColor,textColor,textColor);
 					else context.getInterface().fillRect(new Rectangle(x1,rect.y+padding/2,1,height),textColor,textColor,textColor,textColor);
 				}
-				ITheme.drawRect(context.getInterface(),rect,getFontColor(effFocus));
+				ITheme.drawRect(context.getInterface(),rect,textColor);
 				context.getInterface().restore();
 				return boxPosition;
 			}

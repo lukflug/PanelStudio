@@ -30,7 +30,7 @@ public interface ISliderRenderer {
 	 * @param context the context to be used
 	 * @return the rectangle reprsenting the area that can be slided
 	 */
-	public default Rectangle getSlideArea (Context context) {
+	public default Rectangle getSlideArea (Context context, String title, String state) {
 		return context.getRect();
 	}
 }

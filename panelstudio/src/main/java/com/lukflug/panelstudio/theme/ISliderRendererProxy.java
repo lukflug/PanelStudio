@@ -21,8 +21,8 @@ public interface ISliderRendererProxy extends ISliderRenderer {
 	}
 
 	@Override
-	public default Rectangle getSlideArea(Context context) {
-		return getRenderer().getSlideArea(context);
+	public default Rectangle getSlideArea(Context context, String title, String state) {
+		return getRenderer().getSlideArea(context,title,state);
 	}
 
 	/**

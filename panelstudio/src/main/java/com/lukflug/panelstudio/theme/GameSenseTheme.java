@@ -270,7 +270,7 @@ public class GameSenseTheme extends ThemeBase {
 			public void renderSlider(Context context, String title, String state, boolean focus, double value) {
 				boolean effFocus=container?context.hasFocus():focus;
 				Color colorA=getMainColor(effFocus,true),colorB=getBackgroundColor(effFocus);
-				Rectangle rect=getSlideArea(context);
+				Rectangle rect=getSlideArea(context,title,state);
 				int divider=(int)(rect.width*value);
 				context.getInterface().fillRect(new Rectangle(rect.x,rect.y,divider,rect.height),colorA,colorA,colorA,colorA);
 				context.getInterface().fillRect(new Rectangle(rect.x+divider,rect.y,rect.width-divider,rect.height),colorB,colorB,colorB,colorB);

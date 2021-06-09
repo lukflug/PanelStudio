@@ -42,6 +42,7 @@ public abstract class FocusableComponentProxy<T extends IComponent> implements I
 	
 	@Override
 	public void enter() {
+		focus=initFocus;
 		if (focus) requestFocus=true;
 		IComponentProxy.super.enter();
 	}

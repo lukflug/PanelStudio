@@ -271,7 +271,7 @@ public class ClearTheme extends ThemeBase {
 				renderBackground(context,effFocus,graphicalLevel);
 				Color color=getFontColor(effFocus);
 				Color colorA=getMainColor(effFocus,true);
-				Rectangle rect=getSlideArea(context);
+				Rectangle rect=getSlideArea(context,title,state);
 				int divider=(int)(rect.width*value);
 				context.getInterface().fillRect(new Rectangle(rect.x,rect.y,divider,rect.height),colorA,colorA,colorA,colorA);
 				renderOverlay(context);
