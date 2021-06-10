@@ -170,8 +170,13 @@ public class Windows31Theme extends ThemeBase {
 			public int renderScrollBar(Context context, boolean focus, T state, boolean horizontal, int height, int position) {
 				Color color=getBackgroundColor(focus);
 				context.getInterface().fillRect(context.getRect(),color,color,color,color);
-				// TODO Auto-generated method stub
-				return position;
+				int d=horizontal?context.getSize().height:context.getSize().width;
+				int x=context.getPos().x+(horizontal?(int)(position/(double)(height-context.getSize().width)*(context.getSize().width-2*d)):0);
+				int y=context.getPos().y+(horizontal?0:(int)(position/(double)(height-context.getSize().height)*(context.getSize().height-2*d)));
+				Rectangle rect=new Rectangle(x,y,d*(horizontal?2:1),d*(horizontal?1:2));
+				Windows31Theme.this.drawButton(context.getInterface(),rect,focus,context.isClicked(IInterface.LBUTTON)&&rect.contains(context.getInterface().getMouse()),true);
+				if (horizontal) return (int)Math.round((context.getInterface().getMouse().x-context.getPos().x-d)/(double)(context.getSize().width-2*d)*(height-context.getSize().width));
+				else return (int)Math.round((context.getInterface().getMouse().y-context.getPos().y-d)/(double)(context.getSize().height-2*d)*(height-context.getSize().height));
 			}
 
 			@Override
@@ -202,24 +207,24 @@ public class Windows31Theme extends ThemeBase {
 				boolean effFocus=container?context.hasFocus():focus;
 				boolean active=type==Boolean.class?(Boolean)state:effFocus;
 				if (!container && type==Boolean.class) {
-					ITheme.drawRect(context.getInterface(),new Rectangle(context.getRect().x,context.getRect().y,height,height),getFontColor(effFocus));
+					ITheme.drawRect(context.getInterface(),new Rectangle(context.getPos().x,context.getPos().y,height,height),getFontColor(effFocus));
 					if ((Boolean)state) {
-						context.getInterface().drawLine(context.getPos(),new Point(context.getRect().x+height-1,context.getRect().y+height-1),getFontColor(effFocus),getFontColor(effFocus));
-						context.getInterface().drawLine(new Point(context.getRect().x+height-1,context.getRect().y+1),new Point(context.getRect().x,context.getRect().y+height),getFontColor(effFocus),getFontColor(effFocus));
+						context.getInterface().drawLine(context.getPos(),new Point(context.getPos().x+height-1,context.getPos().y+height-1),getFontColor(effFocus),getFontColor(effFocus));
+						context.getInterface().drawLine(new Point(context.getPos().x+height-1,context.getPos().y+1),new Point(context.getPos().x,context.getPos().y+height),getFontColor(effFocus),getFontColor(effFocus));
 					}
-					context.getInterface().drawString(new Point(context.getRect().x+height+padding,context.getRect().y),height,title,getFontColor(effFocus));
+					context.getInterface().drawString(new Point(context.getPos().x+height+padding,context.getPos().y),height,title,getFontColor(effFocus));
 					return;
 				} else if (container) {
 					Color color=getMainColor(effFocus,active);
 					context.getInterface().fillRect(context.getRect(),color,color,color,color);
 					Color lineColor=getFontColor(effFocus);
-					context.getInterface().fillRect(new Rectangle(context.getRect().x,context.getRect().y+context.getRect().height-1,context.getRect().width,1),lineColor,lineColor,lineColor,lineColor);
+					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+context.getSize().height-1,context.getSize().width,1),lineColor,lineColor,lineColor,lineColor);
 				} else drawButton(context.getInterface(),context.getRect(),effFocus,context.isClicked(IInterface.LBUTTON),false);
 				Color color=(container&&active)?getMainColor(effFocus,false):getFontColor(effFocus);
 				String string=title;
 				if (type==String.class) string+=separator+state;
 				else if (type==Color.class) color=(Color)state;
-				context.getInterface().drawString(new Point(context.getRect().x+context.getRect().width/2-context.getInterface().getFontWidth(height,string)/2,context.getRect().y+(container?0:3)+padding),height,string,color);
+				context.getInterface().drawString(new Point(context.getPos().x+context.getSize().width/2-context.getInterface().getFontWidth(height,string)/2,context.getPos().y+(container?0:3)+padding),height,string,color);
 			}
 
 			@Override
@@ -236,13 +241,12 @@ public class Windows31Theme extends ThemeBase {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, Void state) {
 				// TODO Auto-generated method stub
-				
+				Windows31Theme.this.drawButton(context.getInterface(),context.getRect(),focus,context.isClicked(IInterface.LBUTTON),true);
 			}
 
 			@Override
 			public int getDefaultHeight() {
-				// TODO Auto-generated method stub
-				return 0;
+				return getBaseHeight();
 			}
 		};
 	}
@@ -270,13 +274,13 @@ public class Windows31Theme extends ThemeBase {
 				Windows31Theme.this.drawButton(context.getInterface(),buttonRect,effFocus,clicked,true);
 				Color color=(container&&effFocus)?getMainColor(effFocus,false):getFontColor(effFocus);
 				String string=title+separator+state; 
-				context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,string,color);
+				context.getInterface().drawString(new Point(context.getPos().x+padding,context.getPos().y+padding),height,string,color);
 			}
 			
 			@Override
 			public Rectangle getSlideArea (Context context, String title, String state) {
 				if (container) return context.getRect();
-				else return new Rectangle(context.getRect().x,context.getRect().y+context.getRect().height-height,context.getRect().width,height);
+				else return new Rectangle(context.getPos().x,context.getPos().y+context.getSize().height-height,context.getSize().width,height);
 			}
 
 			@Override
@@ -348,7 +352,7 @@ public class Windows31Theme extends ThemeBase {
 				if (position<content.length()) x2+=context.getInterface().getFontWidth(height,content.substring(0,position+1));
 				else x2+=context.getInterface().getFontWidth(height,content+"X");
 				// Draw stuff around the box
-				context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding/2),height,title+separator,titleColor);
+				context.getInterface().drawString(new Point(context.getPos().x+padding,context.getPos().y+padding/2),height,title+separator,titleColor);
 				// Draw the box
 				context.getInterface().window(rect);
 				if (select>=0) {
@@ -369,7 +373,7 @@ public class Windows31Theme extends ThemeBase {
 
 			@Override
 			public int getDefaultHeight() {
-				int height=getBaseHeight()-padding;
+				int height=getBaseHeight();
 				if (height%2==1) height+=1;
 				return height;
 			}
@@ -428,7 +432,16 @@ public class Windows31Theme extends ThemeBase {
 		return new ISwitchRenderer<Boolean>() {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, Boolean state) {
-				// TODO Auto-generated method stub
+				boolean effFocus=container?context.hasFocus():focus;
+				Color colorA=getMainColor(effFocus,true);
+				if (container && effFocus) context.getInterface().fillRect(context.getRect(),colorA,colorA,colorA,colorA);
+				context.getInterface().drawString(new Point(context.getPos().x+padding,context.getPos().y+padding),height,title+separator+(state?"On":"Off"),getFontColor(focus));
+				Rectangle rect=new Rectangle(context.getPos().x+context.getSize().width-2*context.getSize().height,context.getPos().y,2*context.getSize().height,context.getSize().height);
+				Color colorB=getMainColor(effFocus,state);
+				context.getInterface().fillRect(rect,colorB,colorB,colorB,colorB);
+				ITheme.drawRect(context.getInterface(),rect,getFontColor(effFocus));
+				Rectangle field=state?getOnField(context):getOffField(context);
+				drawButton(context.getInterface(),field,focus,context.isClicked(IInterface.LBUTTON)&&field.contains(context.getInterface().getMouse()),true);
 			}
 
 			@Override
@@ -438,14 +451,14 @@ public class Windows31Theme extends ThemeBase {
 
 			@Override
 			public Rectangle getOnField(Context context) {
-				// TODO Auto-generated method stub
-				return null;
+				Rectangle rect=context.getRect();
+				return new Rectangle(rect.x+rect.width-rect.height,rect.y,rect.height,rect.height);
 			}
 
 			@Override
 			public Rectangle getOffField(Context context) {
-				// TODO Auto-generated method stub
-				return null;
+				Rectangle rect=context.getRect();
+				return new Rectangle(rect.x+rect.width-2*rect.height,rect.y,rect.height,rect.height);
 			}
 		};
 	}
@@ -455,7 +468,21 @@ public class Windows31Theme extends ThemeBase {
 		return new ISwitchRenderer<String>() {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, String state) {
-				// TODO Auto-generated method stub
+				boolean effFocus=container?context.hasFocus():focus;
+				Color colorA=getMainColor(effFocus,true);
+				if (container && effFocus) context.getInterface().fillRect(context.getRect(),colorA,colorA,colorA,colorA);
+				Context subContext=new Context(context,context.getSize().width-2*context.getSize().height,new Point(0,0),true,true);
+				subContext.setHeight(context.getSize().height);
+				Color textColor=(container&&effFocus)?getMainColor(effFocus,false):getFontColor(effFocus);
+				context.getInterface().drawString(new Point(context.getPos().x+padding,context.getPos().y+padding),height,title+separator+state,textColor);
+				Rectangle rect=getOnField(context);
+				subContext=new Context(context,rect.width,new Point(rect.x-context.getPos().x,0),true,true);
+				subContext.setHeight(rect.height);
+				getSmallButtonRenderer(ITheme.RIGHT,logicalLevel,graphicalLevel,container).renderButton(subContext,null,effFocus,null);
+				rect=getOffField(context);
+				subContext=new Context(context,rect.width,new Point(rect.x-context.getPos().x,0),true,true);
+				subContext.setHeight(rect.height);
+				getSmallButtonRenderer(ITheme.LEFT,logicalLevel,graphicalLevel,false).renderButton(subContext,null,effFocus,null);
 			}
 
 			@Override
@@ -465,14 +492,14 @@ public class Windows31Theme extends ThemeBase {
 
 			@Override
 			public Rectangle getOnField(Context context) {
-				// TODO Auto-generated method stub
-				return null;
+				Rectangle rect=context.getRect();
+				return new Rectangle(rect.x+rect.width-rect.height,rect.y,rect.height,rect.height);
 			}
 
 			@Override
 			public Rectangle getOffField(Context context) {
-				// TODO Auto-generated method stub
-				return null;
+				Rectangle rect=context.getRect();
+				return new Rectangle(rect.x+rect.width-2*rect.height,rect.y,rect.height,rect.height);
 			}
 		};
 	}

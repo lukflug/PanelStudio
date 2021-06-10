@@ -50,9 +50,9 @@ public class ClearTheme extends ThemeBase {
 	
 	protected void renderSmallButton(Context context, String title, int symbol, boolean focus) {
 		Point points[]=new Point[3];
-		int padding=context.getRect().height<=8?2:4;
-		Rectangle rect=new Rectangle(context.getRect().x+padding/2,context.getRect().y+padding/2,context.getRect().height-2*(padding/2),context.getRect().height-2*(padding/2));
-		if (title==null) rect.x+=context.getRect().width/2-context.getRect().height/2;
+		int padding=context.getSize().height<=8?2:4;
+		Rectangle rect=new Rectangle(context.getPos().x+padding/2,context.getPos().y+padding/2,context.getSize().height-2*(padding/2),context.getSize().height-2*(padding/2));
+		if (title==null) rect.x+=context.getSize().width/2-context.getSize().height/2;
 		Color color=getFontColor(focus);
 		switch (symbol) {
 		case ITheme.CLOSE:
@@ -96,7 +96,7 @@ public class ClearTheme extends ThemeBase {
 		if (symbol>=ITheme.LEFT && symbol<=ITheme.DOWN) {
 			context.getInterface().fillTriangle(points[0],points[1],points[2],color,color,color);
 		}
-		if (title!=null) context.getInterface().drawString(new Point(context.getRect().x+(symbol==ITheme.NONE?padding:context.getRect().height),context.getRect().y+padding),height,title,getFontColor(focus));
+		if (title!=null) context.getInterface().drawString(new Point(context.getPos().x+(symbol==ITheme.NONE?padding:context.getSize().height),context.getPos().y+padding),height,title,getFontColor(focus));
 	}
 
 	@Override
@@ -211,8 +211,8 @@ public class ClearTheme extends ThemeBase {
 				if (type==Boolean.class && (Boolean)state==true) color=getMainColor(effFocus,true);
 				else if (type==Color.class) color=(Color)state;
 				if (graphicalLevel>0) renderOverlay(context);
-				if (type==String.class) context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title+separator+state,color);
-				else context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title,color);
+				if (type==String.class) context.getInterface().drawString(new Point(context.getPos().x+padding,context.getPos().y+padding),height,title+separator+state,color);
+				else context.getInterface().drawString(new Point(context.getPos().x+padding,context.getPos().y+padding),height,title,color);
 			}
 
 			@Override
@@ -252,7 +252,7 @@ public class ClearTheme extends ThemeBase {
 				Color color=getFontColor(effFocus);
 				if (effFocus) color=getMainColor(effFocus,true);
 				renderOverlay(context);
-				context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title+separator+(focus?"...":state),color);
+				context.getInterface().drawString(new Point(context.getPos().x+padding,context.getPos().y+padding),height,title+separator+(focus?"...":state),color);
 			}
 
 			@Override
@@ -275,7 +275,7 @@ public class ClearTheme extends ThemeBase {
 				int divider=(int)(rect.width*value);
 				context.getInterface().fillRect(new Rectangle(rect.x,rect.y,divider,rect.height),colorA,colorA,colorA,colorA);
 				renderOverlay(context);
-				context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title+separator+state,color);
+				context.getInterface().drawString(new Point(context.getPos().x+padding,context.getPos().y+padding),height,title+separator+state,color);
 			}
 
 			@Override
@@ -367,7 +367,7 @@ public class ClearTheme extends ThemeBase {
 				else x2+=context.getInterface().getFontWidth(height,content+"X");
 				// Draw stuff around the box
 				renderOverlay(context);
-				context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding/2),height,title+separator,textColor);
+				context.getInterface().drawString(new Point(context.getPos().x+padding,context.getPos().y+padding/2),height,title+separator,textColor);
 				// Draw the box
 				context.getInterface().window(rect);
 				if (select>=0) {
@@ -423,7 +423,7 @@ public class ClearTheme extends ThemeBase {
 				boolean effFocus=container?context.hasFocus():focus;
 				renderBackground(context,effFocus,graphicalLevel);
 				renderOverlay(context);
-				context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title+separator+(state?"On":"Off"),getFontColor(focus));
+				context.getInterface().drawString(new Point(context.getPos().x+padding,context.getPos().y+padding),height,title+separator+(state?"On":"Off"),getFontColor(focus));
 				Color color=state?scheme.getColor("Enabled Color"):scheme.getColor("Disabled Color");
 				Color fillColor=ITheme.combineColors(color,getBackgroundColor(effFocus));
 				Rectangle rect=state?getOnField(context):getOffField(context);
@@ -459,17 +459,17 @@ public class ClearTheme extends ThemeBase {
 			public void renderButton(Context context, String title, boolean focus, String state) {
 				boolean effFocus=container?context.hasFocus():focus;
 				renderBackground(context,effFocus,graphicalLevel);
-				Context subContext=new Context(context,context.getRect().width-2*context.getRect().height,new Point(0,0),true,true);
-				subContext.setHeight(context.getRect().height);
+				Context subContext=new Context(context,context.getSize().width-2*context.getSize().height,new Point(0,0),true,true);
+				subContext.setHeight(context.getSize().height);
 				renderOverlay(subContext);
 				Color textColor=getFontColor(effFocus);
-				context.getInterface().drawString(new Point(context.getRect().x+padding,context.getRect().y+padding),height,title+separator+state,textColor);
+				context.getInterface().drawString(new Point(context.getPos().x+padding,context.getPos().y+padding),height,title+separator+state,textColor);
 				Rectangle rect=getOnField(context);
-				subContext=new Context(context,rect.width,new Point(rect.x-context.getRect().x,0),true,true);
+				subContext=new Context(context,rect.width,new Point(rect.x-context.getPos().x,0),true,true);
 				subContext.setHeight(rect.height);
 				getSmallButtonRenderer(ITheme.RIGHT,logicalLevel,graphicalLevel,container).renderButton(subContext,null,effFocus,null);
 				rect=getOffField(context);
-				subContext=new Context(context,rect.width,new Point(rect.x-context.getRect().x,0),true,true);
+				subContext=new Context(context,rect.width,new Point(rect.x-context.getPos().x,0),true,true);
 				subContext.setHeight(rect.height);
 				getSmallButtonRenderer(ITheme.LEFT,logicalLevel,graphicalLevel,false).renderButton(subContext,null,effFocus,null);
 			}

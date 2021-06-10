@@ -14,7 +14,7 @@ public interface IScrollBarRenderer<T> {
 	 * @param focus the focus state of the scroll bar
 	 * @param state the state of the scroll bar
 	 * @param horizontal whether the scroll bar is horizontal
-	 * @param height the height of the scroll bar
+	 * @param height the height of the scroll content
 	 * @param position the scroll position
 	 * @return the new scroll position based on mouse input
 	 */
