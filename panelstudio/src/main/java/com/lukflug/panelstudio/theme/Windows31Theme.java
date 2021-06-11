@@ -240,8 +240,55 @@ public class Windows31Theme extends ThemeBase {
 		return new IButtonRenderer<Void>() {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, Void state) {
-				// TODO Auto-generated method stub
 				Windows31Theme.this.drawButton(context.getInterface(),context.getRect(),focus,context.isClicked(IInterface.LBUTTON),true);
+				Point points[]=new Point[3];
+				int padding=context.getSize().height<=12?4:6;
+				Rectangle rect=new Rectangle(context.getPos().x+padding/2,context.getPos().y+padding/2,context.getSize().height-2*(padding/2),context.getSize().height-2*(padding/2));
+				if (title==null) rect.x+=context.getSize().width/2-context.getSize().height/2;
+				Color color=getFontColor(focus);
+				switch (symbol) {
+				case ITheme.CLOSE:
+					context.getInterface().drawLine(new Point(rect.x,rect.y),new Point(rect.x+rect.width,rect.y+rect.height),color,color);
+					context.getInterface().drawLine(new Point(rect.x,rect.y+rect.height),new Point(rect.x+rect.width,rect.y),color,color);
+					break;
+				case ITheme.MINIMIZE:
+					context.getInterface().fillRect(new Rectangle(rect.x,rect.y+rect.height-2,rect.width,2),color,color,color,color);
+					break;
+				case ITheme.ADD:
+					if (rect.width%2==1) rect.width-=1;
+					if (rect.height%2==1) rect.height-=1;
+					context.getInterface().fillRect(new Rectangle(rect.x+rect.width/2-1,rect.y,2,rect.height),color,color,color,color);
+					context.getInterface().fillRect(new Rectangle(rect.x,rect.y+rect.height/2-1,rect.width,2),color,color,color,color);
+					break;
+				case ITheme.LEFT:
+					if (rect.height%2==1) rect.height-=1;
+					points[2]=new Point(rect.x+rect.width,rect.y);
+					points[1]=new Point(rect.x+rect.width,rect.y+rect.height);
+					points[0]=new Point(rect.x,rect.y+rect.height/2);
+					break;
+				case ITheme.RIGHT:
+					if (rect.height%2==1) rect.height-=1;
+					points[0]=new Point(rect.x,rect.y);
+					points[1]=new Point(rect.x,rect.y+rect.height);
+					points[2]=new Point(rect.x+rect.width,rect.y+rect.height/2);
+					break;
+				case ITheme.UP:
+					if (rect.width%2==1) rect.width-=1;
+					points[0]=new Point(rect.x,rect.y+rect.height);
+					points[1]=new Point(rect.x+rect.width,rect.y+rect.height);
+					points[2]=new Point(rect.x+rect.width/2,rect.y);
+					break;
+				case ITheme.DOWN:
+					if (rect.width%2==1) rect.width-=1;
+					points[2]=new Point(rect.x,rect.y);
+					points[1]=new Point(rect.x+rect.width,rect.y);
+					points[0]=new Point(rect.x+rect.width/2,rect.y+rect.height);
+					break;
+				}
+				if (symbol>=ITheme.LEFT && symbol<=ITheme.DOWN) {
+					context.getInterface().fillTriangle(points[0],points[1],points[2],color,color,color);
+				}
+				if (title!=null) context.getInterface().drawString(new Point(context.getPos().x+(symbol==ITheme.NONE?padding:context.getSize().height),context.getPos().y+padding),height,title,getFontColor(focus));
 			}
 
 			@Override
@@ -352,19 +399,19 @@ public class Windows31Theme extends ThemeBase {
 				if (position<content.length()) x2+=context.getInterface().getFontWidth(height,content.substring(0,position+1));
 				else x2+=context.getInterface().getFontWidth(height,content+"X");
 				// Draw stuff around the box
-				context.getInterface().drawString(new Point(context.getPos().x+padding,context.getPos().y+padding/2),height,title+separator,titleColor);
+				context.getInterface().drawString(new Point(context.getPos().x+padding,context.getPos().y+padding),height,title+separator,titleColor);
 				// Draw the box
 				context.getInterface().window(rect);
 				if (select>=0) {
 					int x3=rect.x+padding/2-offset+context.getInterface().getFontWidth(height,content.substring(0,select));
-					context.getInterface().fillRect(new Rectangle(Math.min(x1,x3),rect.y+padding/2,Math.abs(x3-x1),height),highlightColor,highlightColor,highlightColor,highlightColor);
-					context.getInterface().drawString(new Point(rect.x+padding/2-offset,rect.y+padding/2),height,content.substring(0,Math.min(position,select)),textColor);
-					context.getInterface().drawString(new Point(Math.min(x1,x3),rect.y+padding/2),height,content.substring(Math.min(position,select),Math.max(position,select)),getMainColor(effFocus,false));
-					context.getInterface().drawString(new Point(Math.max(x1,x3),rect.y+padding/2),height,content.substring(Math.max(position,select)),textColor);
-				} else context.getInterface().drawString(new Point(rect.x+padding/2-offset,rect.y+padding/2),height,content,textColor);
+					context.getInterface().fillRect(new Rectangle(Math.min(x1,x3),rect.y+padding,Math.abs(x3-x1),height),highlightColor,highlightColor,highlightColor,highlightColor);
+					context.getInterface().drawString(new Point(rect.x+padding/2-offset,rect.y+padding),height,content.substring(0,Math.min(position,select)),textColor);
+					context.getInterface().drawString(new Point(Math.min(x1,x3),rect.y+padding),height,content.substring(Math.min(position,select),Math.max(position,select)),getMainColor(effFocus,false));
+					context.getInterface().drawString(new Point(Math.max(x1,x3),rect.y+padding),height,content.substring(Math.max(position,select)),textColor);
+				} else context.getInterface().drawString(new Point(rect.x+padding/2-offset,rect.y+padding),height,content,textColor);
 				if ((System.currentTimeMillis()/500)%2==0 && focus) {
-					if (insertMode) context.getInterface().fillRect(new Rectangle(x1,rect.y+padding/2+height,x2-x1,1),textColor,textColor,textColor,textColor);
-					else context.getInterface().fillRect(new Rectangle(x1,rect.y+padding/2,1,height),textColor,textColor,textColor,textColor);
+					if (insertMode) context.getInterface().fillRect(new Rectangle(x1,rect.y+padding+height,x2-x1,1),textColor,textColor,textColor,textColor);
+					else context.getInterface().fillRect(new Rectangle(x1,rect.y+padding,1,height),textColor,textColor,textColor,textColor);
 				}
 				ITheme.drawRect(context.getInterface(),rect,textColor);
 				context.getInterface().restore();
