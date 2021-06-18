@@ -91,8 +91,7 @@ public class RainbowTheme extends ThemeBase {
 	public <T> IScrollBarRenderer<T> getScrollBarRenderer(Class<T> type, int logicalLevel, int graphicalLevel) {
 		return new IScrollBarRenderer<T>() {
 			@Override
-			public int renderScrollBar(Context context, boolean focus, T state, boolean horizontal, int height,
-					int position) {
+			public int renderScrollBar(Context context, boolean focus, T state, boolean horizontal, int height, int position) {
 				// TODO Auto-generated method stub
 				return 0;
 			}
@@ -127,8 +126,7 @@ public class RainbowTheme extends ThemeBase {
 
 			@Override
 			public int getDefaultHeight() {
-				// TODO Auto-generated method stub
-				return 0;
+				return getBaseHeight();
 			}
 		};
 	}
@@ -144,8 +142,7 @@ public class RainbowTheme extends ThemeBase {
 
 			@Override
 			public int getDefaultHeight() {
-				// TODO Auto-generated method stub
-				return 0;
+				return getBaseHeight();
 			}
 		};
 	}
@@ -161,8 +158,7 @@ public class RainbowTheme extends ThemeBase {
 
 			@Override
 			public int getDefaultHeight() {
-				// TODO Auto-generated method stub
-				return 0;
+				return getBaseHeight();
 			}
 		};
 	}
@@ -229,14 +225,13 @@ public class RainbowTheme extends ThemeBase {
 
 			@Override
 			public int getDefaultHeight() {
-				// TODO Auto-generated method stub
-				return 0;
+				return getBaseHeight();
 			}
 
 			@Override
 			public Rectangle getTextArea(Context context, String title) {
 				// TODO Auto-generated method stub
-				return null;
+				return context.getRect();
 			}
 
 			@Override
@@ -258,20 +253,21 @@ public class RainbowTheme extends ThemeBase {
 
 			@Override
 			public int getDefaultHeight() {
-				// TODO Auto-generated method stub
-				return 0;
+				return getBaseHeight();
 			}
 
 			@Override
 			public Rectangle getOnField(Context context) {
 				// TODO Auto-generated method stub
-				return null;
+				Rectangle rect=context.getRect();
+				return new Rectangle(rect.x+rect.width-rect.height,rect.y,rect.height,rect.height);
 			}
 
 			@Override
 			public Rectangle getOffField(Context context) {
 				// TODO Auto-generated method stub
-				return null;
+				Rectangle rect=context.getRect();
+				return new Rectangle(rect.x+rect.width-2*rect.height,rect.y,rect.height,rect.height);
 			}
 		};
 	}
@@ -287,20 +283,21 @@ public class RainbowTheme extends ThemeBase {
 
 			@Override
 			public int getDefaultHeight() {
-				// TODO Auto-generated method stub
-				return 0;
+				return getBaseHeight();
 			}
 
 			@Override
 			public Rectangle getOnField(Context context) {
 				// TODO Auto-generated method stub
-				return null;
+				Rectangle rect=context.getRect();
+				return new Rectangle(rect.x+rect.width-rect.height,rect.y,rect.height,rect.height);
 			}
 
 			@Override
 			public Rectangle getOffField(Context context) {
 				// TODO Auto-generated method stub
-				return null;
+				Rectangle rect=context.getRect();
+				return new Rectangle(rect.x+rect.width-2*rect.height,rect.y,rect.height,rect.height);
 			}
 		};
 	}
