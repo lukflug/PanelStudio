@@ -1,6 +1,7 @@
 package com.lukflug.panelstudio.theme;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.function.IntSupplier;
@@ -30,6 +31,11 @@ public class RainbowTheme extends ThemeBase {
 		scheme.createSetting(this,"Font Color","The main color for text.",false,true,new Color(255,255,255),false);
 	}
 	
+	protected void renderOverlay (Context context) {
+		Color color=context.isHovered()?new Color(0,0,0,64):new Color(0,0,0,0);
+		context.getInterface().fillRect(context.getRect(),color,color,color,color);
+	}
+	
 	protected void renderRainbowRect (Rectangle rect, Context context, boolean focus) {
 		Color source=getMainColor(focus,true);
 		float[] hsb=Color.RGBtoHSB(source.getRed(),source.getGreen(),source.getBlue(),null);
@@ -54,8 +60,10 @@ public class RainbowTheme extends ThemeBase {
 		return new IDescriptionRenderer() {
 			@Override
 			public void renderDescription(IInterface inter, Point pos, String text) {
-				// TODO Auto-generated method stub
-				
+				Rectangle rect=new Rectangle(pos,new Dimension(inter.getFontWidth(height,text)+2,height+2));
+				Color color=getBackgroundColor(true);
+				inter.fillRect(rect,color,color,color,color);
+				inter.drawString(new Point(pos.x+1,pos.y+1),height,text,getFontColor(true));
 			}
 		};
 	}
@@ -65,7 +73,7 @@ public class RainbowTheme extends ThemeBase {
 		return new IContainerRenderer() {
 			@Override
 			public void renderBackground (Context context, boolean focus) {
-				if (graphicalLevel==0) renderRainbowRect(context.getRect(),context,focus);
+				if (graphicalLevel==0 && !buttonRainbow.isOn()) renderRainbowRect(context.getRect(),context,focus);
 			}
 		};
 	}
@@ -74,15 +82,20 @@ public class RainbowTheme extends ThemeBase {
 	public <T> IPanelRenderer<T> getPanelRenderer(Class<T> type, int logicalLevel, int graphicalLevel) {
 		return new IPanelRenderer<T>() {
 			@Override
+			public int getBorder() {
+				return graphicalLevel==0?1:0;
+			}
+			
+			@Override
 			public void renderPanelOverlay(Context context, boolean focus, T state, boolean open) {
-				// TODO Auto-generated method stub
-				
 			}
 
 			@Override
 			public void renderTitleOverlay(Context context, boolean focus, T state, boolean open) {
-				// TODO Auto-generated method stub
-				
+				if (graphicalLevel==0) {
+					Color color=getFontColor(focus);
+					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+context.getSize().height,context.getSize().width,1),color,color,color,color);
+				}
 			}
 		};
 	}
@@ -120,8 +133,20 @@ public class RainbowTheme extends ThemeBase {
 		return new IButtonRenderer<T>() {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, Object state) {
-				// TODO Auto-generated method stub
-				
+				boolean effFocus=container?context.hasFocus():focus;
+				boolean active=container&&graphicalLevel!=0;
+				if (type==Boolean.class) {
+					active=(Boolean)state || (ignoreDisabled.isOn()&&container);
+				}
+				if (!active) {
+					Color color=getBackgroundColor(effFocus);
+					context.getInterface().fillRect(context.getRect(),color,color,color,color);
+				} else if (graphicalLevel==0 || buttonRainbow.isOn()) {
+					renderRainbowRect(context.getRect(),context,effFocus);
+				}
+				renderOverlay(context);
+				String text=(logicalLevel>=2?"> ":"")+title+(type==String.class?separator+state:"");
+				context.getInterface().drawString(new Point(context.getPos().x+padding,context.getPos().y+padding),height,text,getFontColor(effFocus));
 			}
 
 			@Override
@@ -149,18 +174,7 @@ public class RainbowTheme extends ThemeBase {
 
 	@Override
 	public IButtonRenderer<String> getKeybindRenderer(int logicalLevel, int graphicalLevel, boolean container) {
-		return new IButtonRenderer<String>() {
-			@Override
-			public void renderButton(Context context, String title, boolean focus, String state) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public int getDefaultHeight() {
-				return getBaseHeight();
-			}
-		};
+		return getButtonRenderer(String.class,logicalLevel,graphicalLevel,container);
 	}
 
 	@Override
@@ -174,8 +188,7 @@ public class RainbowTheme extends ThemeBase {
 
 			@Override
 			public int getDefaultHeight() {
-				// TODO Auto-generated method stub
-				return 0;
+				return getBaseHeight();
 			}
 		};
 	}
@@ -258,14 +271,12 @@ public class RainbowTheme extends ThemeBase {
 
 			@Override
 			public Rectangle getOnField(Context context) {
-				// TODO Auto-generated method stub
 				Rectangle rect=context.getRect();
 				return new Rectangle(rect.x+rect.width-rect.height,rect.y,rect.height,rect.height);
 			}
 
 			@Override
 			public Rectangle getOffField(Context context) {
-				// TODO Auto-generated method stub
 				Rectangle rect=context.getRect();
 				return new Rectangle(rect.x+rect.width-2*rect.height,rect.y,rect.height,rect.height);
 			}
@@ -288,14 +299,12 @@ public class RainbowTheme extends ThemeBase {
 
 			@Override
 			public Rectangle getOnField(Context context) {
-				// TODO Auto-generated method stub
 				Rectangle rect=context.getRect();
 				return new Rectangle(rect.x+rect.width-rect.height,rect.y,rect.height,rect.height);
 			}
 
 			@Override
 			public Rectangle getOffField(Context context) {
-				// TODO Auto-generated method stub
 				Rectangle rect=context.getRect();
 				return new Rectangle(rect.x+rect.width-2*rect.height,rect.y,rect.height,rect.height);
 			}
