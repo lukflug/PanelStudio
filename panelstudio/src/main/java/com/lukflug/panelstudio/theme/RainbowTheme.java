@@ -182,8 +182,16 @@ public class RainbowTheme extends ThemeBase {
 		return new ISliderRenderer() {
 			@Override
 			public void renderSlider(Context context, String title, String state, boolean focus, double value) {
-				// TODO Auto-generated method stub
-				
+				boolean effFocus=container?context.hasFocus():focus;
+				if (graphicalLevel==0 || buttonRainbow.isOn()) {
+					renderRainbowRect(context.getRect(),context,effFocus);
+				}
+				int divider=(int)(context.getSize().width*value);
+				Color color=getBackgroundColor(effFocus);
+				context.getInterface().fillRect(new Rectangle(context.getPos().x+divider,context.getPos().y,context.getSize().width-divider,context.getSize().height),color,color,color,color);
+				renderOverlay(context);
+				String text=(logicalLevel>=2?"> ":"")+title+separator+state;
+				context.getInterface().drawString(new Point(context.getPos().x+padding,context.getPos().y+padding),height,text,getFontColor(effFocus));
 			}
 
 			@Override
