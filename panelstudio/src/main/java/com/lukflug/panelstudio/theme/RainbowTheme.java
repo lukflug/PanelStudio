@@ -55,6 +55,58 @@ public class RainbowTheme extends ThemeBase {
 			currentHue=nextHue;
 		}
 	}
+	
+	protected void renderSmallButton(Context context, String title, int symbol, boolean focus) {
+		Point points[]=new Point[3];
+		int padding=context.getSize().height<=12?(context.getSize().height<=8?2:4):6;
+		Rectangle rect=new Rectangle(context.getPos().x+padding/2,context.getPos().y+padding/2,context.getSize().height-2*(padding/2),context.getSize().height-2*(padding/2));
+		if (title==null) rect.x+=context.getSize().width/2-context.getSize().height/2;
+		Color color=getFontColor(focus);
+		switch (symbol) {
+		case ITheme.CLOSE:
+			context.getInterface().drawLine(new Point(rect.x,rect.y),new Point(rect.x+rect.width,rect.y+rect.height),color,color);
+			context.getInterface().drawLine(new Point(rect.x,rect.y+rect.height),new Point(rect.x+rect.width,rect.y),color,color);
+			break;
+		case ITheme.MINIMIZE:
+			context.getInterface().fillRect(new Rectangle(rect.x,rect.y+rect.height-2,rect.width,2),color,color,color,color);
+			break;
+		case ITheme.ADD:
+			if (rect.width%2==1) rect.width-=1;
+			if (rect.height%2==1) rect.height-=1;
+			context.getInterface().fillRect(new Rectangle(rect.x+rect.width/2-1,rect.y,2,rect.height),color,color,color,color);
+			context.getInterface().fillRect(new Rectangle(rect.x,rect.y+rect.height/2-1,rect.width,2),color,color,color,color);
+			break;
+		case ITheme.LEFT:
+			if (rect.height%2==1) rect.height-=1;
+			points[2]=new Point(rect.x+rect.width,rect.y);
+			points[0]=new Point(rect.x+rect.width,rect.y+rect.height);
+			points[1]=new Point(rect.x,rect.y+rect.height/2);
+			break;
+		case ITheme.RIGHT:
+			if (rect.height%2==1) rect.height-=1;
+			points[0]=new Point(rect.x,rect.y);
+			points[2]=new Point(rect.x,rect.y+rect.height);
+			points[1]=new Point(rect.x+rect.width,rect.y+rect.height/2);
+			break;
+		case ITheme.UP:
+			if (rect.width%2==1) rect.width-=1;
+			points[0]=new Point(rect.x,rect.y+rect.height);
+			points[2]=new Point(rect.x+rect.width,rect.y+rect.height);
+			points[1]=new Point(rect.x+rect.width/2,rect.y);
+			break;
+		case ITheme.DOWN:
+			if (rect.width%2==1) rect.width-=1;
+			points[2]=new Point(rect.x,rect.y);
+			points[0]=new Point(rect.x+rect.width,rect.y);
+			points[1]=new Point(rect.x+rect.width/2,rect.y+rect.height);
+			break;
+		}
+		if (symbol>=ITheme.LEFT && symbol<=ITheme.DOWN) {
+			context.getInterface().drawLine(points[0],points[1],color,color);
+			context.getInterface().drawLine(points[1],points[2],color,color);
+		}
+		if (title!=null) context.getInterface().drawString(new Point(context.getPos().x+(symbol==ITheme.NONE?padding:context.getSize().height),context.getPos().y+padding),height,title,getFontColor(focus));
+	}
 
 	@Override
 	public IDescriptionRenderer getDescriptionRenderer() {
@@ -93,9 +145,21 @@ public class RainbowTheme extends ThemeBase {
 
 			@Override
 			public void renderTitleOverlay(Context context, boolean focus, T state, boolean open) {
-				if (graphicalLevel==0) {
+				if (graphicalLevel<=0) {
 					Color color=getFontColor(focus);
 					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+context.getSize().height,context.getSize().width,1),color,color,color,color);
+				} else {
+					Rectangle rect=context.getRect();
+					rect=new Rectangle(rect.width-rect.height,0,rect.height,rect.height);
+					if (rect.width%2!=0) {
+						rect.width--;
+						rect.height--;
+						rect.x++;
+					}
+					Context subContext=new Context(context,rect.width,rect.getLocation(),true,true);
+					subContext.setHeight(rect.height);
+					if (open) renderSmallButton(subContext,null,ITheme.DOWN,focus);
+					else renderSmallButton(subContext,null,ITheme.RIGHT,focus);
 				}
 			}
 		};
@@ -176,8 +240,11 @@ public class RainbowTheme extends ThemeBase {
 		return new IButtonRenderer<Void>() {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, Void state) {
-				// TODO Auto-generated method stub
-				
+				if (graphicalLevel==0 || buttonRainbow.isOn()) {
+					renderRainbowRect(context.getRect(),context,focus);
+				}
+				renderOverlay(context);
+				if (!container || logicalLevel<=0) renderSmallButton(context,title,symbol,focus);
 			}
 
 			@Override
@@ -360,8 +427,21 @@ public class RainbowTheme extends ThemeBase {
 		return new ISwitchRenderer<Boolean>() {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, Boolean state) {
-				// TODO Auto-generated method stub
-				
+				boolean effFocus=container?context.hasFocus():focus;
+				if (graphicalLevel==0 || buttonRainbow.isOn()) {
+					renderRainbowRect(context.getRect(),context,effFocus);
+				}
+				Color color=getBackgroundColor(effFocus);
+				if (graphicalLevel<=0 && container) {
+					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+context.getSize().height-1,context.getSize().width,1),color,color,color,color);
+				}
+				renderOverlay(context);
+				context.getInterface().drawString(new Point(context.getPos().x+padding,context.getPos().y+padding),height,title+separator+(state?"On":"Off"),getFontColor(focus));
+				Rectangle rect=state?getOnField(context):getOffField(context);
+				context.getInterface().fillRect(rect,color,color,color,color);
+				rect=context.getRect();
+				rect=new Rectangle(rect.x+rect.width-2*rect.height+3*padding,rect.y+padding,2*rect.height-4*padding,rect.height-2*padding);
+				ITheme.drawRect(context.getInterface(),rect,color);
 			}
 
 			@Override
@@ -372,13 +452,13 @@ public class RainbowTheme extends ThemeBase {
 			@Override
 			public Rectangle getOnField(Context context) {
 				Rectangle rect=context.getRect();
-				return new Rectangle(rect.x+rect.width-rect.height,rect.y,rect.height,rect.height);
+				return new Rectangle(rect.x+rect.width-rect.height+padding,rect.y+padding,rect.height-2*padding,rect.height-2*padding);
 			}
 
 			@Override
 			public Rectangle getOffField(Context context) {
 				Rectangle rect=context.getRect();
-				return new Rectangle(rect.x+rect.width-2*rect.height,rect.y,rect.height,rect.height);
+				return new Rectangle(rect.x+rect.width-2*rect.height+3*padding,rect.y+padding,rect.height-2*padding,rect.height-2*padding);
 			}
 		};
 	}
@@ -388,8 +468,23 @@ public class RainbowTheme extends ThemeBase {
 		return new ISwitchRenderer<String>() {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, String state) {
-				// TODO Auto-generated method stub
-				
+				boolean effFocus=container?context.hasFocus():focus;
+				if (graphicalLevel==0 || buttonRainbow.isOn()) {
+					renderRainbowRect(context.getRect(),context,effFocus);
+				}
+				Context subContext=new Context(context,context.getSize().width-2*context.getSize().height,new Point(0,0),true,true);
+				subContext.setHeight(context.getSize().height);
+				renderOverlay(subContext);
+				Color textColor=getFontColor(effFocus);
+				context.getInterface().drawString(new Point(context.getPos().x+padding,context.getPos().y+padding),height,title+separator+state,textColor);
+				Rectangle rect=getOnField(context);
+				subContext=new Context(context,rect.width,new Point(rect.x-context.getPos().x,0),true,true);
+				subContext.setHeight(rect.height);
+				getSmallButtonRenderer(ITheme.RIGHT,logicalLevel,graphicalLevel,container).renderButton(subContext,null,effFocus,null);
+				rect=getOffField(context);
+				subContext=new Context(context,rect.width,new Point(rect.x-context.getPos().x,0),true,true);
+				subContext.setHeight(rect.height);
+				getSmallButtonRenderer(ITheme.LEFT,logicalLevel,graphicalLevel,false).renderButton(subContext,null,effFocus,null);
 			}
 
 			@Override
