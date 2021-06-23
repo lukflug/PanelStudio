@@ -44,8 +44,7 @@ public abstract class TextField extends FocusableComponent {
 			int pos=renderer.transformToCharPos(context,getTitle(),setting.getValue(),boxPosition);
 			if (pos>=0) setPosition(context.getInterface(),pos);
 			unselect();
-		}
-		if (!hasFocus(context)) unselect();
+		} else if (!hasFocus(context)) unselect();
 	}
 	
 	@Override
