@@ -156,8 +156,8 @@ public interface ITheme {
 	
 	public static void drawRect (IInterface inter, Rectangle rect, Color color) {
 		inter.fillRect(new Rectangle(rect.x,rect.y,1,rect.height),color,color,color,color);
-		inter.fillRect(new Rectangle(rect.x,rect.y,rect.width,1),color,color,color,color);
+		inter.fillRect(new Rectangle(rect.x+1,rect.y,rect.width-2,1),color,color,color,color);
 		inter.fillRect(new Rectangle(rect.x+rect.width-1,rect.y,1,rect.height),color,color,color,color);
-		inter.fillRect(new Rectangle(rect.x,rect.y+rect.height-1,rect.width,1),color,color,color,color);
+		inter.fillRect(new Rectangle(rect.x+1,rect.y+rect.height-1,rect.width-2,1),color,color,color,color);
 	}
 }
