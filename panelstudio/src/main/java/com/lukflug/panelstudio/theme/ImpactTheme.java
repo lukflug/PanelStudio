@@ -7,9 +7,23 @@ import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IInterface;
 
 public class ImpactTheme extends ThemeBase {
+	int height,padding;
 
-	public ImpactTheme(IColorScheme scheme) {
+	public ImpactTheme (IColorScheme scheme, int height, int padding) {
 		super(scheme);
+		this.height=height;
+		this.padding=padding;
+		scheme.createSetting(this,"Title Color","The color for panel titles.",true,true,new Color(20,20,20,72),false);
+		scheme.createSetting(this,"Background Color","The panel background color.",true,true,new Color(20,20,20,48),false);
+		scheme.createSetting(this,"Hovered Color","The background color for hovered components.",true,true,new Color(20,20,20,64),false);
+		scheme.createSetting(this,"Outline Color","The main color for panel outlines.",true,true,new Color(20,20,20,72),false);
+		scheme.createSetting(this,"Active Font Color","The color for active text.",false,true,new Color(255,255,255),false);
+		scheme.createSetting(this,"Hovered Font Color","The color for hovered text.",false,true,new Color(192,192,192),false);
+		scheme.createSetting(this,"Inactive Font Color","The color for inactive text.",false,true,new Color(128,128,128),false);
+		scheme.createSetting(this,"Enabled Color","The color for enabled modules.",false,true,new Color(0,255,0),false);
+		scheme.createSetting(this,"Disabled Color","The  color for disabled modules.",false,true,new Color(255,0,0),false);
+		scheme.createSetting(this,"Highlight Color","The color for highlighted text.",false,true,new Color(0,0,255),false);
+		scheme.createSetting(this,"Tooltip Color","The color for description tooltips.",false,true,new Color(0,0,0),false);
 	}
 
 	@Override
@@ -147,8 +161,7 @@ public class ImpactTheme extends ThemeBase {
 
 	@Override
 	public int getBaseHeight() {
-		// TODO Auto-generated method stub
-		return 0;
+		return height+2*padding;
 	}
 
 	@Override
@@ -165,7 +178,6 @@ public class ImpactTheme extends ThemeBase {
 
 	@Override
 	public Color getFontColor(boolean focus) {
-		// TODO Auto-generated method stub
-		return null;
+		return scheme.getColor("");
 	}
 }
