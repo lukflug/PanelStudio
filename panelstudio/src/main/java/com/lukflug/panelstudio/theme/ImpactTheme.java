@@ -2,9 +2,11 @@ package com.lukflug.panelstudio.theme;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.Rectangle;
 
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IInterface;
+import com.lukflug.panelstudio.setting.ILabeled;
 
 public class ImpactTheme extends ThemeBase {
 	int height,padding;
@@ -107,56 +109,189 @@ public class ImpactTheme extends ThemeBase {
 
 	@Override
 	public IButtonRenderer<Void> getSmallButtonRenderer(int symbol, int logicalLevel, int graphicalLevel, boolean container) {
-		// TODO Auto-generated method stub
-		return null;
+		return new IButtonRenderer<Void>() {
+			@Override
+			public void renderButton(Context context, String title, boolean focus, Void state) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public int getDefaultHeight() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+		};
 	}
 
 	@Override
 	public IButtonRenderer<String> getKeybindRenderer(int logicalLevel, int graphicalLevel, boolean container) {
-		// TODO Auto-generated method stub
-		return null;
+		return new IButtonRenderer<String>() {
+			@Override
+			public void renderButton(Context context, String title, boolean focus, String state) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public int getDefaultHeight() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+		};
 	}
 
 	@Override
 	public ISliderRenderer getSliderRenderer(int logicalLevel, int graphicalLevel, boolean container) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ISliderRenderer() {
+			@Override
+			public void renderSlider(Context context, String title, String state, boolean focus, double value) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public int getDefaultHeight() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+		};
 	}
 
 	@Override
 	public IRadioRenderer getRadioRenderer(int logicalLevel, int graphicalLevel, boolean container) {
-		// TODO Auto-generated method stub
-		return null;
+		return new IRadioRenderer() {
+			@Override
+			public void renderItem(Context context, ILabeled[] items, boolean focus, int target, double state,
+					boolean horizontal) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public int getDefaultHeight(ILabeled[] items, boolean horizontal) {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+		};
 	}
 
 	@Override
 	public IResizeBorderRenderer getResizeRenderer() {
-		// TODO Auto-generated method stub
-		return null;
+		return new IResizeBorderRenderer() {
+			@Override
+			public void drawBorder(Context context, boolean focus) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public int getBorder() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+		};
 	}
 
 	@Override
 	public ITextFieldRenderer getTextRenderer(boolean embed, int logicalLevel, int graphicalLevel, boolean container) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ITextFieldRenderer() {
+			@Override
+			public int renderTextField(Context context, String title, boolean focus, String content, int position,
+					int select, int boxPosition, boolean insertMode) {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+
+			@Override
+			public int getDefaultHeight() {
+				return getBaseHeight();
+			}
+
+			@Override
+			public Rectangle getTextArea(Context context, String title) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public int transformToCharPos(Context context, String title, String content, int boxPosition) {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+		};
 	}
 
 	@Override
 	public ISwitchRenderer<Boolean> getToggleSwitchRenderer(int logicalLevel, int graphicalLevel, boolean container) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ISwitchRenderer<Boolean>() {
+			@Override
+			public void renderButton(Context context, String title, boolean focus, Boolean state) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public int getDefaultHeight() {
+				return getBaseHeight();
+			}
+
+			@Override
+			public Rectangle getOnField(Context context) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public Rectangle getOffField(Context context) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};
 	}
 
 	@Override
 	public ISwitchRenderer<String> getCycleSwitchRenderer(int logicalLevel, int graphicalLevel, boolean container) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ISwitchRenderer<String>() {
+			@Override
+			public void renderButton(Context context, String title, boolean focus, String state) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public int getDefaultHeight() {
+				return getBaseHeight();
+			}
+
+			@Override
+			public Rectangle getOnField(Context context) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public Rectangle getOffField(Context context) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};
 	}
 
 	@Override
 	public IColorPickerRenderer getColorPickerRenderer() {
-		// TODO Auto-generated method stub
-		return null;
+		// TODO maybe make it look more like impact
+		return new StandardColorPicker() {
+			@Override
+			public int getPadding() {
+				return padding;
+			}
+
+			@Override
+			public int getBaseHeight() {
+				return ImpactTheme.this.getBaseHeight();
+			}
+		};
 	}
 
 	@Override
