@@ -18,11 +18,15 @@ public interface IScrollBarRenderer<T> {
 	 * @param position the scroll position
 	 * @return the new scroll position based on mouse input
 	 */
-	public int renderScrollBar (Context context, boolean focus, T state, boolean horizontal, int height, int position);
+	public default int renderScrollBar (Context context, boolean focus, T state, boolean horizontal, int height, int position) {
+		return position;
+	}
 	
 	/**
 	 * Get default scroll bar thickness.
 	 * @return the default size
 	 */
-	public int getThickness();
+	public default int getThickness() {
+		return 0;
+	}
 }
