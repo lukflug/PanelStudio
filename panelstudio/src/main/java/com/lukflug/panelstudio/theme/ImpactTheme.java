@@ -16,17 +16,24 @@ public class ImpactTheme extends ThemeBase {
 		super(scheme);
 		this.height=height;
 		this.padding=padding;
-		scheme.createSetting(this,"Title Color","The color for panel titles.",true,true,new Color(20,20,20,48),false);
-		scheme.createSetting(this,"Background Color","The panel background color.",true,true,new Color(20,20,20,48),false);
-		scheme.createSetting(this,"Hovered Color","The background color for hovered components.",true,true,new Color(20,20,20,64),false);
-		scheme.createSetting(this,"Outline Color","The main color for panel outlines.",true,true,new Color(20,20,20,32),false);
+		scheme.createSetting(this,"Title Color","The color for panel titles.",true,true,new Color(16,16,16,198),false);
+		scheme.createSetting(this,"Background Color","The panel background color.",true,true,new Color(30,30,30,192),false);
+		scheme.createSetting(this,"Panel Outline Color","The main color for panel outlines.",false,true,new Color(20,20,20),false);
+		scheme.createSetting(this,"Component Outline Color","The main color for component outlines.",true,true,new Color(0,0,0,92),false);
 		scheme.createSetting(this,"Active Font Color","The color for active text.",false,true,new Color(255,255,255),false);
 		scheme.createSetting(this,"Hovered Font Color","The color for hovered text.",false,true,new Color(192,192,192),false);
 		scheme.createSetting(this,"Inactive Font Color","The color for inactive text.",false,true,new Color(128,128,128),false);
-		scheme.createSetting(this,"Enabled Color","The color for enabled modules.",false,true,new Color(0,255,0),false);
-		scheme.createSetting(this,"Disabled Color","The  color for disabled modules.",false,true,new Color(255,0,0),false);
+		scheme.createSetting(this,"Enabled Color","The color for enabled modules.",false,true,new Color(91,201,79),false);
+		scheme.createSetting(this,"Disabled Color","The  color for disabled modules.",false,true,new Color(194,48,48),false);
 		scheme.createSetting(this,"Highlight Color","The color for highlighted text.",false,true,new Color(0,0,255),false);
 		scheme.createSetting(this,"Tooltip Color","The color for description tooltips.",false,true,new Color(0,0,0,128),false);
+	}
+	
+	protected void renderOverlay (Context context) {
+		if (context.isHovered()) {
+			Color color=new Color(0,0,0,24);
+			context.getInterface().fillRect(context.getRect(),color,color,color,color);
+		}
 	}
 
 	@Override
@@ -85,7 +92,7 @@ public class ImpactTheme extends ThemeBase {
 			
 			@Override
 			public int getBorder() {
-				return 1;
+				return graphicalLevel<=0?1:0;
 			}
 			
 			@Override
@@ -110,8 +117,7 @@ public class ImpactTheme extends ThemeBase {
 			
 			@Override
 			public void renderPanelOverlay(Context context, boolean focus, T state, boolean open) {
-				Color color=scheme.getColor("Outline Color");
-				if (graphicalLevel<=0) color=ITheme.combineColors(color,new Color(0,0,0));
+				Color color=graphicalLevel<=0?scheme.getColor("Panel Outline Color"):scheme.getColor("Component Outline Color");
 				ITheme.drawRect(context.getInterface(),context.getRect(),color);
 			}
 
@@ -120,12 +126,11 @@ public class ImpactTheme extends ThemeBase {
 				if (graphicalLevel==0) {
 					Color color=scheme.getColor("Title Color");
 					context.getInterface().fillRect(context.getRect(),color,color,color,color);
-				}
-				if (open) {
-					Color color=scheme.getColor("Outline Color");
-					if (graphicalLevel<=0) color=ITheme.combineColors(color,new Color(0,0,0));
-					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+context.getSize().height,context.getSize().width,1),color,color,color,color);
-				}
+					if (open) {
+						Color colorA=scheme.getColor("Panel Outline Color");
+						context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+context.getSize().height,context.getSize().width,1),colorA,colorA,colorA,colorA);
+					}
+				} else renderOverlay(context);
 			}
 		};
 	}
@@ -140,8 +145,6 @@ public class ImpactTheme extends ThemeBase {
 		return new IEmptySpaceRenderer<T>() {
 			@Override
 			public void renderSpace(Context context, boolean focus, T state) {
-				// TODO Auto-generated method stub
-				
 			}
 		};
 	}
