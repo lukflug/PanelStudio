@@ -29,6 +29,11 @@ public class ImpactTheme extends ThemeBase {
 		scheme.createSetting(this,"Tooltip Color","The color for description tooltips.",false,true,new Color(0,0,0,128),false);
 	}
 	
+	protected void renderBackground (Context context, boolean focus) {
+		Color color=getBackgroundColor(focus);
+		context.getInterface().fillRect(new Rectangle(context.getPos().x+1,context.getPos().y+1,context.getSize().width-2,context.getSize().height-2),color,color,color,color);
+	}
+	
 	protected void renderOverlay (Context context) {
 		if (context.isHovered()) {
 			Color color=new Color(0,0,0,24);
@@ -84,10 +89,7 @@ public class ImpactTheme extends ThemeBase {
 		return new IPanelRenderer<T>() {
 			@Override
 			public void renderBackground (Context context, boolean focus) {
-				if (graphicalLevel==0) {
-					Color color=getBackgroundColor(focus);
-					context.getInterface().fillRect(new Rectangle(context.getPos().x+1,context.getPos().y+1,context.getSize().width-2,context.getSize().height-2),color,color,color,color);
-				}
+				if (graphicalLevel==0) ImpactTheme.this.renderBackground(context,focus);
 			}
 			
 			@Override
@@ -124,8 +126,6 @@ public class ImpactTheme extends ThemeBase {
 			@Override
 			public void renderTitleOverlay(Context context, boolean focus, T state, boolean open) {
 				if (graphicalLevel==0) {
-					Color color=scheme.getColor("Title Color");
-					context.getInterface().fillRect(context.getRect(),color,color,color,color);
 					if (open) {
 						Color colorA=scheme.getColor("Panel Outline Color");
 						context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+context.getSize().height,context.getSize().width,1),colorA,colorA,colorA,colorA);
@@ -154,13 +154,33 @@ public class ImpactTheme extends ThemeBase {
 		return new IButtonRenderer<T>() {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, T state) {
-				// TODO Auto-generated method stub
-				
+				if (graphicalLevel<=0) {
+					if (container) {
+						Color color=scheme.getColor("Title Color");
+						context.getInterface().fillRect(context.getRect(),color,color,color,color);
+					} else renderBackground(context,focus);
+				}
+				if (!container) {
+					Color color=graphicalLevel<=0?scheme.getColor("Panel Outline Color"):scheme.getColor("Component Outline Color");
+					ITheme.drawRect(context.getInterface(),context.getRect(),color);
+					renderOverlay(context);
+				}
+				int colorLevel=1;
+				if (type==Boolean.class) colorLevel=(Boolean)state?2:0;
+				else if (type==String.class) colorLevel=2;
+				if (container && graphicalLevel<=0) colorLevel=2;
+				if (context.isHovered() && context.getInterface().getMouse().x>context.getPos().x+context.getSize().height-padding && colorLevel<2) colorLevel++;
+				Color fontColor=getFontColor(focus);
+				if (colorLevel==2) fontColor=scheme.getColor("Active Font Color");
+				else if (colorLevel==0) fontColor=scheme.getColor("Inactive Font Color");
+				int xpos=context.getPos().x+context.getSize().height-padding;
+				if (container && graphicalLevel<=0) xpos=context.getPos().x+context.getSize().width/2-context.getInterface().getFontWidth(height,title)/2;
+				context.getInterface().drawString(new Point(xpos,context.getPos().y+padding),height,title,fontColor);
 			}
 
 			@Override
 			public int getDefaultHeight() {
-				return getBaseHeight();
+				return container?getBaseHeight()-2:getBaseHeight();
 			}
 		};
 	}
