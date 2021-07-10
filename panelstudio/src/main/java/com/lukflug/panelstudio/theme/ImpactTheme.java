@@ -31,7 +31,7 @@ public class ImpactTheme extends ThemeBase {
 	
 	protected void renderBackground (Context context, boolean focus) {
 		Color color=getBackgroundColor(focus);
-		context.getInterface().fillRect(new Rectangle(context.getPos().x+1,context.getPos().y+1,context.getSize().width-2,context.getSize().height-2),color,color,color,color);
+		context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y,context.getSize().width,context.getSize().height),color,color,color,color);
 	}
 	
 	protected void renderOverlay (Context context) {
@@ -57,6 +57,11 @@ public class ImpactTheme extends ThemeBase {
 	@Override
 	public IContainerRenderer getContainerRenderer(int logicalLevel, int graphicalLevel, boolean horizontal) {
 		return new IContainerRenderer() {
+			@Override
+			public void renderBackground (Context context, boolean focus) {
+				if (graphicalLevel==0) ImpactTheme.this.renderBackground(context,focus);
+			}
+			
 			@Override
 			public int getBorder() {
 				return 2;
@@ -87,11 +92,6 @@ public class ImpactTheme extends ThemeBase {
 	@Override
 	public <T> IPanelRenderer<T> getPanelRenderer(Class<T> type, int logicalLevel, int graphicalLevel) {
 		return new IPanelRenderer<T>() {
-			@Override
-			public void renderBackground (Context context, boolean focus) {
-				if (graphicalLevel==0) ImpactTheme.this.renderBackground(context,focus);
-			}
-			
 			@Override
 			public int getBorder() {
 				return graphicalLevel<=0?1:0;
@@ -145,6 +145,7 @@ public class ImpactTheme extends ThemeBase {
 		return new IEmptySpaceRenderer<T>() {
 			@Override
 			public void renderSpace(Context context, boolean focus, T state) {
+				if (graphicalLevel==0) renderBackground(context,focus);
 			}
 		};
 	}
@@ -169,13 +170,20 @@ public class ImpactTheme extends ThemeBase {
 				if (type==Boolean.class) colorLevel=(Boolean)state?2:0;
 				else if (type==String.class) colorLevel=2;
 				if (container && graphicalLevel<=0) colorLevel=2;
-				if (context.isHovered() && context.getInterface().getMouse().x>context.getPos().x+context.getSize().height-padding && colorLevel<2) colorLevel++;
+				Color valueColor=getFontColor(focus);
+				if (context.isHovered() && context.getInterface().getMouse().x>context.getPos().x+context.getSize().height-padding) {
+					if (colorLevel<2) colorLevel++;
+					valueColor=scheme.getColor("Active Font Color");
+				}
 				Color fontColor=getFontColor(focus);
 				if (colorLevel==2) fontColor=scheme.getColor("Active Font Color");
 				else if (colorLevel==0) fontColor=scheme.getColor("Inactive Font Color");
 				int xpos=context.getPos().x+context.getSize().height-padding;
 				if (container && graphicalLevel<=0) xpos=context.getPos().x+context.getSize().width/2-context.getInterface().getFontWidth(height,title)/2;
-				context.getInterface().drawString(new Point(xpos,context.getPos().y+padding),height,title,fontColor);
+				context.getInterface().drawString(new Point(xpos,context.getPos().y+padding-(container?1:0)),height,title,fontColor);
+				if (type==String.class) {
+					context.getInterface().drawString(new Point(context.getPos().x+context.getSize().width-padding-context.getInterface().getFontWidth(height,(String)state),context.getPos().y+padding-(container?1:0)),height,(String)state,valueColor);
+				}
 			}
 
 			@Override
@@ -206,13 +214,31 @@ public class ImpactTheme extends ThemeBase {
 		return new IButtonRenderer<String>() {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, String state) {
-				// TODO Auto-generated method stub
-				
+				if (graphicalLevel<=0) {
+					if (container) {
+						Color color=scheme.getColor("Title Color");
+						context.getInterface().fillRect(context.getRect(),color,color,color,color);
+					} else renderBackground(context,focus);
+				}
+				if (!container) {
+					Color color=graphicalLevel<=0?scheme.getColor("Panel Outline Color"):scheme.getColor("Component Outline Color");
+					ITheme.drawRect(context.getInterface(),context.getRect(),color);
+					renderOverlay(context);
+				}
+				Color valueColor=scheme.getColor("Active Font Color");
+				Color fontColor=getFontColor(focus);
+				if (context.isHovered() && context.getInterface().getMouse().x>context.getPos().x+context.getSize().height-padding) {
+					fontColor=scheme.getColor("Active Font Color");
+				}
+				int xpos=context.getPos().x+context.getSize().height-padding;
+				if (container && graphicalLevel<=0) xpos=context.getPos().x+context.getSize().width/2-context.getInterface().getFontWidth(height,title)/2;
+				context.getInterface().drawString(new Point(xpos,context.getPos().y+padding-(container?1:0)),height,title,fontColor);
+				context.getInterface().drawString(new Point(context.getPos().x+context.getSize().width-padding-context.getInterface().getFontWidth(height,(String)(focus?"...":state)),context.getPos().y+padding-(container?1:0)),height,(String)(focus?"...":state),valueColor);
 			}
 
 			@Override
 			public int getDefaultHeight() {
-				return getBaseHeight();
+				return container?getBaseHeight()-2:getBaseHeight();
 			}
 		};
 	}
@@ -222,13 +248,40 @@ public class ImpactTheme extends ThemeBase {
 		return new ISliderRenderer() {
 			@Override
 			public void renderSlider(Context context, String title, String state, boolean focus, double value) {
-				// TODO Auto-generated method stub
-				
+				if (graphicalLevel<=0) {
+					if (container) {
+						Color color=scheme.getColor("Title Color");
+						context.getInterface().fillRect(context.getRect(),color,color,color,color);
+					} else renderBackground(context,focus);
+				}
+				if (!container) {
+					Color color=graphicalLevel<=0?scheme.getColor("Panel Outline Color"):scheme.getColor("Component Outline Color");
+					ITheme.drawRect(context.getInterface(),context.getRect(),color);
+					renderOverlay(context);
+				}
+				Color valueColor=scheme.getColor("Active Font Color");
+				Color fontColor=getFontColor(focus);
+				if (context.isHovered() && context.getInterface().getMouse().x>context.getPos().x+context.getSize().height-padding) {
+					fontColor=scheme.getColor("Active Font Color");
+				}
+				int xpos=context.getPos().x+context.getSize().height-padding;
+				if (container && graphicalLevel<=0) xpos=context.getPos().x+context.getSize().width/2-context.getInterface().getFontWidth(height,title)/2;
+				context.getInterface().drawString(new Point(xpos,context.getPos().y+padding-(container?1:0)),height,title,fontColor);
+				if (context.isHovered()) {
+					context.getInterface().drawString(new Point(context.getPos().x+context.getSize().width-padding-context.getInterface().getFontWidth(height,(String)state),context.getPos().y+padding-(container?1:0)),height,(String)state,valueColor);
+				}
+				int separator=(int)Math.round((context.getSize().width-context.getSize().height+padding-(container?0:1))*value);
+				context.getInterface().fillRect(new Rectangle(context.getPos().x+context.getSize().height-padding,context.getPos().y+context.getSize().height-(container?1:2),separator,1),getFontColor(focus),getFontColor(focus),getFontColor(focus),getFontColor(focus));
 			}
 
 			@Override
 			public int getDefaultHeight() {
-				return getBaseHeight();
+				return container?getBaseHeight()-2:getBaseHeight();
+			}
+			
+			@Override
+			public Rectangle getSlideArea (Context context, String title, String state) {
+				return new Rectangle(context.getPos().x+context.getSize().height-padding,context.getPos().y,context.getSize().width-context.getSize().height+padding-(container?0:1),context.getSize().height);
 			}
 		};
 	}
@@ -255,14 +308,17 @@ public class ImpactTheme extends ThemeBase {
 		return new IResizeBorderRenderer() {
 			@Override
 			public void drawBorder(Context context, boolean focus) {
-				// TODO Auto-generated method stub
-				
+				Color color=getBackgroundColor(focus);
+				Rectangle rect=context.getRect();
+				context.getInterface().fillRect(new Rectangle(rect.x,rect.y,rect.width,getBorder()),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(rect.x,rect.y+rect.height-getBorder(),rect.width,getBorder()),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(rect.x,rect.y+getBorder(),getBorder(),rect.height-2*getBorder()),color,color,color,color);
+				context.getInterface().fillRect(new Rectangle(rect.x+rect.width-getBorder(),rect.y+getBorder(),getBorder(),rect.height-2*getBorder()),color,color,color,color);
 			}
 
 			@Override
 			public int getBorder() {
-				// TODO Auto-generated method stub
-				return 0;
+				return 2;
 			}
 		};
 	}
