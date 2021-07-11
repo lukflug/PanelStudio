@@ -15,9 +15,7 @@ public abstract class StandardColorPicker implements IColorPickerRenderer {
 		Color colorC=new Color(0,0,0,0),colorD=new Color(0,0,0);
 		context.getInterface().fillRect(context.getRect(),colorC,colorC,colorD,colorD);
 		Point p=new Point((int)Math.round(context.getPos().x+hsb[1]*(context.getSize().width-1)),(int)Math.round(context.getPos().y+(1-hsb[2])*(context.getSize().height-1)));
-		Color fontColor=new Color(255-color.getRed(),255-color.getGreen(),255-color.getBlue());
-		context.getInterface().fillRect(new Rectangle(p.x,p.y-getPadding(),1,2*getPadding()+1),fontColor,fontColor,fontColor,fontColor);
-		context.getInterface().fillRect(new Rectangle(p.x-getPadding(),p.y,2*getPadding()+1,1),fontColor,fontColor,fontColor,fontColor);
+		renderCursor(context,p,color);
 	}
 
 	@Override
@@ -36,6 +34,12 @@ public abstract class StandardColorPicker implements IColorPickerRenderer {
 	@Override
 	public int getDefaultHeight(int width) {
 		return Math.min(width,8*getBaseHeight());
+	}
+	
+	protected void renderCursor (Context context, Point p, Color color) {
+		Color fontColor=new Color(255-color.getRed(),255-color.getGreen(),255-color.getBlue());
+		context.getInterface().fillRect(new Rectangle(p.x,p.y-getPadding(),1,2*getPadding()+1),fontColor,fontColor,fontColor,fontColor);
+		context.getInterface().fillRect(new Rectangle(p.x-getPadding(),p.y,2*getPadding()+1,1),fontColor,fontColor,fontColor,fontColor);
 	}
 	
 	public abstract int getPadding();
