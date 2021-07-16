@@ -40,6 +40,59 @@ public class ImpactTheme extends ThemeBase {
 			context.getInterface().fillRect(context.getRect(),color,color,color,color);
 		}
 	}
+	
+	protected void renderSmallButton(Context context, String title, int symbol, boolean focus) {
+		Point points[]=new Point[3];
+		int padding=context.getSize().height<=12?(context.getSize().height<=8?2:4):6;
+		Rectangle rect=new Rectangle(context.getPos().x+padding/2,context.getPos().y+padding/2,context.getSize().height-2*(padding/2),context.getSize().height-2*(padding/2));
+		if (title==null) rect.x+=context.getSize().width/2-context.getSize().height/2;
+		Color color=getFontColor(focus);
+		if (context.isHovered()) color=scheme.getColor("Active Font Color");
+		switch (symbol) {
+		case ITheme.CLOSE:
+			context.getInterface().drawLine(new Point(rect.x,rect.y),new Point(rect.x+rect.width,rect.y+rect.height),color,color);
+			context.getInterface().drawLine(new Point(rect.x,rect.y+rect.height),new Point(rect.x+rect.width,rect.y),color,color);
+			break;
+		case ITheme.MINIMIZE:
+			context.getInterface().fillRect(new Rectangle(rect.x,rect.y+rect.height-2,rect.width,2),color,color,color,color);
+			break;
+		case ITheme.ADD:
+			if (rect.width%2==1) rect.width-=1;
+			if (rect.height%2==1) rect.height-=1;
+			context.getInterface().fillRect(new Rectangle(rect.x+rect.width/2-1,rect.y,2,rect.height),color,color,color,color);
+			context.getInterface().fillRect(new Rectangle(rect.x,rect.y+rect.height/2-1,rect.width,2),color,color,color,color);
+			break;
+		case ITheme.LEFT:
+			if (rect.height%2==1) rect.height-=1;
+			points[2]=new Point(rect.x+rect.width,rect.y);
+			points[0]=new Point(rect.x+rect.width,rect.y+rect.height);
+			points[1]=new Point(rect.x,rect.y+rect.height/2);
+			break;
+		case ITheme.RIGHT:
+			if (rect.height%2==1) rect.height-=1;
+			points[0]=new Point(rect.x,rect.y);
+			points[2]=new Point(rect.x,rect.y+rect.height);
+			points[1]=new Point(rect.x+rect.width,rect.y+rect.height/2);
+			break;
+		case ITheme.UP:
+			if (rect.width%2==1) rect.width-=1;
+			points[0]=new Point(rect.x,rect.y+rect.height);
+			points[2]=new Point(rect.x+rect.width,rect.y+rect.height);
+			points[1]=new Point(rect.x+rect.width/2,rect.y);
+			break;
+		case ITheme.DOWN:
+			if (rect.width%2==1) rect.width-=1;
+			points[2]=new Point(rect.x,rect.y);
+			points[0]=new Point(rect.x+rect.width,rect.y);
+			points[1]=new Point(rect.x+rect.width/2,rect.y+rect.height);
+			break;
+		}
+		if (symbol>=ITheme.LEFT && symbol<=ITheme.DOWN) {
+			context.getInterface().drawLine(points[0],points[1],color,color);
+			context.getInterface().drawLine(points[1],points[2],color,color);
+		}
+		if (title!=null) context.getInterface().drawString(new Point(context.getPos().x+(symbol==ITheme.NONE?padding:context.getSize().height),context.getPos().y+padding),height,title,getFontColor(focus));
+	}
 
 	@Override
 	public IDescriptionRenderer getDescriptionRenderer() {
@@ -125,10 +178,15 @@ public class ImpactTheme extends ThemeBase {
 
 			@Override
 			public void renderTitleOverlay(Context context, boolean focus, T state, boolean open) {
-				if (graphicalLevel==0) {
+				if (graphicalLevel<=0) {
 					Color colorA=scheme.getColor("Panel Outline Color");
 					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+context.getSize().height,context.getSize().width,1),colorA,colorA,colorA,colorA);
-				} else renderOverlay(context);
+				} else {
+					renderOverlay(context);
+					Context subContext=new Context(context,height,new Point(padding/2,padding/2),true,true);
+					subContext.setHeight(context.getSize().height-padding);
+					renderSmallButton(subContext,null,open?ITheme.DOWN:ITheme.RIGHT,focus);
+				}
 			}
 		};
 	}
@@ -213,8 +271,19 @@ public class ImpactTheme extends ThemeBase {
 		return new IButtonRenderer<Void>() {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, Void state) {
-				// TODO Auto-generated method stub
-				
+				if (graphicalLevel<=0) {
+					if (container) {
+						Color color=scheme.getColor("Title Color");
+						context.getInterface().fillRect(context.getRect(),color,color,color,color);
+					} else renderBackground(context,focus);
+				}
+				if (!container) {
+					Color color=graphicalLevel<=0?scheme.getColor("Panel Outline Color"):scheme.getColor("Component Outline Color");
+					ITheme.drawRect(context.getInterface(),context.getRect(),color);
+					renderOverlay(context);
+				}
+				renderOverlay(context);
+				if (!container || logicalLevel<=0) renderSmallButton(context,title,symbol,focus);
 			}
 
 			@Override
@@ -448,12 +517,12 @@ public class ImpactTheme extends ThemeBase {
 				context.getInterface().window(rect);
 				if (select>=0) {
 					int x3=rect.x+padding/2-offset+context.getInterface().getFontWidth(height,content.substring(0,select));
-					context.getInterface().fillRect(new Rectangle(Math.min(x1,x3),rect.y+padding-(container?1:0),Math.abs(x3-x1),height),highlightColor,highlightColor,highlightColor,highlightColor);
+					context.getInterface().fillRect(new Rectangle(Math.min(x1,x3),context.getPos().y+padding-(container?1:0),Math.abs(x3-x1),height),highlightColor,highlightColor,highlightColor,highlightColor);
 				}
-				context.getInterface().drawString(new Point(rect.x+padding/2-offset,rect.y+padding-(container?1:0)),height,content,textColor);
+				context.getInterface().drawString(new Point(rect.x+padding/2-offset,context.getPos().y+padding-(container?1:0)),height,content,textColor);
 				if ((System.currentTimeMillis()/500)%2==0 && focus) {
-					if (insertMode) context.getInterface().fillRect(new Rectangle(x1,rect.y+padding/2+height,x2-x1,1),textColor,textColor,textColor,textColor);
-					else context.getInterface().fillRect(new Rectangle(x1,rect.y+padding/2,1,height),textColor,textColor,textColor,textColor);
+					if (insertMode) context.getInterface().fillRect(new Rectangle(x1,context.getPos().y+padding-(container?1:0)+height,x2-x1,1),textColor,textColor,textColor,textColor);
+					else context.getInterface().fillRect(new Rectangle(x1,context.getPos().y+padding-(container?1:0),1,height),textColor,textColor,textColor,textColor);
 				}
 				context.getInterface().restore();
 				return boxPosition;
@@ -490,12 +559,30 @@ public class ImpactTheme extends ThemeBase {
 	}
 
 	@Override
-	public ISwitchRenderer<Boolean> getToggleSwitchRenderer(int logicalLevel, int graphicalLevel, boolean container) {
+	public ISwitchRenderer<Boolean> getToggleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new ISwitchRenderer<Boolean>() {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, Boolean state) {
-				// TODO Auto-generated method stub
-				
+				boolean effFocus=container?context.hasFocus():focus;
+				if (graphicalLevel<=0) {
+					if (container) {
+						Color color=scheme.getColor("Title Color");
+						context.getInterface().fillRect(context.getRect(),color,color,color,color);
+					} else renderBackground(context,effFocus);
+				}
+				if (!container) {
+					Color color=graphicalLevel<=0?scheme.getColor("Panel Outline Color"):scheme.getColor("Component Outline Color");
+					ITheme.drawRect(context.getInterface(),context.getRect(),color);
+					renderOverlay(context);
+				}
+				renderOverlay(context);
+				context.getInterface().drawString(new Point(context.getPos().x+padding,context.getPos().y+padding),height,title,getFontColor(focus));
+				Color fillColor=getMainColor(focus,state);
+				Rectangle rect=state?getOnField(context):getOffField(context);
+				context.getInterface().fillRect(rect,fillColor,fillColor,fillColor,fillColor);
+				rect=context.getRect();
+				rect=new Rectangle(rect.x+rect.width-2*rect.height+3*padding,rect.y+padding,2*rect.height-4*padding,rect.height-2*padding);
+				ITheme.drawRect(context.getInterface(),rect,scheme.getColor("Component Outline Color"));
 			}
 
 			@Override
@@ -505,14 +592,14 @@ public class ImpactTheme extends ThemeBase {
 
 			@Override
 			public Rectangle getOnField(Context context) {
-				// TODO Auto-generated method stub
-				return new Rectangle();
+				Rectangle rect=context.getRect();
+				return new Rectangle(rect.x+rect.width-rect.height+padding,rect.y+padding,rect.height-2*padding,rect.height-2*padding);
 			}
 
 			@Override
 			public Rectangle getOffField(Context context) {
-				// TODO Auto-generated method stub
-				return new Rectangle();
+				Rectangle rect=context.getRect();
+				return new Rectangle(rect.x+rect.width-2*rect.height+3*padding,rect.y+padding,rect.height-2*padding,rect.height-2*padding);
 			}
 		};
 	}
@@ -522,8 +609,37 @@ public class ImpactTheme extends ThemeBase {
 		return new ISwitchRenderer<String>() {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, String state) {
-				// TODO Auto-generated method stub
-				
+				boolean effFocus=container?context.hasFocus():focus;
+				Context subContext=new Context(context,context.getSize().width-2*context.getSize().height,new Point(0,0),true,true);
+				subContext.setHeight(context.getSize().height);
+				if (graphicalLevel<=0) {
+					if (container) {
+						Color color=scheme.getColor("Title Color");
+						context.getInterface().fillRect(subContext.getRect(),color,color,color,color);
+					} else renderBackground(subContext,effFocus);
+				}
+				if (!container) {
+					Color color=graphicalLevel<=0?scheme.getColor("Panel Outline Color"):scheme.getColor("Component Outline Color");
+					ITheme.drawRect(context.getInterface(),subContext.getRect(),color);
+					renderOverlay(subContext);
+				}
+				Color valueColor=getFontColor(effFocus);
+				if (context.isHovered() && context.getInterface().getMouse().x>subContext.getPos().x+subContext.getSize().height-padding) {
+					valueColor=scheme.getColor("Active Font Color");
+				}
+				Color fontColor=scheme.getColor("Active Font Color");
+				int xpos=context.getPos().x+context.getSize().height-padding;
+				if (container && graphicalLevel<=0) xpos=subContext.getPos().x+subContext.getSize().width/2-context.getInterface().getFontWidth(height,title)/2;
+				context.getInterface().drawString(new Point(xpos,subContext.getPos().y+padding-(container?1:0)),height,title,fontColor);
+				context.getInterface().drawString(new Point(subContext.getPos().x+subContext.getSize().width-padding-context.getInterface().getFontWidth(height,(String)state),subContext.getPos().y+padding-(container?1:0)),height,(String)state,valueColor);
+				Rectangle rect=getOnField(context);
+				subContext=new Context(context,rect.width,new Point(rect.x-context.getPos().x,0),true,true);
+				subContext.setHeight(rect.height);
+				getSmallButtonRenderer(ITheme.RIGHT,logicalLevel,graphicalLevel,false).renderButton(subContext,null,effFocus,null);
+				rect=getOffField(context);
+				subContext=new Context(context,rect.width,new Point(rect.x-context.getPos().x,0),true,true);
+				subContext.setHeight(rect.height);
+				getSmallButtonRenderer(ITheme.LEFT,logicalLevel,graphicalLevel,false).renderButton(subContext,null,effFocus,null);
 			}
 
 			@Override
@@ -533,14 +649,14 @@ public class ImpactTheme extends ThemeBase {
 
 			@Override
 			public Rectangle getOnField(Context context) {
-				// TODO Auto-generated method stub
-				return new Rectangle();
+				Rectangle rect=context.getRect();
+				return new Rectangle(rect.x+rect.width-rect.height,rect.y,rect.height,rect.height);
 			}
 
 			@Override
 			public Rectangle getOffField(Context context) {
-				// TODO Auto-generated method stub
-				return new Rectangle();
+				Rectangle rect=context.getRect();
+				return new Rectangle(rect.x+rect.width-2*rect.height,rect.y,rect.height,rect.height);
 			}
 		};
 	}
