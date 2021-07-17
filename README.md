@@ -1,22 +1,25 @@
 # PanelStudio
 A simple yet flexible library to create ClickGUIs designed for use in Minecraft utility mods. It was originally designed for a private client, but made open source, so that it could be used for [GameSense](https://github.com/IUDevman/gamesense-client). Here are some screenshots of what is possible with this library (note that these themes are examples and that one can make the GUI look like basically anything):
 
-* CyberHack Theme:
-![cyberhack](https://cdn.discordapp.com/attachments/780094001331961901/796061322261168198/2021-01-05_17.57.02.png)
-* GameSense 2.0 Theme:
-![gamesense20](https://cdn.discordapp.com/attachments/780094001331961901/796061336156373062/2021-01-05_17.57.07.png)
-* GameSense 2.1 Theme:
-![gamesense21](https://cdn.discordapp.com/attachments/780094001331961901/796061343086149662/2021-01-05_17.57.11.png)
-* PepsiMod Theme:
-![pepsimod](https://cdn.discordapp.com/attachments/780094001331961901/796061349981323274/2021-01-05_17.57.19.png)
-* GameSense 2.2 Theme:
-![gamesense22](https://cdn.discordapp.com/attachments/780094001331961901/796061357858488450/2021-01-05_17.57.23.png)
-* Future Theme:
-![future](https://cdn.discordapp.com/attachments/780094001331961901/796061366057435166/2021-01-05_17.57.27.png)
-* KAMI Blue Theme:
-![kamiblue](https://cdn.discordapp.com/attachments/780094001331961901/796061373058646058/2021-01-05_17.57.36.png)
-* Windows Theme:
-![windows](https://cdn.discordapp.com/attachments/780094001331961901/796061378686615572/2021-01-05_17.57.42.png)
+<details open>
+<summary>Themes</summary> <br>
+CyberHack Theme:
+<img alt="cyberhack" src=https://cdn.discordapp.com/attachments/780094001331961901/796061322261168198/2021-01-05_17.57.02.png> <br>
+GameSense 2.0 Theme:
+<img alt="gamesense20" src=https://cdn.discordapp.com/attachments/780094001331961901/796061336156373062/2021-01-05_17.57.07.png> <br>
+GameSense 2.1 Theme:
+<img alt="gamesense21" src=https://cdn.discordapp.com/attachments/780094001331961901/796061343086149662/2021-01-05_17.57.11.png> <br>
+PepsiMod Theme:
+<img alt="pepsimod" src=https://cdn.discordapp.com/attachments/780094001331961901/796061349981323274/2021-01-05_17.57.19.png> <br>
+GameSense 2.2 Theme:
+<img alt="gamesense22" src=https://cdn.discordapp.com/attachments/780094001331961901/796061357858488450/2021-01-05_17.57.23.png> <br> 
+Future Theme:
+<img alt="future" src=https://cdn.discordapp.com/attachments/780094001331961901/796061366057435166/2021-01-05_17.57.27.png> <br>
+KAMI Blue Theme:
+<img alt="kamiblue" src=https://cdn.discordapp.com/attachments/780094001331961901/796061373058646058/2021-01-05_17.57.36.png> <br>
+Windows Theme:
+<img alt="windows" src=https://cdn.discordapp.com/attachments/780094001331961901/796061378686615572/2021-01-05_17.57.42.png> <br>
+</details>
 
 This repository only includes the GameSense themes, however, since Cyber didn't want me to publish the other themes. The library has no depedencies (aside from Java 8), so it can be easily used for other purposes, aside from Minecraft utility mods. Thanks to Go_Hoosiers, for suggesting the name of this library. If you use this library, some attribution would be greatly appreciated. Consider visiting the PanelStudio discord server: https://discord.gg/E3DrF4XvUE.
 
@@ -44,7 +47,7 @@ repositories {
 }
 
 dependencies {
-	compile('com.lukflug:panelstudio:0.1.8')
+	compile('com.lukflug:panelstudio:0.1.11')
 }
 
 shadowJar {
@@ -204,7 +207,7 @@ Toggleable hudToggle=new Toggleable() {
 ```
 
 ## Reference
-For a list of classes and methods, consult the [javadoc](https://lukflug.github.io/javadoc/panelstudio/0.1.10/overview-summary.html). For an example implementation, consult the GameSense source code.
+For a list of classes and methods, consult the [javadoc](https://lukflug.github.io/javadoc/panelstudio/0.1.11/overview-summary.html). For an example implementation, consult the GameSense source code.
 
 ## Creating custom themes
 The components provided by PanelStudio use the methods in the `Renderer` interface to render. A `Theme` consist of three renderers: one for the single components (settings), one for the containers (modules) and one for the panels (categories). To see how themes are implemented, consult the package `com.lukflug.panelstudio.theme`.
