@@ -1,17 +1,18 @@
 package com.lukflug.panelstudio.mc8fabric;
 
-import com.lukflug.panelstudio.ClickGUI;
-import com.lukflug.panelstudio.Interface;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
+import java.awt.Point;
+
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
-import java.awt.*;
+import com.lukflug.panelstudio.base.IInterface;
+import com.lukflug.panelstudio.container.GUI;
+
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 
 /**
- * Implementation of Minecraft's GuiScreen that renders a PanelStudio GUI.
- * Ported to 1.8 legacy fabric by
- * @author NirvanaNevermind
+ * Implementation of Minecraft's {@link Screen} that renders a PanelStudio GUI.
  * @author lukflug
  */
 public abstract class MinecraftGUI extends Screen {
@@ -27,42 +28,48 @@ public abstract class MinecraftGUI extends Screen {
 	 * Current right mouse button state.
 	 */
 	private boolean rButton=false;
+	/**
+	 * Last rendering time.
+	 */
+	private long lastTime;
 	
 	/**
 	 * Displays the GUI.
 	 */
 	public void enterGUI() {
 		MinecraftClient.getInstance().openScreen(this);
-		getGUI().enter();
 	}
 	
 	/**
 	 * Closes the GUI.
 	 */
 	public void exitGUI() {
-		getGUI().exit();
 		MinecraftClient.getInstance().openScreen(null);
 	}
 	
 	/**
-	 * Updates the matrix buffers and renders the GUI.
+	 * Renders the GUI.
 	 */
 	protected void renderGUI() {
-		getInterface().getMatrices();
-		GLInterface.begin();
+		lastTime=System.currentTimeMillis();
+		getInterface().begin(true);
 		getGUI().render();
-		GLInterface.end();
+		getInterface().end(true);
 	}
 	
-	/**
-	 * Draws the screen, updates the mouse position and handles scroll events.
-	 * @param mouseX current mouse x position
-	 * @param mouseY current mouse y position
-	 * @param partialTicks partial tick count
-	 */
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
-		mouse=new Point(mouseX,mouseY);
+	public void init() {
+		getGUI().enter();
+	}
+	
+	@Override
+	public void removed() {
+		getGUI().exit();
+	}
+	
+	@Override
+	public void render (int mouseX, int mouseY, float partialTicks) {
+		mouse=getInterface().screenToGui(new Point(Mouse.getX(),Mouse.getY()));
 		renderGUI();
 		int scroll=Mouse.getDWheel();
 		if (scroll!=0) {
@@ -71,97 +78,91 @@ public abstract class MinecraftGUI extends Screen {
 		}
 	}
 
-	/**
-	 * Updates {@link #lButton} and {@link #rButton}.
-	 * @param mouseX current mouse x position
-	 * @param mouseY current mouse y position
-	 * @param clickedButton number of button being clicked
-	 */
 	@Override
-	public void mouseClicked(int mouseX, int mouseY, int clickedButton) {
-		mouse=new Point(mouseX,mouseY);
+	public void mouseClicked (int mouseX, int mouseY, int clickedButton) {
+		mouse=getInterface().screenToGui(new Point(Mouse.getX(),Mouse.getY()));
 		switch (clickedButton) {
-		case Interface.LBUTTON:
+		case IInterface.LBUTTON:
 			lButton=true;
 			break;
-		case Interface.RBUTTON:
+		case IInterface.RBUTTON:
 			rButton=true;
 			break;
 		}
 		getGUI().handleButton(clickedButton);
 	}
 
-	/**
-	 * Updates {@link #lButton} and {@link #rButton}.
-	 * @param mouseX current mouse x position
-	 * @param mouseY current mouse y position
-	 * @param releaseButton number of button being released
-	 */
 	@Override
-	public void mouseReleased(int mouseX, int mouseY, int releaseButton) {
-		mouse=new Point(mouseX,mouseY);
+	public void mouseReleased (int mouseX, int mouseY, int releaseButton) {
+		mouse=getInterface().screenToGui(new Point(Mouse.getX(),Mouse.getY()));
 		switch (releaseButton) {
-		case Interface.LBUTTON:
+		case IInterface.LBUTTON:
 			lButton=false;
-		break;
-		case Interface.RBUTTON:
+			break;
+		case IInterface.RBUTTON:
 			rButton=false;
 			break;
 		}
 		getGUI().handleButton(releaseButton);
 	}
 	
-	/**
-	 * Handles the current keys being typed.
-	 * @param typedChar character being typed
-	 * @param keyCode scancode of key being typed
-	 */
 	@Override
-	protected void keyPressed(char typedChar, int keyCode) {
-		if (keyCode == 1) exitGUI();
-		else getGUI().handleKey(keyCode);
+	protected void keyPressed (char typedChar, int keyCode) {
+		if (keyCode == Keyboard.KEY_ESCAPE) exitGUI();
+		else {
+			getGUI().handleKey(keyCode);
+			getGUI().handleChar(typedChar);
+		}
 	}
 
-	/**
-	 * Returns false.
-	 * @return returns false
-	 */
 	@Override
 	public boolean shouldPauseGame() {
 		return false;
 	}
 	
 	/**
-	 * Get the {@link ClickGUI} to be rendered.
-	 * @return current ClickGUI
+	 * Get the {@link GUI} to be rendered.
+	 * @return current GUI
 	 */
-	protected abstract ClickGUI getGUI();
+	protected abstract GUI getGUI();
+	
 	/**
 	 * Get current {@link GUIInterface}.
 	 * @return the current interface
 	 */
 	protected abstract GUIInterface getInterface();
+	
 	/**
 	 * Get current scroll speed.
 	 * @return the scroll speed
 	 */
 	protected abstract int getScrollSpeed();
 	
+	
 	/**
 	 * Implementation of {@link GLInterface} to be used with {@link MinecraftGUI}
 	 * @author lukflug
 	 */
 	public abstract class GUIInterface extends GLInterface {
+		/**
+		 * Constructor.
+		 * @param clipX whether to clip in the horizontal direction
+		 */
 		public GUIInterface (boolean clipX) {
 			super(clipX);
 		}
 		
 		@Override
-		public boolean getButton(int button) {
+		public long getTime() {
+			return lastTime;
+		}
+		
+		@Override
+		public boolean getButton (int button) {
 			switch (button) {
-			case Interface.LBUTTON:
+			case IInterface.LBUTTON:
 				return lButton;
-			case Interface.RBUTTON:
+			case IInterface.RBUTTON:
 				return rButton;
 			}
 			return false;

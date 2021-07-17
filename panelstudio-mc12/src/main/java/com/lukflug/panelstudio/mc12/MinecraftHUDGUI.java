@@ -1,26 +1,31 @@
 package com.lukflug.panelstudio.mc12;
 
-import com.lukflug.panelstudio.ClickGUI;
-import com.lukflug.panelstudio.hud.HUDClickGUI;
+import org.lwjgl.input.Keyboard;
 
-import net.minecraft.client.Minecraft;
+import com.lukflug.panelstudio.container.GUI;
+import com.lukflug.panelstudio.hud.HUDGUI;
 
 /**
- * Class designed for GUIs with HUDs.
+ * An extension of {@link MinecraftGUI} for HUD editors.
  * @author lukflug
  */
 public abstract class MinecraftHUDGUI extends MinecraftGUI {
-	protected boolean hudEditor=false;
+	/**
+	 * Whether {@link GUI#enter()} has been called.
+	 */
+	private boolean guiOpened=false;
 	
 	@Override
 	public void enterGUI() {
-		hudEditor=false;
+		if (!getGUI().getGUIVisibility().isOn()) getGUI().getGUIVisibility().toggle();
+		if (!getGUI().getHUDVisibility().isOn()) getGUI().getHUDVisibility().toggle();
 		super.enterGUI();
 	}
 	
 	@Override
 	public void exitGUI() {
-		hudEditor=false;
+		if (getGUI().getGUIVisibility().isOn()) getGUI().getGUIVisibility().toggle();
+		if (getGUI().getHUDVisibility().isOn()) getGUI().getHUDVisibility().toggle();
 		super.exitGUI();
 	}
 
@@ -28,16 +33,31 @@ public abstract class MinecraftHUDGUI extends MinecraftGUI {
 	 * Open the HUD editor.
 	 */
 	public void enterHUDEditor() {
-		hudEditor=true;
-		if (getHUDGUI().isOn()) getHUDGUI().toggle();
-		Minecraft.getMinecraft().displayGuiScreen(this);
+		if (getGUI().getGUIVisibility().isOn()) getGUI().getGUIVisibility().toggle();
+		if (!getGUI().getHUDVisibility().isOn()) getGUI().getHUDVisibility().toggle();
+		super.enterGUI();
+	}
+	
+	@Override
+	public void initGui() {
+	}
+	
+	@Override
+	public void onGuiClosed() {
+	}
+	
+	@Override
+	protected void renderGUI() {
+		if (!guiOpened) getGUI().enter();
+		guiOpened=true;
+		super.renderGUI();
 	}
 	
 	/**
-	 * Render function to be called when the GUI is closed to render the HUD.
+	 * Render function to be called even when the GUI is closed.
 	 */
 	public void render() {
-		if (!getHUDGUI().isOn() && !hudEditor) renderGUI();
+		if (!getGUI().getGUIVisibility().isOn() && !getGUI().getHUDVisibility().isOn()) renderGUI();
 	}
 	
 	/**
@@ -45,17 +65,9 @@ public abstract class MinecraftHUDGUI extends MinecraftGUI {
 	 * @param scancode the key scancode
 	 */
 	public void handleKeyEvent (int scancode) {
-		if (scancode!=1 && !getHUDGUI().isOn() && !hudEditor) getHUDGUI().handleKey(scancode);
+		if (scancode!=Keyboard.KEY_ESCAPE && !getGUI().getGUIVisibility().isOn() && !getGUI().getGUIVisibility().isOn()) getGUI().handleKey(scancode);
 	}
-	
-	/**
-	 * Get the {@link HUDClickGUI} to be rendered.
-	 * @return current ClickGUI
-	 */
-	protected abstract HUDClickGUI getHUDGUI();
 
 	@Override
-	protected ClickGUI getGUI() {
-		return getHUDGUI();
-	}
+	protected abstract HUDGUI getGUI();
 }

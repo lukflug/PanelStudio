@@ -1,0 +1,48 @@
+
+buildscript {
+	repositories {
+		jcenter()
+		maven {
+			name = "Fabric"
+			url = "https://maven.fabricmc.net/"
+		}
+	}
+	dependencies {
+		classpath "net.fabricmc:fabric-loom:${loomVersion}"
+	}
+}
+
+apply plugin: "fabric-loom"
+
+minecraft {
+	remapMod=false
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${minecraft16fabric}"
+	mappings "net.fabricmc:yarn:${mappings16fabric}:v2"
+	annotationProcessor "org.ow2.asm:asm:9.0"
+	annotationProcessor "org.ow2.asm:asm-analysis:9.0"
+	annotationProcessor "org.ow2.asm:asm-commons:9.0"
+	annotationProcessor "org.ow2.asm:asm-tree:9.0"
+	annotationProcessor "org.ow2.asm:asm-util:9.0"
+	compile project(":panelstudio")
+}
+
+processResources {
+	inputs.property "version", project.version
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
+}
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			pom {
+				name = "PanelStudio-MC16-Fabric"
+				description = "A supplement to PanelStudio desgined for FabricMC 1.16.x."
+			}
+		}
+	}
+}

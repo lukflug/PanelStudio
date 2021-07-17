@@ -3,7 +3,7 @@
 	"id": "panelstudio",
 	"version": "${version}",
 	"name": "PanelStudio-MC8-Fabric",
-	"description": "A simple yet flexible library to create ClickGUIs designed for use in Minecraft utility mods.",
+	"description": "A supplement to PanelStudio desgined for FabricMC 1.8.9.",
 	"authors": ["NirvanaNevermind","lukflug"],
 	"contact": {
 		"homepage": "https://lukflug.github.io",
@@ -12,7 +12,7 @@
 	"license": "MIT",
 	"environment": "*",
 	"depends": {
-		"minecraft": "1.8.x"
+		"minecraft": "1.8.9"
 	}
 }
 

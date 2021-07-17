@@ -1,228 +1,157 @@
 package com.lukflug.panelstudio.hud;
 
-import java.awt.Color;
 import java.awt.Point;
-import java.awt.Rectangle;
 
-import com.lukflug.panelstudio.Animation;
-import com.lukflug.panelstudio.Context;
-import com.lukflug.panelstudio.DraggableContainer;
-import com.lukflug.panelstudio.FixedComponent;
-import com.lukflug.panelstudio.Interface;
-import com.lukflug.panelstudio.PanelConfig;
-import com.lukflug.panelstudio.settings.Toggleable;
-import com.lukflug.panelstudio.theme.Renderer;
-import com.lukflug.panelstudio.theme.RendererProxy;
+import com.lukflug.panelstudio.base.AnimatedToggleable;
+import com.lukflug.panelstudio.base.Animation;
+import com.lukflug.panelstudio.base.Context;
+import com.lukflug.panelstudio.base.IBoolean;
+import com.lukflug.panelstudio.base.IInterface;
+import com.lukflug.panelstudio.base.IToggleable;
+import com.lukflug.panelstudio.component.ComponentProxy;
+import com.lukflug.panelstudio.component.DraggableComponent;
+import com.lukflug.panelstudio.component.IComponentProxy;
+import com.lukflug.panelstudio.component.IFixedComponent;
+import com.lukflug.panelstudio.config.IPanelConfig;
+import com.lukflug.panelstudio.setting.Labeled;
+import com.lukflug.panelstudio.theme.IButtonRenderer;
+import com.lukflug.panelstudio.theme.IButtonRendererProxy;
+import com.lukflug.panelstudio.theme.IPanelRenderer;
+import com.lukflug.panelstudio.theme.IPanelRendererProxy;
+import com.lukflug.panelstudio.theme.ITheme;
+import com.lukflug.panelstudio.widget.ClosableComponent;
+import com.lukflug.panelstudio.widget.ToggleButton;
 
-/**
- * Panel holding an HUD component.
- * @author lukflug
- */
-public class HUDPanel extends DraggableContainer {
-	/**
-	 * Whether GUI is open.
-	 */
-	protected Toggleable guiOpen;
-	/**
-	 * The HUD component.
-	 */
-	protected FixedComponent component;
+public class HUDPanel<T extends IFixedComponent> extends DraggableComponent<HUDPanel<T>.HUDPanelComponent> {
+	protected T component;
+	protected HUDPanel<T>.HUDPanelComponent panel;
+	protected IBoolean renderState;
 	
-	/**
-	 * Constructor.
-	 * @param component the component
-	 * @param renderer the renderer for this container
-	 * @param open toggleable indicating whether the container is open or closed
-	 * @param animation the animation for opening and closing this container
-	 * @param guiOpen whether to accept input and render container itself or not
-	 * @param minBorder the minimum border for the container
-	 */
-	public HUDPanel(FixedComponent component, Renderer renderer, Toggleable open, Animation animation, Toggleable guiOpen, int minBorder) {
-		super(component.getTitle(),null,new HUDRenderer(renderer,guiOpen,minBorder),open,animation,null,new Point(0,0),0);
-		addComponent(component);
-		this.guiOpen=guiOpen;
+	public HUDPanel (T component, IToggleable state, Animation animation, ITheme theme, IBoolean renderState, int border) {
 		this.component=component;
-		bodyDrag=true;
+		panel=new HUDPanelComponent(state,animation,theme,renderState,border);
+		this.renderState=renderState;
 	}
 	
-	/**
-	 * Mask out input, if GUI is turned off.
-	 */
 	@Override
+	public HUDPanel<T>.HUDPanelComponent getComponent() {
+		return panel;
+	}
+	
 	public void handleButton (Context context, int button) {
-		if (guiOpen.isOn()) super.handleButton(context,button);
+		if (renderState.isOn()) super.handleButton(context,button);
+		else super.getHeight(context);
 	}
-
-	/**
-	 * Mask out input, if GUI is turned off.
-	 */
-	@Override
+	
 	public void handleScroll (Context context, int diff) {
-		if (guiOpen.isOn()) super.handleScroll(context,diff);
-	}
-	
-	/**
-	 * Gets position from child component.
-	 */
-	@Override
-	public Point getPosition (Interface inter) {
-		position=component.getPosition(inter);
-		position.translate(0,-renderer.getHeight(open.getValue()!=0)-renderer.getOffset());
-		return super.getPosition(inter);
-	}
-
-	/**
-	 * Sets position of child component.
-	 */
-	@Override
-	public void setPosition (Interface inter, Point position) {
-		component.setPosition(inter,new Point(position.x,position.y+renderer.getHeight(open.getValue()!=0)+renderer.getOffset()));
-	}
-	
-	/**
-	 * Get the child component width.
-	 */
-	@Override
-	public int getWidth (Interface inter) {
-		return component.getWidth(inter)+renderer.getBorder()*2+renderer.getLeftBorder(scroll)+renderer.getRightBorder(scroll);
-	}
-	
-	/**
-	 * Disable clipping, if container fully open.
-	 */
-	@Override
-	protected Rectangle getClipRect (Context context, int height) {
-		if (open.getValue()!=1) return super.getClipRect(context,height);
-		else return null;
-	}
-
-	@Override
-	public void saveConfig(Interface inter, PanelConfig config) {
-		component.saveConfig(inter,config);
-		config.saveState(open.isOn());
-	}
-
-	@Override
-	public void loadConfig(Interface inter, PanelConfig config) {
-		component.loadConfig(inter,config);
-		if (open.isOn()!=config.loadState()) open.toggle();
+		if (renderState.isOn()) super.handleScroll(context,diff);
+		else super.getHeight(context);
 	}
 	
 	
-	/**
-	 * Proxy for a {@link Renderer}, doesn't display container, when GUI is off.
-	 * @author lukflug
-	 */
-	protected static class HUDRenderer extends RendererProxy {
-		/**
-		 * Base renderer.
-		 */
-		Renderer renderer;
-		/**
-		 * Whether GUI is open.
-		 */
-		protected Toggleable guiOpen;
-		/**
-		 * Minimum border.
-		 */
-		protected int minBorder;
+	protected class HUDPanelComponent implements IFixedComponent,IComponentProxy<ComponentProxy<ClosableComponent<ToggleButton,ComponentProxy<T>>>> {
+		protected ComponentProxy<ClosableComponent<ToggleButton,ComponentProxy<T>>> closable;
+		protected IButtonRenderer<Boolean> titleRenderer;
+		protected IPanelRenderer<Boolean> panelRenderer;
+		protected int border;
 		
-		/**
-		 * Constructor.
-		 * @param renderer the base renderer
-		 * @param guiOpen whether to accept input and render container itself or not
-	 * @param minBorder the minimum border for the container
-		 */
-		public HUDRenderer (Renderer renderer, Toggleable guiOpen, int minBorder) {
-			this.renderer=renderer;
-			this.guiOpen=guiOpen;
-			this.minBorder=minBorder;
-		}
+		public HUDPanelComponent (IToggleable state, Animation animation, ITheme theme, IBoolean renderState, int border) {
+			this.border=border;
+			panelRenderer=theme.getPanelRenderer(Boolean.class,0,0);
+			titleRenderer=theme.getButtonRenderer(Boolean.class,0,0,true);
+			closable=getWrappedDragComponent(new ClosableComponent<ToggleButton,ComponentProxy<T>>(new ToggleButton(new Labeled(component.getTitle(),null,()->component.isVisible()),new IToggleable() {
+				@Override
+				public boolean isOn() {
+					return state.isOn();
+				}
 
-		/**
-		 * Returns the offset defined by the base renderer, if it is larger than {@link #minBorder}.
-		 * Otherwise it will return {@link #minBorder}.
-		 */
-		@Override
-		public int getOffset() {
-			return Math.max(renderer.getOffset(),minBorder);
-		}
+				@Override
+				public void toggle() {
+				}
+			},new IButtonRendererProxy<Boolean>() {
+				@Override
+				public void renderButton (Context context, String title, boolean focus, Boolean state) {
+					if (renderState.isOn()) IButtonRendererProxy.super.renderButton(context,title,focus,state);
+				}
+				
+				@Override
+				public IButtonRenderer<Boolean> getRenderer() {
+					return titleRenderer;
+				}
+			}),new ComponentProxy<T>(component) {
+				@Override
+				public int getHeight (int height) {
+					return height+2*border;
+				}
+				
+				@Override
+				public Context getContext (Context context) {
+					return new Context(context,context.getSize().width-2*border,new Point(border,border),context.hasFocus(),context.onTop());
+				}
+			},()->state.isOn(),new AnimatedToggleable(state,animation),new IPanelRendererProxy<Boolean>() {
+				@Override
+				public void renderBackground (Context context, boolean focus) {
+					if (renderState.isOn()) IPanelRendererProxy.super.renderBackground(context,focus);
+				}
+				
+				@Override
+				public void renderPanelOverlay(Context context, boolean focus, Boolean state, boolean open) {
+					if (renderState.isOn()) IPanelRendererProxy.super.renderPanelOverlay(context,focus,state,open);
+				}
 
-		/**
-		 * Returns the border defined by the base renderer, if it is larger than {@link #minBorder}.
-		 * Otherwise it will return {@link #minBorder}.
-		 */
-		@Override
-		public int getBorder() {
-			return Math.max(renderer.getBorder(),minBorder);
-		}
+				@Override
+				public void renderTitleOverlay(Context context, boolean focus, Boolean state, boolean open) {
+					if (renderState.isOn()) IPanelRendererProxy.super.renderTitleOverlay(context,focus,state,open);
+				}
 
-		@Override
-		public void renderTitle(Context context, String text, boolean focus) {
-			if (guiOpen.isOn()) renderer.renderTitle(context,text,focus);
-		}
-
-		@Override
-		public void renderTitle(Context context, String text, boolean focus, boolean active) {
-			if (guiOpen.isOn()) renderer.renderTitle(context,text,focus,active);
-		}
-
-		@Override
-		public void renderTitle(Context context, String text, boolean focus, boolean active, boolean open) {
-			if (guiOpen.isOn()) renderer.renderTitle(context,text,focus,open);
-		}
-
-		@Override
-		public void renderRect(Context context, String text, boolean focus, boolean active, Rectangle rectangle, boolean overlay) {
-			if (guiOpen.isOn()) renderer.renderRect(context,text,focus,active,rectangle,overlay);
-		}
-
-		@Override
-		public void renderBackground(Context context, boolean focus) {
-			if (guiOpen.isOn()) renderer.renderBackground(context,focus);
-		}
-
-		@Override
-		public void renderBorder(Context context, boolean focus, boolean active, boolean open) {
-			if (guiOpen.isOn()) renderer.renderBorder(context,focus,active,open);
-		}
-		
-		@Override
-		public int renderScrollBar (Context context, boolean focus, boolean active, boolean scroll, int childHeight, int scrollPosition) {
-			if (guiOpen.isOn()) return renderer.renderScrollBar(context,focus,active,scroll,childHeight,scrollPosition);
-			else return scrollPosition;
-		}
-
-		/**
-		 * Returns invisible color, if GUI is off.
-		 */
-		@Override
-		public Color getMainColor(boolean focus, boolean active) {
-			if (guiOpen.isOn()) return renderer.getMainColor(focus,active);
-			else return new Color(0,0,0,0);
-		}
-
-		/**
-		 * Returns invisible color, if GUI is off.
-		 */
-		@Override
-		public Color getBackgroundColor(boolean focus) {
-			if (guiOpen.isOn()) return renderer.getBackgroundColor(focus);
-			else return new Color(0,0,0,0);
-		}
-
-		/**
-		 * Returns invisible color, if GUI is off.
-		 */
-		@Override
-		public Color getFontColor(boolean focus) {
-			if (guiOpen.isOn()) return renderer.getFontColor(focus);
-			else return new Color(0,0,0,0);
+				@Override
+				public IPanelRenderer<Boolean> getRenderer() {
+					return panelRenderer;
+				}
+			},false));
 		}
 
 		@Override
-		protected Renderer getRenderer() {
-			return renderer;
+		public ComponentProxy<ClosableComponent<ToggleButton,ComponentProxy<T>>> getComponent() {
+			return closable;
+		}
+
+		@Override
+		public Point getPosition(IInterface inter) {
+			Point pos=component.getPosition(inter);
+			pos.translate(-panelRenderer.getLeft()-border,-panelRenderer.getTop()-titleRenderer.getDefaultHeight()-panelRenderer.getBorder()-border);
+			return pos;
+		}
+
+		@Override
+		public void setPosition(IInterface inter, Point position) {
+			position.translate(panelRenderer.getLeft()+border,panelRenderer.getTop()+titleRenderer.getDefaultHeight()+panelRenderer.getBorder()+border);
+			component.setPosition(inter,position);
+		}
+
+		@Override
+		public int getWidth(IInterface inter) {
+			return component.getWidth(inter)+panelRenderer.getLeft()+panelRenderer.getRight()+2*border;
+		}
+
+		@Override
+		public boolean savesState() {
+			return component.savesState();
+		}
+
+		@Override
+		public void saveConfig(IInterface inter, IPanelConfig config) {
+			component.saveConfig(inter,config);
+		}
+
+		@Override
+		public void loadConfig(IInterface inter, IPanelConfig config) {
+			component.loadConfig(inter,config);
+		}
+
+		@Override
+		public String getConfigName() {
+			return component.getConfigName();
 		}
 	}
 }

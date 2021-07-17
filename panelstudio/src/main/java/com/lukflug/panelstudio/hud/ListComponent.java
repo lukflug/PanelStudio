@@ -1,42 +1,26 @@
 package com.lukflug.panelstudio.hud;
 
+import java.awt.Dimension;
 import java.awt.Point;
 
-import com.lukflug.panelstudio.Context;
-import com.lukflug.panelstudio.Interface;
-import com.lukflug.panelstudio.PanelConfig;
-import com.lukflug.panelstudio.theme.Renderer;
+import com.lukflug.panelstudio.base.Context;
+import com.lukflug.panelstudio.base.IInterface;
+import com.lukflug.panelstudio.config.IPanelConfig;
+import com.lukflug.panelstudio.setting.ILabeled;
 
-/**
- * HUD component that consists of a list of strings.
- * @author lukflug
- */
 public class ListComponent extends HUDComponent {
-	/**
-	 * The list to be rendered.
-	 */
 	protected HUDList list;
-	/**
-	 * Flag saving the state of whether to sort up.
-	 */
 	protected boolean lastUp=false;
-	/**
-	 * Flag saving the state of whether to sort right.
-	 */
 	protected boolean lastRight=false;
+	protected int height,border;
 	
-	/**
-	 * Constructor.
-	 * @param name the title of the component
-	 * @param renderer the renderer for the component
-	 * @param position the initial position
-	 * @param list the list to be rendered
-	 */
-	public ListComponent (String name, Renderer renderer, Point position, HUDList list) {
-		super(name,renderer,position);
+	public ListComponent (ILabeled label, Point position, String configName, HUDList list, int height, int border) {
+		super(label,position,configName);
 		this.list=list;
+		this.height=height;
+		this.border=border;
 	}
-
+	
 	@Override
 	public void render (Context context) {
 		super.render(context);
@@ -44,72 +28,67 @@ public class ListComponent extends HUDComponent {
 			String s=list.getItem(i);
 			Point p=context.getPos();
 			if (list.sortUp()) {
-				p.translate(0,context.getSize().height-(i+1)*context.getInterface().getFontHeight());
+				p.translate(0,(height+border)*(list.getSize()-1-i));
 			} else {
-				p.translate(0,i*context.getInterface().getFontHeight());
+				p.translate(0,i*(height+border));
 			}
 			if (list.sortRight()) {
-				p.translate(getWidth(context.getInterface())-context.getInterface().getFontWidth(s),0);
+				p.translate(getWidth(context.getInterface())-context.getInterface().getFontWidth(height,s),0);
 			}
-			context.getInterface().drawString(p,s,list.getItemColor(i));
+			context.getInterface().drawString(p,height,s,list.getItemColor(i));
 		}
 	}
 	
 	@Override
-	public Point getPosition (Interface inter) {
-		int width=getWidth(inter);
-		int height=renderer.getHeight(false)+(list.getSize()-1)*inter.getFontHeight();
+	public Point getPosition (IInterface inter) {
+		Dimension size=getSize(inter);
 		if (lastUp!=list.sortUp()) {
-			if (list.sortUp()) position.translate(0,height);
-			else position.translate(0,-height);
+			if (list.sortUp()) position.translate(0,size.height);
+			else position.translate(0,-size.height);
 			lastUp=list.sortUp();
 		}
 		if (lastRight!=list.sortRight()) {
-			if (list.sortRight()) position.translate(width,0);
-			else position.translate(-width,0);
+			if (list.sortRight()) position.translate(size.width,0);
+			else position.translate(-size.width,0);
 			lastRight=list.sortRight();
 		}
 		if (list.sortUp()) {
-			if (list.sortRight()) return new Point(position.x-width,position.y-height);
-			else return new Point(position.x,position.y-height);
+			if (list.sortRight()) return new Point(position.x-size.width,position.y-size.height);
+			else return new Point(position.x,position.y-size.height);
 		} else {
-			if (list.sortRight()) return new Point(new Point(position.x-width,position.y));
+			if (list.sortRight()) return new Point(new Point(position.x-size.width,position.y));
 			else return new Point(position);
 		}
 	}
 	
 	@Override
-	public void setPosition (Interface inter, Point position) {
-		int width=getWidth(inter);
-		int height=renderer.getHeight(false)+(list.getSize()-1)*inter.getFontHeight();
+	public void setPosition (IInterface inter, Point position) {
+		Dimension size=getSize(inter);
 		if (list.sortUp()) {
-			if (list.sortRight()) this.position=new Point(position.x+width,position.y+height);
-			else this.position=new Point(position.x,position.y+height);
+			if (list.sortRight()) this.position=new Point(position.x+size.width,position.y+size.height);
+			else this.position=new Point(position.x,position.y+size.height);
 		} else {
-			if (list.sortRight()) this.position=new Point(position.x+width,position.y);
+			if (list.sortRight()) this.position=new Point(position.x+size.width,position.y);
 			else this.position=new Point(position);
 		}
 	}
-
-	@Override
-	public int getWidth (Interface inter) {
-		int width=inter.getFontWidth(getTitle());
-		for (int i=0;i<list.getSize();i++) {
-			String s=list.getItem(i);
-			width=Math.max(width,inter.getFontWidth(s));
-		}
-		return width;
-	}
-
-	@Override
-	public void getHeight (Context context) {
-		context.setHeight(renderer.getHeight(false)+(list.getSize()-1)*context.getInterface().getFontHeight());
-	}
 	
 	@Override
-	public void loadConfig (Interface inter, PanelConfig config) {
+	public void loadConfig (IInterface inter, IPanelConfig config) {
 		super.loadConfig(inter,config);
 		this.lastUp=list.sortUp();
 		this.lastRight=list.sortRight();
+	}
+
+	@Override
+	public Dimension getSize (IInterface inter) {
+		int width=inter.getFontWidth(height,getTitle());
+		for (int i=0;i<list.getSize();i++) {
+			String s=list.getItem(i);
+			width=Math.max(width,inter.getFontWidth(height,s));
+		}
+		int height=(this.height+border)*list.getSize()-border;
+		if (height<0) height=0;
+		return new Dimension(width+2*border,height);
 	}
 }

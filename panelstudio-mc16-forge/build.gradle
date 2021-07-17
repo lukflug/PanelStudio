@@ -1,0 +1,35 @@
+
+buildscript {
+	repositories {
+		jcenter()
+		maven {
+			name = "forge"
+			url = "https://maven.minecraftforge.net/"
+		}
+	}
+	dependencies {
+		classpath "net.minecraftforge.gradle:ForgeGradle:${forgeGradle3}"
+	}
+}
+
+apply plugin: "net.minecraftforge.gradle"
+
+minecraft {
+	mappings("official",project.mappings16forge)
+}
+
+dependencies {
+	minecraft "net.minecraftforge:forge:${minecraft16forge}"
+	compile project(":panelstudio")
+}
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			pom {
+				name = "PanelStudio-MC16-Forge"
+				description = "A supplement to PanelStudio desgined for Minecraft Forge 1.16.x."
+			}
+		}
+	}
+}
