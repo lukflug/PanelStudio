@@ -13,6 +13,7 @@ import com.lukflug.panelstudio.component.IFixedComponent;
 import com.lukflug.panelstudio.component.IFixedComponentProxy;
 import com.lukflug.panelstudio.component.IResizable;
 import com.lukflug.panelstudio.component.IScrollSize;
+import com.lukflug.panelstudio.config.IPanelConfig;
 import com.lukflug.panelstudio.theme.IResizeBorderRenderer;
 import com.lukflug.panelstudio.theme.RendererTuple;
 
@@ -99,6 +100,19 @@ public class ResizableComponent<T extends IFixedComponent> implements IFixedComp
 	@Override
 	public int getWidth (IInterface inter) {
 		return size.getSize().width+2*renderer.getBorder();
+	}
+	
+	@Override
+	public void saveConfig (IInterface inter, IPanelConfig config) {
+		IFixedComponentProxy.super.saveConfig(inter,config);
+		config.saveSize(size.getSize());
+	}
+	
+	@Override
+	public void loadConfig (IInterface inter, IPanelConfig config) {
+		IFixedComponentProxy.super.loadConfig(inter,config);
+		Dimension s=config.loadSize();
+		if (s!=null) size.setSize(s);
 	}
 	
 	@Override

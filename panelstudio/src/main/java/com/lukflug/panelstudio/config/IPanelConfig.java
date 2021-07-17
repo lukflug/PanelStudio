@@ -1,5 +1,6 @@
 package com.lukflug.panelstudio.config;
 
+import java.awt.Dimension;
 import java.awt.Point;
 
 /**
@@ -13,11 +14,15 @@ public interface IPanelConfig {
 	 */
 	public void savePositon (Point position);
 	
+	public void saveSize (Dimension size);
+	
 	/**
 	 * Load the position of the point.
 	 * @return the stored position
 	 */
 	public Point loadPosition();
+	
+	public Dimension loadSize();
 	
 	/**
 	 * Store the state of the panel.
