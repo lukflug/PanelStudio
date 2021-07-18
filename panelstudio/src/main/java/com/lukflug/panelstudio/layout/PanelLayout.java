@@ -6,7 +6,6 @@ import java.util.function.IntFunction;
 import java.util.function.Supplier;
 
 import com.lukflug.panelstudio.base.Animation;
-import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.component.FocusableComponent;
 import com.lukflug.panelstudio.component.IComponent;
 import com.lukflug.panelstudio.container.VerticalContainer;
@@ -57,7 +56,7 @@ public class PanelLayout implements ILayout {
 				else moduleTitle=new ToggleButton(module,module.isEnabled(),theme.getButtonRenderer(Boolean.class,1,1,mode==ChildMode.DOWN));
 				VerticalContainer moduleContainer=new VerticalContainer(module,theme.getContainerRenderer(1,graphicalLevel,false));
 				if (module.isEnabled()==null) util.addContainer(module,moduleTitle,moduleContainer,()->null,Void.class,categoryContent,gui,new ThemeTuple(theme,1,graphicalLevel),layoutType.apply(0));
-				else util.addContainer(module,moduleTitle,moduleContainer,()->module.isEnabled(),IBoolean.class,categoryContent,gui,new ThemeTuple(theme,1,graphicalLevel),layoutType.apply(0));
+				else util.addContainer(module,moduleTitle,moduleContainer,()->module.isEnabled().isOn(),Boolean.class,categoryContent,gui,new ThemeTuple(theme,1,graphicalLevel),layoutType.apply(0));
 				module.getSettings().forEach(setting->addSettingsComponent(setting,moduleContainer,gui,components,new ThemeTuple(theme,2,graphicalLevel+1)));
 			});
 		});

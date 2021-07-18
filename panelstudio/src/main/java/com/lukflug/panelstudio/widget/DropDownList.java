@@ -155,7 +155,12 @@ public abstract class DropDownList extends HorizontalContainer {
 				return textField.getHeight();
 			}
 		};
-		addComponent(new HorizontalComponent<>(button,textField.getHeight(),0));
+		addComponent(new HorizontalComponent<Button<Void>>(button,textField.getHeight(),0) {
+			@Override
+			public int getWidth(IInterface inter) {
+				return textField.getHeight();
+			}
+		});
 	}
 	
 	@Override

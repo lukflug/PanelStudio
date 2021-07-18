@@ -86,6 +86,11 @@ public class Spinner extends HorizontalContainer {
 				return textField.getHeight()/2;
 			}
 		});
-		addComponent(new HorizontalComponent<>(buttons,textField.getHeight(),0));
+		addComponent(new HorizontalComponent<VerticalContainer>(buttons,textField.getHeight(),0) {
+			@Override
+			public int getWidth(IInterface inter) {
+				return textField.getHeight();
+			}
+		});
 	}
 }

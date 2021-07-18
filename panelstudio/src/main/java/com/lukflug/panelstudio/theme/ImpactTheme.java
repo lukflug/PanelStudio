@@ -283,7 +283,7 @@ public class ImpactTheme extends ThemeBase {
 					renderOverlay(context);
 				}
 				renderOverlay(context);
-				if (!container || logicalLevel<=0) renderSmallButton(context,title,symbol,focus);
+				renderSmallButton(context,title,symbol,focus);
 			}
 
 			@Override
