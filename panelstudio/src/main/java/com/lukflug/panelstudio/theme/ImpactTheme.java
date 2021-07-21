@@ -530,7 +530,9 @@ public class ImpactTheme extends ThemeBase {
 
 			@Override
 			public int getDefaultHeight() {
-				return container?getBaseHeight()-2:getBaseHeight();
+				int height=container?getBaseHeight()-2:getBaseHeight();
+				if (height%2==1) height+=1;
+				return height;
 			}
 
 			@Override
