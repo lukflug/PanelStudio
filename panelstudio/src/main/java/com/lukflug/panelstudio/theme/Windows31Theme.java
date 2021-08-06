@@ -300,7 +300,26 @@ public class Windows31Theme extends ThemeBase {
 
 	@Override
 	public IButtonRenderer<String> getKeybindRenderer(int logicalLevel, int graphicalLevel, boolean container) {
-		return getButtonRenderer(String.class,logicalLevel,graphicalLevel,container);
+		return new IButtonRenderer<String>() {
+			@Override
+			public void renderButton(Context context, String title, boolean focus, String state) {
+				boolean effFocus=container?context.hasFocus():focus;
+				if (container) {
+					Color color=getMainColor(effFocus,effFocus);
+					context.getInterface().fillRect(context.getRect(),color,color,color,color);
+					Color lineColor=getFontColor(effFocus);
+					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+context.getSize().height-1,context.getSize().width,1),lineColor,lineColor,lineColor,lineColor);
+				} else drawButton(context.getInterface(),context.getRect(),effFocus,context.isClicked(IInterface.LBUTTON),false);
+				Color color=(container&&effFocus)?getMainColor(effFocus,false):getFontColor(effFocus);
+				String string=title+separator+(focus?"...":state);
+				context.getInterface().drawString(new Point(context.getPos().x+context.getSize().width/2-context.getInterface().getFontWidth(height,string)/2,context.getPos().y+(container?0:3)+padding),height,string,color);
+			}
+
+			@Override
+			public int getDefaultHeight() {
+				return container?getBaseHeight():getBaseHeight()+6;
+			}
+		};
 	}
 
 	@Override

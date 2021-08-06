@@ -211,7 +211,7 @@ public class RainbowTheme extends ThemeBase {
 	public <T> IButtonRenderer<T> getButtonRenderer(Class<T> type, int logicalLevel, int graphicalLevel, boolean container) {
 		return new IButtonRenderer<T>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, Object state) {
+			public void renderButton(Context context, String title, boolean focus, T state) {
 				boolean effFocus=container?context.hasFocus():focus;
 				boolean active=container&&graphicalLevel!=0;
 				if (type==Boolean.class) {
@@ -256,7 +256,27 @@ public class RainbowTheme extends ThemeBase {
 
 	@Override
 	public IButtonRenderer<String> getKeybindRenderer(int logicalLevel, int graphicalLevel, boolean container) {
-		return getButtonRenderer(String.class,logicalLevel,graphicalLevel,container);
+		return new IButtonRenderer<String>() {
+			@Override
+			public void renderButton(Context context, String title, boolean focus, String state) {
+				boolean effFocus=container?context.hasFocus():focus;
+				boolean active=container&&graphicalLevel!=0;
+				if (!active) {
+					Color color=getBackgroundColor(effFocus);
+					context.getInterface().fillRect(context.getRect(),color,color,color,color);
+				} else if (graphicalLevel==0 || buttonRainbow.isOn()) {
+					renderRainbowRect(context.getRect(),context,effFocus);
+				}
+				renderOverlay(context);
+				String text=(logicalLevel>=2?"> ":"")+title+separator+(focus?"...":state);
+				context.getInterface().drawString(new Point(context.getPos().x+padding,context.getPos().y+padding),height,text,getFontColor(effFocus));
+			}
+
+			@Override
+			public int getDefaultHeight() {
+				return getBaseHeight();
+			}
+		};
 	}
 
 	@Override
