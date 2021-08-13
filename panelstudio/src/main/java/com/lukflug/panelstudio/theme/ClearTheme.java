@@ -163,7 +163,7 @@ public class ClearTheme extends ThemeBase {
 		return new IScrollBarRenderer<T>() {
 			@Override
 			public int renderScrollBar (Context context, boolean focus, T state, boolean horizontal, int height, int position) {
-				renderBackground(context,focus,graphicalLevel);
+				ClearTheme.this.renderBackground(context,focus,graphicalLevel);
 				Color color=ITheme.combineColors(scheme.getColor("Scroll Bar Color"),getBackgroundColor(focus));
 				if (horizontal) {
 					int a=(int)(position/(double)height*context.getSize().width);

@@ -7,7 +7,7 @@ import com.lukflug.panelstudio.base.Context;
  * @author lukflug
  * @param <T> type representing state of scroll bar
  */
-public interface IScrollBarRenderer<T> {
+public interface IScrollBarRenderer<T> extends IContainerRenderer {
 	/**
 	 * Render a scroll bar.
 	 * @param context the context to be used

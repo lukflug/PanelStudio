@@ -30,7 +30,7 @@ public abstract class ScrollBarComponent<S,T extends IComponent> extends Horizon
 	 * @param emptyRenderer the renderer to use for the corners
 	 */
 	public ScrollBarComponent (T component, IScrollBarRenderer<S> renderer, IEmptySpaceRenderer<S> cornerRenderer, IEmptySpaceRenderer<S> emptyRenderer) {
-		super(new Labeled(component.getTitle(),null,()->component.isVisible()),new IContainerRenderer(){});
+		super(new Labeled(component.getTitle(),null,()->component.isVisible()),renderer);
 		this.component=component;
 		// Component containing content
 		ScrollableComponent<T> scrollComponent=new ScrollableComponent<T>() {

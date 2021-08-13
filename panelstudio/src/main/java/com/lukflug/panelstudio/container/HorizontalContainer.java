@@ -47,7 +47,7 @@ public class HorizontalContainer extends Container<IHorizontalComponent> {
 		    spentWeight.addAndGet(component.getWeight());
 		    if (subContext.getSize().height>height.get()) height.set(subContext.getSize().height);
 		});
-		context.setHeight(height.get());
+		context.setHeight(height.get()+renderer.getTop()+renderer.getBottom());
 	}
 	
 	/**
