@@ -4,7 +4,7 @@ import com.lukflug.panelstudio.component.IScrollSize;
 
 /**
  * Data structure used to reduce argument count.
- * Describes what type of popup a certain layout should use.
+ * Describes what type of pop-up a certain layout should use.
  * @author lukflug
  */
 public class PopupTuple {
@@ -17,15 +17,15 @@ public class PopupTuple {
 	 */
 	public final boolean dynamicPopup;
 	/**
-	 * The scroll behaviour for the popup component.
+	 * The scroll behavior for the pop-up component.
 	 */
 	public final IScrollSize popupSize;
 	
 	/**
 	 * Constructor.
-	 * @param popupPos the value for {@link popupPos}
-	 * @param dynamicPopup the value for {@link dynamicPopup}
-	 * @param popupSize the value for {@link popupSize}
+	 * @param popupPos the value for {@link #popupPos}
+	 * @param dynamicPopup the value for {@link #dynamicPopup}
+	 * @param popupSize the value for {@link #popupSize}
 	 */
 	public PopupTuple (IPopupPositioner popupPos, boolean dynamicPopup, IScrollSize popupSize) {
 		this.popupPos=popupPos;

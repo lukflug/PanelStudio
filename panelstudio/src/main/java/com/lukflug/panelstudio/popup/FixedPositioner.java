@@ -25,7 +25,7 @@ public class FixedPositioner implements IPopupPositioner {
 	}
 	
 	@Override
-	public Point getPosition(IInterface inter, Dimension popup, Rectangle component, Rectangle panel) {
+	public Point getPosition (IInterface inter, Dimension popup, Rectangle component, Rectangle panel) {
 		return new Point(pos);
 	}
 }

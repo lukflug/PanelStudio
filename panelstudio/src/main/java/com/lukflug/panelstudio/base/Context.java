@@ -47,6 +47,9 @@ public final class Context {
 	 * Description set by the child to be displayed when hovered.
 	 */
 	private Description description=null;
+	/**
+	 * The current pop-up displayer.
+	 */
 	private IPopupDisplayer popupDisplayer=null;
 	
 	/**
@@ -203,10 +206,18 @@ public final class Context {
 		this.description=description;
 	}
 	
+	/**
+	 * Get the pop-up displayer to be used to display a static pop-up.
+	 * @return the current pop-up displayer
+	 */
 	public IPopupDisplayer getPopupDisplayer() {
 		return popupDisplayer;
 	}
 	
+	/**
+	 * Set the pop-up to be used.
+	 * @param popupDisplayer the new pop-up displayer
+	 */
 	public void setPopupDisplayer (IPopupDisplayer popupDisplayer) {
 		this.popupDisplayer=popupDisplayer;
 	}

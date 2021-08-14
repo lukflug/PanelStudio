@@ -9,11 +9,11 @@ import com.lukflug.panelstudio.base.IInterface;
 /**
  * Interface representing how pop-ups should be positioned.
  * There exist static and dynamic positioners.
- * Static popup positioners may not rely on the current size of the popup component and are usually only called when displaying the popup.
- * The position of a static popup doesn't change while the popup is being displayed.
+ * Static pop-up positioners may not rely on the current size of the pop-up component and are usually only called when displaying the pop-up.
+ * The position of a static pop-up doesn't change while the pop-up is being displayed.
  * Static positioners may be used as dynamic positioners.
- * Dynamic positioners depend on the dimensions of the popup and therefore this argument must not be null.
- * Dynamic positioners are used to update the position of a popup each frame.
+ * Dynamic positioners depend on the dimensions of the pop-up and therefore this argument must not be null.
+ * Dynamic positioners are used to update the position of a pop-up each frame.
  * @author lukflug
  */
 @FunctionalInterface

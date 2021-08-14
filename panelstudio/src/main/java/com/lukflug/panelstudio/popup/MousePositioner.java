@@ -25,7 +25,7 @@ public class MousePositioner implements IPopupPositioner {
 	}
 
 	@Override
-	public Point getPosition(IInterface inter, Dimension popup, Rectangle component, Rectangle panel) {
+	public Point getPosition (IInterface inter, Dimension popup, Rectangle component, Rectangle panel) {
 		Point pos=inter.getMouse();
 		pos.translate(offset.x,offset.y);
 		return pos;

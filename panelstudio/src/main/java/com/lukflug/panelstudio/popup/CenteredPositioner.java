@@ -26,7 +26,7 @@ public class CenteredPositioner implements IPopupPositioner {
 	}
 	
 	@Override
-	public Point getPosition(IInterface inter, Dimension popup, Rectangle component, Rectangle panel) {
+	public Point getPosition (IInterface inter, Dimension popup, Rectangle component, Rectangle panel) {
 		Rectangle rect=this.rect.get();
 		return new Point(rect.x+rect.width/2-popup.width/2,rect.y+rect.height/2-popup.height/2);
 	}

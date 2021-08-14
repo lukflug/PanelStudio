@@ -20,9 +20,25 @@ public interface IInterface {
 	 * @see #getButton(int)
 	 */
 	public static final int RBUTTON=1;
+	/**
+	 * ID for the shift keyboard modifier.
+	 * @see #getModifier(int)
+	 */
 	public static final int SHIFT=0;
+	/**
+	 * ID for the control keyboard modifier.
+	 * @see #getModifier(int)
+	 */
 	public static final int CTRL=1;
+	/**
+	 * ID for the alt keyboard modifier.
+	 * @see #getModifier(int)
+	 */
 	public static final int ALT=2;
+	/**
+	 * ID for the windows/super/command keyboard modifier.
+	 * @see #getModifier(int)
+	 */
 	public static final int SUPER=3;
 	
 	/**
@@ -49,6 +65,16 @@ public interface IInterface {
 	 */
 	public boolean getButton (int button);
 	
+	/**
+	 * Method to query a keyboard modifier.
+	 * May be called by any GUI-related method.
+	 * @param modifier the ID of the modifier
+	 * @return true if the keyboard modifier key is down
+	 * @see #SHIFT
+	 * @see #CTRL
+	 * @see #ALT
+	 * @see #SUPER
+	 */
 	public boolean getModifier (int modifier);
 	
 	/**

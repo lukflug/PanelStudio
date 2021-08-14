@@ -45,6 +45,10 @@ public final class AnimatedToggleable implements IToggleable {
 		return toggle.isOn();
 	}
 	
+	/**
+	 * Get the current transition value.
+	 * @return a number between zero and one
+	 */
 	public double getValue() {
 		if (animation.getTarget()!=(toggle.isOn()?1:0)) {
 			if (toggle.isOn()) animation.setValue(1);

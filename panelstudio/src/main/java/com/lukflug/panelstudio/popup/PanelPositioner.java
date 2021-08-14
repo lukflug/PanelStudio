@@ -25,7 +25,7 @@ public class PanelPositioner implements IPopupPositioner {
 	}
 
 	@Override
-	public Point getPosition(IInterface inter, Dimension popup, Rectangle component, Rectangle panel) {
+	public Point getPosition (IInterface inter, Dimension popup, Rectangle component, Rectangle panel) {
 		return new Point(panel.x+panel.width+offset.x,component.y+offset.y);
 	}
 }

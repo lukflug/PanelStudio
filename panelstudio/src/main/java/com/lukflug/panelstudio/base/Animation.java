@@ -24,6 +24,10 @@ public abstract class Animation {
 	 */
 	protected long lastTime;
 	
+	/**
+	 * Constructor.
+	 * @param time the supplier for the current time in milliseconds
+	 */
 	public Animation (Supplier<Long> time) {
 		this.time=time;
 		lastTime=time.get();
@@ -63,7 +67,7 @@ public abstract class Animation {
 	 * Set the value, with a transition between the old and new value.
 	 * @param value the new value
 	 */
-	public void setValue(double value) {
+	public void setValue (double value) {
 		lastValue=getValue();
 		this.value=value;
 		lastTime=time.get();
