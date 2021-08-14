@@ -14,14 +14,22 @@ public interface IPanelConfig {
 	 */
 	public void savePositon (Point position);
 	
+	/**
+	 * Store the size of the panel.
+	 * @param size the current size of the panel
+	 */
 	public void saveSize (Dimension size);
 	
 	/**
-	 * Load the position of the point.
+	 * Load the position of the panel.
 	 * @return the stored position
 	 */
 	public Point loadPosition();
 	
+	/**
+	 * Load the size of the panel.
+	 * @return the store size
+	 */
 	public Dimension loadSize();
 	
 	/**
