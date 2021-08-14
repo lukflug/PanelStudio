@@ -164,17 +164,12 @@ public abstract class GLInterface implements IInterface {
 			texCoords[0][1]=temp2;
 		}
 		if (parity) {
-			int temp1=texCoords[3][0],temp2=texCoords[3][1];
-			texCoords[3][0]=texCoords[0][0];
-			texCoords[3][1]=texCoords[0][1];
+			int temp1=texCoords[1][0];
+			texCoords[1][0]=texCoords[0][0];
 			texCoords[0][0]=temp1;
-			texCoords[0][1]=temp2;
-			temp1=texCoords[2][0];
-			temp2=texCoords[2][1];
-			texCoords[2][0]=texCoords[1][0];
-			texCoords[2][1]=texCoords[1][1];
-			texCoords[1][0]=temp1;
-			texCoords[1][1]=temp2;
+			temp1=texCoords[3][0];
+			texCoords[3][0]=texCoords[2][0];
+			texCoords[2][0]=temp1;
 		}
 		Tessellator tessellator = Tessellator.getInstance();
 		WorldRenderer bufferbuilder = tessellator.getWorldRenderer();
