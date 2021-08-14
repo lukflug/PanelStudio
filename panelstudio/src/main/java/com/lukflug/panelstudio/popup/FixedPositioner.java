@@ -7,7 +7,7 @@ import java.awt.Rectangle;
 import com.lukflug.panelstudio.base.IInterface;
 
 /**
- * Pop-up with a fixed position.
+ * Static pop-up positioner that positions the pop-up at a fixed position.
  * @author lukflug
  */
 public class FixedPositioner implements IPopupPositioner {

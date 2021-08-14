@@ -7,7 +7,7 @@ import java.awt.Rectangle;
 import com.lukflug.panelstudio.base.IInterface;
 
 /**
- * Pop-up that is positioned near mouse.
+ * Static pop-up positioner that positions the pop-up at a fixed position relative to the mouse pointer.
  * @author lukflug
  */
 public class MousePositioner implements IPopupPositioner {

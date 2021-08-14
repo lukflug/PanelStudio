@@ -7,7 +7,7 @@ import java.awt.Rectangle;
 import com.lukflug.panelstudio.base.IInterface;
 
 /**
- * Pop-up positioner, that positions the pop-up on the side of the panel.
+ * Static pop-up positioner, that positions the pop-up on the side of the panel.
  * @author lukflug
  */
 public class PanelPositioner implements IPopupPositioner {
