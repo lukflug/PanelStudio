@@ -22,11 +22,34 @@ import com.lukflug.panelstudio.theme.ITheme;
 import com.lukflug.panelstudio.widget.ClosableComponent;
 import com.lukflug.panelstudio.widget.ToggleButton;
 
+/**
+ * Panel containing an HUD component.
+ * @author lukflug
+ * @param <T> the component type
+ */
 public class HUDPanel<T extends IFixedComponent> extends DraggableComponent<HUDPanel<T>.HUDPanelComponent> {
+	/**
+	 * The component to be wrapped.
+	 */
 	protected T component;
-	protected HUDPanel<T>.HUDPanelComponent panel;
+	/**
+	 * The panel containing the HUD component.
+	 */
+	protected HUDPanelComponent panel;
+	/**
+	 * Whether to display the panel outline.
+	 */
 	protected IBoolean renderState;
 	
+	/**
+	 * Constructor.
+	 * @param component the component to be wrapped
+	 * @param state the boolean state to be passed to the theme
+	 * @param animation the animation for opening and closing
+	 * @param theme the theme to be used
+	 * @param renderState whether to render the panel title and outline
+	 * @param border the component border
+	 */
 	public HUDPanel (T component, IToggleable state, Animation animation, ITheme theme, IBoolean renderState, int border) {
 		this.component=component;
 		panel=new HUDPanelComponent(state,animation,theme,renderState,border);
@@ -34,27 +57,53 @@ public class HUDPanel<T extends IFixedComponent> extends DraggableComponent<HUDP
 	}
 	
 	@Override
-	public HUDPanel<T>.HUDPanelComponent getComponent() {
+	public HUDPanelComponent getComponent() {
 		return panel;
 	}
 	
+	@Override
 	public void handleButton (Context context, int button) {
 		if (renderState.isOn()) super.handleButton(context,button);
 		else super.getHeight(context);
 	}
 	
+	@Override
 	public void handleScroll (Context context, int diff) {
 		if (renderState.isOn()) super.handleScroll(context,diff);
 		else super.getHeight(context);
 	}
 	
 	
+	/**
+	 * Panel wrapper that conditionally renders the panel itself, but not its content.
+	 * @author lukflug
+	 */
 	protected class HUDPanelComponent implements IFixedComponent,IComponentProxy<ComponentProxy<ClosableComponent<ToggleButton,ComponentProxy<T>>>> {
+		/**
+		 * The panel to be wrapped.
+		 */
 		protected ComponentProxy<ClosableComponent<ToggleButton,ComponentProxy<T>>> closable;
+		/**
+		 * The renderer for the panel title bar.
+		 */
 		protected IButtonRenderer<Boolean> titleRenderer;
+		/**
+		 * The renderer for the panel outline and background.
+		 */
 		protected IPanelRenderer<Boolean> panelRenderer;
+		/**
+		 * The border size.
+		 */
 		protected int border;
 		
+		/**
+		 * Constructor.
+		 * @param state the boolean state to be passed to the theme
+		 * @param animation the animation for opening and closing
+		 * @param theme the theme to be used
+		 * @param renderState whether to render the panel title and outline
+		 * @param border the component border
+		 */
 		public HUDPanelComponent (IToggleable state, Animation animation, ITheme theme, IBoolean renderState, int border) {
 			this.border=border;
 			panelRenderer=theme.getPanelRenderer(Boolean.class,0,0);
@@ -95,12 +144,12 @@ public class HUDPanel<T extends IFixedComponent> extends DraggableComponent<HUDP
 				}
 				
 				@Override
-				public void renderPanelOverlay(Context context, boolean focus, Boolean state, boolean open) {
+				public void renderPanelOverlay (Context context, boolean focus, Boolean state, boolean open) {
 					if (renderState.isOn()) IPanelRendererProxy.super.renderPanelOverlay(context,focus,state,open);
 				}
 
 				@Override
-				public void renderTitleOverlay(Context context, boolean focus, Boolean state, boolean open) {
+				public void renderTitleOverlay (Context context, boolean focus, Boolean state, boolean open) {
 					if (renderState.isOn()) IPanelRendererProxy.super.renderTitleOverlay(context,focus,state,open);
 				}
 
@@ -117,20 +166,20 @@ public class HUDPanel<T extends IFixedComponent> extends DraggableComponent<HUDP
 		}
 
 		@Override
-		public Point getPosition(IInterface inter) {
+		public Point getPosition (IInterface inter) {
 			Point pos=component.getPosition(inter);
 			pos.translate(-panelRenderer.getLeft()-border,-panelRenderer.getTop()-titleRenderer.getDefaultHeight()-panelRenderer.getBorder()-border);
 			return pos;
 		}
 
 		@Override
-		public void setPosition(IInterface inter, Point position) {
+		public void setPosition (IInterface inter, Point position) {
 			position.translate(panelRenderer.getLeft()+border,panelRenderer.getTop()+titleRenderer.getDefaultHeight()+panelRenderer.getBorder()+border);
 			component.setPosition(inter,position);
 		}
 
 		@Override
-		public int getWidth(IInterface inter) {
+		public int getWidth (IInterface inter) {
 			return component.getWidth(inter)+panelRenderer.getLeft()+panelRenderer.getRight()+2*border;
 		}
 
@@ -140,12 +189,12 @@ public class HUDPanel<T extends IFixedComponent> extends DraggableComponent<HUDP
 		}
 
 		@Override
-		public void saveConfig(IInterface inter, IPanelConfig config) {
+		public void saveConfig (IInterface inter, IPanelConfig config) {
 			component.saveConfig(inter,config);
 		}
 
 		@Override
-		public void loadConfig(IInterface inter, IPanelConfig config) {
+		public void loadConfig (IInterface inter, IPanelConfig config) {
 			component.loadConfig(inter,config);
 		}
 

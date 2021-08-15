@@ -5,59 +5,74 @@ import java.awt.Point;
 
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.Description;
-import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.component.IFixedComponent;
 import com.lukflug.panelstudio.config.IPanelConfig;
 import com.lukflug.panelstudio.setting.ILabeled;
 
+/**
+ * Base class for HUD components.
+ * @author lukflug
+ */
 public abstract class HUDComponent implements IFixedComponent {
-	protected String title;
-	protected IBoolean visible;
-	protected String description;
+	/**
+	 * The component label.
+	 */
+	protected ILabeled label;
+	/**
+	 * The current component position.
+	 */
 	protected Point position;
+	/**
+	 * The component config name.
+	 */
 	protected String configName;
 	
+	/**
+	 * Constructor.
+	 * @param label the label for the component
+	 * @param position the initial position
+	 * @param configName the config name for the component
+	 */
 	public HUDComponent (ILabeled label, Point position, String configName) {
-		this.title=label.getDisplayName();
+		this.label=label;
 		this.position=position;
-		this.description=label.getDescription();
 		this.configName=configName;
 	}
 
 	@Override
 	public String getTitle() {
-		return title;
+		return label.getDisplayName();
 	}
 
 	@Override
-	public void render(Context context) {
+	public void render (Context context) {
 		context.setHeight(getSize(context.getInterface()).height);
-		if (description!=null) context.setDescription(new Description(context.getRect(),description));
+		if (label.getDescription()!=null) context.setDescription(new Description(context.getRect(),label.getDescription()));
 	}
 
 	@Override
-	public void handleButton(Context context, int button) {
+	public void handleButton (Context context, int button) {
 		context.setHeight(getSize(context.getInterface()).height);
 	}
 
 	@Override
-	public void handleKey(Context context, int scancode) {
+	public void handleKey (Context context, int scancode) {
 		context.setHeight(getSize(context.getInterface()).height);
 	}
 	
 	@Override
-	public void handleChar(Context context, char character) {
+	public void handleChar (Context context, char character) {
 		context.setHeight(getSize(context.getInterface()).height);
 	}
 
 	@Override
-	public void handleScroll(Context context, int diff) {
+	public void handleScroll (Context context, int diff) {
 		context.setHeight(getSize(context.getInterface()).height);
 	}
 
 	@Override
-	public void getHeight(Context context) {
+	public void getHeight (Context context) {
 		context.setHeight(getSize(context.getInterface()).height);
 	}
 
@@ -75,21 +90,21 @@ public abstract class HUDComponent implements IFixedComponent {
 
 	@Override
 	public boolean isVisible() {
-		return true;
+		return label.isVisible().isOn();
 	}
 
 	@Override
-	public Point getPosition(IInterface inter) {
+	public Point getPosition (IInterface inter) {
 		return new Point(position);
 	}
 
 	@Override
-	public void setPosition(IInterface inter, Point position) {
+	public void setPosition (IInterface inter, Point position) {
 		this.position=new Point(position);
 	}
 
 	@Override
-	public int getWidth(IInterface inter) {
+	public int getWidth (IInterface inter) {
 		return getSize(inter).width;
 	}
 
@@ -99,12 +114,12 @@ public abstract class HUDComponent implements IFixedComponent {
 	}
 
 	@Override
-	public void saveConfig(IInterface inter, IPanelConfig config) {
+	public void saveConfig (IInterface inter, IPanelConfig config) {
 		config.savePositon(position);
 	}
 
 	@Override
-	public void loadConfig(IInterface inter, IPanelConfig config) {
+	public void loadConfig (IInterface inter, IPanelConfig config) {
 		position=config.loadPosition();
 	}
 
@@ -113,5 +128,10 @@ public abstract class HUDComponent implements IFixedComponent {
 		return configName;
 	}
 	
+	/**
+	 * Returns the size of the HUD component.
+	 * @param inter the current interface
+	 * @return the component size
+	 */
 	public abstract Dimension getSize (IInterface inter);
 }

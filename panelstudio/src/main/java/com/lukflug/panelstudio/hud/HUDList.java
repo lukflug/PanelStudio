@@ -2,6 +2,10 @@ package com.lukflug.panelstudio.hud;
 
 import java.awt.Color;
 
+/**
+ * Interface abstracting a dynamic list of text that can be displayed by the list component.
+ * @author lukflug
+ */
 public interface HUDList {
 	/**
 	 * Get the number of elements in the list

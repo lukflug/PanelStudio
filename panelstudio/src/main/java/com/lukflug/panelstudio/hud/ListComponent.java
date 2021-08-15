@@ -8,12 +8,41 @@ import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.config.IPanelConfig;
 import com.lukflug.panelstudio.setting.ILabeled;
 
+/**
+ * {@link HUDComponent} displaying a {@link HUDList}.
+ * @author lukflug
+ */
 public class ListComponent extends HUDComponent {
+	/**
+	 * The list to be displayed.
+	 */
 	protected HUDList list;
-	protected boolean lastUp=false;
-	protected boolean lastRight=false;
-	protected int height,border;
+	/**
+	 * Variable to track {@link HUDList#sortUp()} changes.
+	 */
+	private boolean lastUp=false;
+	/**
+	 * Variable to track {@link HUDList#sortRight()} changes.
+	 */
+	private boolean lastRight=false;
+	/**
+	 * The font size.
+	 */
+	protected int height;
+	/**
+	 * The border between lines.
+	 */
+	protected int border;
 	
+	/**
+	 * Constructor.
+	 * @param label the label for the component
+	 * @param position initial position of the component
+	 * @param configName the config name of the component
+	 * @param list the list to be displayed
+	 * @param height the font size
+	 * @param border the line spacing
+	 */
 	public ListComponent (ILabeled label, Point position, String configName, HUDList list, int height, int border) {
 		super(label,position,configName);
 		this.list=list;
