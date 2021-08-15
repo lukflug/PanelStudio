@@ -29,6 +29,9 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 	 * Whether to clip container.
 	 */
 	protected boolean clip;
+	/**
+	 * List of static pop-ups to be displayed.
+	 */
 	protected List<PopupPair> popups=new ArrayList<PopupPair>();
 	
 	/**
@@ -43,7 +46,7 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 	}
 
 	@Override
-	public void displayPopup(IPopup popup, Rectangle rect, IToggleable visible, IPopupPositioner positioner) {
+	public void displayPopup (IPopup popup, Rectangle rect, IToggleable visible, IPopupPositioner positioner) {
 		popups.add(new PopupPair(popup,rect,visible,positioner));
 	}
 	
@@ -111,7 +114,7 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 	}
 
 	@Override
-	protected void doContextSensitiveLoop(Context context, ContextSensitiveConsumer<IFixedComponent> function) {
+	protected void doContextSensitiveLoop (Context context, ContextSensitiveConsumer<IFixedComponent> function) {
 		// Set context height
 		context.setHeight(getHeight());
 		// Do loop in inverse order
@@ -195,12 +198,35 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 	}
 	
 	
+	/**
+	 * A tuple containing all the information to display a pop-up.
+	 * @author lukflug
+	 */
 	protected final class PopupPair {
+		/**
+		 * The pop-up to be displayed.
+		 */
 		public final IPopup popup;
+		/**
+		 * The displaying component location.
+		 */
 		public final Rectangle rect;
+		/**
+		 * The visibility predicate.
+		 */
 		public final IToggleable visible;
+		/**
+		 * The positioner to be used.
+		 */
 		public final IPopupPositioner positioner;
 		
+		/**
+		 * Constructor.
+		 * @param popup value for {@link #popup}
+		 * @param rect value for {@link #rect}
+		 * @param visible value for {@link #visible}
+		 * @param positioner value for {@link #positioner}
+		 */
 		public PopupPair (IPopup popup, Rectangle rect, IToggleable visible, IPopupPositioner positioner) {
 			this.popup=popup;
 			this.rect=rect;

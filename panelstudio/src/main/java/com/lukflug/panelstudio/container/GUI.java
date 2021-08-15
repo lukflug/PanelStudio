@@ -37,7 +37,7 @@ public class GUI implements IContainer<IFixedComponent> {
 	 * Constructor for the GUI.
 	 * @param inter the {@link Interface} to be used by the GUI
 	 * @param descriptionRenderer the {@link DescriptionRenderer} used by the GUI
-	 * @param descriptionPosition the {@link IPopupPositioner} to be used to position the descriptions
+	 * @param descriptionPosition the static {@link IPopupPositioner} to be used to position the descriptions
 	 */
 	public GUI (IInterface inter, IDescriptionRenderer descriptionRenderer, IPopupPositioner descriptionPosition) {
 		this.inter=inter;
@@ -52,12 +52,12 @@ public class GUI implements IContainer<IFixedComponent> {
 	}
 
 	@Override
-	public boolean addComponent(IFixedComponent component, IBoolean visible) {
+	public boolean addComponent (IFixedComponent component, IBoolean visible) {
 		return container.addComponent(component,visible);
 	}
 
 	@Override
-	public boolean removeComponent(IFixedComponent component) {
+	public boolean removeComponent (IFixedComponent component) {
 		return container.removeComponent(component);
 	}
 	
