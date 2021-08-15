@@ -44,9 +44,17 @@ public abstract class ColorComponent extends VerticalContainer {
 		theme.restoreMainColor();
 	}
 	
+	/**
+	 * Function to populate color component.
+	 * @param theme the theme to be used
+	 */
 	public abstract void populate (ThemeTuple theme);
 	
 	
+	/**
+	 * Boolean setting for rainbow toggle.
+	 * @author lukflug
+	 */
 	protected final class RainbowToggle implements IBooleanSetting {
 		@Override
 		public String getDisplayName() {
@@ -70,13 +78,25 @@ public abstract class ColorComponent extends VerticalContainer {
 	}
 	
 	
+	/**
+	 * Number setting for color sliders.
+	 * @author lukflug
+	 */
 	protected final class ColorNumber implements INumberSetting {
 		/**
 		 * Number indicating the index of the component for the color model.
 		 */
 		private final int value;
+		/**
+		 * Boolean indicating whether HSB model is used.
+		 */
 		private final IBoolean model;
 		
+		/**
+		 * Constructor.
+		 * @param value the component index
+		 * @param model true for HSB, false for RGB
+		 */
 		public ColorNumber (int value, IBoolean model) {
 			this.value=value;
 			this.model=model;
@@ -120,7 +140,7 @@ public abstract class ColorComponent extends VerticalContainer {
 		}
 
 		@Override
-		public void setNumber(double value) {
+		public void setNumber (double value) {
 			Color c=setting.getColor();
 			float[] color=Color.RGBtoHSB(c.getRed(),c.getGreen(),c.getBlue(),null);
 			switch (this.value) {

@@ -6,11 +6,29 @@ import com.lukflug.panelstudio.component.FocusableComponent;
 import com.lukflug.panelstudio.setting.IColorSetting;
 import com.lukflug.panelstudio.theme.IColorPickerRenderer;
 
+/**
+ * Color picker field widget.
+ * @author lukflug
+ */
 public class ColorPicker extends FocusableComponent {
+	/**
+	 * The color setting to be used.
+	 */
 	protected IColorSetting setting;
+	/**
+	 * The renderer to be used.
+	 */
 	protected IColorPickerRenderer renderer;
+	/**
+	 * Whether mouse is dragging color cursor.
+	 */
 	protected boolean dragging=false;
 
+	/**
+	 * Constructor.
+	 * @param setting the color setting to be used
+	 * @param renderer the renderer to be used
+	 */
 	public ColorPicker (IColorSetting setting, IColorPickerRenderer renderer) {
 		super(setting);
 		this.setting=setting;

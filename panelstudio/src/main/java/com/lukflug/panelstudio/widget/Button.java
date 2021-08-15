@@ -12,6 +12,9 @@ import com.lukflug.panelstudio.theme.IButtonRenderer;
  * @author lukflug
  */
 public class Button<T> extends FocusableComponent {
+	/**
+	 * The button state supplier.
+	 */
 	protected Supplier<T> state;
 	/**
 	 * Renderer for this component.
@@ -21,9 +24,10 @@ public class Button<T> extends FocusableComponent {
 	/**
 	 * Constructor.
 	 * @param label the label for the component
+	 * @param state the button state supplier
 	 * @param renderer the renderer for this component
 	 */
-	public Button(ILabeled label, Supplier<T> state, IButtonRenderer<T> renderer) {
+	public Button (ILabeled label, Supplier<T> state, IButtonRenderer<T> renderer) {
 		super(label);
 		this.renderer=renderer;
 		this.state=state;
