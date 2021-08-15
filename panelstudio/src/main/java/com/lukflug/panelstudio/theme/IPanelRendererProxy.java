@@ -40,7 +40,7 @@ public interface IPanelRendererProxy<T> extends IPanelRenderer<T> {
 	}
 	
 	@Override
-	public default void renderPanelOverlay(Context context, boolean focus, T state, boolean open) {
+	public default void renderPanelOverlay (Context context, boolean focus, T state, boolean open) {
 		getRenderer().renderPanelOverlay(context,focus,state,open);
 	}
 	

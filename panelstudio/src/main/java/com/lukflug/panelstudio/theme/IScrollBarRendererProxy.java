@@ -10,7 +10,7 @@ import com.lukflug.panelstudio.base.Context;
 @FunctionalInterface
 public interface IScrollBarRendererProxy<T> extends IScrollBarRenderer<T>,IContainerRendererProxy {
 	@Override
-	public default int renderScrollBar(Context context, boolean focus, T state, boolean horizontal, int height, int position) {
+	public default int renderScrollBar (Context context, boolean focus, T state, boolean horizontal, int height, int position) {
 		return getRenderer().renderScrollBar(context,focus,state,horizontal,height,position);
 	}
 

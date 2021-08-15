@@ -5,6 +5,10 @@ import java.awt.Point;
 
 import com.lukflug.panelstudio.base.Context;
 
+/**
+ * Proxy redirecting calls
+ * @author lukflug
+ */
 @FunctionalInterface
 public interface IColorPickerRendererProxy extends IColorPickerRenderer {
 	@Override

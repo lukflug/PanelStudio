@@ -16,10 +16,36 @@ import com.lukflug.panelstudio.setting.ILabeled;
  * @author lukflug
  */
 public class ClearTheme extends ThemeBase {
+	/**
+	 * The gradient predicate.
+	 */
 	protected IBoolean gradient;
-	protected int height,padding,border;
+	/**
+	 * The font size.
+	 */
+	protected int height;
+	/**
+	 * The text padding.
+	 */
+	protected int padding;
+	/**
+	 * The border size.
+	 */
+	protected int border;
+	/**
+	 * The text between title string and state string.
+	 */
 	protected String separator;
 	
+	/**
+	 * Constructor.
+	 * @param scheme the color scheme to be used.
+	 * @param gradient the gradient predicate
+	 * @param height the font size
+	 * @param padding the text padding
+	 * @param border the border size
+	 * @param separator the text between title string and state string
+	 */
 	public ClearTheme (IColorScheme scheme, IBoolean gradient, int height, int padding, int border, String separator) {
 		super(scheme);
 		this.gradient=gradient;
@@ -36,11 +62,21 @@ public class ClearTheme extends ThemeBase {
 		scheme.createSetting(this,"Highlight Color","The color for highlighted text.",false,true,new Color(0,0,255),false);
 	}
 	
+	/**
+	 * Function to render hover overlay.
+	 * @param context the context to be used
+	 */
 	protected void renderOverlay (Context context) {
 		Color color=context.isHovered()?new Color(0,0,0,64):new Color(0,0,0,0);
 		context.getInterface().fillRect(context.getRect(),color,color,color,color);
 	}
 	
+	/**
+	 * Function to render background.
+	 * @param context the context to be used
+	 * @param focus the focus state
+	 * @param graphicalLevel the panel nesting level
+	 */
 	protected void renderBackground (Context context, boolean focus, int graphicalLevel) {
 		if (graphicalLevel==0) {
 			Color color=getBackgroundColor(focus);
@@ -48,7 +84,14 @@ public class ClearTheme extends ThemeBase {
 		}
 	}
 	
-	protected void renderSmallButton(Context context, String title, int symbol, boolean focus) {
+	/**
+	 * Function to render small buttons.
+	 * @param context the context to be used
+	 * @param title the component title
+	 * @param symbol the icon ID to be used
+	 * @param focus the focus state
+	 */
+	protected void renderSmallButton (Context context, String title, int symbol, boolean focus) {
 		Point points[]=new Point[3];
 		int padding=context.getSize().height<=8?2:4;
 		Rectangle rect=new Rectangle(context.getPos().x+padding/2,context.getPos().y+padding/2,context.getSize().height-2*(padding/2),context.getSize().height-2*(padding/2));
@@ -113,7 +156,7 @@ public class ClearTheme extends ThemeBase {
 	}
 
 	@Override
-	public IContainerRenderer getContainerRenderer(int logicalLevel, int graphicalLevel, boolean horizontal) {
+	public IContainerRenderer getContainerRenderer (int logicalLevel, int graphicalLevel, boolean horizontal) {
 		return new IContainerRenderer() {
 			@Override
 			public void renderBackground (Context context, boolean focus) {
@@ -133,14 +176,14 @@ public class ClearTheme extends ThemeBase {
 	}
 
 	@Override
-	public <T> IPanelRenderer<T> getPanelRenderer(Class<T> type, int logicalLevel, int graphicalLevel) {
+	public <T> IPanelRenderer<T> getPanelRenderer (Class<T> type, int logicalLevel, int graphicalLevel) {
 		return new IPanelRenderer<T>() {
 			@Override
-			public void renderPanelOverlay(Context context, boolean focus, T state, boolean open) {
+			public void renderPanelOverlay (Context context, boolean focus, T state, boolean open) {
 			}
 
 			@Override
-			public void renderTitleOverlay(Context context, boolean focus, T state, boolean open) {
+			public void renderTitleOverlay (Context context, boolean focus, T state, boolean open) {
 				if (graphicalLevel>0) {
 					Rectangle rect=context.getRect();
 					rect=new Rectangle(rect.width-rect.height,0,rect.height,rect.height);
@@ -159,7 +202,7 @@ public class ClearTheme extends ThemeBase {
 	}
 
 	@Override
-	public <T> IScrollBarRenderer<T> getScrollBarRenderer(Class<T> type, int logicalLevel, int graphicalLevel) {
+	public <T> IScrollBarRenderer<T> getScrollBarRenderer (Class<T> type, int logicalLevel, int graphicalLevel) {
 		return new IScrollBarRenderer<T>() {
 			@Override
 			public int renderScrollBar (Context context, boolean focus, T state, boolean horizontal, int height, int position) {
@@ -188,17 +231,17 @@ public class ClearTheme extends ThemeBase {
 	}
 
 	@Override
-	public <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer(Class<T> type, int logicalLevel, int graphicalLevel, boolean container) {
+	public <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer (Class<T> type, int logicalLevel, int graphicalLevel, boolean container) {
 		return new IEmptySpaceRenderer<T>() {
 			@Override
-			public void renderSpace(Context context, boolean focus, T state) {
+			public void renderSpace (Context context, boolean focus, T state) {
 				renderBackground(context,focus,graphicalLevel);
 			}
 		};
 	}
 
 	@Override
-	public <T> IButtonRenderer<T> getButtonRenderer(Class<T> type, int logicalLevel, int graphicalLevel, boolean container) {
+	public <T> IButtonRenderer<T> getButtonRenderer (Class<T> type, int logicalLevel, int graphicalLevel, boolean container) {
 		return new IButtonRenderer<T>() {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, T state) {
@@ -223,10 +266,10 @@ public class ClearTheme extends ThemeBase {
 	}
 
 	@Override
-	public IButtonRenderer<Void> getSmallButtonRenderer(int symbol, int logicalLevel, int graphicalLevel, boolean container) {
+	public IButtonRenderer<Void> getSmallButtonRenderer (int symbol, int logicalLevel, int graphicalLevel, boolean container) {
 		return new IButtonRenderer<Void>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, Void state) {
+			public void renderButton (Context context, String title, boolean focus, Void state) {
 				renderBackground(context,focus,graphicalLevel);
 				renderOverlay(context);
 				if (!container || logicalLevel<=0) renderSmallButton(context,title,symbol,focus);
@@ -240,10 +283,10 @@ public class ClearTheme extends ThemeBase {
 	}
 
 	@Override
-	public IButtonRenderer<String> getKeybindRenderer(int logicalLevel, int graphicalLevel, boolean container) {
+	public IButtonRenderer<String> getKeybindRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new IButtonRenderer<String>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, String state) {
+			public void renderButton (Context context, String title, boolean focus, String state) {
 				boolean effFocus=container?context.hasFocus():focus;
 				if (container && graphicalLevel<=0) {
 					Color colorA=getColor(scheme.getColor("Title Color")),colorB=gradient.isOn()?getBackgroundColor(effFocus):colorA;
@@ -263,10 +306,10 @@ public class ClearTheme extends ThemeBase {
 	}
 
 	@Override
-	public ISliderRenderer getSliderRenderer(int logicalLevel, int graphicalLevel, boolean container) {
+	public ISliderRenderer getSliderRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new ISliderRenderer() {
 			@Override
-			public void renderSlider(Context context, String title, String state, boolean focus, double value) {
+			public void renderSlider (Context context, String title, String state, boolean focus, double value) {
 				boolean effFocus=container?context.hasFocus():focus;
 				renderBackground(context,effFocus,graphicalLevel);
 				Color color=getFontColor(effFocus);
@@ -286,10 +329,10 @@ public class ClearTheme extends ThemeBase {
 	}
 
 	@Override
-	public IRadioRenderer getRadioRenderer(int logicalLevel, int graphicalLevel, boolean container) {
+	public IRadioRenderer getRadioRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new IRadioRenderer() {
 			@Override
-			public void renderItem(Context context, ILabeled[] items, boolean focus, int target, double state, boolean horizontal) {
+			public void renderItem (Context context, ILabeled[] items, boolean focus, int target, double state, boolean horizontal) {
 				renderBackground(context,focus,graphicalLevel);
 				for (int i=0;i<items.length;i++) {
 					Rectangle rect=getItemRect(context,items,i,horizontal);
@@ -301,7 +344,7 @@ public class ClearTheme extends ThemeBase {
 			}
 
 			@Override
-			public int getDefaultHeight(ILabeled[] items, boolean horizontal) {
+			public int getDefaultHeight (ILabeled[] items, boolean horizontal) {
 				return (horizontal?1:items.length)*getBaseHeight();
 			}
 		};
@@ -311,7 +354,7 @@ public class ClearTheme extends ThemeBase {
 	public IResizeBorderRenderer getResizeRenderer() {
 		return new IResizeBorderRenderer() {
 			@Override
-			public void drawBorder(Context context, boolean focus) {
+			public void drawBorder (Context context, boolean focus) {
 				Color color=getBackgroundColor(focus);
 				Rectangle rect=context.getRect();
 				context.getInterface().fillRect(new Rectangle(rect.x,rect.y,rect.width,getBorder()),color,color,color,color);
@@ -398,7 +441,7 @@ public class ClearTheme extends ThemeBase {
 			}
 
 			@Override
-			public int transformToCharPos(Context context, String title, String content, int boxPosition) {
+			public int transformToCharPos (Context context, String title, String content, int boxPosition) {
 				Rectangle rect=getTextArea(context,title);
 				Point mouse=context.getInterface().getMouse();
 				int offset=context.getInterface().getFontWidth(height,content.substring(0,boxPosition));
@@ -419,7 +462,7 @@ public class ClearTheme extends ThemeBase {
 	public ISwitchRenderer<Boolean> getToggleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new ISwitchRenderer<Boolean>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, Boolean state) {
+			public void renderButton (Context context, String title, boolean focus, Boolean state) {
 				boolean effFocus=container?context.hasFocus():focus;
 				renderBackground(context,effFocus,graphicalLevel);
 				renderOverlay(context);
@@ -439,13 +482,13 @@ public class ClearTheme extends ThemeBase {
 			}
 
 			@Override
-			public Rectangle getOnField(Context context) {
+			public Rectangle getOnField (Context context) {
 				Rectangle rect=context.getRect();
 				return new Rectangle(rect.x+rect.width-rect.height+padding,rect.y+padding,rect.height-2*padding,rect.height-2*padding);
 			}
 
 			@Override
-			public Rectangle getOffField(Context context) {
+			public Rectangle getOffField (Context context) {
 				Rectangle rect=context.getRect();
 				return new Rectangle(rect.x+rect.width-2*rect.height+3*padding,rect.y+padding,rect.height-2*padding,rect.height-2*padding);
 			}
@@ -456,7 +499,7 @@ public class ClearTheme extends ThemeBase {
 	public ISwitchRenderer<String> getCycleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new ISwitchRenderer<String>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, String state) {
+			public void renderButton (Context context, String title, boolean focus, String state) {
 				boolean effFocus=container?context.hasFocus():focus;
 				renderBackground(context,effFocus,graphicalLevel);
 				Context subContext=new Context(context,context.getSize().width-2*context.getSize().height,new Point(0,0),true,true);
@@ -480,13 +523,13 @@ public class ClearTheme extends ThemeBase {
 			}
 
 			@Override
-			public Rectangle getOnField(Context context) {
+			public Rectangle getOnField (Context context) {
 				Rectangle rect=context.getRect();
 				return new Rectangle(rect.x+rect.width-rect.height,rect.y,rect.height,rect.height);
 			}
 
 			@Override
-			public Rectangle getOffField(Context context) {
+			public Rectangle getOffField (Context context) {
 				Rectangle rect=context.getRect();
 				return new Rectangle(rect.x+rect.width-2*rect.height,rect.y,rect.height,rect.height);
 			}
@@ -514,18 +557,18 @@ public class ClearTheme extends ThemeBase {
 	}
 
 	@Override
-	public Color getMainColor(boolean focus, boolean active) {
+	public Color getMainColor (boolean focus, boolean active) {
 		if (active) return getColor(scheme.getColor("Enabled Color"));
 		else return new Color(0,0,0,0);
 	}
 
 	@Override
-	public Color getBackgroundColor(boolean focus) {
+	public Color getBackgroundColor (boolean focus) {
 		return scheme.getColor("Background Color");
 	}
 
 	@Override
-	public Color getFontColor(boolean focus) {
+	public Color getFontColor (boolean focus) {
 		return scheme.getColor("Font Color");
 	}
 }

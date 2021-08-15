@@ -11,12 +11,47 @@ import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.setting.ILabeled;
 
+/**
+ * Private rainbow theme I made on commission for DoctorSwag.
+ * Later made open-source and ported to PanelStudio 0.2.0.
+ * @author lukflug
+ */
 public class RainbowTheme extends ThemeBase {
-	protected IBoolean ignoreDisabled,buttonRainbow;
+	/**
+	 * Predicate for drawing rainbows even for disabled containers.
+	 */
+	protected IBoolean ignoreDisabled;
+	/**
+	 * Predicate for resetting rainbow for each button rainbow.
+	 */
+	protected IBoolean buttonRainbow;
+	/**
+	 * Integer supplier for rainbow gradient.
+	 */
 	protected IntSupplier rainbowGradient;
-	protected int height,padding;
+	/**
+	 * The font size.
+	 */
+	protected int height;
+	/**
+	 * The text padding.
+	 */
+	protected int padding;
+	/**
+	 * The text between title string and state string.
+	 */
 	protected String separator;
 	
+	/**
+	 * Constructor.
+	 * @param scheme the color scheme to be used
+	 * @param ignoreDisabled predicate for drawing rainbows even for disabled containers
+	 * @param buttonRainbow predicate for resetting rainbow for each button rainbow
+	 * @param rainbowGradient integer supplier for rainbow gradient
+	 * @param height the font size
+	 * @param padding the text padding
+	 * @param separator the text between title string and state string
+	 */
 	public RainbowTheme (IColorScheme scheme, IBoolean ignoreDisabled, IBoolean buttonRainbow, IntSupplier rainbowGradient, int height, int padding, String separator) {
 		super(scheme);
 		this.ignoreDisabled=ignoreDisabled;
@@ -32,11 +67,21 @@ public class RainbowTheme extends ThemeBase {
 		scheme.createSetting(this,"Highlight Color","The color for highlighted text.",false,true,new Color(0,0,255),false);
 	}
 	
+	/**
+	 * Function to render hover overlay.
+	 * @param context the context to be used
+	 */
 	protected void renderOverlay (Context context) {
 		Color color=context.isHovered()?new Color(0,0,0,64):new Color(0,0,0,0);
 		context.getInterface().fillRect(context.getRect(),color,color,color,color);
 	}
 	
+	/**
+	 * Draw a rainbow rectangle.
+	 * @param rect the rectangle to be drawn
+	 * @param context the context to be used
+	 * @param focus the focus state
+	 */
 	protected void renderRainbowRect (Rectangle rect, Context context, boolean focus) {
 		Color source=getMainColor(focus,true);
 		float[] hsb=Color.RGBtoHSB(source.getRed(),source.getGreen(),source.getBlue(),null);
@@ -56,7 +101,14 @@ public class RainbowTheme extends ThemeBase {
 		}
 	}
 	
-	protected void renderSmallButton(Context context, String title, int symbol, boolean focus) {
+	/**
+	 * Function to render small buttons.
+	 * @param context the context to be used
+	 * @param title the component title
+	 * @param symbol the icon ID to be used
+	 * @param focus the focus state
+	 */
+	protected void renderSmallButton (Context context, String title, int symbol, boolean focus) {
 		Point points[]=new Point[3];
 		int padding=context.getSize().height<=12?(context.getSize().height<=8?2:4):6;
 		Rectangle rect=new Rectangle(context.getPos().x+padding/2,context.getPos().y+padding/2,context.getSize().height-2*(padding/2),context.getSize().height-2*(padding/2));
@@ -122,7 +174,7 @@ public class RainbowTheme extends ThemeBase {
 	}
 
 	@Override
-	public IContainerRenderer getContainerRenderer(int logicalLevel, int graphicalLevel, boolean horizontal) {
+	public IContainerRenderer getContainerRenderer (int logicalLevel, int graphicalLevel, boolean horizontal) {
 		return new IContainerRenderer() {
 			@Override
 			public void renderBackground (Context context, boolean focus) {
@@ -132,7 +184,7 @@ public class RainbowTheme extends ThemeBase {
 	}
 
 	@Override
-	public <T> IPanelRenderer<T> getPanelRenderer(Class<T> type, int logicalLevel, int graphicalLevel) {
+	public <T> IPanelRenderer<T> getPanelRenderer (Class<T> type, int logicalLevel, int graphicalLevel) {
 		return new IPanelRenderer<T>() {
 			@Override
 			public int getBorder() {
@@ -140,11 +192,11 @@ public class RainbowTheme extends ThemeBase {
 			}
 			
 			@Override
-			public void renderPanelOverlay(Context context, boolean focus, T state, boolean open) {
+			public void renderPanelOverlay (Context context, boolean focus, T state, boolean open) {
 			}
 
 			@Override
-			public void renderTitleOverlay(Context context, boolean focus, T state, boolean open) {
+			public void renderTitleOverlay (Context context, boolean focus, T state, boolean open) {
 				if (graphicalLevel<=0) {
 					Color color=getFontColor(focus);
 					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+context.getSize().height,context.getSize().width,1),color,color,color,color);
@@ -166,10 +218,10 @@ public class RainbowTheme extends ThemeBase {
 	}
 
 	@Override
-	public <T> IScrollBarRenderer<T> getScrollBarRenderer(Class<T> type, int logicalLevel, int graphicalLevel) {
+	public <T> IScrollBarRenderer<T> getScrollBarRenderer (Class<T> type, int logicalLevel, int graphicalLevel) {
 		return new IScrollBarRenderer<T>() {
 			@Override
-			public int renderScrollBar(Context context, boolean focus, T state, boolean horizontal, int height, int position) {
+			public int renderScrollBar (Context context, boolean focus, T state, boolean horizontal, int height, int position) {
 				Color color=getBackgroundColor(focus);
 				if (graphicalLevel==0 || buttonRainbow.isOn()) {
 					renderRainbowRect(context.getRect(),context,focus);
@@ -197,10 +249,10 @@ public class RainbowTheme extends ThemeBase {
 	}
 
 	@Override
-	public <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer(Class<T> type, int logicalLevel, int graphicalLevel, boolean container) {
+	public <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer (Class<T> type, int logicalLevel, int graphicalLevel, boolean container) {
 		return new IEmptySpaceRenderer<T>() {
 			@Override
-			public void renderSpace(Context context, boolean focus, T state) {
+			public void renderSpace (Context context, boolean focus, T state) {
 				Color color=getBackgroundColor(focus);
 				context.getInterface().fillRect(context.getRect(),color,color,color,color);
 			}
@@ -208,10 +260,10 @@ public class RainbowTheme extends ThemeBase {
 	}
 
 	@Override
-	public <T> IButtonRenderer<T> getButtonRenderer(Class<T> type, int logicalLevel, int graphicalLevel, boolean container) {
+	public <T> IButtonRenderer<T> getButtonRenderer (Class<T> type, int logicalLevel, int graphicalLevel, boolean container) {
 		return new IButtonRenderer<T>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, T state) {
+			public void renderButton (Context context, String title, boolean focus, T state) {
 				boolean effFocus=container?context.hasFocus():focus;
 				boolean active=container&&graphicalLevel!=0;
 				if (type==Boolean.class) {
@@ -236,10 +288,10 @@ public class RainbowTheme extends ThemeBase {
 	}
 
 	@Override
-	public IButtonRenderer<Void> getSmallButtonRenderer(int symbol, int logicalLevel, int graphicalLevel, boolean container) {
+	public IButtonRenderer<Void> getSmallButtonRenderer (int symbol, int logicalLevel, int graphicalLevel, boolean container) {
 		return new IButtonRenderer<Void>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, Void state) {
+			public void renderButton (Context context, String title, boolean focus, Void state) {
 				if (graphicalLevel==0 || buttonRainbow.isOn()) {
 					renderRainbowRect(context.getRect(),context,focus);
 				}
@@ -255,10 +307,10 @@ public class RainbowTheme extends ThemeBase {
 	}
 
 	@Override
-	public IButtonRenderer<String> getKeybindRenderer(int logicalLevel, int graphicalLevel, boolean container) {
+	public IButtonRenderer<String> getKeybindRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new IButtonRenderer<String>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, String state) {
+			public void renderButton (Context context, String title, boolean focus, String state) {
 				boolean effFocus=container?context.hasFocus():focus;
 				boolean active=container&&graphicalLevel!=0;
 				if (!active) {
@@ -280,10 +332,10 @@ public class RainbowTheme extends ThemeBase {
 	}
 
 	@Override
-	public ISliderRenderer getSliderRenderer(int logicalLevel, int graphicalLevel, boolean container) {
+	public ISliderRenderer getSliderRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new ISliderRenderer() {
 			@Override
-			public void renderSlider(Context context, String title, String state, boolean focus, double value) {
+			public void renderSlider (Context context, String title, String state, boolean focus, double value) {
 				boolean effFocus=container?context.hasFocus():focus;
 				if (graphicalLevel==0 || buttonRainbow.isOn()) {
 					renderRainbowRect(context.getRect(),context,effFocus);
@@ -304,10 +356,10 @@ public class RainbowTheme extends ThemeBase {
 	}
 
 	@Override
-	public IRadioRenderer getRadioRenderer(int logicalLevel, int graphicalLevel, boolean container) {
+	public IRadioRenderer getRadioRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new IRadioRenderer() {
 			@Override
-			public void renderItem(Context context, ILabeled[] items, boolean focus, int target, double state, boolean horizontal) {
+			public void renderItem (Context context, ILabeled[] items, boolean focus, int target, double state, boolean horizontal) {
 				if (graphicalLevel==0 || buttonRainbow.isOn()) {
 					renderRainbowRect(context.getRect(),context,focus);
 				}
@@ -325,7 +377,7 @@ public class RainbowTheme extends ThemeBase {
 			}
 
 			@Override
-			public int getDefaultHeight(ILabeled[] items, boolean horizontal) {
+			public int getDefaultHeight (ILabeled[] items, boolean horizontal) {
 				return (horizontal?1:items.length)*getBaseHeight();
 			}
 		};
@@ -335,7 +387,7 @@ public class RainbowTheme extends ThemeBase {
 	public IResizeBorderRenderer getResizeRenderer() {
 		return new IResizeBorderRenderer() {
 			@Override
-			public void drawBorder(Context context, boolean focus) {
+			public void drawBorder (Context context, boolean focus) {
 				Color color=getBackgroundColor(focus);
 				Rectangle rect=context.getRect();
 				context.getInterface().fillRect(new Rectangle(rect.x,rect.y,rect.width,getBorder()),color,color,color,color);
@@ -352,7 +404,7 @@ public class RainbowTheme extends ThemeBase {
 	}
 
 	@Override
-	public ITextFieldRenderer getTextRenderer(boolean embed, int logicalLevel, int graphicalLevel, boolean container) {
+	public ITextFieldRenderer getTextRenderer (boolean embed, int logicalLevel, int graphicalLevel, boolean container) {
 		return new ITextFieldRenderer() {
 			@Override
 			public int renderTextField (Context context, String title, boolean focus, String content, int position, int select, int boxPosition, boolean insertMode) {
@@ -425,7 +477,7 @@ public class RainbowTheme extends ThemeBase {
 			}
 
 			@Override
-			public int transformToCharPos(Context context, String title, String content, int boxPosition) {
+			public int transformToCharPos (Context context, String title, String content, int boxPosition) {
 				Rectangle rect=getTextArea(context,title);
 				Point mouse=context.getInterface().getMouse();
 				int offset=context.getInterface().getFontWidth(height,content.substring(0,boxPosition));
@@ -443,10 +495,10 @@ public class RainbowTheme extends ThemeBase {
 	}
 
 	@Override
-	public ISwitchRenderer<Boolean> getToggleSwitchRenderer(int logicalLevel, int graphicalLevel, boolean container) {
+	public ISwitchRenderer<Boolean> getToggleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new ISwitchRenderer<Boolean>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, Boolean state) {
+			public void renderButton (Context context, String title, boolean focus, Boolean state) {
 				boolean effFocus=container?context.hasFocus():focus;
 				if (graphicalLevel==0 || buttonRainbow.isOn()) {
 					renderRainbowRect(context.getRect(),context,effFocus);
@@ -470,13 +522,13 @@ public class RainbowTheme extends ThemeBase {
 			}
 
 			@Override
-			public Rectangle getOnField(Context context) {
+			public Rectangle getOnField (Context context) {
 				Rectangle rect=context.getRect();
 				return new Rectangle(rect.x+rect.width-rect.height+padding,rect.y+padding,rect.height-2*padding,rect.height-2*padding);
 			}
 
 			@Override
-			public Rectangle getOffField(Context context) {
+			public Rectangle getOffField (Context context) {
 				Rectangle rect=context.getRect();
 				return new Rectangle(rect.x+rect.width-2*rect.height+3*padding,rect.y+padding,rect.height-2*padding,rect.height-2*padding);
 			}
@@ -484,10 +536,10 @@ public class RainbowTheme extends ThemeBase {
 	}
 
 	@Override
-	public ISwitchRenderer<String> getCycleSwitchRenderer(int logicalLevel, int graphicalLevel, boolean container) {
+	public ISwitchRenderer<String> getCycleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new ISwitchRenderer<String>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, String state) {
+			public void renderButton (Context context, String title, boolean focus, String state) {
 				boolean effFocus=container?context.hasFocus():focus;
 				if (graphicalLevel==0 || buttonRainbow.isOn()) {
 					renderRainbowRect(context.getRect(),context,effFocus);
@@ -513,13 +565,13 @@ public class RainbowTheme extends ThemeBase {
 			}
 
 			@Override
-			public Rectangle getOnField(Context context) {
+			public Rectangle getOnField (Context context) {
 				Rectangle rect=context.getRect();
 				return new Rectangle(rect.x+rect.width-rect.height,rect.y,rect.height,rect.height);
 			}
 
 			@Override
-			public Rectangle getOffField(Context context) {
+			public Rectangle getOffField (Context context) {
 				Rectangle rect=context.getRect();
 				return new Rectangle(rect.x+rect.width-2*rect.height,rect.y,rect.height,rect.height);
 			}
@@ -547,18 +599,18 @@ public class RainbowTheme extends ThemeBase {
 	}
 
 	@Override
-	public Color getMainColor(boolean focus, boolean active) {
+	public Color getMainColor (boolean focus, boolean active) {
 		if (active) return scheme.getColor("Rainbow Color");
 		else return scheme.getColor("Background Color");
 	}
 
 	@Override
-	public Color getBackgroundColor(boolean focus) {
+	public Color getBackgroundColor (boolean focus) {
 		return scheme.getColor("Background Color");
 	}
 
 	@Override
-	public Color getFontColor(boolean focus) {
+	public Color getFontColor (boolean focus) {
 		return scheme.getColor("Font Color");
 	}
 }

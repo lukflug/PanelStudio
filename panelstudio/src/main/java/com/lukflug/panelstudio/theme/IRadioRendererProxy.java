@@ -5,6 +5,10 @@ import java.awt.Rectangle;
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.setting.ILabeled;
 
+/**
+ * Proxy redirecting calls
+ * @author lukflug
+ */
 @FunctionalInterface
 public interface IRadioRendererProxy extends IRadioRenderer {
 	@Override
@@ -22,5 +26,9 @@ public interface IRadioRendererProxy extends IRadioRenderer {
 		return getRenderer().getItemRect(context,items,index,horizontal);
 	}
 	
+	/**
+	 * The renderer to be redirected to.
+	 * @return the renderer
+	 */
 	public IRadioRenderer getRenderer();
 }

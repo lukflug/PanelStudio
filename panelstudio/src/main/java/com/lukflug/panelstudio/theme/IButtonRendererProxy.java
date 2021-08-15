@@ -10,7 +10,7 @@ import com.lukflug.panelstudio.base.Context;
 @FunctionalInterface
 public interface IButtonRendererProxy<T> extends IButtonRenderer<T> {
 	@Override
-	public default void renderButton(Context context, String title, boolean focus, T state) {
+	public default void renderButton (Context context, String title, boolean focus, T state) {
 		getRenderer().renderButton(context,title,focus,state);
 	}
 

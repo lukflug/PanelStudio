@@ -11,7 +11,7 @@ import com.lukflug.panelstudio.base.IInterface;
 @FunctionalInterface
 public interface IDescriptionRendererProxy extends IDescriptionRenderer {
 	@Override
-	public default void renderDescription(IInterface inter, Point pos, String text) {
+	public default void renderDescription (IInterface inter, Point pos, String text) {
 		getRenderer().renderDescription(inter,pos,text);
 	}
 

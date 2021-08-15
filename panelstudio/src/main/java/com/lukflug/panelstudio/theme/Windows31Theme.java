@@ -9,10 +9,36 @@ import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.setting.ILabeled;
 
+/**
+ * Theme replacting the look of Windows 3.1.
+ * @author lukflug
+ */
 public class Windows31Theme extends ThemeBase {
-	protected int height,padding,scroll;
+	/**
+	 * The font size.
+	 */
+	protected int height;
+	/**
+	 * The text padding.
+	 */
+	protected int padding;
+	/**
+	 * The scroll bar size.
+	 */
+	protected int scroll;
+	/**
+	 * The text between title string and state string.
+	 */
 	protected String separator;
 
+	/**
+	 * Constructor.
+	 * @param scheme the color scheme to be used.
+	 * @param height the font size
+	 * @param padding the text padding
+	 * @param scroll the scroll bar size
+	 * @param separator the text between title string and state string
+	 */
 	public Windows31Theme (IColorScheme scheme, int height, int padding, int scroll, String separator) {
 		super(scheme);
 		this.height=height;
@@ -26,6 +52,14 @@ public class Windows31Theme extends ThemeBase {
 		scheme.createSetting(this,"Font Color","The main color for text.",false,true,new Color(0,0,0),false);
 	}
 	
+	/**
+	 * Draw base for buttons.
+	 * @param inter the current interface
+	 * @param rect the location of the component
+	 * @param focus the focus state
+	 * @param clicked whether the component is being clicked
+	 * @param small whether the button is small
+	 */
 	protected void drawButtonBase (IInterface inter, Rectangle rect, boolean focus, boolean clicked, boolean small) {
 		Color c1=scheme.getColor("Shadow Color");
 		Color c2=getMainColor(focus,false);
@@ -55,6 +89,14 @@ public class Windows31Theme extends ThemeBase {
 		}
 	}
 	
+	/**
+	 * Draw the body of a button.
+	 * @param inter the current interface
+	 * @param rect the location of the component
+	 * @param focus the focus state
+	 * @param clicked whether the component is being clicked
+	 * @param small whether the button is small
+	 */
 	protected void drawButton (IInterface inter, Rectangle rect, boolean focus, boolean clicked, boolean small) {
 		Color c0=getFontColor(focus);
 		if (small) ITheme.drawRect(inter,rect,c0);
@@ -74,7 +116,7 @@ public class Windows31Theme extends ThemeBase {
 	public IDescriptionRenderer getDescriptionRenderer() {
 		return new IDescriptionRenderer() {
 			@Override
-			public void renderDescription(IInterface inter, Point pos, String text) {
+			public void renderDescription (IInterface inter, Point pos, String text) {
 				Rectangle rect=new Rectangle(pos,new Dimension(inter.getFontWidth(height,text)+4,height+4));
 				Color color=getMainColor(true,false);
 				inter.fillRect(rect,color,color,color,color);
@@ -85,7 +127,7 @@ public class Windows31Theme extends ThemeBase {
 	}
 
 	@Override
-	public IContainerRenderer getContainerRenderer(int logicalLevel, int graphicalLevel, boolean horizontal) {
+	public IContainerRenderer getContainerRenderer (int logicalLevel, int graphicalLevel, boolean horizontal) {
 		return new IContainerRenderer() {
 			@Override
 			public int getBorder() {
@@ -115,7 +157,7 @@ public class Windows31Theme extends ThemeBase {
 	}
 
 	@Override
-	public <T> IPanelRenderer<T> getPanelRenderer(Class<T> type, int logicalLevel, int graphicalLevel) {
+	public <T> IPanelRenderer<T> getPanelRenderer (Class<T> type, int logicalLevel, int graphicalLevel) {
 		return new IPanelRenderer<T>() {
 			@Override
 			public void renderBackground (Context context, boolean focus) {
@@ -150,7 +192,7 @@ public class Windows31Theme extends ThemeBase {
 			}
 			
 			@Override
-			public void renderPanelOverlay(Context context, boolean focus, T state, boolean open) {
+			public void renderPanelOverlay (Context context, boolean focus, T state, boolean open) {
 				Rectangle rect=context.getRect();
 				ITheme.drawRect(context.getInterface(),rect,getFontColor(focus));
 				ITheme.drawRect(context.getInterface(),new Rectangle(rect.x+1,rect.y+1,rect.width-2,rect.height-2),getMainColor(focus,focus));
@@ -158,16 +200,16 @@ public class Windows31Theme extends ThemeBase {
 			}
 
 			@Override
-			public void renderTitleOverlay(Context context, boolean focus, T state, boolean open) {
+			public void renderTitleOverlay (Context context, boolean focus, T state, boolean open) {
 			}
 		};
 	}
 
 	@Override
-	public <T> IScrollBarRenderer<T> getScrollBarRenderer(Class<T> type, int logicalLevel, int graphicalLevel) {
+	public <T> IScrollBarRenderer<T> getScrollBarRenderer (Class<T> type, int logicalLevel, int graphicalLevel) {
 		return new IScrollBarRenderer<T>() {
 			@Override
-			public int renderScrollBar(Context context, boolean focus, T state, boolean horizontal, int height, int position) {
+			public int renderScrollBar (Context context, boolean focus, T state, boolean horizontal, int height, int position) {
 				Color color=getBackgroundColor(focus);
 				context.getInterface().fillRect(context.getRect(),color,color,color,color);
 				int d=horizontal?context.getSize().height:context.getSize().width;
@@ -187,10 +229,10 @@ public class Windows31Theme extends ThemeBase {
 	}
 
 	@Override
-	public <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer(Class<T> type, int logicalLevel, int graphicalLevel, boolean container) {
+	public <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer (Class<T> type, int logicalLevel, int graphicalLevel, boolean container) {
 		return new IEmptySpaceRenderer<T>() {
 			@Override
-			public void renderSpace(Context context, boolean focus, T state) {
+			public void renderSpace (Context context, boolean focus, T state) {
 				Color color;
 				if (container) color=getMainColor(focus,false);
 				else color=getBackgroundColor(focus);
@@ -200,10 +242,10 @@ public class Windows31Theme extends ThemeBase {
 	}
 
 	@Override
-	public <T> IButtonRenderer<T> getButtonRenderer(Class<T> type, int logicalLevel, int graphicalLevel, boolean container) {
+	public <T> IButtonRenderer<T> getButtonRenderer (Class<T> type, int logicalLevel, int graphicalLevel, boolean container) {
 		return new IButtonRenderer<T>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, T state) {
+			public void renderButton (Context context, String title, boolean focus, T state) {
 				boolean effFocus=container?context.hasFocus():focus;
 				boolean active=type==Boolean.class?(Boolean)state:effFocus;
 				if (!container && type==Boolean.class) {
@@ -236,10 +278,10 @@ public class Windows31Theme extends ThemeBase {
 	}
 
 	@Override
-	public IButtonRenderer<Void> getSmallButtonRenderer(int symbol, int logicalLevel, int graphicalLevel, boolean container) {
+	public IButtonRenderer<Void> getSmallButtonRenderer (int symbol, int logicalLevel, int graphicalLevel, boolean container) {
 		return new IButtonRenderer<Void>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, Void state) {
+			public void renderButton (Context context, String title, boolean focus, Void state) {
 				Windows31Theme.this.drawButton(context.getInterface(),context.getRect(),focus,context.isClicked(IInterface.LBUTTON),true);
 				Point points[]=new Point[3];
 				int padding=context.getSize().height<=12?4:6;
@@ -299,10 +341,10 @@ public class Windows31Theme extends ThemeBase {
 	}
 
 	@Override
-	public IButtonRenderer<String> getKeybindRenderer(int logicalLevel, int graphicalLevel, boolean container) {
+	public IButtonRenderer<String> getKeybindRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new IButtonRenderer<String>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, String state) {
+			public void renderButton (Context context, String title, boolean focus, String state) {
 				boolean effFocus=container?context.hasFocus():focus;
 				if (container) {
 					Color color=getMainColor(effFocus,effFocus);
@@ -323,10 +365,10 @@ public class Windows31Theme extends ThemeBase {
 	}
 
 	@Override
-	public ISliderRenderer getSliderRenderer(int logicalLevel, int graphicalLevel, boolean container) {
+	public ISliderRenderer getSliderRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new ISliderRenderer() {
 			@Override
-			public void renderSlider(Context context, String title, String state, boolean focus, double value) {
+			public void renderSlider (Context context, String title, String state, boolean focus, double value) {
 				boolean effFocus=container?context.hasFocus():focus;
 				Color colorA=getMainColor(effFocus,true);
 				if (container && effFocus) context.getInterface().fillRect(context.getRect(),colorA,colorA,colorA,colorA);
@@ -357,7 +399,7 @@ public class Windows31Theme extends ThemeBase {
 	}
 
 	@Override
-	public IRadioRenderer getRadioRenderer(int logicalLevel, int graphicalLevel, boolean container) {
+	public IRadioRenderer getRadioRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new IRadioRenderer() {
 			@Override
 			public void renderItem (Context context, ILabeled[] items, boolean focus, int target, double state, boolean horizontal) {
@@ -445,14 +487,14 @@ public class Windows31Theme extends ThemeBase {
 			}
 
 			@Override
-			public Rectangle getTextArea(Context context, String title) {
+			public Rectangle getTextArea (Context context, String title) {
 				Rectangle rect=context.getRect();
 				int length=padding+context.getInterface().getFontWidth(height,title+separator);
 				return new Rectangle(rect.x+length,rect.y,rect.width-length,rect.height);
 			}
 			
 			@Override
-			public int transformToCharPos(Context context, String title, String content, int boxPosition) {
+			public int transformToCharPos (Context context, String title, String content, int boxPosition) {
 				Rectangle rect=getTextArea(context,title);
 				Point mouse=context.getInterface().getMouse();
 				int offset=context.getInterface().getFontWidth(height,content.substring(0,boxPosition));
@@ -473,7 +515,7 @@ public class Windows31Theme extends ThemeBase {
 	public IResizeBorderRenderer getResizeRenderer() {
 		return new IResizeBorderRenderer() {
 			@Override
-			public void drawBorder(Context context, boolean focus) {
+			public void drawBorder (Context context, boolean focus) {
 				Color color=getBackgroundColor(focus);
 				Rectangle rect=context.getRect();
 				context.getInterface().fillRect(new Rectangle(rect.x,rect.y,rect.width,getBorder()),color,color,color,color);
@@ -497,7 +539,7 @@ public class Windows31Theme extends ThemeBase {
 	public ISwitchRenderer<Boolean> getToggleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new ISwitchRenderer<Boolean>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, Boolean state) {
+			public void renderButton (Context context, String title, boolean focus, Boolean state) {
 				boolean effFocus=container?context.hasFocus():focus;
 				Color colorA=getMainColor(effFocus,true);
 				if (container && effFocus) context.getInterface().fillRect(context.getRect(),colorA,colorA,colorA,colorA);
@@ -516,13 +558,13 @@ public class Windows31Theme extends ThemeBase {
 			}
 
 			@Override
-			public Rectangle getOnField(Context context) {
+			public Rectangle getOnField (Context context) {
 				Rectangle rect=context.getRect();
 				return new Rectangle(rect.x+rect.width-rect.height,rect.y,rect.height,rect.height);
 			}
 
 			@Override
-			public Rectangle getOffField(Context context) {
+			public Rectangle getOffField (Context context) {
 				Rectangle rect=context.getRect();
 				return new Rectangle(rect.x+rect.width-2*rect.height,rect.y,rect.height,rect.height);
 			}
@@ -533,7 +575,7 @@ public class Windows31Theme extends ThemeBase {
 	public ISwitchRenderer<String> getCycleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new ISwitchRenderer<String>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, String state) {
+			public void renderButton (Context context, String title, boolean focus, String state) {
 				boolean effFocus=container?context.hasFocus():focus;
 				Color colorA=getMainColor(effFocus,true);
 				if (container && effFocus) context.getInterface().fillRect(context.getRect(),colorA,colorA,colorA,colorA);
@@ -557,13 +599,13 @@ public class Windows31Theme extends ThemeBase {
 			}
 
 			@Override
-			public Rectangle getOnField(Context context) {
+			public Rectangle getOnField (Context context) {
 				Rectangle rect=context.getRect();
 				return new Rectangle(rect.x+rect.width-rect.height,rect.y,rect.height,rect.height);
 			}
 
 			@Override
-			public Rectangle getOffField(Context context) {
+			public Rectangle getOffField (Context context) {
 				Rectangle rect=context.getRect();
 				return new Rectangle(rect.x+rect.width-2*rect.height,rect.y,rect.height,rect.height);
 			}
@@ -591,18 +633,18 @@ public class Windows31Theme extends ThemeBase {
 	}
 
 	@Override
-	public Color getMainColor(boolean focus, boolean active) {
+	public Color getMainColor (boolean focus, boolean active) {
 		if (active) return getColor(scheme.getColor("Title Color"));
 		else return scheme.getColor("Background Color");
 	}
 
 	@Override
-	public Color getBackgroundColor(boolean focus) {
+	public Color getBackgroundColor (boolean focus) {
 		return scheme.getColor("Button Color");
 	}
 
 	@Override
-	public Color getFontColor(boolean focus) {
+	public Color getFontColor (boolean focus) {
 		return scheme.getColor("Font Color");
 	}
 }

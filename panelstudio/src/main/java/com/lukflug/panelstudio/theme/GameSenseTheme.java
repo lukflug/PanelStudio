@@ -14,9 +14,31 @@ import com.lukflug.panelstudio.setting.ILabeled;
  * @author lukflug
  */
 public class GameSenseTheme extends ThemeBase {
-	protected int height,padding,scroll;
+	/**
+	 * The font size.
+	 */
+	protected int height;
+	/**
+	 * The text padding.
+	 */
+	protected int padding;
+	/**
+	 * The scroll bar size.
+	 */
+	protected int scroll;
+	/**
+	 * The text between title string and state string.
+	 */
 	protected String separator;
 	
+	/**
+	 * Constructor.
+	 * @param scheme the color scheme to be used.
+	 * @param height the font size
+	 * @param padding the text padding
+	 * @param scroll the scroll bar size
+	 * @param separator the text between title string and state string
+	 */
 	public GameSenseTheme (IColorScheme scheme, int height, int padding, int scroll, String separator) {
 		super(scheme);
 		this.height=height;
@@ -32,6 +54,15 @@ public class GameSenseTheme extends ThemeBase {
 		scheme.createSetting(this,"Highlight Color","The color for highlighted text.",false,true,new Color(0,0,255),false);
 	}
 	
+	/**
+	 * Render the base of components.
+	 * @param context the context to be used
+	 * @param focus the focus state
+	 * @param active whether the component is active
+	 * @param logicalLevel the logical nesting level
+	 * @param graphicalLevel the panel nesting level
+	 * @param colorState the current color override
+	 */
 	protected void fillBaseRect (Context context, boolean focus, boolean active, int logicalLevel, int graphicalLevel, Color colorState) {
 		Color color=getMainColor(focus,active);
 		if (logicalLevel>1 && !active) color=getBackgroundColor(focus);
@@ -40,6 +71,10 @@ public class GameSenseTheme extends ThemeBase {
 		context.getInterface().fillRect(context.getRect(),color,color,color,color);
 	}
 	
+	/**
+	 * Function to render hover overlay.
+	 * @param context the context to be used
+	 */
 	protected void renderOverlay (Context context) {
 		Color color=context.isHovered()?new Color(255,255,255,64):new Color(0,0,0,0);
 		context.getInterface().fillRect(context.getRect(),color,color,color,color);
@@ -49,7 +84,7 @@ public class GameSenseTheme extends ThemeBase {
 	public IDescriptionRenderer getDescriptionRenderer() {
 		return new IDescriptionRenderer() {
 			@Override
-			public void renderDescription(IInterface inter, Point pos, String text) {
+			public void renderDescription (IInterface inter, Point pos, String text) {
 				Rectangle rect=new Rectangle(pos,new Dimension(inter.getFontWidth(height,text)+4,height+4));
 				Color color=getMainColor(true,false);
 				inter.fillRect(rect,color,color,color,color);
@@ -97,14 +132,14 @@ public class GameSenseTheme extends ThemeBase {
 			}
 			
 			@Override
-			public void renderPanelOverlay(Context context, boolean focus, T state, boolean open) {
+			public void renderPanelOverlay (Context context, boolean focus, T state, boolean open) {
 				if (graphicalLevel==0) {
 					ITheme.drawRect(context.getInterface(),context.getRect(),scheme.getColor("Outline Color"));
 				}
 			}
 
 			@Override
-			public void renderTitleOverlay(Context context, boolean focus, T state, boolean open) {
+			public void renderTitleOverlay (Context context, boolean focus, T state, boolean open) {
 			}
 		};
 	}
@@ -113,7 +148,7 @@ public class GameSenseTheme extends ThemeBase {
 	public <T> IScrollBarRenderer<T> getScrollBarRenderer (Class<T> type, int logicalLevel, int graphicalLevel) {
 		return new IScrollBarRenderer<T>() {
 			@Override
-			public int renderScrollBar(Context context, boolean focus, T state, boolean horizontal, int height, int position) {
+			public int renderScrollBar (Context context, boolean focus, T state, boolean horizontal, int height, int position) {
 				Color activecolor=getMainColor(focus,true);
 				Color inactivecolor=getMainColor(focus,false);
 				if (horizontal) {
@@ -246,7 +281,7 @@ public class GameSenseTheme extends ThemeBase {
 	}
 
 	@Override
-	public IButtonRenderer<String> getKeybindRenderer(int logicalLevel, int graphicalLevel, boolean container) {
+	public IButtonRenderer<String> getKeybindRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new IButtonRenderer<String>() {
 			@Override
 			public void renderButton(Context context, String title, boolean focus, String state) {
@@ -264,10 +299,10 @@ public class GameSenseTheme extends ThemeBase {
 	}
 
 	@Override
-	public ISliderRenderer getSliderRenderer(int logicalLevel, int graphicalLevel, boolean container) {
+	public ISliderRenderer getSliderRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new ISliderRenderer() {
 			@Override
-			public void renderSlider(Context context, String title, String state, boolean focus, double value) {
+			public void renderSlider (Context context, String title, String state, boolean focus, double value) {
 				boolean effFocus=container?context.hasFocus():focus;
 				Color colorA=getMainColor(effFocus,true),colorB=getBackgroundColor(effFocus);
 				Rectangle rect=getSlideArea(context,title,state);
@@ -286,7 +321,7 @@ public class GameSenseTheme extends ThemeBase {
 	}
 
 	@Override
-	public IRadioRenderer getRadioRenderer(int logicalLevel, int graphicalLevel, boolean container) {
+	public IRadioRenderer getRadioRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new IRadioRenderer() {
 			@Override
 			public void renderItem (Context context, ILabeled[] items, boolean focus, int target, double state, boolean horizontal) {
@@ -311,7 +346,7 @@ public class GameSenseTheme extends ThemeBase {
 	public IResizeBorderRenderer getResizeRenderer() {
 		return new IResizeBorderRenderer() {
 			@Override
-			public void drawBorder(Context context, boolean focus) {
+			public void drawBorder (Context context, boolean focus) {
 				Color color=ITheme.combineColors(scheme.getColor("Outline Color"),scheme.getColor("Enabled Color"));
 				Rectangle rect=context.getRect();
 				context.getInterface().fillRect(new Rectangle(rect.x,rect.y,rect.width,getBorder()),color,color,color,color);
@@ -404,7 +439,7 @@ public class GameSenseTheme extends ThemeBase {
 			}
 
 			@Override
-			public int transformToCharPos(Context context, String title, String content, int boxPosition) {
+			public int transformToCharPos (Context context, String title, String content, int boxPosition) {
 				Rectangle rect=getTextArea(context,title);
 				Point mouse=context.getInterface().getMouse();
 				int offset=context.getInterface().getFontWidth(height,content.substring(0,boxPosition));
@@ -425,7 +460,7 @@ public class GameSenseTheme extends ThemeBase {
 	public ISwitchRenderer<Boolean> getToggleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new ISwitchRenderer<Boolean>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, Boolean state) {
+			public void renderButton (Context context, String title, boolean focus, Boolean state) {
 				boolean effFocus=container?context.hasFocus():focus;
 				fillBaseRect(context,effFocus,false,logicalLevel,graphicalLevel,null);
 				Color color=scheme.getColor("Outline Color");
@@ -448,13 +483,13 @@ public class GameSenseTheme extends ThemeBase {
 			}
 
 			@Override
-			public Rectangle getOnField(Context context) {
+			public Rectangle getOnField (Context context) {
 				Rectangle rect=context.getRect();
 				return new Rectangle(rect.x+rect.width-rect.height+padding,rect.y+padding,rect.height-2*padding,rect.height-2*padding);
 			}
 
 			@Override
-			public Rectangle getOffField(Context context) {
+			public Rectangle getOffField (Context context) {
 				Rectangle rect=context.getRect();
 				return new Rectangle(rect.x+rect.width-2*rect.height+3*padding,rect.y+padding,rect.height-2*padding,rect.height-2*padding);
 			}
@@ -464,7 +499,7 @@ public class GameSenseTheme extends ThemeBase {
 	public ISwitchRenderer<String> getCycleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new ISwitchRenderer<String>() {
 			@Override
-			public void renderButton(Context context, String title, boolean focus, String state) {
+			public void renderButton (Context context, String title, boolean focus, String state) {
 				boolean effFocus=container?context.hasFocus():focus;
 				fillBaseRect(context,effFocus,false,logicalLevel,graphicalLevel,null);
 				Color color=scheme.getColor("Outline Color");
@@ -492,13 +527,13 @@ public class GameSenseTheme extends ThemeBase {
 			}
 
 			@Override
-			public Rectangle getOnField(Context context) {
+			public Rectangle getOnField (Context context) {
 				Rectangle rect=context.getRect();
 				return new Rectangle(rect.x+rect.width-rect.height,rect.y,rect.height,rect.height);
 			}
 
 			@Override
-			public Rectangle getOffField(Context context) {
+			public Rectangle getOffField (Context context) {
 				Rectangle rect=context.getRect();
 				return new Rectangle(rect.x+rect.width-2*rect.height,rect.y,rect.height,rect.height);
 			}
@@ -526,18 +561,18 @@ public class GameSenseTheme extends ThemeBase {
 	}
 
 	@Override
-	public Color getMainColor(boolean focus, boolean active) {
+	public Color getMainColor (boolean focus, boolean active) {
 		if (active) return ITheme.combineColors(getColor(scheme.getColor("Enabled Color")),scheme.getColor("Enabled Color"));
 		else return ITheme.combineColors(scheme.getColor("Disabled Color"),scheme.getColor("Enabled Color"));
 	}
 
 	@Override
-	public Color getBackgroundColor(boolean focus) {
+	public Color getBackgroundColor (boolean focus) {
 		return ITheme.combineColors(scheme.getColor("Settings Color"),scheme.getColor("Enabled Color"));
 	}
 
 	@Override
-	public Color getFontColor(boolean focus) {
+	public Color getFontColor (boolean focus) {
 		return scheme.getColor("Font Color");
 	}
 }

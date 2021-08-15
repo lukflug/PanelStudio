@@ -4,6 +4,10 @@ import java.awt.Rectangle;
 
 import com.lukflug.panelstudio.base.Context;
 
+/**
+ * Proxy redirecting calls
+ * @author lukflug
+ */
 @FunctionalInterface
 public interface ITextFieldRendererProxy extends ITextFieldRenderer {
 	@Override
