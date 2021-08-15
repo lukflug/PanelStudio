@@ -151,14 +151,15 @@ public interface IInterface {
 	 * @param name a string indicating the location of the image to be loaded
 	 * @return a number identifying the image
 	 * @see #drawImage(Rectangle, int, boolean, int)
+	 * @see #drawImage(Rectangle, int, boolean, int, Color)
 	 */
 	public int loadImage (String name);
 	
 	/**
 	 * Draw an image.
 	 * @param r the rectangle specifying the position of the image
-	 * @param rotation the rotation of the image in units of 90 degrees counter-clockwise
-	 * @param parity if true, will switch the top-left and bottom-right, the bottom-left and top-right corners
+	 * @param rotation the rotation of the image in units of 90 degrees clockwise
+	 * @param parity if true, will flip the image around the vertical axis
 	 * @param image the number identifying the image
 	 * @see #loadImage(String)
 	 */
@@ -169,8 +170,8 @@ public interface IInterface {
 	/**
 	 * Draw an image.
 	 * @param r the rectangle specifying the position of the image
-	 * @param rotation the rotation of the image in units of 90 degrees counter-clockwise
-	 * @param parity if true, will switch the top-left and bottom-right, the bottom-left and top-right corners
+	 * @param rotation the rotation of the image in units of 90 degrees clockwise
+	 * @param parity if true, will flip the image around the vertical axis
 	 * @param image the number identifying the image
 	 * @param color the color to modulate the image by
 	 * @see #loadImage(String)

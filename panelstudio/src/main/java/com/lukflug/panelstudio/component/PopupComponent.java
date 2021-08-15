@@ -5,19 +5,38 @@ import java.awt.Rectangle;
 
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IInterface;
-import com.lukflug.panelstudio.popup.IPopup;
 import com.lukflug.panelstudio.popup.IPopupPositioner;
 
-public class PopupComponent<T extends IComponent> extends FixedComponent<T> implements IPopup {
-	protected Rectangle component,panel;
+/**
+ * A {@link FixedComponent} that uses dynamic {@link IPopupPositioner} for positioning. 
+ * @author lukflug
+ * @param <T> the component type
+ */
+public class PopupComponent<T extends IComponent> extends FixedComponent<T> {
+	/**
+	 * The displaying component location.
+	 */
+	protected Rectangle component;
+	/**
+	 * The panel location.
+	 */
+	protected Rectangle panel;
+	/**
+	 * The positioner to be used.
+	 */
 	protected IPopupPositioner positioner;
 	
+	/**
+	 * Constructor.
+	 * @param component the component to be wrapped
+	 * @param width the width of the component
+	 */
 	public PopupComponent (T component, int width) {
 		super(component,new Point(0,0),width,null,false,"");
 	}
 
 	@Override
-	public Point getPosition(IInterface inter) {
+	public Point getPosition (IInterface inter) {
 		Context temp=new Context(inter,width,position,true,true);
 		getHeight(temp);
 		return positioner.getPosition(inter,temp.getSize(),component,panel);

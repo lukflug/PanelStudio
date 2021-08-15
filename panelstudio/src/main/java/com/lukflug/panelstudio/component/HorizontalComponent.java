@@ -5,6 +5,7 @@ import com.lukflug.panelstudio.base.IInterface;
 /**
  * Class wrapping a generic component into a horizontal component.
  * @author lukflug
+ * @param <T> the component type
  */
 public class HorizontalComponent<T extends IComponent> extends ComponentProxy<T> implements IHorizontalComponent {
 	/**
@@ -29,7 +30,7 @@ public class HorizontalComponent<T extends IComponent> extends ComponentProxy<T>
 	}
 
 	@Override
-	public int getWidth(IInterface inter) {
+	public int getWidth (IInterface inter) {
 		return width;
 	}
 

@@ -39,6 +39,12 @@ public interface IComponent {
 	 */
 	public void handleKey (Context context, int scancode);
 	
+	/**
+	 * Should be called by the parent when a key is typed.
+	 * The current height of the component should be set by this method via {@link Context#setHeight(int)}.
+	 * @param context the {@link Context} for the component
+	 * @param character the character that was typed
+	 */
 	public void handleChar (Context context, char character);
 	
 	/**

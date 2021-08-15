@@ -4,14 +4,29 @@ import java.util.function.Consumer;
 
 import com.lukflug.panelstudio.base.Context;
 
+/**
+ * Component proxy that manages focus.
+ * @author lukflug
+ * @param <T> the component type
+ */
 public abstract class FocusableComponentProxy<T extends IComponent> implements IComponentProxy<T> {
+	/**
+	 * The focus state this component should have after becoming visible.
+	 */
+	private final boolean initFocus;
 	/**
 	 * The focus state for this component.
 	 */
-	private final boolean initFocus;
 	private boolean focus;
+	/**
+	 * Flag to indicate that focus has to be requested.
+	 */
 	private boolean requestFocus=false;
 	
+	/**
+	 * Constructor.
+	 * @param focus initial focus state
+	 */
 	public FocusableComponentProxy (boolean focus) {
 		initFocus=focus;
 		this.focus=focus;

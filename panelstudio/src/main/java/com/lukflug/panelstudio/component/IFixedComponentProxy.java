@@ -7,6 +7,11 @@ import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.config.IPanelConfig;
 import com.lukflug.panelstudio.popup.IPopupPositioner;
 
+/**
+ * Combination of {@link IComponentProxy} and {@link IFixedComponent}.
+ * @author lukflug
+ * @param <T> the component type
+ */
 @FunctionalInterface
 public interface IFixedComponentProxy<T extends IFixedComponent> extends IComponentProxy<T>,IFixedComponent {
 	@Override

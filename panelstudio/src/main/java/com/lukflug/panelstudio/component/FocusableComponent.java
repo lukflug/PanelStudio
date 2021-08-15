@@ -4,7 +4,7 @@ import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.setting.ILabeled;
 
 /**
- * Base class for all components included in this library.
+ * Base class for most widgets included in this library.
  * @author lukflug
  */
 public abstract class FocusableComponent extends ComponentBase {

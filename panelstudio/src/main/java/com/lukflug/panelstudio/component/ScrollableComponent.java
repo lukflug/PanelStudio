@@ -10,8 +10,12 @@ import com.lukflug.panelstudio.base.Context;
 /**
  * A component that can scroll another component.
  * @author lukflug
+ * @param <T> the component type
  */
 public abstract class ScrollableComponent<T extends IComponent> implements IComponentProxy<T>,IScrollSize {
+	/**
+	 * Context cache.
+	 */
 	private Context tempContext;
 	/**
 	 * Current scrolling position.
@@ -31,7 +35,7 @@ public abstract class ScrollableComponent<T extends IComponent> implements IComp
 	protected Dimension scrollSize=new Dimension(0,0);
 	
 	@Override
-	public void render(Context context) {
+	public void render (Context context) {
 		doOperation(context,subContext->{
 			context.getInterface().window(context.getRect());
 			getComponent().render(subContext);
@@ -50,7 +54,7 @@ public abstract class ScrollableComponent<T extends IComponent> implements IComp
 	}
 
 	@Override
-	public void handleScroll(Context context, int diff) {
+	public void handleScroll (Context context, int diff) {
 		Context sContext=doOperation(context,subContext->getComponent().handleScroll(subContext,diff));
 		if (context.isHovered()) {
 			if (isScrollingY()) scrollPos.translate(0,diff);
@@ -157,5 +161,10 @@ public abstract class ScrollableComponent<T extends IComponent> implements IComp
 		return getScrollHeight(tempContext,height);
 	}
 	
+	/**
+	 * Renders empty space in case the component is smaller than the scroll container.
+	 * @param context the current context
+	 * @param rect the rectangle defining the empty space
+	 */
 	public abstract void fillEmptySpace (Context context, Rectangle rect);
 }

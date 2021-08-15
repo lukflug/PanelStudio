@@ -19,19 +19,23 @@ public abstract class CollapsibleComponent<T extends IComponent> implements ICom
 	
 	/**
 	 * Constructor.
-	 * @param component the component to be wrapped
-	 * @param toggle the toggleable indicating whether the component is open
+	 * @param toggle the {@link IToggleable} to be used
+	 * @param animation the {@link Animation} to be used
 	 */
 	public CollapsibleComponent (IToggleable toggle, Animation animation) {
 		this.toggle=new AnimatedToggleable(toggle,animation);
 	}
 	
+	/**
+	 * Constructor.
+	 * @param toggle the {@link AnimatedToggleable} to be used
+	 */
 	public CollapsibleComponent (AnimatedToggleable toggle) {
 		this.toggle=toggle;
 	}
 	
 	@Override
-	public void render(Context context) {
+	public void render (Context context) {
 		doOperation(context,subContext->{
 			context.getInterface().window(context.getRect());
 			getComponent().render(subContext);
@@ -60,7 +64,7 @@ public abstract class CollapsibleComponent<T extends IComponent> implements ICom
 	}
 	
 	/**
-	 * Returns the current toggleable used.
+	 * Returns the current {@link IToggleable} used.
 	 * @return the current {@link #toggle}
 	 */
 	public AnimatedToggleable getToggle() {

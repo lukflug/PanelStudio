@@ -3,7 +3,7 @@ package com.lukflug.panelstudio.component;
 import com.lukflug.panelstudio.base.IInterface;
 
 /**
- * Component to be included in horizontal
+ * Component to be included in horizontal containers.
  * @author lukflug
  */
 public interface IHorizontalComponent extends IComponent {

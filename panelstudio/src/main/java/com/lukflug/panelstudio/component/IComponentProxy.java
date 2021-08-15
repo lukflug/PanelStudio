@@ -7,6 +7,7 @@ import com.lukflug.panelstudio.base.Context;
 /**
  * Proxy redirecting calls to other component.
  * @author lukflug
+ * @param <T> the component type
  */
 @FunctionalInterface
 public interface IComponentProxy<T extends IComponent> extends IComponent {
@@ -16,32 +17,32 @@ public interface IComponentProxy<T extends IComponent> extends IComponent {
 	}
 
 	@Override
-	public default void render(Context context) {
+	public default void render (Context context) {
 		doOperation(context,getComponent()::render);
 	}
 
 	@Override
-	public default void handleButton(Context context, int button) {
+	public default void handleButton (Context context, int button) {
 		doOperation(context,subContext->getComponent().handleButton(subContext,button));
 	}
 
 	@Override
-	public default void handleKey(Context context, int scancode) {
+	public default void handleKey (Context context, int scancode) {
 		doOperation(context,subContext->getComponent().handleKey(subContext,scancode));
 	}
 	
 	@Override
-	public default void handleChar(Context context, char character) {
+	public default void handleChar (Context context, char character) {
 		doOperation(context,subContext->getComponent().handleChar(subContext,character));
 	}
 
 	@Override
-	public default void handleScroll(Context context, int diff) {
+	public default void handleScroll (Context context, int diff) {
 		doOperation(context,subContext->getComponent().handleScroll(subContext,diff));
 	}
 
 	@Override
-	public default void getHeight(Context context) {
+	public default void getHeight (Context context) {
 		doOperation(context,getComponent()::getHeight);
 	}
 

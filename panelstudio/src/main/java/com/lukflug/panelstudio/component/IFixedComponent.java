@@ -62,5 +62,9 @@ public interface IFixedComponent extends IComponent,IPopup {
 	 */
 	public void loadConfig (IInterface inter, IPanelConfig config);
 	
+	/**
+	 * Returns the name to identify the component for saving position and size.
+	 * @return the config name of the component
+	 */
 	public String getConfigName();
 }

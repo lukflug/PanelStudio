@@ -9,6 +9,7 @@ import com.lukflug.panelstudio.config.IPanelConfig;
 /**
  * Fixed component wrapper that can be dragged by another component.
  * @author lukflug
+ * @param <T> the component type
  */
 public abstract class DraggableComponent<T extends IFixedComponent> implements IComponentProxy<T>,IFixedComponent {
 	/**
@@ -21,14 +22,14 @@ public abstract class DraggableComponent<T extends IFixedComponent> implements I
 	protected Point attachPoint;
 
 	@Override
-	public Point getPosition(IInterface inter) {
+	public Point getPosition (IInterface inter) {
 		Point point=getComponent().getPosition(inter);
 		if (dragging) point.translate(inter.getMouse().x-attachPoint.x,inter.getMouse().y-attachPoint.y);
 		return point;
 	}
 
 	@Override
-	public void setPosition(IInterface inter, Point position) {
+	public void setPosition (IInterface inter, Point position) {
 		getComponent().setPosition(inter,position);
 	}
 
@@ -43,12 +44,12 @@ public abstract class DraggableComponent<T extends IFixedComponent> implements I
 	}
 
 	@Override
-	public void saveConfig(IInterface inter, IPanelConfig config) {
+	public void saveConfig (IInterface inter, IPanelConfig config) {
 		getComponent().saveConfig(inter,config);
 	}
 
 	@Override
-	public void loadConfig(IInterface inter, IPanelConfig config) {
+	public void loadConfig (IInterface inter, IPanelConfig config) {
 		getComponent().loadConfig(inter,config);
 	}
 	
