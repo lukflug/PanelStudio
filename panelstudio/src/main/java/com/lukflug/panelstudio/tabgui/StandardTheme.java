@@ -10,13 +10,48 @@ import com.lukflug.panelstudio.popup.IPopupPositioner;
 import com.lukflug.panelstudio.popup.PanelPositioner;
 import com.lukflug.panelstudio.theme.IColorScheme;
 
+/**
+ * The standard TabGUI look and feel.
+ * @author lukflug
+ */
 public class StandardTheme implements ITabGUITheme {
+	/**
+	 * The color scheme to be used.
+	 */
 	protected final IColorScheme scheme;
-	protected int width,height,padding;
+	/**
+	 * The base tab width.
+	 */
+	protected int width;
+	/**
+	 * The font size.
+	 */
+	protected int height;
+	/**
+	 * The padding around text.
+	 */
+	protected int padding;
+	/**
+	 * The pop-up positioner for the child tabs.
+	 */
 	protected IPopupPositioner positioner;
+	/**
+	 * The renderer for the parent.
+	 */
 	protected RendererBase<Void> parentRenderer;
+	/**
+	 * The renderer for the children.
+	 */
 	protected RendererBase<Boolean> childRenderer;
 	
+	/**
+	 * Constructor.
+	 * @param scheme the color scheme to be used
+	 * @param width the base tab width
+	 * @param height the font size
+	 * @param padding the padding around text
+	 * @param distance the distance between parent and child
+	 */
 	public StandardTheme (IColorScheme scheme, int width, int height, int padding, int distance) {
 		this.scheme=scheme;
 		this.width=width;
@@ -64,9 +99,14 @@ public class StandardTheme implements ITabGUITheme {
 	}
 	
 	
+	/**
+	 * Base class for the TabGUI renderers.
+	 * @author lukflug
+	 * @param <T> the item state type
+	 */
 	protected abstract class RendererBase<T> implements ITabGUIRenderer<T> {
 		@Override
-		public void renderTab(Context context, int amount, double tabState) {
+		public void renderTab (Context context, int amount, double tabState) {
 			Color color=scheme.getColor("Selected Color");
 			Color fill=scheme.getColor("Background Color");
 			Color border=scheme.getColor("Outline Color");
@@ -91,6 +131,11 @@ public class StandardTheme implements ITabGUITheme {
 			return new Rectangle(rect.x,rect.y+(int)Math.round(rect.height*tabState/amount),rect.width,height+2*padding);
 		}
 		
+		/**
+		 * Get the font color for items.
+		 * @param itemState the item state
+		 * @return the font color
+		 */
 		protected abstract Color getFontColor (T itemState);
 	}
 }
