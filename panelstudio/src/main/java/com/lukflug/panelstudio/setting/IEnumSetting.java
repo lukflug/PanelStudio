@@ -12,6 +12,9 @@ public interface IEnumSetting extends ISetting<String> {
 	 */
 	public void increment();
 	
+	/**
+	 * Cycle through the values of the enumeration in inverse order
+	 */
 	public void decrement();
 	
 	/**
@@ -20,6 +23,10 @@ public interface IEnumSetting extends ISetting<String> {
 	 */
 	public String getValueName();
 	
+	/**
+	 * Get a sequential number of the current enum state.
+	 * @return the index of the current value
+	 */
 	public default int getValueIndex() {
 		ILabeled stuff[]=getAllowedValues();
 		String compare=getValueName();
@@ -29,8 +36,16 @@ public interface IEnumSetting extends ISetting<String> {
 		return -1;
 	}
 	
+	/**
+	 * Set the current enum state by sequential number per {@link #getValueIndex()}.
+	 * @param index the new value index
+	 */
 	public void setValueIndex (int index);
 	
+	/**
+	 * Get a list of allowed enum states.
+	 * @return list of enum values
+	 */
 	public ILabeled[] getAllowedValues();
 	
 	@Override
@@ -43,6 +58,11 @@ public interface IEnumSetting extends ISetting<String> {
 		return String.class;
 	}
 	
+	/**
+	 * Get a list of enum values that are visible.
+	 * @param setting the enum setting in question
+	 * @return list of visible enum values
+	 */
 	public static ILabeled[] getVisibleValues (IEnumSetting setting) {
 		return Arrays.stream(setting.getAllowedValues()).filter(value->value.isVisible().isOn()).toArray(ILabeled[]::new);
 	}

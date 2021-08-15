@@ -15,7 +15,7 @@ public interface IKeybindSetting extends ISetting<String> {
 	 * Set the value of the keybind.
 	 * @param key the scancode of the key
 	 */
-    public void setKey(int key);
+    public void setKey (int key);
     
     /**
      * Get the name of the key that is binded.
