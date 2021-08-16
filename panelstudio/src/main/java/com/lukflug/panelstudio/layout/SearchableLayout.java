@@ -31,19 +31,76 @@ import com.lukflug.panelstudio.widget.ITextFieldKeys;
 import com.lukflug.panelstudio.widget.ScrollBarComponent;
 import com.lukflug.panelstudio.widget.SearchableRadioButton;
 
+/**
+ * Adds components in a tab-based layout, where modules are organized flat (categories bypassed), with a search bar.
+ * @author lukflug
+ */
 public class SearchableLayout implements ILayout,IScrollSize {
-	protected ILabeled titleLabel,searchLabel;
+	/**
+	 * The panel label.
+	 */
+	protected ILabeled titleLabel;
+	/**
+	 * The search bar label.
+	 */
+	protected ILabeled searchLabel;
+	/**
+	 * The panel position.
+	 */
 	protected Point position;
+	/**
+	 * The panel width.
+	 */
 	protected int width;
+	/**
+	 * The animation supplier.
+	 */
 	protected Supplier<Animation> animation;
+	/**
+	 * The title for module toggles.
+	 */
 	protected String enabledButton;
+	/**
+	 * The weight of the settings column.
+	 */
 	protected int weight;
+	/**
+	 * The child mode to use for setting components that are containers (e.g. color components).
+	 */
 	protected ChildMode colorType;
+	/**
+	 * The child util instance.
+	 */
 	protected ChildUtil util;
+	/**
+	 * The sorting comparison method.
+	 */
 	protected Comparator<IModule> comparator;
+	/**
+	 * The character filter for the search bar.
+	 */
 	protected IntPredicate charFilter;
+	/**
+	 * The function key predicates for the search bar. 
+	 */
 	protected ITextFieldKeys keys;
 	
+	/**
+	 * Constructor.
+	 * @param titleLabel panel label
+	 * @param searchLabel search bar label
+	 * @param position panel position
+	 * @param width panel width
+	 * @param popupWidth pop-up width
+	 * @param animation animation supplier
+	 * @param enabledButton title for module toggles
+	 * @param weight weight of the module column
+	 * @param colorType child mode to use for setting components that are containers (e.g. color components)
+	 * @param popupType child util instance
+	 * @param comparator sorting comparison method
+	 * @param charFilter character filter for the search bar
+	 * @param keys function key predicates for the search bar
+	 */
 	public SearchableLayout (ILabeled titleLabel, ILabeled searchLabel, Point position, int width, int popupWidth, Supplier<Animation> animation, String enabledButton, int weight, ChildMode colorType, PopupTuple popupType, Comparator<IModule> comparator, IntPredicate charFilter, ITextFieldKeys keys) {
 		this.titleLabel=titleLabel;
 		this.searchLabel=searchLabel;
@@ -64,7 +121,7 @@ public class SearchableLayout implements ILayout,IScrollSize {
 		Button<Void> title=new Button<Void>(titleLabel,()->null,theme.getButtonRenderer(Void.class,0,0,true));
 		HorizontalContainer window=new HorizontalContainer(titleLabel,theme.getContainerRenderer(0,0,true));
 		Supplier<Stream<IModule>> modules=()->client.getCategories().flatMap(cat->cat.getModules()).sorted(comparator);
-		IEnumSetting modSelect=addContainer(searchLabel,modules.get().map(mod->mod),window,new ThemeTuple(theme,0,1),false,button->wrapColumn(button,new ThemeTuple(theme,0,1),1),()->true);
+		IEnumSetting modSelect=addContainer(searchLabel,modules.get().map(mod->mod),window,new ThemeTuple(theme,0,1),button->wrapColumn(button,new ThemeTuple(theme,0,1),1),()->true);
 		gui.addComponent(title,window,new ThemeTuple(theme,0,0),position,width,animation);
 		modules.get().forEach(module->{
 			VerticalContainer container=new VerticalContainer(module,theme.getContainerRenderer(1,1,false));
@@ -89,6 +146,15 @@ public class SearchableLayout implements ILayout,IScrollSize {
 		});
 	}
 	
+	/**
+	 * Add a setting component.
+	 * @param <T> the setting state type
+	 * @param setting the setting to be added
+	 * @param container the parent container
+	 * @param gui the component adder for pop-ups
+	 * @param components the component generator
+	 * @param theme the theme to be used
+	 */
 	protected <T> void addSettingsComponent (ISetting<T> setting, VerticalContainer container, IComponentAdder gui, IComponentGenerator components, ThemeTuple theme) {
 		int colorLevel=(colorType==ChildMode.DOWN)?theme.graphicalLevel:0;
 		boolean isContainer=setting.getSubSettings()!=null;
@@ -107,7 +173,19 @@ public class SearchableLayout implements ILayout,IScrollSize {
 		}
 	}
 	
-	protected <T extends IComponent> IEnumSetting addContainer (ILabeled label, Stream<ILabeled> labels, IContainer<T> window, ThemeTuple theme, boolean horizontal, Function<SearchableRadioButton,T> container, IBoolean visible) {
+
+	/**
+	 * Add a multiplexing radio button list to a parent container.
+	 * @param <T> parent container component type
+	 * @param label the radio button label
+	 * @param labels list of items to multiplex
+	 * @param window the parent container
+	 * @param theme the theme to be used
+	 * @param container mapping from radio button to container component type instance
+	 * @param visible radio buttons visibility predicate
+	 * @return the enum setting controlling the radio button list
+	 */
+	protected <T extends IComponent> IEnumSetting addContainer (ILabeled label, Stream<ILabeled> labels, IContainer<T> window, ThemeTuple theme, Function<SearchableRadioButton,T> container, IBoolean visible) {
 		IEnumSetting setting=new IEnumSetting() {
 			private int state=0;
 			private ILabeled array[]=labels.toArray(ILabeled[]::new);
@@ -171,20 +249,25 @@ public class SearchableLayout implements ILayout,IScrollSize {
 			
 			@Override
 			protected boolean isUpKey (int key) {
-				if (horizontal) return isLeftKey(key);
-				else return SearchableLayout.this.isUpKey(key);
+			return SearchableLayout.this.isUpKey(key);
 			}
 
 			@Override
 			protected boolean isDownKey (int key) {
-				if (horizontal) return isRightKey(key);
-				else return SearchableLayout.this.isDownKey(key);
+				return SearchableLayout.this.isDownKey(key);
 			}
 		};
 		window.addComponent(container.apply(button),visible);
 		return setting;
 	}
 	
+	/**
+	 * Wrap content in a scrollable horizontal component to be added as a column. 
+	 * @param button the content container
+	 * @param theme the theme to be used
+	 * @param weight the horizontal weight
+	 * @return a horizontal component
+	 */
 	protected HorizontalComponent<ScrollBarComponent<Void,IComponent>> wrapColumn (IComponent button, ThemeTuple theme, int weight) {
 		return new HorizontalComponent<ScrollBarComponent<Void,IComponent>>(new ScrollBarComponent<Void,IComponent>(button,theme.getScrollBarRenderer(Void.class),theme.getEmptySpaceRenderer(Void.class,false),theme.getEmptySpaceRenderer(Void.class,true)) {
 			@Override
@@ -199,19 +282,21 @@ public class SearchableLayout implements ILayout,IScrollSize {
 		},0,weight);
 	}
 	
+	/**
+	 * Keyboard predicate for navigating up.
+	 * @param key the key scancode
+	 * @return whether key matches
+	 */
 	protected boolean isUpKey (int key) {
 		return false;
 	}
 	
+	/**
+	 * Keyboard predicate for navigating down.
+	 * @param key the key scancode
+	 * @return whether key matches
+	 */
 	protected boolean isDownKey (int key) {
-		return false;
-	}
-	
-	protected boolean isLeftKey (int key) {
-		return false;
-	}
-	
-	protected boolean isRightKey (int key) {
 		return false;
 	}
 }

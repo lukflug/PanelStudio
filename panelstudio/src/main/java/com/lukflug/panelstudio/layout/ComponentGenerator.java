@@ -13,10 +13,30 @@ import com.lukflug.panelstudio.widget.ITextFieldKeys;
 import com.lukflug.panelstudio.widget.KeybindComponent;
 import com.lukflug.panelstudio.widget.TextField;
 
+/**
+ * Default implementation of the component generator.
+ * @author lukflug
+ */
 public class ComponentGenerator implements IComponentGenerator {
-	protected final IntPredicate keybindKey,charFilter;
+	/**
+	 * The scancode predicate for delete keybind key.
+	 */
+	protected final IntPredicate keybindKey;
+	/**
+	 * The text field character filter predicate. 
+	 */
+	protected final IntPredicate charFilter;
+	/**
+	 * The text field function key predicates.
+	 */
 	protected final ITextFieldKeys keys;
 	
+	/**
+	 * Constructor.
+	 * @param keybindKey the scancode predicate for delete keybind key
+	 * @param charFilter the text field character filter predicate
+	 * @param keys the text field function key predicates
+	 */
 	public ComponentGenerator (IntPredicate keybindKey, IntPredicate charFilter, ITextFieldKeys keys) {
 		this.keybindKey=keybindKey;
 		this.charFilter=charFilter;

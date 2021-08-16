@@ -12,7 +12,9 @@ public interface ILayout {
 	/**
 	 * Populates a GUI with modules and settings given.
 	 * @param gui the GUI to populate
+	 * @param components the setting widgets to use
 	 * @param client the client defining the module and setting hierarchy
+	 * @param theme the theme to be used
 	 */
 	public void populateGUI (IComponentAdder gui, IComponentGenerator components, IClient client, ITheme theme);
 }

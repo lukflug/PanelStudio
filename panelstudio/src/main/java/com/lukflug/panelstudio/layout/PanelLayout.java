@@ -18,15 +18,55 @@ import com.lukflug.panelstudio.theme.ThemeTuple;
 import com.lukflug.panelstudio.widget.Button;
 import com.lukflug.panelstudio.widget.ToggleButton;
 
+/**
+ * A layout that organizes components in the traditional ClickGUI panels.
+ * @author lukflug
+ */
 public class PanelLayout implements ILayout {
+	/**
+	 * The panel width.
+	 */
 	protected int width;
+	/**
+	 * The position of the first panel.
+	 */
 	protected Point start;
-	protected int skipX,skipY;
+	/**
+	 * The horizontal panel offset.
+	 */
+	protected int skipX;
+	/**
+	 * The vertical alternating panel offset.
+	 */
+	protected int skipY;
+	/**
+	 * The animation supplier.
+	 */
 	protected Supplier<Animation> animation;
+	/**
+	 * The child mode to use for sub-panels (modules,nested settings).
+	 */
 	protected IntFunction<ChildMode> layoutType;
+	/**
+	 * The child mode to use for setting components that are containers (e.g. color components).
+	 */
 	protected IntFunction<ChildMode> colorType;
+	/**
+	 * The child util instance.
+	 */
 	protected ChildUtil util;
 	
+	/**
+	 * Constructor.
+	 * @param width panel width
+	 * @param start position of the first panel
+	 * @param skipX horizontal panel offset
+	 * @param skipY vertical alternating panel offset
+	 * @param animation animation supplier
+	 * @param layoutType child mode to use for sub-panels (modules,nested settings)
+	 * @param colorType child mode to use for setting components that are containers (e.g. color components)
+	 * @param popupType child util instance
+	 */
 	public PanelLayout (int width, Point start, int skipX, int skipY, Supplier<Animation> animation, IntFunction<ChildMode> layoutType, IntFunction<ChildMode> colorType, PopupTuple popupType) {
 		this.width=width;
 		this.start=start;
@@ -62,6 +102,15 @@ public class PanelLayout implements ILayout {
 		});
 	}
 	
+	/**
+	 * Add a setting component.
+	 * @param <T> the setting state type
+	 * @param setting the setting to be added
+	 * @param container the parent container
+	 * @param gui the component adder for pop-ups
+	 * @param components the component generator
+	 * @param theme the theme to be used
+	 */
 	protected <T> void addSettingsComponent (ISetting<T> setting, VerticalContainer container, IComponentAdder gui, IComponentGenerator components, ThemeTuple theme) {
 		int nextLevel=(layoutType.apply(theme.logicalLevel-1)==ChildMode.DOWN)?theme.graphicalLevel:0;
 		int colorLevel=(colorType.apply(theme.logicalLevel-1)==ChildMode.DOWN)?theme.graphicalLevel:0;

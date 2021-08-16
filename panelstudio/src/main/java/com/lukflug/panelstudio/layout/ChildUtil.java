@@ -20,17 +20,49 @@ import com.lukflug.panelstudio.theme.ThemeTuple;
 import com.lukflug.panelstudio.widget.Button;
 import com.lukflug.panelstudio.widget.ClosableComponent;
 
+/**
+ * Utility to add child components.
+ * @author lukflug
+ */
 public class ChildUtil {
+	/**
+	 * The pop-up width.
+	 */
 	protected int width;
+	/**
+	 * The animation supplier.
+	 */
 	protected Supplier<Animation> animation;
+	/**
+	 * The pop-up type.
+	 */
 	protected PopupTuple popupType;
 	
+	/**
+	 * Construcotr.
+	 * @param width pop-up width
+	 * @param animation animation supplier
+	 * @param popupType pop-up type
+	 */
 	public ChildUtil (int width, Supplier<Animation> animation, PopupTuple popupType) {
 		this.width=width;
 		this.animation=animation;
 		this.popupType=popupType;
 	}
 	
+	/**
+	 * Add a child container.
+	 * @param <T> the render state type
+	 * @param label the container label
+	 * @param title the title component
+	 * @param container the container itself
+	 * @param state the render state supplier
+	 * @param stateClass the render state class
+	 * @param parent the parent component
+	 * @param gui the component adder for pop-ups
+	 * @param theme the theme to be used
+	 * @param mode the child mode to be used
+	 */
 	protected <T> void addContainer (ILabeled label, IComponent title, IComponent container, Supplier<T> state, Class<T> stateClass, VerticalContainer parent, IComponentAdder gui, ThemeTuple theme, ChildMode mode) {
 		IFixedComponent popup;
 		IToggleable toggle;
@@ -60,7 +92,22 @@ public class ChildUtil {
 		}
 	}
 	
+	/**
+	 * Enum listing the ways a child component can be added.
+	 * @author lukflug
+	 */
 	public static enum ChildMode {
-		DOWN,POPUP,DRAG_POPUP;
+		/**
+		 * Component is added as a closable component with title bar.
+		 */
+		DOWN,
+		/**
+		 * Component is added as button that shows pop-up.
+		 */
+		POPUP,
+		/**
+		 * Component is added as button that shows draggable pop-up with title bar.
+		 */
+		DRAG_POPUP;
 	}
 }

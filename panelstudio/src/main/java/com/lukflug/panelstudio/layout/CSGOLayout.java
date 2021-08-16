@@ -29,17 +29,66 @@ import com.lukflug.panelstudio.widget.RadioButton;
 import com.lukflug.panelstudio.widget.ScrollBarComponent;
 import com.lukflug.panelstudio.widget.ToggleButton;
 
+/**
+ * Adds components in a tab-based layout.
+ * @author lukflug
+ */
 public class CSGOLayout implements ILayout,IScrollSize {
+	/**
+	 * The panel label.
+	 */
 	protected ILabeled label;
+	/**
+	 * The panel position.
+	 */
 	protected Point position;
+	/**
+	 * The panel width.
+	 */
 	protected int width;
+	/**
+	 * The animation supplier.
+	 */
 	protected Supplier<Animation> animation;
+	/**
+	 * The title for module toggles.
+	 */
 	protected String enabledButton;
-	protected boolean horizontal,moduleColumn;
+	/**
+	 * Whether tab list is horizontal.
+	 */
+	protected boolean horizontal;
+	/**
+	 * Whether settings are in a separate column.
+	 */
+	protected boolean moduleColumn;
+	/**
+	 * The weight of the settings column.
+	 */
 	protected int weight;
+	/**
+	 * The child mode to use for setting components that are containers (e.g. color components).
+	 */
 	protected ChildMode colorType;
+	/**
+	 * The child util instance.
+	 */
 	protected ChildUtil util;
 	
+	/**
+	 * Constructor.
+	 * @param label panel label
+	 * @param position panel position
+	 * @param width panel width
+	 * @param popupWidth pop-up width
+	 * @param animation animation supplier
+	 * @param enabledButton title for module toggles
+	 * @param horizontal whether tab list is horizontal
+	 * @param moduleColumn whether settings are in a separate column
+	 * @param weight weight of the module column
+	 * @param colorType child mode to use for setting components that are containers (e.g. color components)
+	 * @param popupType child util instance
+	 */
 	public CSGOLayout (ILabeled label, Point position, int width, int popupWidth, Supplier<Animation> animation, String enabledButton, boolean horizontal, boolean moduleColumn, int weight, ChildMode colorType, PopupTuple popupType) {
 		this.label=label;
 		this.position=position;
@@ -108,6 +157,15 @@ public class CSGOLayout implements ILayout,IScrollSize {
 		});
 	}
 	
+	/**
+	 * Add a setting component.
+	 * @param <T> the setting state type
+	 * @param setting the setting to be added
+	 * @param container the parent container
+	 * @param gui the component adder for pop-ups
+	 * @param components the component generator
+	 * @param theme the theme to be used
+	 */
 	protected <T> void addSettingsComponent (ISetting<T> setting, VerticalContainer container, IComponentAdder gui, IComponentGenerator components, ThemeTuple theme) {
 		int colorLevel=(colorType==ChildMode.DOWN)?theme.graphicalLevel:0;
 		boolean isContainer=setting.getSubSettings()!=null;
@@ -126,6 +184,18 @@ public class CSGOLayout implements ILayout,IScrollSize {
 		}
 	}
 	
+	/**
+	 * Add a multiplexing radio button list to a parent container.
+	 * @param <T> parent container component type
+	 * @param label the radio button label
+	 * @param labels list of items to multiplex
+	 * @param window the parent container
+	 * @param theme the theme to be used
+	 * @param horizontal whether radio button is horizontal
+	 * @param container mapping from radio button to container component type instance
+	 * @param visible radio buttons visibility predicate
+	 * @return the enum setting controlling the radio button list
+	 */
 	protected <T extends IComponent> IEnumSetting addContainer (ILabeled label, Stream<ILabeled> labels, IContainer<T> window, ThemeTuple theme, boolean horizontal, Function<RadioButton,T> container, IBoolean visible) {
 		IEnumSetting setting=new IEnumSetting() {
 			private int state=0;
@@ -194,6 +264,13 @@ public class CSGOLayout implements ILayout,IScrollSize {
 		return setting;
 	}
 	
+	/**
+	 * Wrap content in a scrollable horizontal component to be added as a column. 
+	 * @param button the content container
+	 * @param theme the theme to be used
+	 * @param weight the horizontal weight
+	 * @return a horizontal component
+	 */
 	protected HorizontalComponent<ScrollBarComponent<Void,IComponent>> wrapColumn (IComponent button, ThemeTuple theme, int weight) {
 		return new HorizontalComponent<ScrollBarComponent<Void,IComponent>>(new ScrollBarComponent<Void,IComponent>(button,theme.getScrollBarRenderer(Void.class),theme.getEmptySpaceRenderer(Void.class,false),theme.getEmptySpaceRenderer(Void.class,true)) {
 			@Override
@@ -208,18 +285,38 @@ public class CSGOLayout implements ILayout,IScrollSize {
 		},0,weight);
 	}
 	
+	/**
+	 * Keyboard predicate for navigating up.
+	 * @param key the key scancode
+	 * @return whether key matches
+	 */
 	protected boolean isUpKey (int key) {
 		return false;
 	}
 	
+	/**
+	 * Keyboard predicate for navigating down.
+	 * @param key the key scancode
+	 * @return whether key matches
+	 */
 	protected boolean isDownKey (int key) {
 		return false;
 	}
 	
+	/**
+	 * Keyboard predicate for navigating left.
+	 * @param key the key scancode
+	 * @return whether key matches
+	 */
 	protected boolean isLeftKey (int key) {
 		return false;
 	}
 	
+	/**
+	 * Keyboard predicate for navigating right.
+	 * @param key the key scancode
+	 * @return whether key matches
+	 */
 	protected boolean isRightKey (int key) {
 		return false;
 	}

@@ -22,7 +22,21 @@ import com.lukflug.panelstudio.widget.NumberSlider;
 import com.lukflug.panelstudio.widget.TextField;
 import com.lukflug.panelstudio.widget.ToggleButton;
 
+/**
+ * Interface defining what components to use for settings.
+ * @author lukflug
+ */
 public interface IComponentGenerator {
+	/**
+	 * Get component from a given setting object.
+	 * @param setting the setting object.
+	 * @param animation the animation supplier
+	 * @param adder the component adder for any pop-ups
+	 * @param theme the theme to be used
+	 * @param colorLevel the panel nesting level, in case the component is a container (e.g. color components)
+	 * @param isContainer whether this component is a title bar
+	 * @return the component to be used
+	 */
 	public default IComponent getComponent (ISetting<?> setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, boolean isContainer) {
 		if (setting instanceof IBooleanSetting) {
 			return getBooleanComponent((IBooleanSetting)setting,animation,adder,theme,colorLevel,isContainer);
@@ -41,85 +55,145 @@ public interface IComponentGenerator {
 		}
 	}
 	
+	/**
+	 * Get component from a given boolean setting object.
+	 * @param setting the setting object.
+	 * @param animation the animation supplier
+	 * @param adder the component adder for any pop-ups
+	 * @param theme the theme to be used
+	 * @param colorLevel the panel nesting level, in case the component is a container (e.g. color components)
+	 * @param isContainer whether this component is a title bar
+	 * @return the component to be used
+	 */
 	public default IComponent getBooleanComponent (IBooleanSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, boolean isContainer) {
 		return new ToggleButton(setting,theme.getButtonRenderer(Boolean.class,isContainer));
 	}
 	
+	/**
+	 * Get component from a given number setting object.
+	 * @param setting the setting object.
+	 * @param animation the animation supplier
+	 * @param adder the component adder for any pop-ups
+	 * @param theme the theme to be used
+	 * @param colorLevel the panel nesting level, in case the component is a container (e.g. color components)
+	 * @param isContainer whether this component is a title bar
+	 * @return the component to be used
+	 */
 	public default IComponent getNumberComponent (INumberSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, boolean isContainer) {
 		return new NumberSlider(setting,theme.getSliderRenderer(isContainer));
 	}
 	
+	/**
+	 * Get component from a given enum setting object.
+	 * @param setting the setting object.
+	 * @param animation the animation supplier
+	 * @param adder the component adder for any pop-ups
+	 * @param theme the theme to be used
+	 * @param colorLevel the panel nesting level, in case the component is a container (e.g. color components)
+	 * @param isContainer whether this component is a title bar
+	 * @return the component to be used
+	 */
 	public default IComponent getEnumComponent (IEnumSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, boolean isContainer) {
 		return new CycleButton(setting,theme.getButtonRenderer(String.class,isContainer));
 	}
 	
+	/**
+	 * Get component from a given color setting object.
+	 * @param setting the setting object.
+	 * @param animation the animation supplier
+	 * @param adder the component adder for any pop-ups
+	 * @param theme the theme to be used
+	 * @param colorLevel the panel nesting level, in case the component is a container (e.g. color components)
+	 * @param isContainer whether this component is a title bar
+	 * @return the component to be used
+	 */
 	public default IComponent getColorComponent (IColorSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, boolean isContainer) {
 		return new ColorSliderComponent((IColorSetting)setting,new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel));
 	}
 	
+	/**
+	 * Get component from a given keybind setting object.
+	 * @param setting the setting object.
+	 * @param animation the animation supplier
+	 * @param adder the component adder for any pop-ups
+	 * @param theme the theme to be used
+	 * @param colorLevel the panel nesting level, in case the component is a container (e.g. color components)
+	 * @param isContainer whether this component is a title bar
+	 * @return the component to be used
+	 */
 	public default IComponent getKeybindComponent (IKeybindSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, boolean isContainer) {
 		return new KeybindComponent(setting,theme.getKeybindRenderer(isContainer));
 	}
 	
+	/**
+	 * Get component from a given string setting object.
+	 * @param setting the setting object.
+	 * @param animation the animation supplier
+	 * @param adder the component adder for any pop-ups
+	 * @param theme the theme to be used
+	 * @param colorLevel the panel nesting level, in case the component is a container (e.g. color components)
+	 * @param isContainer whether this component is a title bar
+	 * @return the component to be used
+	 */
 	public default IComponent getStringComponent (IStringSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, boolean isContainer) {
 		return new TextField(setting, new ITextFieldKeys() {
 			@Override
-			public boolean isBackspaceKey(int scancode) {
+			public boolean isBackspaceKey (int scancode) {
 				return false;
 			}
 
 			@Override
-			public boolean isDeleteKey(int scancode) {
+			public boolean isDeleteKey (int scancode) {
 				return false;
 			}
 
 			@Override
-			public boolean isInsertKey(int scancode) {
+			public boolean isInsertKey (int scancode) {
 				return false;
 			}
 
 			@Override
-			public boolean isLeftKey(int scancode) {
+			public boolean isLeftKey (int scancode) {
 				return false;
 			}
 
 			@Override
-			public boolean isRightKey(int scancode) {
+			public boolean isRightKey (int scancode) {
 				return false;
 			}
 
 			@Override
-			public boolean isHomeKey(int scancode) {
+			public boolean isHomeKey (int scancode) {
 				return false;
 			}
 
 			@Override
-			public boolean isEndKey(int scancode) {
+			public boolean isEndKey (int scancode) {
 				return false;
 			}
 
 			@Override
-			public boolean isCopyKey(int scancode) {
+			public boolean isCopyKey (int scancode) {
 				return false;
 			}
 
 			@Override
-			public boolean isPasteKey(int scancode) {
+			public boolean isPasteKey (int scancode) {
 				return false;
 			}
 
 			@Override
-			public boolean isCutKey(int scancode) {
+			public boolean isCutKey (int scancode) {
 				return false;
 			}
 
 			@Override
-			public boolean isAllKey(int scancode) {
+			public boolean isAllKey (int scancode) {
 				return false;
 			}
 		},0,new SimpleToggleable(false),theme.getTextRenderer(false,isContainer)) {
 			@Override
-			public boolean allowCharacter(char character) {
+			public boolean allowCharacter (char character) {
 				return false;
 			}
 		};
