@@ -18,9 +18,13 @@ import com.lukflug.panelstudio.theme.IScrollBarRenderer;
 /**
  * Composite container containing a scroll component, which can be scrolled using scroll bars.
  * @author lukflug
- * @param <T> the state type
+ * @param <S> the render state type
+ * @param <T> the component type
  */
 public abstract class ScrollBarComponent<S,T extends IComponent> extends HorizontalContainer implements IScrollSize {
+	/**
+	 * The wrapped component.
+	 */
 	protected final T component;
 	
 	/**
@@ -101,7 +105,7 @@ public abstract class ScrollBarComponent<S,T extends IComponent> extends Horizon
 			}
 
 			@Override
-			protected void setScrollPosition(int position) {
+			protected void setScrollPosition (int position) {
 				scrollComponent.setScrollPosX(position);
 			}
 
@@ -131,6 +135,10 @@ public abstract class ScrollBarComponent<S,T extends IComponent> extends Horizon
 		},()->scrollComponent.isScrollingY());
 	}
 	
+	/**
+	 * Returns the wrapped component.
+	 * @return the wrapped component
+	 */
 	public T getContentComponent() {
 		return component;
 	}

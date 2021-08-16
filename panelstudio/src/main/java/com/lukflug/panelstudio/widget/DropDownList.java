@@ -27,11 +27,34 @@ import com.lukflug.panelstudio.theme.ITheme;
 import com.lukflug.panelstudio.theme.RendererTuple;
 import com.lukflug.panelstudio.theme.ThemeTuple;
 
+/**
+ * Drop-down list widget.
+ * @author lukflug
+ */
 public abstract class DropDownList extends HorizontalContainer {
+	/**
+	 * Cached input area.
+	 */
 	private Rectangle rect=new Rectangle();
+	/**
+	 * Whether focus has to be transfered to list pop-up.
+	 */
 	private boolean transferFocus=false;
+	/**
+	 * Toggle for whether the list pop-up is being displayed.
+	 */
 	protected IToggleable toggle=new SimpleToggleable(false);
 	
+	/**
+	 * Constructor.
+	 * @param setting the enum setting to be used
+	 * @param theme the theme to be used
+	 * @param container whether this is a title bar
+	 * @param allowSearch whether typing in the text box is allowed
+	 * @param keys key predicates for the text box
+	 * @param popupSize the scroll behavior of the list
+	 * @param popupAdder consumer to handle adding list pop-up
+	 */
 	public DropDownList (IEnumSetting setting, ThemeTuple theme, boolean container, boolean allowSearch, ITextFieldKeys keys, IScrollSize popupSize, Consumer<IFixedComponent> popupAdder) {
 		super(setting,new IContainerRenderer(){});
 		AtomicReference<String> searchTerm=new AtomicReference<String>(null);
@@ -171,13 +194,37 @@ public abstract class DropDownList extends HorizontalContainer {
 		}
 	}
 	
+	/**
+	 * Returns the animation to be used.
+	 * @return the animation to be used.
+	 */
 	protected abstract Animation getAnimation();
 	
+	/**
+	 * Character filter.
+	 * @param character the character to check
+	 * @return whether this character is allowed
+	 */
 	public abstract boolean allowCharacter (char character);
 	
+	/**
+	 * Scancode predicate for moving selection up.
+	 * @param key key scancode
+	 * @return whether this key is to be interpreted as up
+	 */
 	protected abstract boolean isUpKey (int key);
 
+	/**
+	 * Scancode predicate for moving selection down.
+	 * @param key key scancode
+	 * @return whether this key is to be interpreted as down
+	 */
 	protected abstract boolean isDownKey (int key);
 	
+	/**
+	 * Scancode predicate for selecting selection.
+	 * @param key key scancode
+	 * @return whether this key is to be interpreted as select
+	 */
 	protected abstract boolean isEnterKey (int key);
 }

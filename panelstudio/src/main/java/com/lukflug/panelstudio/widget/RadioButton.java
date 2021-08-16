@@ -9,12 +9,35 @@ import com.lukflug.panelstudio.setting.IEnumSetting;
 import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.theme.IRadioRenderer;
 
+/**
+ * Widget for radio button list.
+ * @author lukflug
+ */
 public abstract class RadioButton extends FocusableComponent {
+	/**
+	 * The enum setting to be used.
+	 */
 	protected IEnumSetting setting;
+	/**
+	 * The radio renderer to be used.
+	 */
 	protected IRadioRenderer renderer;
+	/**
+	 * The animation for state transitions.
+	 */
 	protected AnimatedEnum animation;
+	/**
+	 * Whether list is horizontal.
+	 */
 	protected final boolean horizontal;
 
+	/**
+	 * Constructor.
+	 * @param setting the enum setting to be used
+	 * @param renderer the radio renderer to be used
+	 * @param animation the animation for state transitions
+	 * @param horizontal whether list is horizontal
+	 */
 	public RadioButton (IEnumSetting setting, IRadioRenderer renderer, Animation animation, boolean horizontal) {
 		super(setting);
 		this.setting=setting;
@@ -71,7 +94,17 @@ public abstract class RadioButton extends FocusableComponent {
 		return renderer.getDefaultHeight(IEnumSetting.getVisibleValues(setting),horizontal);
 	}
 	
+	/**
+	 * Predicate for up key.
+	 * @param key key scancode
+	 * @return whether key is up key
+	 */
 	protected abstract boolean isUpKey (int key);
 	
+	/**
+	 * Predicate for down key.
+	 * @param key key scancode
+	 * @return whether key is down key
+	 */
 	protected abstract boolean isDownKey (int key);
 }

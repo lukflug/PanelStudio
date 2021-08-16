@@ -14,14 +14,48 @@ import com.lukflug.panelstudio.component.FocusableComponent;
 import com.lukflug.panelstudio.setting.IStringSetting;
 import com.lukflug.panelstudio.theme.ITextFieldRenderer;
 
+/**
+ * The text field widget.
+ * @author lukflug
+ */
 public abstract class TextField extends FocusableComponent {
+	/**
+	 * The string setting to be used.
+	 */
 	protected IStringSetting setting;
+	/**
+	 * The keyboard predicates.
+	 */
 	protected ITextFieldKeys keys;
-	private int position,select=-1;
+	/**
+	 * The current text cursor position.
+	 */
+	private int position;
+	/**
+	 * The selection position, negative if nothing is being selected.
+	 */
+	private int select=-1;
+	/**
+	 * The text box text offset.
+	 */
 	protected int boxPosition=0;
+	/**
+	 * Whether input is being overwritten (true) or inserted (false).
+	 */
 	protected IToggleable insertMode;
+	/**
+	 * The renderer to be used.
+	 */
 	protected ITextFieldRenderer renderer;
 	
+	/**
+	 * Constructor.
+	 * @param setting the string setting to be used
+	 * @param keys the keyboard predicates
+	 * @param position the current text cursor position
+	 * @param insertMode whether input is being overwritten (true) or inserted (false)
+	 * @param renderer the renderer to be used
+	 */
 	public TextField (IStringSetting setting, ITextFieldKeys keys, int position, IToggleable insertMode, ITextFieldRenderer renderer) {
 		super(setting);
 		this.setting=setting;
@@ -172,12 +206,21 @@ public abstract class TextField extends FocusableComponent {
 		return renderer.getDefaultHeight();
 	}
 	
+	/**
+	 * Returns the current cursor position, while checking for if it is in range.
+	 * @return the clamped cursor position
+	 */
 	protected int getPosition() {
 		if (position<0) position=0;
 		else if (position>setting.getValue().length()) position=setting.getValue().length();
 		return position;
 	}
 	
+	/**
+	 * Sets cursor position and checks for shift keyboard modifier.
+	 * @param inter the interface to be used
+	 * @param position the position to move to
+	 */
 	protected void setPosition (IInterface inter, int position) {
 		if (inter.getModifier(IInterface.SHIFT)) {
 			if (select<0) select=this.position;
@@ -185,15 +228,27 @@ public abstract class TextField extends FocusableComponent {
 		this.position=position;
 	}
 	
+	/**
+	 * Returns the selected position.
+	 * @return the selected position
+	 */
 	protected int getSelect() {
 		if (select>setting.getValue().length()) select=setting.getValue().length();
 		if (select==getPosition()) select=-1;
 		return select;
 	}
 	
+	/**
+	 * Clear selection.
+	 */
 	protected void unselect() {
 		select=-1;
 	}
 	
+	/**
+	 * Character filter predicate.
+	 * @param character character to be tested
+	 * @return whether character is allowed
+	 */
 	public abstract boolean allowCharacter (char character);
 }

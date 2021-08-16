@@ -6,6 +6,10 @@ import com.lukflug.panelstudio.component.FocusableComponent;
 import com.lukflug.panelstudio.setting.IEnumSetting;
 import com.lukflug.panelstudio.theme.ISwitchRenderer;
 
+/**
+ * Component representing an enumeration-valued setting which cycles in both directions, by pressing embedded buttons.
+ * @author lukflug
+ */
 public class CycleSwitch extends FocusableComponent {
 	/**
 	 * The setting in question.
@@ -27,18 +31,12 @@ public class CycleSwitch extends FocusableComponent {
 		this.renderer=renderer;
 	}
 
-	/**
-	 * Renders the component, by drawing a title bar containing the name and current value of the setting.
-	 */
 	@Override
 	public void render (Context context) {
 		super.render(context);
 		renderer.renderButton(context,getTitle(),hasFocus(context),setting.getValueName());
 	}
 	
-	/**
-	 * Cycles through the values of the enumeration when clicked.
-	 */
 	@Override
 	public void handleButton (Context context, int button) {
 		super.handleButton(context,button);

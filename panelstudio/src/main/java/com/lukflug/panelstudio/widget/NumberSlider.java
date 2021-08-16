@@ -29,7 +29,7 @@ public class NumberSlider extends Slider {
 	}
 
 	@Override
-	protected void setValue(double value) {
+	protected void setValue (double value) {
 		setting.setNumber(value*(setting.getMaximumValue()-setting.getMinimumValue())+setting.getMinimumValue());
 	}
 

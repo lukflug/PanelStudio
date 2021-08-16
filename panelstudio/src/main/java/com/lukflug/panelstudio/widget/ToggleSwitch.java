@@ -9,6 +9,10 @@ import com.lukflug.panelstudio.setting.IBooleanSetting;
 import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.theme.ISwitchRenderer;
 
+/**
+ * Switch widget that can control a toggleable.
+ * @author lukflug
+ */
 public class ToggleSwitch extends FocusableComponent {
 	/**
 	 * Setting to be toggled by left click.

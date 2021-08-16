@@ -17,14 +17,43 @@ import com.lukflug.panelstudio.config.IPanelConfig;
 import com.lukflug.panelstudio.theme.IResizeBorderRenderer;
 import com.lukflug.panelstudio.theme.RendererTuple;
 
+/**
+ * A fixed component that can be resized.
+ * @author lukflug
+ * @param <T> the content component type
+ */
 public class ResizableComponent<T extends IFixedComponent> implements IFixedComponentProxy<T> {
+	/**
+	 * The component to be wrapped.
+	 */
 	protected T component;
+	/**
+	 * The renderer to be used.
+	 */
 	protected IResizeBorderRenderer renderer;
+	/**
+	 * The resize behavior.
+	 */
 	protected IResizable size;
+	/**
+	 * Whether the mouse has been pressed on the resize border.
+	 */
 	protected boolean resizing[]={false,false,false,false};
+	/**
+	 * The position where the mouse was clicked.
+	 */
 	protected Point attachPoint=null;
+	/**
+	 * The component size when the mouse was clicked.
+	 */
 	protected Rectangle attachRect=null;
 	
+	/**
+	 * Constructor.
+	 * @param component the content component to be wrapped
+	 * @param renderer the renderer to be used
+	 * @param size the resize behavior
+	 */
 	public ResizableComponent (T component, IResizeBorderRenderer renderer, IResizable size) {
 		this.component=component;
 		this.renderer=renderer;
@@ -120,6 +149,25 @@ public class ResizableComponent<T extends IFixedComponent> implements IFixedComp
 		return component;
 	}
 	
+	/**
+	 * Creates a closable resizable panel.
+	 * @param <S> the title component type
+	 * @param <T> the content component type
+	 * @param <U> the render state type
+	 * @param title the title component
+	 * @param content the content component
+	 * @param state the render state
+	 * @param open the toggleable for opening an closing
+	 * @param renderer the panel renderers to be used
+	 * @param resizeRenderer the resize renderer to be sued
+	 * @param size the resize behavior
+	 * @param scrollSize the scroll behavior
+	 * @param position the initial position of the panel
+	 * @param width the panel width
+	 * @param savesState whether this panel should save the panel state
+	 * @param configName the config name of the panel
+	 * @return
+	 */
 	public static <S extends IComponent,T extends IComponent,U> IFixedComponent createResizableComponent (S title, T content, Supplier<U> state, AnimatedToggleable open, RendererTuple<U> renderer, IResizeBorderRenderer resizeRenderer, IResizable size, IScrollSize scrollSize, Point position, int width, boolean savesState, String configName) {
 		IFixedComponent draggable=ClosableComponent.createDraggableComponent(title,content,state,open,renderer,scrollSize,position,width,savesState,configName);
 		if (size!=null) {

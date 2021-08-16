@@ -13,7 +13,19 @@ import com.lukflug.panelstudio.theme.IContainerRenderer;
 import com.lukflug.panelstudio.theme.ITheme;
 import com.lukflug.panelstudio.theme.ThemeTuple;
 
+/**
+ * A spinner for fine tuning numerical settings.
+ * @author lukflug
+ */
 public class Spinner extends HorizontalContainer {
+	/**
+	 * Constructor.
+	 * @param setting the number setting to be used
+	 * @param theme the theme to be used
+	 * @param container whether this is a title bar
+	 * @param allowInput whether text input is allowed
+	 * @param keys the keyboard predicates for the text box
+	 */
 	public Spinner (INumberSetting setting, ThemeTuple theme, boolean container, boolean allowInput, ITextFieldKeys keys) {
 		super(setting,new IContainerRenderer(){});
 		TextField textField=new TextField(new IStringSetting() {
@@ -41,7 +53,7 @@ public class Spinner extends HorizontalContainer {
 			}
 
 			@Override
-			public void setValue(String string) {
+			public void setValue (String string) {
 				if (value==null) lastTime=System.currentTimeMillis();
 				value=new String(string);
 			}
@@ -88,7 +100,7 @@ public class Spinner extends HorizontalContainer {
 		});
 		addComponent(new HorizontalComponent<VerticalContainer>(buttons,textField.getHeight(),0) {
 			@Override
-			public int getWidth(IInterface inter) {
+			public int getWidth (IInterface inter) {
 				return textField.getHeight();
 			}
 		});

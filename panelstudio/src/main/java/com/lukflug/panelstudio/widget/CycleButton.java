@@ -7,7 +7,7 @@ import com.lukflug.panelstudio.setting.IEnumSetting;
 import com.lukflug.panelstudio.theme.IButtonRenderer;
 
 /**
- * Component representing an enumeration-valued setting which cycles
+ * Component representing an enumeration-valued setting which cycles.
  * @author lukflug
  */
 public class CycleButton extends FocusableComponent {
@@ -31,18 +31,12 @@ public class CycleButton extends FocusableComponent {
 		this.renderer=renderer;
 	}
 
-	/**
-	 * Renders the component, by drawing a title bar containing the name and current value of the setting.
-	 */
 	@Override
 	public void render (Context context) {
 		super.render(context);
 		renderer.renderButton(context,getTitle(),hasFocus(context),setting.getValueName());
 	}
 	
-	/**
-	 * Cycles through the values of the enumeration when clicked.
-	 */
 	@Override
 	public void handleButton (Context context, int button) {
 		super.handleButton(context,button);
