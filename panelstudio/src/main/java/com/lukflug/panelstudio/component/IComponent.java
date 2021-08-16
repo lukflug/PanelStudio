@@ -1,6 +1,7 @@
 package com.lukflug.panelstudio.component;
 
 import com.lukflug.panelstudio.base.Context;
+import com.lukflug.panelstudio.base.IInterface;
 
 /**
  * Interface representing a drawable object in the GUI.
@@ -26,8 +27,8 @@ public interface IComponent {
 	 * The current height of the component should be set by this method via {@link Context#setHeight(int)}.
 	 * @param context the {@link Context} for the component
 	 * @param button the button that changed its state
-	 * @see Interface#LBUTTON
-	 * @see Interface#RBUTTON
+	 * @see IInterface#LBUTTON
+	 * @see IInterface#RBUTTON
 	 */
 	public void handleButton (Context context, int button);
 	
@@ -78,6 +79,7 @@ public interface IComponent {
 	
 	/**
 	 * Check if component should be visible.
+	 * @return whether the component is visible
 	 */
 	public boolean isVisible();
 }

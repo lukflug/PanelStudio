@@ -73,7 +73,7 @@ public final class Context {
 	
 	/**
 	 * Constructor that should be used by the root parent.
-	 * @param inter the current {@link Interface}
+	 * @param inter the current {@link IInterface}
 	 * @param width the width of the component
 	 * @param position the position of the component
 	 * @param focus set to false, to disable the component from having focus
@@ -88,8 +88,8 @@ public final class Context {
 	}
 	
 	/**
-	 * Returns the current {@link Interface}.
-	 * @return the current {@link Interface}
+	 * Returns the current {@link IInterface}.
+	 * @return the current {@link IInterface}
 	 */
 	public IInterface getInterface() {
 		return inter;
@@ -176,7 +176,8 @@ public final class Context {
 	
 	/**
 	 * Get mouse click state.
-	 * @return set to true, if {@link #isHovered()} is true and the left mouse button is clicked
+	 * @param button the mouse button to check
+	 * @return set to true, if {@link #isHovered()} is true and the mouse button is clicked
 	 */
 	public boolean isClicked (int button) {
 		return isHovered() && inter.getButton(button);

@@ -232,6 +232,8 @@ public abstract class Container<T extends IComponent> extends ComponentBase impl
 	protected interface ContextSensitiveConsumer<T extends IComponent> {
 		/**
 		 * Accept the context and component.
+		 * @param context the context to be used
+		 * @param component the component to be used
 		 */
 		public void accept (Context context, T component);
 	}

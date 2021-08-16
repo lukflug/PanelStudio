@@ -76,6 +76,7 @@ public interface IComponentProxy<T extends IComponent> extends IComponent {
 	 * Perform a context-sensitive operation.
 	 * @param context the context to use
 	 * @param operation the operation to perform
+	 * @return the sub-context of the component
 	 */
 	public default Context doOperation (Context context, Consumer<Context> operation) {
 		Context subContext=getContext(context);

@@ -3,7 +3,7 @@ package com.lukflug.panelstudio.component;
 /**
  * Implementation of {@link IComponentProxy}, redirecting to a component stored in a field.
  * @author lukflug
- * @param <T>
+ * @param <T> the component type
  */
 public class ComponentProxy<T extends IComponent> implements IComponentProxy<T> {
 	/**

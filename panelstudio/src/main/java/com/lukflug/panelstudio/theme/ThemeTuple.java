@@ -133,7 +133,7 @@ public final class ThemeTuple {
 
 	/**
 	 * Returns the text renderer.
-	 * @param embed
+	 * @param embed whether the text renderer is embedded in another component
 	 * @param container whether the component is the title of a panel
 	 * @return the text renderer
 	 */

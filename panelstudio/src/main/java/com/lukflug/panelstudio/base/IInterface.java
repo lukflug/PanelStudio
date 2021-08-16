@@ -88,9 +88,9 @@ public interface IInterface {
 	public void drawString (Point pos, int height, String s, Color c);
 	
 	/**
-	 * Get the font width of a string being rendered by {@link #drawString(Point, String, Color)}
-	 * @param s the string to be considered
+	 * Get the font width of a string being rendered by {@link #drawString(Point, int, String, Color)}
 	 * @param height the height of the string
+	 * @param s the string to be considered
 	 * @return the font width
 	 */
 	public int getFontWidth (int height, String s);
@@ -180,6 +180,7 @@ public interface IInterface {
 	
 	/**
 	 * Get size of display.
+	 * @return the display size
 	 */
 	public Dimension getWindowSize();
 	

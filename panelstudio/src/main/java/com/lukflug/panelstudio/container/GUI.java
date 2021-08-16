@@ -21,11 +21,11 @@ public class GUI implements IContainer<IFixedComponent> {
 	 */
 	protected FixedContainer container;
 	/**
-	 * The {@link Interface} to be used by the GUI.
+	 * The {@link IInterface} to be used by the GUI.
 	 */
 	protected IInterface inter;
 	/**
-	 * The {@link DescriptionRenderer} to be used by the GUI.
+	 * The {@link IDescriptionRenderer} to be used by the GUI.
 	 */
 	protected IDescriptionRenderer descriptionRenderer;
 	/**
@@ -35,8 +35,8 @@ public class GUI implements IContainer<IFixedComponent> {
 	
 	/**
 	 * Constructor for the GUI.
-	 * @param inter the {@link Interface} to be used by the GUI
-	 * @param descriptionRenderer the {@link DescriptionRenderer} used by the GUI
+	 * @param inter the {@link IInterface} to be used by the GUI
+	 * @param descriptionRenderer the {@link IDescriptionRenderer} used by the GUI
 	 * @param descriptionPosition the static {@link IPopupPositioner} to be used to position the descriptions
 	 */
 	public GUI (IInterface inter, IDescriptionRenderer descriptionRenderer, IPopupPositioner descriptionPosition) {
@@ -76,8 +76,8 @@ public class GUI implements IContainer<IFixedComponent> {
 	/**
 	 * Handle a mouse button state change.
 	 * @param button the button that changed its state
-	 * @see Interface#LBUTTON
-	 * @see Interface#RBUTTON
+	 * @see IInterface#LBUTTON
+	 * @see IInterface#RBUTTON
 	 */
 	public void handleButton (int button) {
 		container.handleButton(getContext(),button);

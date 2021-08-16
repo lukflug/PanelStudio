@@ -1,6 +1,7 @@
 package com.lukflug.panelstudio.component;
 
 import com.lukflug.panelstudio.base.Context;
+import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.setting.ILabeled;
 
 /**
@@ -51,8 +52,8 @@ public abstract class FocusableComponent extends ComponentBase {
 	 * If the button is being pressed, update focus state to hover state and call {@link #handleFocus(Context, boolean)}.
 	 * @param context the {@link Context} for the component
 	 * @param button the mouse button state that changed
-	 * @see Interface#LBUTTON
-	 * @see Interface#RBUTTON
+	 * @see IInterface#LBUTTON
+	 * @see IInterface#RBUTTON
 	 */
 	protected void updateFocus (Context context, int button) {
 		if (context.getInterface().getButton(button)) {

@@ -59,6 +59,7 @@ public interface ITheme {
 	 * Returns the renderer for the panel background.
 	 * @param logicalLevel the logical nesting level
 	 * @param graphicalLevel the panel nesting level
+	 * @param horizontal whether the container is horizontal
 	 * @return the container renderer
 	 */
 	public IContainerRenderer getContainerRenderer (int logicalLevel, int graphicalLevel, boolean horizontal);

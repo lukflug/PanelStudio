@@ -29,6 +29,7 @@ public interface IColorPickerRenderer {
 	
 	/**
 	 * Returns the default height.
+	 * @param width the width of the color picker
 	 * @return the default height
 	 */
 	public int getDefaultHeight (int width);

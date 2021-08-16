@@ -31,7 +31,8 @@ public abstract class ScrollBarComponent<S,T extends IComponent> extends Horizon
 	 * Constructor.
 	 * @param component the component to be wrapped
 	 * @param renderer the renderer to use for the scroll bars
-	 * @param emptyRenderer the renderer to use for the corners
+	 * @param cornerRenderer the renderer to use for the corners
+	 * @param emptyRenderer the renderer for empty space, if the component is too small
 	 */
 	public ScrollBarComponent (T component, IScrollBarRenderer<S> renderer, IEmptySpaceRenderer<S> cornerRenderer, IEmptySpaceRenderer<S> emptyRenderer) {
 		super(new Labeled(component.getTitle(),null,()->component.isVisible()),renderer);

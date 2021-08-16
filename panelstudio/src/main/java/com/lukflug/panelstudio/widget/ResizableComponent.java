@@ -160,13 +160,13 @@ public class ResizableComponent<T extends IFixedComponent> implements IFixedComp
 	 * @param open the toggleable for opening an closing
 	 * @param renderer the panel renderers to be used
 	 * @param resizeRenderer the resize renderer to be sued
-	 * @param size the resize behavior
+	 * @param size the resize behavior, null for normal un-resizable panel
 	 * @param scrollSize the scroll behavior
 	 * @param position the initial position of the panel
 	 * @param width the panel width
 	 * @param savesState whether this panel should save the panel state
 	 * @param configName the config name of the panel
-	 * @return
+	 * @return the fixed component
 	 */
 	public static <S extends IComponent,T extends IComponent,U> IFixedComponent createResizableComponent (S title, T content, Supplier<U> state, AnimatedToggleable open, RendererTuple<U> renderer, IResizeBorderRenderer resizeRenderer, IResizable size, IScrollSize scrollSize, Point position, int width, boolean savesState, String configName) {
 		IFixedComponent draggable=ClosableComponent.createDraggableComponent(title,content,state,open,renderer,scrollSize,position,width,savesState,configName);

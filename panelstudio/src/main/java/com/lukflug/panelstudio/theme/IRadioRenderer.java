@@ -25,6 +25,7 @@ public interface IRadioRenderer {
 	 * Returns the default height
 	 * @param items a list of all items
 	 * @param horizontal whether the list is horizontal or vertical
+	 * @return the default height
 	 */
 	public int getDefaultHeight (ILabeled[] items, boolean horizontal);
 	

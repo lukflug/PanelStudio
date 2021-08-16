@@ -42,7 +42,8 @@ public class ColorSliderComponent extends ColorComponent {
 	/**
 	 * Returns the component for the color component setting.
 	 * @param theme the theme to be used
-	 * @param toggle the number setting to be used
+	 * @param value the index of the component 
+	 * @param number the number setting to be used
 	 * @return the component
 	 */
 	public IComponent getColorComponent (ThemeTuple theme, int value, INumberSetting number) {

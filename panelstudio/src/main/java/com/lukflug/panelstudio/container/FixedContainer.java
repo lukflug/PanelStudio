@@ -156,6 +156,7 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 	 * Create sub-context for child component.
 	 * @param context the current context
 	 * @param component the component
+	 * @param focus whether this component has focus within container
 	 * @param highest whether this component is the highest
 	 * @return the context for the child component
 	 */

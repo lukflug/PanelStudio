@@ -76,6 +76,7 @@ public abstract class Animation {
 	/**
 	 * Function to use for animation.
 	 * @param weight the time-linear weight
+	 * @return the interpolated weight
 	 */
 	protected double interpolate (double weight) {
 		return (weight-1)*(weight-1)*(weight-1)+1;

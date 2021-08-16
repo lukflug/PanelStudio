@@ -28,6 +28,8 @@ public interface ISliderRenderer {
 	/**
 	 * Get slidable area.
 	 * @param context the context to be used
+	 * @param title the title of the slider
+	 * @param state the display state of the slider
 	 * @return the rectangle reprsenting the area that can be slided
 	 */
 	public default Rectangle getSlideArea (Context context, String title, String state) {

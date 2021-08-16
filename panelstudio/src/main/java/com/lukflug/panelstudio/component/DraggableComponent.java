@@ -60,7 +60,9 @@ public abstract class DraggableComponent<T extends IFixedComponent> implements I
 	
 	/**
 	 * Returns the wrapped dragging component.
+	 * @param<S> the component type
 	 * @param dragComponent component that is used to drag the panel
+	 * @return wrapped component
 	 */
 	public <S extends IComponent> ComponentProxy<S> getWrappedDragComponent (S dragComponent) {
 		return new ComponentProxy<S>(dragComponent) {

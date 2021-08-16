@@ -46,14 +46,13 @@ public class ClosableComponent<S extends IComponent,T extends IComponent> extend
 	
 	/**
 	 * Creates a generic panel.
+	 * @param <U> the render state type
 	 * @param title the title component of the panel
 	 * @param content the content of the panel
 	 * @param state the state of this panel
-	 * @param open the toggleable to use for opening and closing the panel 
-	 * @param animation the animation to use for opening and closing the panel
 	 * @param panelRenderer the render to use for the overlay of this panel
+	 * @param open the toggleable to use for opening and closing the panel
 	 * @param focus initial focus state
-	 * @return a vertical container having the functionality of a panel
 	 */
 	public <U> ClosableComponent (S title, T content, Supplier<U> state, AnimatedToggleable open, IPanelRenderer<U> panelRenderer, boolean focus) {
 		super(focus);
@@ -211,7 +210,7 @@ public class ClosableComponent<S extends IComponent,T extends IComponent> extend
 	 * @param width the panel width
 	 * @param savesState whether this panel should save the panel state
 	 * @param configName the config name of the panel
-	 * @return
+	 * @return a draggable component
 	 */
 	public static <S extends IComponent,T extends IComponent,U> DraggableComponent<FixedComponent<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>>> createDraggableComponent (S title, T content, Supplier<U> state, AnimatedToggleable open, RendererTuple<U> renderer, IScrollSize scrollSize, Point position, int width, boolean savesState, String configName) {
 		AtomicReference<ClosableComponent<ComponentProxy<S>,ScrollBarComponent<U,T>>> panel=new AtomicReference<>(null);

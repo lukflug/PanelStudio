@@ -26,8 +26,8 @@ public class HUDGUI extends GUI {
 	
 	/**
 	 * Constructor.
-	 * @param inter the {@link Interface} to be used by the GUI
-	 * @param descriptionRenderer the {@link DescriptionRenderer} used by the GUI
+	 * @param inter the {@link IInterface} to be used by the GUI
+	 * @param descriptionRenderer the {@link IDescriptionRenderer} used by the GUI
 	 * @param descriptionPosition the static {@link IPopupPositioner} to be used to position the descriptions
 	 * @param guiVisibility predicate for ClickGUI visibility
 	 * @param hudVisibility predicate for HUDEdior visibility
@@ -61,7 +61,7 @@ public class HUDGUI extends GUI {
 	/**
 	 * Add a component wrapped in a {@link HUDPanel} as HUD component.
 	 * @param component the component to be added
-	 * @param visible the external visibility of the component
+	 * @param state the boolean state to be passed to the theme
 	 * @param animation the animation to be used for opening and closing
 	 * @param theme the theme for the panel
 	 * @param border the component border
