@@ -28,7 +28,7 @@ publishing {
 		mavenJava(MavenPublication) {
 			pom {
 				name = "PanelStudio-MC12"
-				description = "A supplement to PanelStudio desgined for Minecraft Forge 1.12.2."
+				description = "A supplement to PanelStudio designed for Minecraft Forge 1.12.2."
 			}
 		}
 	}

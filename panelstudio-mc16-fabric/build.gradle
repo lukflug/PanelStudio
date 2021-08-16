@@ -41,7 +41,7 @@ publishing {
 		mavenJava(MavenPublication) {
 			pom {
 				name = "PanelStudio-MC16-Fabric"
-				description = "A supplement to PanelStudio desgined for FabricMC 1.16.x."
+				description = "A supplement to PanelStudio designed for FabricMC 1.16.x."
 			}
 		}
 	}

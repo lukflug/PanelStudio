@@ -3,7 +3,7 @@
 	"id": "panelstudio",
 	"version": "${version}",
 	"name": "PanelStudio-MC8-Fabric",
-	"description": "A supplement to PanelStudio desgined for FabricMC 1.8.9.",
+	"description": "A supplement to PanelStudio designed for FabricMC 1.8.9.",
 	"authors": ["NirvanaNevermind","lukflug"],
 	"contact": {
 		"homepage": "https://lukflug.github.io",

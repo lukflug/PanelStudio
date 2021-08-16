@@ -28,7 +28,7 @@ publishing {
 		mavenJava(MavenPublication) {
 			pom {
 				name = "PanelStudio-MC16-Forge"
-				description = "A supplement to PanelStudio desgined for Minecraft Forge 1.16.x."
+				description = "A supplement to PanelStudio designed for Minecraft Forge 1.16.x."
 			}
 		}
 	}

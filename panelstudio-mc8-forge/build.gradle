@@ -30,7 +30,7 @@ publishing {
 		mavenJava(MavenPublication) {
 			pom {
 				name = "PanelStudio-MC8-Forge"
-				description = "A supplement to PanelStudio desgined for Minecraft Forge 1.8.9."
+				description = "A supplement to PanelStudio designed for Minecraft Forge 1.8.9."
 			}
 		}
 	}
