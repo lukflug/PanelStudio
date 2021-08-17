@@ -1,0 +1,70 @@
+
+buildscript {
+	repositories {
+		gradlePluginPortal()
+		maven {
+			name = 'Fabric'
+			url = 'https://maven.fabricmc.net/'
+		}
+	}
+	dependencies {
+		classpath "net.fabricmc:fabric-loom:${loomVersion}"
+		classpath "gradle.plugin.com.github.jengelman.gradle.plugins:shadow:7.0.0"
+	}
+}
+
+apply plugin: "fabric-loom"
+apply plugin: "com.github.johnrengelman.shadow"
+
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+compileJava {
+	sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+configurations {
+	shadow
+	modImplementation.extendsFrom shadow	
+}
+
+repositories {
+	maven {
+		name = "legacy-fabric"
+		url = "https://maven.legacyfabric.net/"
+	}
+	maven {
+		name = "lukflug"
+		url = "http://localhost:8080/maven/"
+		allowInsecureProtocol = true
+	}
+}
+
+
+minecraft {
+	intermediaryUrl = {
+		return "https://maven.legacyfabric.net/net/fabricmc/intermediary/" + it + "/intermediary-" + it + "-v2.jar";
+	}
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${minecraft8fabric}"
+	mappings "net.fabricmc:yarn:${mappings8fabric}:v2"
+	modImplementation "net.fabricmc:fabric-loader-1.8.9:${loader8fabric}"
+	modImplementation "net.legacyfabric.legacy-fabric-api:legacy-fabric-api:${api8fabric}"
+	shadow "com.lukflug:panelstudio:${version}"
+	shadow "com.lukflug:panelstudio-mc8-fabric:${version}"
+}
+
+processResources {
+	inputs.property "version", project.version
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
+}
+
+shadowJar {
+	classifier = ""
+	configurations = [project.configurations.shadow]
+	relocate "com.lukflug.panelstudio","com.lukflug.examplemod8forge.com.lukflug.panelstudio"
+}
+
+remapJar.dependsOn(shadowJar)

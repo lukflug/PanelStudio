@@ -47,8 +47,8 @@ minecraft {
 }
 
 dependencies {
-	shadow("com.lukflug:panelstudio:${version}")
-	shadow("com.lukflug:panelstudio-mc8-forge:${version}")
+	shadow "com.lukflug:panelstudio:${version}"
+	shadow "com.lukflug:panelstudio-mc8-forge:${version}"
 }
 
 processResources {

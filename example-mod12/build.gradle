@@ -45,8 +45,8 @@ minecraft {
 
 dependencies {
 	minecraft "net.minecraftforge:forge:${minecraft12}"
-	shadow("com.lukflug:panelstudio:${version}")
-	shadow("com.lukflug:panelstudio-mc12:${version}")
+	shadow "com.lukflug:panelstudio:${version}"
+	shadow "com.lukflug:panelstudio-mc12:${version}"
 }
 
 processResources {
