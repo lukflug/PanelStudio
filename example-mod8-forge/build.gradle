@@ -1,0 +1,74 @@
+
+buildscript {
+	repositories {
+		gradlePluginPortal()
+		maven {
+			name = "forge"
+			url = "https://maven.minecraftforge.net/"
+		}
+	}
+	dependencies {
+		classpath "net.minecraftforge.gradle:ForgeGradle:${forgeGradle2}"
+		classpath "com.github.jengelman.gradle.plugins:shadow:4.0.4"
+	}
+}
+
+apply plugin: "net.minecraftforge.gradle.forge"
+apply plugin: "com.github.johnrengelman.shadow"
+
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+compileJava {
+	sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+configurations {
+	shadow
+	implementation.extendsFrom shadow	
+}
+
+repositories {
+	maven {
+		name = "forge"
+		url = "https://maven.minecraftforge.net/"
+	}
+	maven {
+		name = "lukflug"
+		url = "http://localhost:8080/maven/"
+	}
+}
+
+minecraft {
+	mappings = project.mappings8forge
+	version = project.minecraft8forge
+	runDir = "run"
+}
+
+dependencies {
+	shadow("com.lukflug:panelstudio:${version}")
+	shadow("com.lukflug:panelstudio-mc8-forge:${version}")
+}
+
+processResources {
+	inputs.property "version",project.version
+	inputs.property "mcversion",project.minecraft.version
+	from(sourceSets.main.resources.srcDirs) {
+		include "mcmod.info"
+		expand "version":project.version,"mcversion":project.minecraft.version
+	}
+	from(sourceSets.main.resources.srcDirs) {
+		exclude "mcmod.info"
+	}
+}
+
+shadowJar {
+	classifier = ""
+	configurations = [project.configurations.shadow]
+	relocate "com.lukflug.panelstudio","com.lukflug.examplemod8forge.com.lukflug.panelstudio"
+}
+
+reobf {
+	shadowJar{
+		mappingType = "SEARGE"
+		classpath = sourceSets.main.compileClasspath
+	}
+}
