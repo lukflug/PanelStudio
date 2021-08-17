@@ -53,14 +53,14 @@ public abstract class MinecraftGUI extends Screen {
 	 * Displays the GUI.
 	 */
 	public void enterGUI() {
-		Minecraft.getInstance().setScreen(this);
+		Minecraft.getInstance().displayGuiScreen(this);
 	}
 	
 	/**
 	 * Closes the GUI.
 	 */
 	public void exitGUI() {
-		Minecraft.getInstance().setScreen(null);
+		Minecraft.getInstance().displayGuiScreen(null);
 	}
 	
 	/**

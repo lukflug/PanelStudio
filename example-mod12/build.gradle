@@ -16,10 +16,6 @@ buildscript {
 apply plugin: "net.minecraftforge.gradle"
 apply plugin: "com.github.johnrengelman.shadow"
 
-configurations.all {
-	resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-}
-
 configurations {
 	shadow
 	implementation.extendsFrom shadow	
@@ -49,8 +45,8 @@ minecraft {
 
 dependencies {
 	minecraft "net.minecraftforge:forge:${minecraft12}"
-	shadow("com.lukflug:panelstudio:${version}-SNAPSHOT") {changing=true}
-	shadow("com.lukflug:panelstudio-mc12:${version}-SNAPSHOT") {changing=true}
+	shadow("com.lukflug:panelstudio:${version}")
+	shadow("com.lukflug:panelstudio-mc12:${version}")
 }
 
 processResources {

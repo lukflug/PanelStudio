@@ -58,10 +58,10 @@ public abstract class GLInterface implements IInterface {
 	public void drawString (Point pos, int height, String s, Color c) {
 		GL11.glPushMatrix();
 		GL11.glTranslatef(pos.x,pos.y,0);
-		double scale=height/(double)Minecraft.getInstance().font.lineHeight;
+		double scale=height/(double)Minecraft.getInstance().fontRenderer.FONT_HEIGHT;
 		GL11.glScaled(scale,scale,1);
 		end(false);
-		Minecraft.getInstance().font.drawShadow(getMatrixStack(),s,0,0,c.getRGB());
+		Minecraft.getInstance().fontRenderer.drawStringWithShadow(getMatrixStack(),s,0,0,c.getRGB());
 		begin(false);
 		GL11.glPopMatrix();
 	}
@@ -69,53 +69,53 @@ public abstract class GLInterface implements IInterface {
 	@SuppressWarnings("resource")
 	@Override
 	public int getFontWidth (int height, String s) {
-		double scale=height/(double)Minecraft.getInstance().font.lineHeight;
-		return (int)Math.round(Minecraft.getInstance().font.width(s)*scale);
+		double scale=height/(double)Minecraft.getInstance().fontRenderer.FONT_HEIGHT;
+		return (int)Math.round(Minecraft.getInstance().fontRenderer.getStringWidth(s)*scale);
 	}
 
 	@Override
 	public void fillTriangle (Point pos1, Point pos2, Point pos3, Color c1, Color c2, Color c3) {
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferbuilder = tessellator.getBuilder();
+		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		bufferbuilder.begin(GL11.GL_TRIANGLES,DefaultVertexFormats.POSITION_COLOR);
-			bufferbuilder.vertex(pos1.x,pos1.y,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).endVertex();
-			bufferbuilder.vertex(pos2.x,pos2.y,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).endVertex();
-			bufferbuilder.vertex(pos3.x,pos3.y,getZLevel()).color(c3.getRed()/255.0f,c3.getGreen()/255.0f,c3.getBlue()/255.0f,c3.getAlpha()/255.0f).endVertex();
-		tessellator.end();
+			bufferbuilder.pos(pos1.x,pos1.y,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).endVertex();
+			bufferbuilder.pos(pos2.x,pos2.y,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).endVertex();
+			bufferbuilder.pos(pos3.x,pos3.y,getZLevel()).color(c3.getRed()/255.0f,c3.getGreen()/255.0f,c3.getBlue()/255.0f,c3.getAlpha()/255.0f).endVertex();
+		tessellator.draw();
 	}
 
 	@Override
 	public void drawLine (Point a, Point b, Color c1, Color c2) {
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferbuilder = tessellator.getBuilder();
+		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		bufferbuilder.begin(GL11.GL_LINES,DefaultVertexFormats.POSITION_COLOR);
-			bufferbuilder.vertex(a.x,a.y,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).endVertex();
-			bufferbuilder.vertex(b.x,b.y,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).endVertex();
-		tessellator.end();
+			bufferbuilder.pos(a.x,a.y,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).endVertex();
+			bufferbuilder.pos(b.x,b.y,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).endVertex();
+		tessellator.draw();
 	}
 
 	@Override
 	public void fillRect (Rectangle r, Color c1, Color c2, Color c3, Color c4) {
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferbuilder = tessellator.getBuilder();
+		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-			bufferbuilder.vertex(r.x,r.y+r.height,getZLevel()).color(c4.getRed()/255.0f,c4.getGreen()/255.0f,c4.getBlue()/255.0f,c4.getAlpha()/255.0f).endVertex();
-			bufferbuilder.vertex(r.x+r.width,r.y+r.height,getZLevel()).color(c3.getRed()/255.0f,c3.getGreen()/255.0f,c3.getBlue()/255.0f,c3.getAlpha()/255.0f).endVertex();
-			bufferbuilder.vertex(r.x+r.width,r.y,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).endVertex();
-			bufferbuilder.vertex(r.x,r.y,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).endVertex();
-		tessellator.end();
+			bufferbuilder.pos(r.x,r.y+r.height,getZLevel()).color(c4.getRed()/255.0f,c4.getGreen()/255.0f,c4.getBlue()/255.0f,c4.getAlpha()/255.0f).endVertex();
+			bufferbuilder.pos(r.x+r.width,r.y+r.height,getZLevel()).color(c3.getRed()/255.0f,c3.getGreen()/255.0f,c3.getBlue()/255.0f,c3.getAlpha()/255.0f).endVertex();
+			bufferbuilder.pos(r.x+r.width,r.y,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).endVertex();
+			bufferbuilder.pos(r.x,r.y,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).endVertex();
+		tessellator.draw();
 	}
 
 	@Override
 	public void drawRect (Rectangle r, Color c1, Color c2, Color c3, Color c4) {
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferbuilder = tessellator.getBuilder();
+		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		bufferbuilder.begin(GL11.GL_LINE_LOOP, DefaultVertexFormats.POSITION_COLOR);
-			bufferbuilder.vertex(r.x,r.y+r.height,getZLevel()).color(c4.getRed()/255.0f,c4.getGreen()/255.0f,c4.getBlue()/255.0f,c4.getAlpha()/255.0f).endVertex();
-			bufferbuilder.vertex(r.x+r.width,r.y+r.height,getZLevel()).color(c3.getRed()/255.0f,c3.getGreen()/255.0f,c3.getBlue()/255.0f,c3.getAlpha()/255.0f).endVertex();
-			bufferbuilder.vertex(r.x+r.width,r.y,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).endVertex();
-			bufferbuilder.vertex(r.x,r.y,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).endVertex();
-		tessellator.end();
+			bufferbuilder.pos(r.x,r.y+r.height,getZLevel()).color(c4.getRed()/255.0f,c4.getGreen()/255.0f,c4.getBlue()/255.0f,c4.getAlpha()/255.0f).endVertex();
+			bufferbuilder.pos(r.x+r.width,r.y+r.height,getZLevel()).color(c3.getRed()/255.0f,c3.getGreen()/255.0f,c3.getBlue()/255.0f,c3.getAlpha()/255.0f).endVertex();
+			bufferbuilder.pos(r.x+r.width,r.y,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).endVertex();
+			bufferbuilder.pos(r.x,r.y,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).endVertex();
+		tessellator.draw();
 	}
 	
 	@Override
@@ -123,7 +123,7 @@ public abstract class GLInterface implements IInterface {
 		try {
 			ResourceLocation rl=new ResourceLocation(getResourcePrefix()+name);
 			if (!textures.contains(rl)) {
-				Minecraft.getInstance().getTextureManager().preload(rl,null).get();
+				Minecraft.getInstance().getTextureManager().loadAsync(rl,null).get();
 				textures.add(rl);
 			}
 			return textures.indexOf(rl);
@@ -160,18 +160,18 @@ public abstract class GLInterface implements IInterface {
 			texCoords[2][0]=temp1;
 		}
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferbuilder = tessellator.getBuilder();
+		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		float[] colorBuffer={color.getRed()/255.0f,color.getGreen()/255.0f,color.getBlue()/255.0f,color.getAlpha()/255.0f};
-		Minecraft.getInstance().getTextureManager().bind(textures.get(image));
+		Minecraft.getInstance().getTextureManager().bindTexture(textures.get(image));
 		GL11.glTexEnvfv(GL11.GL_TEXTURE_ENV,GL11.GL_TEXTURE_ENV_COLOR,colorBuffer);
-		GlStateManager._enableTexture();
+		GlStateManager.enableTexture();
 		bufferbuilder.begin(GL11.GL_QUADS,DefaultVertexFormats.POSITION_TEX);
-			bufferbuilder.vertex(r.x,r.y+r.height,getZLevel()).uv(texCoords[0][0],texCoords[0][1]).endVertex();
-			bufferbuilder.vertex(r.x+r.width,r.y+r.height,getZLevel()).uv(texCoords[1][0],texCoords[1][1]).endVertex();
-			bufferbuilder.vertex(r.x+r.width,r.y,getZLevel()).uv(texCoords[2][0],texCoords[2][1]).endVertex();
-			bufferbuilder.vertex(r.x,r.y,getZLevel()).uv(texCoords[3][0],texCoords[3][1]).endVertex();
-		tessellator.end();
-		GlStateManager._disableTexture();
+			bufferbuilder.pos(r.x,r.y+r.height,getZLevel()).tex(texCoords[0][0],texCoords[0][1]).endVertex();
+			bufferbuilder.pos(r.x+r.width,r.y+r.height,getZLevel()).tex(texCoords[1][0],texCoords[1][1]).endVertex();
+			bufferbuilder.pos(r.x+r.width,r.y,getZLevel()).tex(texCoords[2][0],texCoords[2][1]).endVertex();
+			bufferbuilder.pos(r.x,r.y,getZLevel()).tex(texCoords[3][0],texCoords[3][1]).endVertex();
+		tessellator.draw();
+		GlStateManager.disableTexture();
 	}
 	
 	/**
@@ -187,7 +187,7 @@ public abstract class GLInterface implements IInterface {
 		Point a=guiToScreen(r.getLocation()),b=guiToScreen(new Point(r.x+r.width,r.y+r.height));
 		if (!clipX) {
 			a.x=0;
-			b.x=Minecraft.getInstance().getWindow().getWidth();
+			b.x=Minecraft.getInstance().getMainWindow().getWidth();
 		}
 		GL11.glScissor(Math.min(a.x,b.x),Math.min(a.y,b.y),Math.abs(b.x-a.x),Math.abs(b.y-a.y));
 		GL11.glEnable(GL11.GL_SCISSOR_TEST);
@@ -238,7 +238,7 @@ public abstract class GLInterface implements IInterface {
 	public Point screenToGui (Point p) {
 		int resX=getWindowSize().width;
 		int resY=getWindowSize().height;
-		return new Point(p.x*resX/Minecraft.getInstance().getWindow().getWidth(),resY-p.y*resY/Minecraft.getInstance().getWindow().getHeight()-1);
+		return new Point(p.x*resX/Minecraft.getInstance().getMainWindow().getWidth(),resY-p.y*resY/Minecraft.getInstance().getMainWindow().getHeight()-1);
 	}
 	
 	/**
@@ -249,7 +249,7 @@ public abstract class GLInterface implements IInterface {
 	public Point guiToScreen (Point p) {
 		double resX=getScreenWidth();
 		double resY=getScreenHeight();
-		return new Point((int)Math.round(p.x*Minecraft.getInstance().getWindow().getWidth()/resX),(int)Math.round((resY-p.y)*Minecraft.getInstance().getWindow().getHeight()/resY));
+		return new Point((int)Math.round(p.x*Minecraft.getInstance().getMainWindow().getWidth()/resX),(int)Math.round((resY-p.y)*Minecraft.getInstance().getMainWindow().getHeight()/resY));
 	}
 	
 	/**
@@ -257,7 +257,7 @@ public abstract class GLInterface implements IInterface {
 	 * @return the screen width
 	 */
 	protected double getScreenWidth() {
-		return Minecraft.getInstance().getWindow().getGuiScaledWidth();
+		return Minecraft.getInstance().getMainWindow().getScaledWidth();
 	}
 	
 	/**
@@ -265,7 +265,7 @@ public abstract class GLInterface implements IInterface {
 	 * @return the screen height
 	 */
 	protected double getScreenHeight() {
-		return Minecraft.getInstance().getWindow().getGuiScaledHeight();
+		return Minecraft.getInstance().getMainWindow().getScaledHeight();
 	}
 	
 	/**
@@ -283,12 +283,12 @@ public abstract class GLInterface implements IInterface {
 			GL11.glPushMatrix();
 			GL11.glLoadIdentity();
 		}
-		GlStateManager._enableBlend();
-		GlStateManager._disableTexture();
+		GlStateManager.enableBlend();
+		GlStateManager.disableTexture();
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
-		GlStateManager._blendFuncSeparate(GL11.GL_SRC_ALPHA,GL11.GL_ONE_MINUS_SRC_ALPHA,GL11.GL_ONE,GL11.GL_ZERO);
+		GlStateManager.blendFuncSeparate(GL11.GL_SRC_ALPHA,GL11.GL_ONE_MINUS_SRC_ALPHA,GL11.GL_ONE,GL11.GL_ZERO);
 		GL11.glShadeModel(GL11.GL_SMOOTH);
-		GlStateManager._lineWidth(2);
+		GlStateManager.lineWidth(2);
 		// Set texture env mode to combine
 		GL11.glPushAttrib(GL11.GL_TEXTURE_BIT);
 		GL11.glTexEnvi(GL11.GL_TEXTURE_ENV,GL11.GL_TEXTURE_ENV_MODE,GL13.GL_COMBINE);
@@ -316,8 +316,8 @@ public abstract class GLInterface implements IInterface {
 		GL11.glPopAttrib();
 		GL11.glShadeModel(GL11.GL_FLAT);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
-		GlStateManager._enableTexture();
-		GlStateManager._disableBlend();
+		GlStateManager.enableTexture();
+		GlStateManager.disableBlend();
 		if (matrix) {
 			GL11.glMatrixMode(GL11.GL_PROJECTION);
 			GL11.glPopMatrix();
