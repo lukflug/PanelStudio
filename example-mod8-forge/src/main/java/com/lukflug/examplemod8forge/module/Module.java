@@ -1,10 +1,7 @@
 package com.lukflug.examplemod8forge.module;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import com.lukflug.examplemod8forge.setting.Setting;
@@ -60,21 +57,6 @@ public class Module implements IModule {
 
 	@Override
 	public Stream<ISetting<?>> getSettings() {
-		return settings.stream().filter(new Predicate<Setting<?>>() {
-			@Override
-			public boolean test (Setting<?> t) {
-				return t instanceof ISetting;
-			}
-		}).sorted(new Comparator<Setting<?>>() {
-			@Override
-			public int compare (Setting<?> o1, Setting<?> o2) {
-				return o1.displayName.compareTo(o2.displayName);
-			}
-		}).map(new Function<Setting<?>,ISetting<?>>() {
-			@Override
-			public ISetting<?> apply (Setting<?> t) {
-				return (ISetting<?>)t;
-			}
-		});
+		return settings.stream().filter(setting->setting instanceof ISetting).sorted((a,b)->a.displayName.compareTo(b.displayName)).map(setting->(ISetting<?>)setting);
 	}
 }

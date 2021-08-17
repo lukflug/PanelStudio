@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 import com.lukflug.examplemod8forge.setting.BooleanSetting;
@@ -14,7 +13,6 @@ import com.lukflug.examplemod8forge.setting.DoubleSetting;
 import com.lukflug.examplemod8forge.setting.IntegerSetting;
 import com.lukflug.examplemod8forge.setting.Setting;
 import com.lukflug.examplemod8forge.setting.StringSetting;
-import com.lukflug.panelstudio.base.ConstantToggleable;
 import com.lukflug.panelstudio.setting.ICategory;
 import com.lukflug.panelstudio.setting.IClient;
 import com.lukflug.panelstudio.setting.IModule;
@@ -45,25 +43,20 @@ public enum Category implements ICategory {
 
 	@Override
 	public Stream<IModule> getModules() {
-		return modules.stream().map(new Function<Module,IModule>() {
-			@Override
-			public IModule apply (Module t) {
-				return t;
-			}
-		});
+		return modules.stream().map(module->module);
 	}
 	
 	public static IClient getClient() {
 		return new IClient() {
 			@Override
 			public Stream<ICategory> getCategories() {
-				return Arrays.stream((ICategory[])Category.values());
+				return Arrays.stream(Category.values());
 			}
 		};
 	}
 	
 	public static Module generateRandomModule() {
-		Module module=new Module(generateRandomName(5,10),generateRandomName(10,20),new ConstantToggleable(true),random.nextInt(2)==0);
+		Module module=new Module(generateRandomName(5,10),generateRandomName(10,20),()->true,random.nextInt(2)==0);
 		int count=random.nextInt(6)+5;
 		for (int i=0;i<count;i++) {
 			module.settings.add(generateRandomSetting());
@@ -81,15 +74,15 @@ public enum Category implements ICategory {
 		Color color=new Color(random.nextInt(256),random.nextInt(256),random.nextInt(256),alpha?random.nextInt(256):255);
 		switch (type) {
 		case 0:
-			return new BooleanSetting(displayName,displayName,description,new ConstantToggleable(true),random.nextInt(2)==0);
+			return new BooleanSetting(displayName,displayName,description,()->true,random.nextInt(2)==0);
 		case 1:
-			return new ColorSetting(displayName,displayName,description,new ConstantToggleable(true),alpha,rainbow,color,rainbow?random.nextInt(2)==0:false);
+			return new ColorSetting(displayName,displayName,description,()->true,alpha,rainbow,color,rainbow?random.nextInt(2)==0:false);
 		case 2:
-			return new DoubleSetting(displayName,displayName,description,new ConstantToggleable(true),min,max,random.nextDouble()*(max-min)+min);
+			return new DoubleSetting(displayName,displayName,description,()->true,min,max,random.nextDouble()*(max-min)+min);
 		case 4:
-			return new IntegerSetting(displayName,displayName,description,new ConstantToggleable(true),min,max,random.nextInt(max-min+1)+min);
+			return new IntegerSetting(displayName,displayName,description,()->true,min,max,random.nextInt(max-min+1)+min);
 		default:
-			return new StringSetting(displayName,displayName,description,new ConstantToggleable(true),generateRandomName(5,10));
+			return new StringSetting(displayName,displayName,description,()->true,generateRandomName(5,10));
 		}
 	};
 	

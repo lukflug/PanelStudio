@@ -6,6 +6,7 @@ import com.lukflug.examplemod8forge.module.ClickGUIModule;
 import com.lukflug.examplemod8forge.module.ClickGUIModule.ColorModel;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.setting.IColorSetting;
+import com.lukflug.panelstudio.theme.ITheme;
 
 public class ColorSetting extends Setting<Color> implements IColorSetting {
 	public final boolean hasAlpha,allowsRainbow;
@@ -22,8 +23,7 @@ public class ColorSetting extends Setting<Color> implements IColorSetting {
 	public Color getValue() {
 		if (rainbow) {
 			int speed=ClickGUIModule.rainbowSpeed.getValue();
-			Color color=Color.getHSBColor((System.currentTimeMillis()%(360*speed))/(float)(360*speed),1,1);
-			return new Color(color.getRed(),color.getGreen(),color.getBlue(),super.getValue().getAlpha());
+			return ITheme.combineColors(Color.getHSBColor((System.currentTimeMillis()%(360*speed))/(float)(360*speed),1,1),super.getValue());
 		}
 		else return super.getValue();
 	}

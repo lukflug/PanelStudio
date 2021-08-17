@@ -1,8 +1,6 @@
 package com.lukflug.examplemod8forge.setting;
 
 import java.util.Arrays;
-import java.util.function.Function;
-import java.util.function.IntFunction;
 
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.setting.IEnumSetting;
@@ -15,22 +13,14 @@ public class EnumSetting<E extends Enum<E>> extends Setting<E> implements IEnumS
 	public EnumSetting (String displayName, String configName, String description, IBoolean visible, E value, Class<E> settingClass) {
 		super(displayName,configName,description,visible,value);
 		this.settingClass=settingClass;
-		array=Arrays.stream(settingClass.getEnumConstants()).map(new Function<E,ILabeled>() {
-			@Override
-			public ILabeled apply (final E t) {
-				return new ILabeled() {
-					@Override
-					public String getDisplayName() {
-						return t.toString();
-					}
-				};
-			}
-		}).toArray(new IntFunction<ILabeled[]>() {
-			@Override
-			public ILabeled[] apply(int value) {
-				return new ILabeled[value];
-			}	
-		});
+		array=Arrays.stream(settingClass.getEnumConstants()).map(v->{
+			return new ILabeled() {
+				@Override
+				public String getDisplayName() {
+					return v.toString();
+				}
+			};
+		}).toArray(ILabeled[]::new);
 	}
 
 	@Override

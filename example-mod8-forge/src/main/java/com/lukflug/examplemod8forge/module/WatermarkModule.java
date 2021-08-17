@@ -6,24 +6,22 @@ import java.awt.Point;
 import com.lukflug.examplemod8forge.setting.BooleanSetting;
 import com.lukflug.examplemod8forge.setting.ColorSetting;
 import com.lukflug.examplemod8forge.setting.StringSetting;
-import com.lukflug.panelstudio.base.ConstantToggleable;
 import com.lukflug.panelstudio.base.IToggleable;
 import com.lukflug.panelstudio.component.IFixedComponent;
 import com.lukflug.panelstudio.hud.HUDList;
 import com.lukflug.panelstudio.hud.ListComponent;
-import com.lukflug.panelstudio.setting.ILabeled;
 
 public class WatermarkModule extends Module {
 	private static WatermarkModule instance;
-	private static final ColorSetting color=new ColorSetting("Text Color","color","The color of the displayed text.",new ConstantToggleable(true),false,true,new Color(0,0,255),false);
-	private static final BooleanSetting sortUp=new BooleanSetting("Sort Up","sortUp","Whether to align the text from the bottom up.",new ConstantToggleable(true),false);
-	private static final BooleanSetting sortRight=new BooleanSetting("Sort Right","sortRight","Whether to align the text from right to left.",new ConstantToggleable(true),false);
-	private static final StringSetting line1=new StringSetting("First Line","line1","The first line of text.",new ConstantToggleable(true),"PanelStudio");
-	private static final StringSetting line2=new StringSetting("Second Line","line2","The second line of text.",new ConstantToggleable(true),"Example Mod");
-	private static final StringSetting line3=new StringSetting("Third Line","line3","The third line of text.",new ConstantToggleable(true),"made by lukflug");
+	private static final ColorSetting color=new ColorSetting("Text Color","color","The color of the displayed text.",()->true,false,true,new Color(0,0,255),false);
+	private static final BooleanSetting sortUp=new BooleanSetting("Sort Up","sortUp","Whether to align the text from the bottom up.",()->true,false);
+	private static final BooleanSetting sortRight=new BooleanSetting("Sort Right","sortRight","Whether to align the text from right to left.",()->true,false);
+	private static final StringSetting line1=new StringSetting("First Line","line1","The first line of text.",()->true,"PanelStudio");
+	private static final StringSetting line2=new StringSetting("Second Line","line2","The second line of text.",()->true,"Example Mod");
+	private static final StringSetting line3=new StringSetting("Third Line","line3","The third line of text.",()->true,"made by lukflug");
 	
 	public WatermarkModule() {
-		super("Watermark","Module that displays text on HUD.",new ConstantToggleable(true),true);
+		super("Watermark","Module that displays text on HUD.",()->true,true);
 		instance=this;
 		settings.add(color);
 		settings.add(sortUp);
@@ -34,12 +32,7 @@ public class WatermarkModule extends Module {
 	}
 
 	public static IFixedComponent getComponent() {
-		return new ListComponent(new ILabeled() {
-			@Override
-			public String getDisplayName() {
-				return "Watermark";
-			}
-		},new Point(300,10),"watermark",new HUDList() {
+		return new ListComponent(()->"Watermark",new Point(300,10),"watermark",new HUDList() {
 			@Override
 			public int getSize() {
 				return 3;
