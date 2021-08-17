@@ -5,10 +5,13 @@ import org.lwjgl.input.Keyboard;
 
 import com.lukflug.examplemod12.module.Category;
 import com.lukflug.examplemod12.module.ClickGUIModule;
+import com.lukflug.examplemod12.module.HUDEditorModule;
+import com.lukflug.examplemod12.module.LogoModule;
+import com.lukflug.examplemod12.module.TabGUIModule;
+import com.lukflug.examplemod12.module.WatermarkModule;
 
-import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -22,7 +25,6 @@ public class ExampleMod {
 	public static final String NAME="PanelStudio-MC12 Example Mod";
 	public static final String VERSION="0.2.0";
 	public static Logger logger;
-	private static final KeyBinding guiBind=new KeyBinding("Open ClickGUI",Keyboard.KEY_O,"PanelStudio Example");
 	private static ClickGUI gui;
 
 	@EventHandler
@@ -34,13 +36,23 @@ public class ExampleMod {
 	public void init (FMLInitializationEvent event) {
 		Category.init();
 		Category.OTHER.modules.add(new ClickGUIModule());
-		ClientRegistry.registerKeyBinding(guiBind);
+		Category.OTHER.modules.add(new HUDEditorModule());
+		Category.HUD.modules.add(new TabGUIModule());
+		Category.HUD.modules.add(new WatermarkModule());
+		Category.HUD.modules.add(new LogoModule());
 		gui=new ClickGUI();
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 	
 	@SubscribeEvent
+	public void onRender (RenderGameOverlayEvent.Post event) {
+		if (event.getType()==RenderGameOverlayEvent.ElementType.HOTBAR) gui.render();
+	}
+	
+	@SubscribeEvent
 	public void onKeyInput (KeyInputEvent event) {
-		if (guiBind.isPressed()) gui.enterGUI();
+		if (Keyboard.isKeyDown(ClickGUIModule.keybind.getKey())) gui.enterGUI();
+		if (Keyboard.isKeyDown(HUDEditorModule.keybind.getKey())) gui.enterHUDEditor();
+		if (Keyboard.getEventKeyState()) gui.handleKeyEvent(Keyboard.getEventKey());
 	}
 }

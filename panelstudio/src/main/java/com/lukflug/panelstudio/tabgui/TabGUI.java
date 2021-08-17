@@ -70,6 +70,11 @@ public class TabGUI extends TabItem<TabGUI.ChildTab,Void> {
 
 	@Override
 	protected void handleExit (Context context) {
+		exit();
+	}
+	
+	@Override
+	public void exit() {
 		ChildTab tab=contents.get((int)tabState.getTarget()).content;
 		if (tab.visible.isOn()) tab.visible.toggle();
 	}

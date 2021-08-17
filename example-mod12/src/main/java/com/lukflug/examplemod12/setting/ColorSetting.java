@@ -6,6 +6,7 @@ import com.lukflug.examplemod12.module.ClickGUIModule;
 import com.lukflug.examplemod12.module.ClickGUIModule.ColorModel;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.setting.IColorSetting;
+import com.lukflug.panelstudio.theme.ITheme;
 
 public class ColorSetting extends Setting<Color> implements IColorSetting {
 	public final boolean hasAlpha,allowsRainbow;
@@ -20,7 +21,10 @@ public class ColorSetting extends Setting<Color> implements IColorSetting {
 	
 	@Override
 	public Color getValue() {
-		if (rainbow) return Color.getHSBColor(System.currentTimeMillis()*36/6000f*ClickGUIModule.rainbowSpeed.getValue().floatValue(),1,1);
+		if (rainbow) {
+			int speed=ClickGUIModule.rainbowSpeed.getValue();
+			return ITheme.combineColors(Color.getHSBColor((System.currentTimeMillis()%(360*speed))/(float)(360*speed),1,1),super.getValue());
+		}
 		else return super.getValue();
 	}
 

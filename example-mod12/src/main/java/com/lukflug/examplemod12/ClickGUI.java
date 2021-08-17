@@ -18,17 +18,26 @@ import org.lwjgl.input.Keyboard;
 import com.lukflug.examplemod12.module.Category;
 import com.lukflug.examplemod12.module.ClickGUIModule;
 import com.lukflug.examplemod12.module.ClickGUIModule.Theme;
+import com.lukflug.examplemod12.module.HUDEditorModule;
+import com.lukflug.examplemod12.module.LogoModule;
+import com.lukflug.examplemod12.module.TabGUIModule;
+import com.lukflug.examplemod12.module.WatermarkModule;
 import com.lukflug.examplemod12.setting.BooleanSetting;
 import com.lukflug.examplemod12.setting.ColorSetting;
 import com.lukflug.examplemod12.setting.IntegerSetting;
 import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.Context;
+import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IInterface;
+import com.lukflug.panelstudio.base.IToggleable;
 import com.lukflug.panelstudio.base.SettingsAnimation;
+import com.lukflug.panelstudio.base.SimpleToggleable;
 import com.lukflug.panelstudio.component.IComponent;
+import com.lukflug.panelstudio.component.IFixedComponent;
 import com.lukflug.panelstudio.component.IResizable;
 import com.lukflug.panelstudio.component.IScrollSize;
-import com.lukflug.panelstudio.container.GUI;
+import com.lukflug.panelstudio.container.IContainer;
+import com.lukflug.panelstudio.hud.HUDGUI;
 import com.lukflug.panelstudio.layout.CSGOLayout;
 import com.lukflug.panelstudio.layout.ChildUtil.ChildMode;
 import com.lukflug.panelstudio.layout.ComponentGenerator;
@@ -40,7 +49,7 @@ import com.lukflug.panelstudio.layout.PanelLayout;
 import com.lukflug.panelstudio.layout.SearchableLayout;
 import com.lukflug.panelstudio.layout.SinglePanelAdder;
 import com.lukflug.panelstudio.layout.StackedPanelAdder;
-import com.lukflug.panelstudio.mc12.MinecraftGUI;
+import com.lukflug.panelstudio.mc12.MinecraftHUDGUI;
 import com.lukflug.panelstudio.popup.CenteredPositioner;
 import com.lukflug.panelstudio.popup.IPopupPositioner;
 import com.lukflug.panelstudio.popup.MousePositioner;
@@ -71,10 +80,10 @@ import com.lukflug.panelstudio.widget.ToggleSwitch;
 
 import net.minecraft.util.text.TextFormatting;
 
-public class ClickGUI extends MinecraftGUI {
+public class ClickGUI extends MinecraftHUDGUI {
 	private final GUIInterface inter;
-	private final GUI gui;
-	public static final int WIDTH=120,HEIGHT=12,DISTANCE=6;
+	private final HUDGUI gui;
+	public static final int WIDTH=120,HEIGHT=12,DISTANCE=6,BORDER=2;
 	
 	public ClickGUI() {
 		// Getting client structure ...
@@ -90,9 +99,36 @@ public class ClickGUI extends MinecraftGUI {
 		// Instantiating theme ...
 		ITheme theme=new OptimizedTheme(new ThemeSelector(inter));
 		// Instantiating GUI ...
-		gui=new GUI(inter,theme.getDescriptionRenderer(),(IPopupPositioner)new MousePositioner(new Point(10,10)));
+		IToggleable guiToggle=new SimpleToggleable(false);
+		IToggleable hudToggle=new SimpleToggleable(false) {
+			@Override
+			public boolean isOn() {
+				return guiToggle.isOn()?HUDEditorModule.showHUD.isOn():super.isOn();
+			}
+		};
+		gui=new HUDGUI(inter,theme.getDescriptionRenderer(),(IPopupPositioner)new MousePositioner(new Point(10,10)),guiToggle,hudToggle);
 		// Creating animation ...
 		Supplier<Animation> animation=()->new SettingsAnimation(()->ClickGUIModule.animationSpeed.getValue(),()->inter.getTime());
+		// Populating HUD ...
+		gui.addHUDComponent(TabGUIModule.getComponent(client,new IContainer<IFixedComponent>() {
+			@Override
+			public boolean addComponent (IFixedComponent component) {
+				return gui.addHUDComponent(component,()->true);
+			}
+
+			@Override
+			public boolean addComponent (IFixedComponent component, IBoolean visible) {
+				return gui.addHUDComponent(component,visible);
+			}
+
+			@Override
+			public boolean removeComponent (IFixedComponent component) {
+				return gui.removeComponent(component);
+			}
+		},animation),TabGUIModule.getToggle(),animation.get(),theme,BORDER);
+		gui.addHUDComponent(WatermarkModule.getComponent(),WatermarkModule.getToggle(),animation.get(),theme,BORDER);
+		gui.addHUDComponent(LogoModule.getComponent(inter),LogoModule.getToggle(),animation.get(),theme,BORDER);
+		
 		// Creating popup types ...
 		BiFunction<Context,Integer,Integer> scrollHeight=(context,componentHeight)->Math.min(componentHeight,Math.max(HEIGHT*4,ClickGUI.this.height-context.getPos().y-HEIGHT));
 		PopupTuple popupType=new PopupTuple(new PanelPositioner(new Point(0,0)),false,new IScrollSize() {
@@ -338,26 +374,6 @@ public class ClickGUI extends MinecraftGUI {
 			public int getScrollHeight (Context context, int componentHeight) {
 				return resizableHeight.apply(horizontalResizable.get()).getScrollHeight(null,height);
 			}
-			
-			@Override
-			protected boolean isUpKey (int key) {
-				return false;//return key==Keyboard.KEY_UP;
-			}
-			
-			@Override
-			protected boolean isDownKey (int key) {
-				return false;//return key==Keyboard.KEY_DOWN;
-			}
-			
-			@Override
-			protected boolean isLeftKey (int key) {
-				return false;//key==Keyboard.KEY_LEFT;
-			}
-			
-			@Override
-			protected boolean isRightKey (int key) {
-				return false;//key==Keyboard.KEY_RIGHT;
-			}
 		};
 		horizontalCSGOLayout.populateGUI(horizontalCSGOAdder,csgoGenerator,client,theme);
 		// Vertical CSGO
@@ -411,7 +427,7 @@ public class ClickGUI extends MinecraftGUI {
 	}
 
 	@Override
-	protected GUI getGUI() {
+	protected HUDGUI getGUI() {
 		return gui;
 	}
 

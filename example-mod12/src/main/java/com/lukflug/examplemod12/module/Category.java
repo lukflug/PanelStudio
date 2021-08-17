@@ -18,7 +18,7 @@ import com.lukflug.panelstudio.setting.IClient;
 import com.lukflug.panelstudio.setting.IModule;
 
 public enum Category implements ICategory {
-	COMBAT("Combat"),EXPLOITS("Exploits"),MISCELLANEOUS("Miscellaneous"),MOVEMENT("Movement"),OTHER("Other"),RENDER("Render"),WORLD("World");
+	COMBAT("Combat"),EXPLOITS("Exploits"),HUD("HUD"),MISCELLANEOUS("Miscellaneous"),MOVEMENT("Movement"),OTHER("Other"),RENDER("Render"),WORLD("World");
 	public final String displayName;
 	public final List<Module> modules=new ArrayList<Module>();
 	public static Random random=new Random();
@@ -31,7 +31,7 @@ public enum Category implements ICategory {
 		for (Category category: Category.values()) {
 			int count=random.nextInt(6)+5;
 			for (int i=0;i<count;i++) {
-				if (category!=OTHER) category.modules.add(generateRandomModule());
+				if (category!=OTHER && category!=HUD) category.modules.add(generateRandomModule());
 			}
 		}
 	}

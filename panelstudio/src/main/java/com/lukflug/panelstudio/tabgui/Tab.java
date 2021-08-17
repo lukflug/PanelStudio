@@ -25,7 +25,7 @@ public class Tab extends TabItem<IToggleable,Boolean> {
 	 */
 	public Tab (ICategory category, ITabGUIRenderer<Boolean> renderer, Animation animation, IntPredicate up, IntPredicate down, IntPredicate enter) {
 		super(category,renderer,animation,up,down,enter,key->false);
-		contents=category.getModules().map(module->new ContentItem<IToggleable,Boolean>(module.getDisplayName(),module.isEnabled())).collect(Collectors.toList());
+		contents=category.getModules().filter(module->module.isEnabled()!=null).map(module->new ContentItem<IToggleable,Boolean>(module.getDisplayName(),module.isEnabled())).collect(Collectors.toList());
 	}
 
 	@Override
