@@ -1,0 +1,23 @@
+modLoader="javafml"
+loaderVersion="[32,)"
+license="MIT license"
+[[mods]]
+	modId="example-mod16-forge"
+	version="${version}"
+	displayName="PanelStudio-MC16-Forge Example Mod"
+	displayURL="https://lukflug.github.io/"
+	logoFile="panelstudio.png"
+	authors="lukflug"
+	description="An example mod for PanelStudio-MC12."
+[[dependencies.example-mod16-forge]]
+	modId="forge"
+	mandatory=true
+	versionRange="[32,)"
+	ordering="NONE"
+	side="BOTH"
+[[dependencies.example-mod16-forge]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16,1.17)"
+    ordering="NONE"
+    side="BOTH"

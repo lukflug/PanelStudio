@@ -18,6 +18,6 @@
 	"depends": {
 		"legacy-fabric-api": "*",
 		"fabricloader": ">=0.7.4",
-		"minecraft": "1.8.x"
+		"minecraft": "1.8.9"
 	}
 }

@@ -1,20 +1,25 @@
 
 buildscript {
 	repositories {
-		gradlePluginPortal()
 		maven {
 			name = "forge"
 			url = "https://maven.minecraftforge.net/"
 		}
+		gradlePluginPortal()
 	}
 	dependencies {
-		classpath "net.minecraftforge.gradle:ForgeGradle:${forgeGradle3}"
-		classpath "com.github.jengelman.gradle.plugins:shadow:4.0.4"
+		classpath "net.minecraftforge.gradle:ForgeGradle:${forgeGradle5}"
+		classpath "gradle.plugin.com.github.jengelman.gradle.plugins:shadow:7.0.0"
 	}
 }
 
 apply plugin: "net.minecraftforge.gradle"
 apply plugin: "com.github.johnrengelman.shadow"
+
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+compileJava {
+	sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+}
 
 configurations {
 	shadow
@@ -29,34 +34,31 @@ repositories {
 	maven {
 		name = "lukflug"
 		url = "http://localhost:8080/maven/"
+		allowInsecureProtocol = true
 	}
 }
 
 minecraft {
-	mappings("stable",project.mappings12)
+	mappings("snapshot",project.mappings16forge)
 	runs {
 		client {
 			workingDirectory project.file("run")
-			property "forge.logging.markers","SCAN,REGISTRIES,REGISTRYDUMP"
+			property "forge.logging.markers","REGISTRIES"
 			property "forge.logging.console.level","debug"
 		}
 	}
 }
 
 dependencies {
-	minecraft "net.minecraftforge:forge:${minecraft12}"
+	minecraft "net.minecraftforge:forge:${minecraft16forge}"
 	shadow "com.lukflug:panelstudio:${version}"
-	shadow "com.lukflug:panelstudio-mc12:${version}"
+	shadow "com.lukflug:panelstudio-mc16-forge:${version}"
 }
 
 processResources {
 	inputs.property "version",project.version
-	from(sourceSets.main.resources.srcDirs) {
-		include "mcmod.info"
-		expand "version":project.version,"mcversion":"1.12.2"
-	}
-	from(sourceSets.main.resources.srcDirs) {
-		exclude "mcmod.info"
+	filesMatching("META-INF/mods.toml") {
+		expand "version": project.version
 	}
 }
 

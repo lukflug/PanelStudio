@@ -3,8 +3,8 @@ publishing {
 	publications {
 		mavenJava(MavenPublication) {
 			pom {
-				name = 'PanelStudio'
-				description = 'An extensible and customizable library to create ClickGUIs, HUDEditors and TabGUIs designed for use in Minecraft utility mods.'
+				name = "PanelStudio"
+				description = "An extensible and customizable library to create ClickGUIs, HUDEditors and TabGUIs designed for use in Minecraft utility mods."
 			}
 		}
 	}
