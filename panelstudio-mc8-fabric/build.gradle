@@ -55,6 +55,9 @@ publishing {
 				description = "A supplement to PanelStudio designed for Legacy Fabric 1.8.9."
 				developers {
 					developer {
+						id = "lukflug"
+					}
+					developer {
 						id = "NirvanaNevermind"
 					}
 				}

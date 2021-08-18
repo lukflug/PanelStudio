@@ -10,9 +10,14 @@
 		"sources": "https://github.com/lukflug/PanelStudio"
 	},
 	"license": "MIT",
+	"icon": "assets/examplemod/panelstudio.png",
 	"environment": "*",
+	"entrypoints": {
+		"main": ["com.lukflug.examplemod8fabric.ExampleMod"]
+	},
 	"depends": {
-		"minecraft": "1.8.9"
-		"panelstudio": "${version}"
+		"legacy-fabric-api": "*",
+		"fabricloader": ">=0.7.4",
+		"minecraft": "1.8.x"
 	}
 }
