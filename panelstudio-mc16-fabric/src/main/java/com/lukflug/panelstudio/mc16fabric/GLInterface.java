@@ -4,10 +4,15 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.IntBuffer;
 import java.util.Stack;
-import java.util.concurrent.ExecutionException;
+
+import javax.imageio.ImageIO;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
@@ -19,6 +24,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.texture.TextureUtil;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
@@ -35,10 +41,6 @@ public abstract class GLInterface implements IInterface {
 	 * Boolean indicating whether to clip in the horizontal direction. 
 	 */
 	protected boolean clipX;
-	/**
-	 * List of loaded images.
-	 */
-	protected final List<Identifier> textures=new ArrayList<Identifier>();
 	
 	/**
 	 * Constructor.
@@ -122,15 +124,17 @@ public abstract class GLInterface implements IInterface {
 	public synchronized int loadImage (String name) {
 		try {
 			Identifier rl=new Identifier(getResourcePrefix()+name);
-			if (!textures.contains(rl)) {
-				MinecraftClient.getInstance().getTextureManager().loadTextureAsync(rl,null).get();
-				textures.add(rl);
-			}
-			return textures.indexOf(rl);
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-			return 0;
-		} catch (InterruptedException e) {
+			InputStream stream=MinecraftClient.getInstance().getResourceManager().getResource(rl).getInputStream();
+			BufferedImage image=ImageIO.read(stream);
+			int texture=TextureUtil.generateId();
+			GlStateManager.bindTexture(texture);
+			int width=image.getWidth(),height=image.getHeight();
+			IntBuffer buffer=ByteBuffer.allocateDirect(4*width*height).order(ByteOrder.nativeOrder()).asIntBuffer();
+			buffer.put(image.getRGB(0,0,width,height,null,0,width));
+			buffer.flip();
+			TextureUtil.uploadImage(buffer,width,height);
+			return texture;
+		} catch (IOException e) {
 			e.printStackTrace();
 			return 0;
 		}
@@ -162,7 +166,7 @@ public abstract class GLInterface implements IInterface {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		float[] colorBuffer={color.getRed()/255.0f,color.getGreen()/255.0f,color.getBlue()/255.0f,color.getAlpha()/255.0f};
-		MinecraftClient.getInstance().getTextureManager().bindTexture(textures.get(image));
+		GlStateManager.bindTexture(image);
 		GL11.glTexEnvfv(GL11.GL_TEXTURE_ENV,GL11.GL_TEXTURE_ENV_COLOR,colorBuffer);
 		GlStateManager.enableTexture();
 		bufferbuilder.begin(GL11.GL_QUADS, VertexFormats.POSITION_TEXTURE);

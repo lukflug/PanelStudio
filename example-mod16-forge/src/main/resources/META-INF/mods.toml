@@ -1,6 +1,6 @@
 modLoader="javafml"
 loaderVersion="[32,)"
-license="MIT license"
+license="MIT"
 [[mods]]
 	modId="example-mod16-forge"
 	version="${version}"
