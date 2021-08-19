@@ -29,7 +29,9 @@ public class ExampleMod {
 	
 	@SubscribeEvent
 	public void onRender (RenderGameOverlayEvent.Post event) {
-		if (!inited) {
+		if (inited) {
+			if (event.getType()==RenderGameOverlayEvent.ElementType.HOTBAR) gui.render();
+		} else {
 			Category.init();
 			Category.OTHER.modules.add(new ClickGUIModule());
 			Category.OTHER.modules.add(new HUDEditorModule());
@@ -39,12 +41,11 @@ public class ExampleMod {
 			gui=new ClickGUI();
 			inited=true;
 		}
-		if (event.getType()==RenderGameOverlayEvent.ElementType.HOTBAR) gui.render();
 	}
 	
 	@SubscribeEvent
 	public void onKeyInput (KeyInputEvent event) {
-		if (event.getAction()==GLFW.GLFW_PRESS) {
+		if (inited && event.getAction()==GLFW.GLFW_PRESS) {
 			if (event.getKey()==ClickGUIModule.keybind.getKey()) gui.enterGUI();
 			if (event.getKey()==HUDEditorModule.keybind.getKey()) gui.enterHUDEditor();
 			gui.handleKeyEvent(event.getKey());

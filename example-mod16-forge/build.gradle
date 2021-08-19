@@ -13,6 +13,10 @@ buildscript {
 	}
 }
 
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
 apply plugin: "net.minecraftforge.gradle"
 apply plugin: "com.github.johnrengelman.shadow"
 
@@ -22,6 +26,8 @@ compileJava {
 }
 
 configurations {
+	extract
+	compileClasspath.extendsFrom extract
 	shadow
 	implementation.extendsFrom shadow	
 }
@@ -51,8 +57,8 @@ minecraft {
 
 dependencies {
 	minecraft "net.minecraftforge:forge:${minecraft16forge}"
-	shadow "com.lukflug:panelstudio:${version}"
-	shadow "com.lukflug:panelstudio-mc16-forge:${version}"
+	shadow("com.lukflug:panelstudio:${version}") {changing=true}
+	extract("com.lukflug:panelstudio-mc16-forge:${version}") {changing=true}
 }
 
 processResources {
@@ -61,6 +67,14 @@ processResources {
 		expand "version": project.version
 	}
 }
+
+task extract (type:Copy) {
+	from({zipTree(configurations.extract.singleFile)}) {exclude "META-INF/*"}
+	into "$buildDir/classes/java/main"
+	includeEmptyDirs = false
+}
+
+compileJava.finalizedBy("extract")
 
 shadowJar {
 	classifier = ""

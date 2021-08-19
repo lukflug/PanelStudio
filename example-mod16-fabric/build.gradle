@@ -41,7 +41,7 @@ minecraft {
 dependencies {
 	minecraft "com.mojang:minecraft:${minecraft16fabric}"
 	mappings "net.fabricmc:yarn:${mappings16fabric}:v2"
-	modImplementation("net.fabricmc:fabric-loader:${loader16fabric}")
+	modImplementation "net.fabricmc:fabric-loader:${loader16fabric}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${api16fabric}"
 	shadow "com.lukflug:panelstudio:${version}"
 	shadow "com.lukflug:panelstudio-mc16-fabric:${version}"

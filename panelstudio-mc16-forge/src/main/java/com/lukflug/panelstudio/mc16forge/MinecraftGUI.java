@@ -227,7 +227,7 @@ public abstract class MinecraftGUI extends Screen {
 
 		@Override
 		protected float getZLevel() {
-			return this.getZLevel();
+			return 0;
 		}
 		
 		@Override
