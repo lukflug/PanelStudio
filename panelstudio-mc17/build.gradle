@@ -18,8 +18,7 @@ apply plugin: "maven-publish"
 repositories {
 	maven {
 		name = "lukflug"
-		url = "http://localhost:8080/maven/"
-		allowInsecureProtocol = true
+		url = "https://lukflug.github.io/maven/"
 	}
 }
 

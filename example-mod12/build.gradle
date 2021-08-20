@@ -28,7 +28,7 @@ repositories {
 	}
 	maven {
 		name = "lukflug"
-		url = "http://localhost:8080/maven/"
+		url = "https://lukflug.github.io/maven/"
 	}
 }
 
