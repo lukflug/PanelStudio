@@ -142,7 +142,6 @@ public abstract class GLInterface implements IInterface {
 
 	@Override
 	public void drawImage (Rectangle r, int rotation, boolean parity, int image, Color color) {
-		if (image==0) return;
 		int texCoords[][]={{0,1},{1,1},{1,0},{0,0}};
 		for (int i=0;i<rotation%4;i++) {
 			int temp1=texCoords[3][0],temp2=texCoords[3][1];
@@ -323,6 +322,9 @@ public abstract class GLInterface implements IInterface {
 		GlStateManager.enableTexture();
 		GlStateManager.disableBlend();
 		if (matrix) {
+			GlStateManager.colorMask(false,false,false,true);
+			fillRect(new Rectangle(getWindowSize()),new Color(0,0,0),new Color(0,0,0),new Color(0,0,0),new Color(0,0,0));
+			GlStateManager.colorMask(true,true,true,true);
 			GL11.glMatrixMode(GL11.GL_PROJECTION);
 			GL11.glPopMatrix();
 			GL11.glMatrixMode(GL11.GL_MODELVIEW);

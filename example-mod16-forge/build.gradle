@@ -13,10 +13,6 @@ buildscript {
 	}
 }
 
-configurations.all {
-    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-}
-
 apply plugin: "net.minecraftforge.gradle"
 apply plugin: "com.github.johnrengelman.shadow"
 
@@ -57,8 +53,8 @@ minecraft {
 
 dependencies {
 	minecraft "net.minecraftforge:forge:${minecraft16forge}"
-	shadow("com.lukflug:panelstudio:${version}") {changing=true}
-	extract("com.lukflug:panelstudio-mc16-forge:${version}") {changing=true}
+	shadow "com.lukflug:panelstudio:${version}"
+	extract "com.lukflug:panelstudio-mc16-forge:${version}"
 }
 
 processResources {
@@ -69,9 +65,8 @@ processResources {
 }
 
 task extract (type:Copy) {
-	from({zipTree(configurations.extract.singleFile)}) {exclude "META-INF/*"}
+	from({zipTree(configurations.extract.singleFile)}) {exclude "META-INF/"}
 	into "$buildDir/classes/java/main"
-	includeEmptyDirs = false
 }
 
 compileJava.finalizedBy("extract")
