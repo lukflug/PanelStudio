@@ -34,4 +34,23 @@ Unfortunately, performance isn't the best, so not every combination makes sense.
 Here are some useful resources to figure out PanelStudio:
 * The [JavaDoc](https://lukflug.github.io/panelstudio.html).
 * The [wiki tutorial](https://github.com/lukflug/PanelStudio/wiki).
-* The included example mods.
+* The example mods included in this repository.
+
+## Screenshots
+Here are some examples of what PanelStudio can accomplish (note: some of the presented themes are private an not available on this repository):
+![a](https://github.com/lukflug/PanelStudio/screenshots/2021-08-20_19.44.27.png)
+![b](https://github.com/lukflug/PanelStudio/screenshots/2021-08-20_19.44.35.png)
+![c](https://github.com/lukflug/PanelStudio/screenshots/2021-08-20_19.44.38.png)
+![d](https://github.com/lukflug/PanelStudio/screenshots/2021-08-20_19.44.42.png)
+![e](https://github.com/lukflug/PanelStudio/screenshots/2021-08-20_19.45.38.png)
+![f](https://github.com/lukflug/PanelStudio/screenshots/2021-08-20_19.45.49.png)
+![g](https://github.com/lukflug/PanelStudio/screenshots/2021-08-20_19.46.03.png)
+![h](https://github.com/lukflug/PanelStudio/screenshots/2021-08-20_19.46.17.png)
+![i](https://github.com/lukflug/PanelStudio/screenshots/2021-08-20_19.46.35.png)
+![j](https://github.com/lukflug/PanelStudio/screenshots/2021-08-20_19.48.45.png)
+![k](https://github.com/lukflug/PanelStudio/screenshots/2021-08-20_19.48.56.png)
+![l](https://github.com/lukflug/PanelStudio/screenshots/2021-08-20_19.49.03.png)
+![m](https://github.com/lukflug/PanelStudio/screenshots/2021-08-20_19.49.07.png)
+![n](https://github.com/lukflug/PanelStudio/screenshots/2021-08-20_19.55.32.png)
+![o](https://github.com/lukflug/PanelStudio/screenshots/2021-08-20_19.55.47.png)
+![p](https://github.com/lukflug/PanelStudio/screenshots/2021-08-20_19.55.54.png)
