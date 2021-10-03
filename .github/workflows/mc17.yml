@@ -1,7 +1,7 @@
 # This workflow will build a Java project with Gradle
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
-name: Java CI with Gradle
+name: Java CI with Gradle for Java 16
 
 on: [push,pull_request]
 
@@ -12,10 +12,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up JDK 1.8
+    - name: Set up JDK 16
       uses: actions/setup-java@v1
       with:
-        java-version: 1.8
+        java-version: 16
     - name: Cache Gradle packages
       uses: actions/cache@v2
       with:
@@ -28,30 +28,13 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
-      run: ./gradlew build
-    - name: Build ExampleMod12
       run: |
-        cd example-mod12
+        cd panelstudio-mc17
         chmod +x gradlew
         ./gradlew build
-    - name: Build ExampleMod16-Fabric
+    - name: Build ExampleMod17
       run: |
-        cd example-mod16-fabric
-        chmod +x gradlew
-        ./gradlew build
-    - name: Build ExampleMod16-Forge
-      run: |
-        cd example-mod16-forge
-        chmod +x gradlew
-        ./gradlew build
-    - name: Build ExampleMod8-Fabric
-      run: |
-        cd example-mod8-fabric
-        chmod +x gradlew
-        ./gradlew build
-    - name: Build ExampleMod8-Forge
-      run: |
-        cd example-mod8-forge
+        cd example-mod17
         chmod +x gradlew
         ./gradlew build
     - name: Upload package
