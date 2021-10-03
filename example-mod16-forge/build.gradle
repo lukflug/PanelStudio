@@ -53,7 +53,7 @@ minecraft {
 dependencies {
 	minecraft "net.minecraftforge:forge:${minecraft16forge}"
 	shadow "com.lukflug:panelstudio:${version}"
-	extract "com.lukflug:panelstudio-mc16-forge:${version}"
+	extract "com.lukflug:panelstudio-mc16-forge:${versionmc}"
 }
 
 processResources {
@@ -73,7 +73,7 @@ compileJava.finalizedBy("extract")
 shadowJar {
 	classifier = ""
 	configurations = [project.configurations.shadow]
-	relocate "com.lukflug.panelstudio","com.lukflug.panelstudio_0_2_0"
+	relocate "com.lukflug.panelstudio","com.lukflug.panelstudio_0_2_1"
 }
 
 reobf {
