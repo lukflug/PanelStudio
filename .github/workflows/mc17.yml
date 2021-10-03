@@ -30,6 +30,7 @@ jobs:
     - name: Build with Gradle
       run: |
         cd panelstudio-mc17
+        chmod +x gradlew
         ./gradlew build
     - name: Build ExampleMod17
       run: |
