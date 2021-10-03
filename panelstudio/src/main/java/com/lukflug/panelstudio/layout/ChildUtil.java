@@ -63,13 +63,13 @@ public class ChildUtil {
 	 * @param theme the theme to be used
 	 * @param mode the child mode to be used
 	 */
-	protected <T> void addContainer (ILabeled label, IComponent title, IComponent container, Supplier<T> state, Class<T> stateClass, VerticalContainer parent, IComponentAdder gui, ThemeTuple theme, ChildMode mode) {
+	public <T> void addContainer (ILabeled label, IComponent title, IComponent container, Supplier<T> state, Class<T> stateClass, VerticalContainer parent, IComponentAdder gui, ThemeTuple theme, ChildMode mode) {
 		IFixedComponent popup;
 		IToggleable toggle;
 		boolean drawTitle=mode==ChildMode.DRAG_POPUP;
 		switch (mode) {
 		case DOWN:
-			parent.addComponent(new ClosableComponent<>(title,container,state,new AnimatedToggleable(new SimpleToggleable(false),animation.get()),theme.getPanelRenderer(stateClass),false));
+			parent.addComponent(new ClosableComponent<>(title,container,state,getAnimatedToggleable(animation.get()),theme.getPanelRenderer(stateClass),false));
 			break;
 		case POPUP:
 		case DRAG_POPUP:
@@ -91,6 +91,16 @@ public class ChildUtil {
 			break;
 		}
 	}
+	
+	/**
+	 * Get animated toggleable.
+	 * @param animation the animation to be used
+	 * @return the animated toggleable to be used
+	 */
+	protected AnimatedToggleable getAnimatedToggleable (Animation animation) {
+		return new AnimatedToggleable(new SimpleToggleable(false),animation);
+	}
+	
 	
 	/**
 	 * Enum listing the ways a child component can be added.

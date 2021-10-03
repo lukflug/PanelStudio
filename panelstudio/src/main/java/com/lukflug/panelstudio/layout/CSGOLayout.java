@@ -63,6 +63,10 @@ public class CSGOLayout implements ILayout,IScrollSize {
 	 */
 	protected boolean moduleColumn;
 	/**
+	 * The width of the category column.
+	 */
+	protected int columnWidth;
+	/**
 	 * The weight of the settings column.
 	 */
 	protected int weight;
@@ -90,6 +94,25 @@ public class CSGOLayout implements ILayout,IScrollSize {
 	 * @param popupType child util instance
 	 */
 	public CSGOLayout (ILabeled label, Point position, int width, int popupWidth, Supplier<Animation> animation, String enabledButton, boolean horizontal, boolean moduleColumn, int weight, ChildMode colorType, PopupTuple popupType) {
+		this(label,position,width,popupWidth,animation,enabledButton,horizontal,moduleColumn,-1,weight,colorType,popupType);
+	}
+	
+	/**
+	 * Constructor.
+	 * @param label panel label
+	 * @param position panel position
+	 * @param width panel width
+	 * @param popupWidth pop-up width
+	 * @param animation animation supplier
+	 * @param enabledButton title for module toggles
+	 * @param horizontal whether tab list is horizontal
+	 * @param moduleColumn whether settings are in a separate column
+	 * @param columnWidth the width of the category column
+	 * @param weight weight of the module column
+	 * @param colorType child mode to use for setting components that are containers (e.g. color components)
+	 * @param popupType child util instance
+	 */
+	public CSGOLayout (ILabeled label, Point position, int width, int popupWidth, Supplier<Animation> animation, String enabledButton, boolean horizontal, boolean moduleColumn, int columnWidth, int weight, ChildMode colorType, PopupTuple popupType) {
 		this.label=label;
 		this.position=position;
 		this.width=width;
@@ -97,6 +120,7 @@ public class CSGOLayout implements ILayout,IScrollSize {
 		this.enabledButton=enabledButton;
 		this.horizontal=horizontal;
 		this.moduleColumn=moduleColumn;
+		this.columnWidth=columnWidth;
 		this.weight=weight;
 		this.colorType=colorType;
 		util=new ChildUtil(popupWidth,animation,popupType);
@@ -113,15 +137,15 @@ public class CSGOLayout implements ILayout,IScrollSize {
 			container.addComponent(window);
 			gui.addComponent(title,container,new ThemeTuple(theme,0,0),position,width,animation);
 		} else {
-			catSelect=addContainer(label,client.getCategories().map(cat->cat),window,new ThemeTuple(theme,0,1),false,button->wrapColumn(button,new ThemeTuple(theme,0,1),1),()->true);
+			catSelect=addContainer(label,client.getCategories().map(cat->cat),window,new ThemeTuple(theme,0,1),false,button->wrapColumn(button,new ThemeTuple(theme,0,1),columnWidth>0?columnWidth:0,columnWidth>0?0:1),()->true);
 			gui.addComponent(title,window,new ThemeTuple(theme,0,0),position,width,animation);
 		}
 		client.getCategories().forEach(category->{
 			if (moduleColumn) {
-				IEnumSetting modSelect=addContainer(category,category.getModules().map(mod->mod),window,new ThemeTuple(theme,1,1),false,button->wrapColumn(button,new ThemeTuple(theme,0,1),1),()->catSelect.getValueName()==category.getDisplayName());
+				IEnumSetting modSelect=addContainer(category,category.getModules().map(mod->mod),window,new ThemeTuple(theme,1,1),false,button->wrapColumn(button,new ThemeTuple(theme,0,1),0,1),()->catSelect.getValueName()==category.getDisplayName());
 				category.getModules().forEach(module->{
 					VerticalContainer container=new VerticalContainer(module,theme.getContainerRenderer(1,1,false));
-					window.addComponent(wrapColumn(container,new ThemeTuple(theme,1,1),weight),()->catSelect.getValueName()==category.getDisplayName()&&modSelect.getValueName()==module.getDisplayName());
+					window.addComponent(wrapColumn(container,new ThemeTuple(theme,1,1),0,weight),()->catSelect.getValueName()==category.getDisplayName()&&modSelect.getValueName()==module.getDisplayName());
 					if (module.isEnabled()!=null) container.addComponent(components.getComponent(new IBooleanSetting() {
 						@Override
 						public String getDisplayName() {
@@ -142,7 +166,7 @@ public class CSGOLayout implements ILayout,IScrollSize {
 				});
 			} else {
 				VerticalContainer categoryContent=new VerticalContainer(category,theme.getContainerRenderer(0,1,false));
-				window.addComponent(wrapColumn(categoryContent,new ThemeTuple(theme,0,1),1),()->catSelect.getValueName()==category.getDisplayName());
+				window.addComponent(wrapColumn(categoryContent,new ThemeTuple(theme,0,1),0,weight),()->catSelect.getValueName()==category.getDisplayName());
 				category.getModules().forEach(module->{
 					int graphicalLevel=1;
 					FocusableComponent moduleTitle;
@@ -268,10 +292,11 @@ public class CSGOLayout implements ILayout,IScrollSize {
 	 * Wrap content in a scrollable horizontal component to be added as a column. 
 	 * @param button the content container
 	 * @param theme the theme to be used
+	 * @param width the horizontal width
 	 * @param weight the horizontal weight
 	 * @return a horizontal component
 	 */
-	protected HorizontalComponent<ScrollBarComponent<Void,IComponent>> wrapColumn (IComponent button, ThemeTuple theme, int weight) {
+	protected HorizontalComponent<ScrollBarComponent<Void,IComponent>> wrapColumn (IComponent button, ThemeTuple theme, int width, int weight) {
 		return new HorizontalComponent<ScrollBarComponent<Void,IComponent>>(new ScrollBarComponent<Void,IComponent>(button,theme.getScrollBarRenderer(Void.class),theme.getEmptySpaceRenderer(Void.class,false),theme.getEmptySpaceRenderer(Void.class,true)) {
 			@Override
 			public int getScrollHeight (Context context, int componentHeight) {
@@ -282,7 +307,7 @@ public class CSGOLayout implements ILayout,IScrollSize {
 			protected Void getState() {
 				return null;
 			}
-		},0,weight);
+		},width,weight);
 	}
 	
 	/**

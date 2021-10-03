@@ -48,7 +48,7 @@ minecraft {
 
 dependencies {
 	shadow "com.lukflug:panelstudio:${version}"
-	shadow "com.lukflug:panelstudio-mc8-forge:${version}"
+	shadow "com.lukflug:panelstudio-mc8-forge:${versionmc}"
 }
 
 processResources {
@@ -66,7 +66,7 @@ processResources {
 shadowJar {
 	classifier = ""
 	configurations = [project.configurations.shadow]
-	relocate "com.lukflug.panelstudio","com.lukflug.panelstudio_0_2_0"
+	relocate "com.lukflug.panelstudio","com.lukflug.panelstudio_0_2_1"
 }
 
 reobf {
