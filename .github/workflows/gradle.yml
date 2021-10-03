@@ -32,30 +32,37 @@ jobs:
     - name: Build PanelStudio-MC17
       run: |
         cd panelstudio-mc17
+        chmod +x gradlew
         ./gradlew build
     - name: Build ExampleMod12
       run: |
         cd ../example-mod12
+        chmod +x gradlew
         ./gradlew build
     - name: Build ExampleMod16-Fabric
       run: |
         cd ../example-mod16-fabric
+        chmod +x gradlew
         ./gradlew build
     - name: Build ExampleMod16-Forge
       run: |
         cd ../example-mod16-forge
+        chmod +x gradlew
         ./gradlew build
     - name: Build ExampleMod8-Fabric
       run: |
         cd ../example-mod8-fabric
+        chmod +x gradlew
         ./gradlew build
     - name: Build ExampleMod8-Forge
       run: |
         cd ../example-mod8-forge
+        chmod +x gradlew
         ./gradlew build
     - name: Build ExampleMod17
       run: |
         cd ../example-mod17
+        chmod +x gradlew
         ./gradlew build
     - name: Upload package
       uses: actions/upload-artifact@v2
