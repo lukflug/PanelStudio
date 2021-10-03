@@ -36,22 +36,22 @@ jobs:
         ./gradlew build
     - name: Build ExampleMod16-Fabric
       run: |
-        cd ../example-mod16-fabric
+        cd example-mod16-fabric
         chmod +x gradlew
         ./gradlew build
     - name: Build ExampleMod16-Forge
       run: |
-        cd ../example-mod16-forge
+        cd example-mod16-forge
         chmod +x gradlew
         ./gradlew build
     - name: Build ExampleMod8-Fabric
       run: |
-        cd ../example-mod8-fabric
+        cd example-mod8-fabric
         chmod +x gradlew
         ./gradlew build
     - name: Build ExampleMod8-Forge
       run: |
-        cd ../example-mod8-forge
+        cd example-mod8-forge
         chmod +x gradlew
         ./gradlew build
     - name: Upload package
