@@ -34,7 +34,7 @@ dependencies {
 	annotationProcessor "org.ow2.asm:asm-commons:9.0"
 	annotationProcessor "org.ow2.asm:asm-tree:9.0"
 	annotationProcessor "org.ow2.asm:asm-util:9.0"
-	implementation "com.lukflug:panelstudio:${version}"
+	implementation "com.lukflug:panelstudio:${coreVersion}"
 }
 
 processResources {
@@ -53,7 +53,9 @@ publishing {
 	publications {
 		mavenJava(MavenPublication) {
 			groupId "com.lukflug"
-			artifact jar
+			artifact jar {
+				classifier ""
+			}
 			artifact sourcesJar
 			pom {
 				name = "PanelStudio-MC17"
