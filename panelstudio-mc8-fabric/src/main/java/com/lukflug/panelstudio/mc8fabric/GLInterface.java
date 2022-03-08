@@ -273,7 +273,7 @@ public abstract class GLInterface implements IInterface {
 	 * @return the screen width
 	 */
 	protected double getScreenWidth() {
-		return new Window(MinecraftClient.getInstance()).method_2467();
+		return new Window(MinecraftClient.getInstance()).getScaledWidth();
 	}
 	
 	/**
@@ -281,7 +281,7 @@ public abstract class GLInterface implements IInterface {
 	 * @return the screen height
 	 */
 	protected double getScreenHeight() {
-		return new Window(MinecraftClient.getInstance()).method_2468();
+		return new Window(MinecraftClient.getInstance()).getScaledHeight();
 	}
 	
 	/**
