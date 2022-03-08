@@ -140,7 +140,7 @@ public abstract class GLInterface implements IInterface {
 			InputStream stream=MinecraftClient.getInstance().getResourceManager().getResource(rl).getInputStream();
 			BufferedImage image=ImageIO.read(stream);
 			int texture=TextureUtil.getTexLevelParameter();
-			TextureUtil.method_4289(texture,image,false,false);
+			TextureUtil.method_5858(texture,image);
 			return texture;
 		} catch (IOException e) {
 			e.printStackTrace();
