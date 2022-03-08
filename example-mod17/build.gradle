@@ -3,8 +3,8 @@ buildscript {
 	repositories {
 		gradlePluginPortal()
 		maven {
-			name = 'Fabric'
-			url = 'https://maven.fabricmc.net/'
+			name = "Fabric"
+			url = "https://maven.fabricmc.net/"
 		}
 	}
 	dependencies {

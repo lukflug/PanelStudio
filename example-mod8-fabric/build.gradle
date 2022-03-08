@@ -3,8 +3,8 @@ buildscript {
 	repositories {
 		gradlePluginPortal()
 		maven {
-			name = 'Fabric'
-			url = 'https://maven.fabricmc.net/'
+			name = "Fabric"
+			url = "https://maven.fabricmc.net/"
 		}
 	}
 	dependencies {
@@ -45,13 +45,12 @@ minecraft {
 }
 
 dependencies {
-	implementation "com.google.guava:guava:23.5-jre"
 	minecraft "com.mojang:minecraft:${minecraft8fabric}"
 	mappings "net.fabricmc:yarn:${mappings8fabric}:v2"
-	modImplementation("net.fabricmc:fabric-loader-1.8.9:${loader8fabric}") {
-		exclude module: "guava"
+	modImplementation "net.fabricmc:fabric-loader:${loader8fabric}"
+	modImplementation("net.legacyfabric.legacy-fabric-api:legacy-fabric-api:${api8fabric}") {
+		exclude module: "fabric-loader-1.8.9"
 	}
-	modImplementation "net.legacyfabric.legacy-fabric-api:legacy-fabric-api:${api8fabric}"
 	shadow "com.lukflug:panelstudio:${version}"
 	shadow "com.lukflug:panelstudio-mc8-fabric:${versionmc}"
 }
