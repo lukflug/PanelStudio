@@ -25,7 +25,7 @@ configurations {
 	extract
 	compileClasspath.extendsFrom extract
 	shadow
-	implementation.extendsFrom shadow	
+	implementation.extendsFrom shadow
 }
 
 repositories {

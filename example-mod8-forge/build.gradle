@@ -26,7 +26,7 @@ compileJava {
 
 configurations {
 	shadow
-	compile.extendsFrom shadow	
+	compile.extendsFrom shadow
 }
 
 repositories {

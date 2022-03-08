@@ -23,7 +23,7 @@ compileJava {
 
 configurations {
 	shadow
-	modImplementation.extendsFrom shadow	
+	modImplementation.extendsFrom shadow
 }
 
 repositories {

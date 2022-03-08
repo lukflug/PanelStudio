@@ -18,7 +18,7 @@ apply plugin: "com.github.johnrengelman.shadow"
 
 configurations {
 	shadow
-	implementation.extendsFrom shadow	
+	implementation.extendsFrom shadow
 }
 
 repositories {
