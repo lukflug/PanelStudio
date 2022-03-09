@@ -16,11 +16,6 @@ buildscript {
 apply plugin: "fabric-loom"
 apply plugin: "com.github.johnrengelman.shadow"
 
-sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
-compileJava {
-	sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
-}
-
 configurations {
 	shadow
 	modImplementation.extendsFrom shadow
@@ -28,31 +23,22 @@ configurations {
 
 repositories {
 	maven {
-		name = "legacy-fabric"
-		url = "https://maven.legacyfabric.net/"
-	}
-	maven {
 		name = "lukflug"
 		url = "https://lukflug.github.io/maven/"
 	}
 }
 
 
-minecraft {
-	intermediaryUrl = {
-		return "https://maven.legacyfabric.net/net/fabricmc/intermediary/" + it + "/intermediary-" + it + "-v2.jar";
-	}
+loom {
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:${minecraft8fabric}"
-	mappings "net.fabricmc:yarn:${mappings8fabric}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${loader8fabric}"
-	modImplementation("net.legacyfabric.legacy-fabric-api:legacy-fabric-api:${api8fabric}") {
-		exclude module: "fabric-loader-1.8.9"
-	}
+	minecraft "com.mojang:minecraft:${minecraft18}"
+	mappings "net.fabricmc:yarn:${mappings18}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${loader18}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${api18}"
 	shadow "com.lukflug:panelstudio:${version}"
-	shadow "com.lukflug:panelstudio-mc8-fabric:${versionmc}"
+	shadow("com.lukflug:panelstudio-mc17:${versionmc}") {changing = true}
 }
 
 processResources {

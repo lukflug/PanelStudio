@@ -11,7 +11,7 @@ In addition to the core PanelStudio library, there are the PanelStudio-MC suppor
 | panelstudio-mc16-forge  | example-mod16-forge  | Minecraft Forge 1.16.5 |
 | panelstudio-mc8-fabric  | example-mod8-fabric  | Legacy Fabric 1.8.9    |
 | panelstudio-mc8-forge   | example-mod8-forge   | Minecraft Forge 1.8.9  |
-| panelstudio-mc17        | example-mod17        | FabricMC 1.17.1        |
+| panelstudio-mc17        | example-mod17 & example-mod18 | FabricMC 1.17.x & 1.18.2 |
 
 Minecraft versions or APIs not in this table can also be used with PanelStudio, but the small PanelStudio-MC library has to be ported, which shouldn't be hard in most cases.
 

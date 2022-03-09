@@ -3,7 +3,7 @@
 	"id": "panelstudio",
 	"version": "${version}",
 	"name": "PanelStudio-MC17",
-	"description": "A supplement to PanelStudio designed for FabricMC 1.17.x.",
+	"description": "A supplement to PanelStudio designed for FabricMC 1.17.x and 1.18.x.",
 	"authors": ["lukflug"],
 	"contact": {
 		"homepage": "https://lukflug.github.io",
@@ -12,6 +12,6 @@
 	"license": "MIT",
 	"environment": "*",
 	"depends": {
-		"minecraft": "1.17.x"
+		"minecraft": ["1.17.x","1.18.x"]
 	}
 }
