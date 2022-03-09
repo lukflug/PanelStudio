@@ -54,4 +54,7 @@ shadowJar {
 	relocate "com.lukflug.panelstudio","com.lukflug.panelstudio_0_2_2"
 }
 
-remapJar.dependsOn(shadowJar)
+remapJar {
+	dependsOn shadowJar
+	inputFile = shadowJar.archiveFile
+}

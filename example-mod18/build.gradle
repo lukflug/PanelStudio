@@ -38,7 +38,7 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${loader18}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${api18}"
 	shadow "com.lukflug:panelstudio:${version}"
-	shadow("com.lukflug:panelstudio-mc17:${versionmc}") {changing = true}
+	shadow "com.lukflug:panelstudio-mc17:${versionmc}"
 }
 
 processResources {
@@ -54,4 +54,7 @@ shadowJar {
 	relocate "com.lukflug.panelstudio","com.lukflug.panelstudio_0_2_2"
 }
 
-remapJar.dependsOn(shadowJar)
+remapJar {
+	dependsOn shadowJar
+	inputFile = shadowJar.archiveFile
+}
