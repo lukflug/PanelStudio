@@ -18,7 +18,6 @@ import javax.imageio.ImageIO;
 import org.lwjgl.opengl.GL11;
 
 import com.lukflug.panelstudio.base.IInterface;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.TextureUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -181,14 +180,14 @@ public abstract class GLInterface implements IInterface {
 		RenderSystem.setShaderTexture(0,image);
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
-		GlStateManager._enableTexture();
+		RenderSystem.enableTexture();
 		bufferbuilder.begin(DrawMode.QUADS,VertexFormats.POSITION_COLOR_TEXTURE);
 			bufferbuilder.vertex(r.x,r.y+r.height,getZLevel()).color(color.getRed()/255.0f,color.getGreen()/255.0f,color.getBlue()/255.0f,color.getAlpha()/255.0f).texture(texCoords[0][0],texCoords[0][1]).next();
 			bufferbuilder.vertex(r.x+r.width,r.y+r.height,getZLevel()).color(color.getRed()/255.0f,color.getGreen()/255.0f,color.getBlue()/255.0f,color.getAlpha()/255.0f).texture(texCoords[1][0],texCoords[1][1]).next();
 			bufferbuilder.vertex(r.x+r.width,r.y,getZLevel()).color(color.getRed()/255.0f,color.getGreen()/255.0f,color.getBlue()/255.0f,color.getAlpha()/255.0f).texture(texCoords[2][0],texCoords[2][1]).next();
 			bufferbuilder.vertex(r.x,r.y,getZLevel()).color(color.getRed()/255.0f,color.getGreen()/255.0f,color.getBlue()/255.0f,color.getAlpha()/255.0f).texture(texCoords[3][0],texCoords[3][1]).next();
 		tessellator.draw();
-		GlStateManager._disableTexture();
+		RenderSystem.disableTexture();
 	}
 	
 	/**
@@ -197,17 +196,15 @@ public abstract class GLInterface implements IInterface {
 	 */
 	protected void scissor (Rectangle r) {
 		if (r==null) {
-			GL11.glScissor(0,0,0,0);
-			GL11.glEnable(GL11.GL_SCISSOR_TEST);
+			RenderSystem.enableScissor(0,0,0,0);
 			return;
 		}
 		Point a=guiToScreen(r.getLocation()),b=guiToScreen(new Point(r.x+r.width,r.y+r.height));
 		if (!clipX) {
 			a.x=0;
-			b.x=MinecraftClient.getInstance().getWindow().getWidth();
+			b.x=MinecraftClient.getInstance().getWindow().getFramebufferWidth();
 		}
-		GL11.glScissor(Math.min(a.x,b.x),Math.min(a.y,b.y),Math.abs(b.x-a.x),Math.abs(b.y-a.y));
-		GL11.glEnable(GL11.GL_SCISSOR_TEST);
+		RenderSystem.enableScissor(Math.min(a.x,b.x),Math.min(a.y,b.y),Math.abs(b.x-a.x),Math.abs(b.y-a.y));
 	}
 
 	@Override
@@ -242,7 +239,7 @@ public abstract class GLInterface implements IInterface {
 	public void restore() {
 		if (!clipRect.isEmpty()) {
 			clipRect.pop();
-			if (clipRect.isEmpty()) GL11.glDisable(GL11.GL_SCISSOR_TEST);
+			if (clipRect.isEmpty()) RenderSystem.disableScissor();
 			else scissor(clipRect.peek());
 		}
 	}
@@ -266,7 +263,7 @@ public abstract class GLInterface implements IInterface {
 	public Point guiToScreen (Point p) {
 		double resX=getScreenWidth();
 		double resY=getScreenHeight();
-		return new Point((int)Math.round(p.x*MinecraftClient.getInstance().getWindow().getWidth()/resX),(int)Math.round((resY-p.y)*MinecraftClient.getInstance().getWindow().getHeight()/resY));
+		return new Point((int)Math.round(p.x*MinecraftClient.getInstance().getWindow().getFramebufferWidth()/resX),(int)Math.round((resY-p.y)*MinecraftClient.getInstance().getWindow().getFramebufferHeight()/resY));
 	}
 	
 	/**
