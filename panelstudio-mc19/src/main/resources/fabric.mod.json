@@ -4,7 +4,7 @@
 	"version": "${version}",
 	"name": "PanelStudio-MC19",
 	"description": "A supplement to PanelStudio designed for FabricMC 1.19.x.",
-	"authors": ["lukflug, Marc"],
+	"authors": ["lukflug, Diliard"],
 	"contact": {
 		"homepage": "https://lukflug.github.io",
 		"sources": "https://github.com/lukflug/PanelStudio"
