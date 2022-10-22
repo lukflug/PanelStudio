@@ -42,6 +42,11 @@ jobs:
         cd example-mod18
         chmod +x gradlew
         ./gradlew build
+    - name: Build ExampleMod19
+      run: |
+        cd example-mod19
+        chmod +x gradlew
+        ./gradlew build
     - name: Upload package
       uses: actions/upload-artifact@v2
       with:
