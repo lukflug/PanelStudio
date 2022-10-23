@@ -8,7 +8,7 @@ buildscript {
 		}
 	}
 	dependencies {
-		classpath "net.fabricmc:fabric-loom:${loom19Version}"
+		classpath "net.fabricmc:fabric-loom:${loomVersion}"
 	}
 }
 

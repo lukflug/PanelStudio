@@ -46,7 +46,7 @@ minecraft {
 
 dependencies {
 	minecraft "com.mojang:minecraft:${minecraft8fabric}"
-	mappings "net.fabricmc:yarn:${mappings8fabric}:v2"
+	mappings "net.legacyfabric:yarn:${mappings8fabric}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${loader8fabric}"
 	modImplementation("net.legacyfabric.legacy-fabric-api:legacy-fabric-api:${api8fabric}") {
 		exclude module: "fabric-loader-1.8.9"
