@@ -12,6 +12,7 @@ In addition to the core PanelStudio library, there are the PanelStudio-MC suppor
 | panelstudio-mc8-fabric  | example-mod8-fabric  | Legacy Fabric 1.8.9    |
 | panelstudio-mc8-forge   | example-mod8-forge   | Minecraft Forge 1.8.9  |
 | panelstudio-mc17        | example-mod17 & example-mod18 | FabricMC 1.17.1 & 1.18.2 |
+| panelstudio-mc19        | example-mod19        | FabricMC 1.19.2        |
 
 Minecraft versions or APIs not in this table can also be used with PanelStudio, but the small PanelStudio-MC library has to be ported, which shouldn't be hard in most cases.
 
@@ -19,6 +20,7 @@ Minecraft versions or APIs not in this table can also be used with PanelStudio, 
 * Thanks to NirvanaNevermind for making the original port of PanelStudio-MC to Fabric 1.8.9!
 * Thanks to Go_Hoosiers (aka. GooberTown or IUDevman) for designing the original PanelStudio logo!
 * Thanks to Chomp for making a pull request to change the readme, I guess.
+* Thanks to Diliard for porting PanelStudio-MC to Fabric 1.19.2!
 
 ## Features
 * Everything is flexible and can be extended.
