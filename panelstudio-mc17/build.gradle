@@ -22,10 +22,6 @@ repositories {
 	}
 }
 
-loom {
-	remapArchives=false
-}
-
 dependencies {
 	minecraft "com.mojang:minecraft:${minecraft17}"
 	mappings "net.fabricmc:yarn:${mappings17}:v2"

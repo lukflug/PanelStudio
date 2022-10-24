@@ -37,19 +37,16 @@ repositories {
 	}
 }
 
-
-minecraft {
-	intermediaryUrl = {
-		return "https://maven.legacyfabric.net/net/fabricmc/intermediary/" + it + "/intermediary-" + it + "-v2.jar";
-	}
+loom {
+	setIntermediaryUrl('https://maven.legacyfabric.net/net/legacyfabric/intermediary/%1$s/intermediary-%1$s-v2.jar');
 }
 
 dependencies {
 	minecraft "com.mojang:minecraft:${minecraft8fabric}"
-	mappings "net.fabricmc:yarn:${mappings8fabric}:v2"
+	mappings "net.legacyfabric:yarn:${mappings8fabric}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${loader8fabric}"
 	modImplementation("net.legacyfabric.legacy-fabric-api:legacy-fabric-api:${api8fabric}") {
-		exclude module: "fabric-loader-1.8.9"
+		exclude module: "legacy-fabric-entity-events-v1"
 	}
 	shadow "com.lukflug:panelstudio:${version}"
 	shadow "com.lukflug:panelstudio-mc8-fabric:${versionmc}"

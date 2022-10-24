@@ -27,9 +27,19 @@ jobs:
           ${{ runner.os }}-gradle-
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-    - name: Build with Gradle
+    - name: Build PanelStudio-MC17
       run: |
         cd panelstudio-mc17
+        chmod +x gradlew
+        ./gradlew build
+    - name: Build PanelStudio-MC19
+      run: |
+        cd panelstudio-mc19
+        chmod +x gradlew
+        ./gradlew build
+    - name: Build ExampleMod8-Fabric
+      run: |
+        cd example-mod8-fabric
         chmod +x gradlew
         ./gradlew build
     - name: Build ExampleMod17
@@ -40,6 +50,11 @@ jobs:
     - name: Build ExampleMod18
       run: |
         cd example-mod18
+        chmod +x gradlew
+        ./gradlew build
+    - name: Build ExampleMod19
+      run: |
+        cd example-mod19
         chmod +x gradlew
         ./gradlew build
     - name: Upload package
