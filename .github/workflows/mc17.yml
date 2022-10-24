@@ -37,6 +37,11 @@ jobs:
         cd panelstudio-mc19
         chmod +x gradlew
         ./gradlew build
+    - name: Build ExampleMod8-Fabric
+      run: |
+        cd example-mod8-fabric
+        chmod +x gradlew
+        ./gradlew build
     - name: Build ExampleMod17
       run: |
         cd example-mod17
