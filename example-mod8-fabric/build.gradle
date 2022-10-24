@@ -38,7 +38,7 @@ repositories {
 }
 
 loom {
-	setIntermediaryUrl("https://maven.legacyfabric.net/net/legacyfabric/intermediary/%1$s/intermediary-%1$s-v2.jar");
+	setIntermediaryUrl('https://maven.legacyfabric.net/net/legacyfabric/intermediary/%1$s/intermediary-%1$s-v2.jar');
 }
 
 dependencies {
