@@ -1,0 +1,79 @@
+
+buildscript {
+	repositories {
+		jcenter()
+		maven {
+			name = "Fabric"
+			url = "https://maven.fabricmc.net/"
+		}
+	}
+	dependencies {
+		classpath "net.fabricmc:fabric-loom:${loomVersion}"
+	}
+}
+
+apply plugin: "fabric-loom"
+apply plugin: "maven-publish"
+
+repositories {
+	maven {
+		name = "lukflug"
+		url = "https://lukflug.github.io/maven/"
+	}
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${minecraft19}"
+	mappings "net.fabricmc:yarn:${mappings19}:v2"
+	annotationProcessor "org.ow2.asm:asm:9.0"
+	annotationProcessor "org.ow2.asm:asm-analysis:9.0"
+	annotationProcessor "org.ow2.asm:asm-commons:9.0"
+	annotationProcessor "org.ow2.asm:asm-tree:9.0"
+	annotationProcessor "org.ow2.asm:asm-util:9.0"
+	implementation "com.lukflug:panelstudio:${coreVersion}"
+}
+
+processResources {
+	inputs.property "version", project.version
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
+}
+
+task sourcesJar(type: Jar) {
+	from sourceSets.main.allJava
+	classifier = "sources"
+}
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			groupId "com.lukflug"
+			artifact jar {
+				classifier ""
+			}
+			artifact sourcesJar
+			pom {
+				name = "PanelStudio-MC19"
+				description = "A supplement to PanelStudio designed for FabricMC 1.19.x"
+				url = "https://github.com/lukflug/PanelStudio"
+				licenses {
+					license {
+						name = "MIT License"
+						url = "https://raw.githubusercontent.com/lukflug/PanelStudio/main/LICENSE"
+					}
+				}
+				developers {
+					developer {
+						id = "lukflug"
+					}
+				}
+			}
+		}
+	}
+	repositories {
+		maven {
+			url = "${projectDir}/../../lukflug.github.io/maven"
+		}
+	}
+}
