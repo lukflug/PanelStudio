@@ -10,11 +10,9 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 import java.util.Stack;
 
 import javax.imageio.ImageIO;
-
 
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
@@ -29,12 +27,13 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormat.DrawMode;
 import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
 /**
  * Implementation of {@link IInterface} for OpenGL in Minecraft.
- * @author lukflug, Diliard
+ * @author lukflug, Diliard, RitomG69
  */
 public abstract class GLInterface implements IInterface {
 	/**
@@ -62,7 +61,7 @@ public abstract class GLInterface implements IInterface {
 	public Dimension getWindowSize() {
 		return new Dimension((int)Math.ceil(getScreenWidth()),(int)Math.ceil(getScreenHeight()));
 	}
-
+	
 	@SuppressWarnings("resource")
 	@Override
 	public void drawString (Point pos, int height, String s, Color c) {
@@ -78,14 +77,14 @@ public abstract class GLInterface implements IInterface {
 		modelview.pop();
 		RenderSystem.applyModelViewMatrix();
 	}
-
+	
 	@SuppressWarnings("resource")
 	@Override
 	public int getFontWidth (int height, String s) {
 		double scale=height/(double)MinecraftClient.getInstance().textRenderer.fontHeight;
 		return (int)Math.round(MinecraftClient.getInstance().textRenderer.getWidth(s)*scale);
 	}
-
+	
 	@Override
 	public void fillTriangle (Point pos1, Point pos2, Point pos3, Color c1, Color c2, Color c3) {
 		RenderSystem.setShader(GameRenderer::getPositionColorProgram);
@@ -97,7 +96,7 @@ public abstract class GLInterface implements IInterface {
 			bufferbuilder.vertex(pos3.x,pos3.y,getZLevel()).color(c3.getRed()/255.0f,c3.getGreen()/255.0f,c3.getBlue()/255.0f,c3.getAlpha()/255.0f).next();
 		tessellator.draw();
 	}
-
+	
 	@Override
 	public void drawLine (Point a, Point b, Color c1, Color c2) {
 		RenderSystem.setShader(GameRenderer::getRenderTypeLinesProgram);
@@ -112,7 +111,7 @@ public abstract class GLInterface implements IInterface {
 			bufferbuilder.vertex(b.x*256/255f,b.y*256/255f,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).normal(normalx,normaly,0).next();
 		tessellator.draw();
 	}
-
+	
 	@Override
 	public void fillRect (Rectangle r, Color c1, Color c2, Color c3, Color c4) {
 		RenderSystem.setShader(GameRenderer::getPositionColorProgram);
@@ -125,7 +124,7 @@ public abstract class GLInterface implements IInterface {
 			bufferbuilder.vertex(r.x,r.y,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).next();
 		tessellator.draw();
 	}
-
+	
 	@Override
 	public void drawRect (Rectangle r, Color c1, Color c2, Color c3, Color c4) {
 		drawLine(new Point(r.x,r.y+r.height),new Point(r.x+r.width,r.y+r.height),c4,c3);
@@ -138,16 +137,16 @@ public abstract class GLInterface implements IInterface {
 	public synchronized int loadImage (String name) {
 		try {
 			Identifier rl=new Identifier(getResourcePrefix()+name);
-			//InputStream stream = MinecraftClient.getInstance().getResourceManager().getResource(rl).getInputStream();
 			InputStream stream = MinecraftClient.getInstance().getResourceManager().getResource(rl).get().getInputStream();
 			BufferedImage image=ImageIO.read(stream);
 			int texture=TextureUtil.generateTextureId();
 			RenderSystem.bindTextureForSetup(texture);
 			int width=image.getWidth(),height=image.getHeight();
-			IntBuffer buffer=ByteBuffer.allocateDirect(4*width*height).order(ByteOrder.nativeOrder()).asIntBuffer();
-			buffer.put(image.getRGB(0,0,width,height,null,0,width));
+			ByteBuffer buffer=ByteBuffer.allocateDirect(4*width*height).order(ByteOrder.nativeOrder());
+			buffer.asIntBuffer().put(image.getRGB(0,0,width,height,null,0,width));
 			buffer.flip();
-			//TextureUtil.initTexture(buffer,width,height);
+			TextureUtil.prepareImage(texture,width,height);
+			NativeImage.read(buffer).upload(0,0,0,true);
 			return texture;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -158,7 +157,7 @@ public abstract class GLInterface implements IInterface {
 	@Override
 	public void drawImage (Rectangle r, int rotation, boolean parity, int image, Color color) {
 		if (image==0) return;
-		int[][] texCoords ={{0,1},{1,1},{1,0},{0,0}};
+		int texCoords[][]={{0,1},{1,1},{1,0},{0,0}};
 		for (int i=0;i<rotation%4;i++) {
 			int temp1=texCoords[3][0],temp2=texCoords[3][1];
 			texCoords[3][0]=texCoords[2][0];
@@ -182,14 +181,12 @@ public abstract class GLInterface implements IInterface {
 		RenderSystem.setShaderTexture(0,image);
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
-		// GlStateManager._enableTexture(); Not Required
 		bufferbuilder.begin(DrawMode.QUADS,VertexFormats.POSITION_COLOR_TEXTURE);
 			bufferbuilder.vertex(r.x,r.y+r.height,getZLevel()).color(color.getRed()/255.0f,color.getGreen()/255.0f,color.getBlue()/255.0f,color.getAlpha()/255.0f).texture(texCoords[0][0],texCoords[0][1]).next();
 			bufferbuilder.vertex(r.x+r.width,r.y+r.height,getZLevel()).color(color.getRed()/255.0f,color.getGreen()/255.0f,color.getBlue()/255.0f,color.getAlpha()/255.0f).texture(texCoords[1][0],texCoords[1][1]).next();
 			bufferbuilder.vertex(r.x+r.width,r.y,getZLevel()).color(color.getRed()/255.0f,color.getGreen()/255.0f,color.getBlue()/255.0f,color.getAlpha()/255.0f).texture(texCoords[2][0],texCoords[2][1]).next();
 			bufferbuilder.vertex(r.x,r.y,getZLevel()).color(color.getRed()/255.0f,color.getGreen()/255.0f,color.getBlue()/255.0f,color.getAlpha()/255.0f).texture(texCoords[3][0],texCoords[3][1]).next();
 		tessellator.draw();
-		//GlStateManager._disableTexture();
 	}
 	
 	/**
@@ -304,7 +301,6 @@ public abstract class GLInterface implements IInterface {
 			RenderSystem.applyModelViewMatrix();
 		}
 		RenderSystem.enableBlend();
-		// RenderSystem.disableTexture(); Not needed
 		RenderSystem.disableCull();
 		RenderSystem.lineWidth(2);
 		RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA,GL11.GL_ONE_MINUS_SRC_ALPHA,GL11.GL_ONE,GL11.GL_ZERO);
@@ -317,7 +313,6 @@ public abstract class GLInterface implements IInterface {
 	 */
 	public void end (boolean matrix) {
 		RenderSystem.enableCull();
-		//RenderSystem.enableTexture();
 		RenderSystem.disableBlend();
 		if (matrix) {
 			RenderSystem.getModelViewStack().pop();
@@ -338,7 +333,7 @@ public abstract class GLInterface implements IInterface {
 	 * @return the current matrix stack
 	 */
 	protected abstract MatrixStack getMatrixStack();
-
+	
 	/**
 	 * Get the Minecraft resource location string.
 	 * @return the resource prefix

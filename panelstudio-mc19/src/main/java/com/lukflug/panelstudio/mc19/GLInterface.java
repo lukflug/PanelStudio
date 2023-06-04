@@ -138,7 +138,6 @@ public abstract class GLInterface implements IInterface {
 	public synchronized int loadImage (String name) {
 		try {
 			Identifier rl=new Identifier(getResourcePrefix()+name);
-			//InputStream stream = MinecraftClient.getInstance().getResourceManager().getResource(rl).getInputStream();
 			InputStream stream = MinecraftClient.getInstance().getResourceManager().getResource(rl).get().getInputStream();
 			BufferedImage image=ImageIO.read(stream);
 			int texture=TextureUtil.generateTextureId();

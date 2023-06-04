@@ -42,7 +42,7 @@ processResources {
 
 task sourcesJar(type: Jar) {
 	from sourceSets.main.allJava
-	classifier = "sources"
+	archiveClassifier = "sources"
 }
 
 publishing {
@@ -50,12 +50,12 @@ publishing {
 		mavenJava(MavenPublication) {
 			groupId "com.lukflug"
 			artifact jar {
-				classifier ""
+				archiveClassifier = ""
 			}
 			artifact sourcesJar
 			pom {
-				name = "PanelStudio-MC19"
-				description = "A supplement to PanelStudio designed for FabricMC 1.19.x"
+				name = "PanelStudio-MC194"
+				description = "A supplement to PanelStudio designed for FabricMC 1.19.4"
 				url = "https://github.com/lukflug/PanelStudio"
 				licenses {
 					license {
