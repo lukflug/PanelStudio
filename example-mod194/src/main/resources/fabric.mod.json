@@ -1,9 +1,9 @@
 {
 	"schemaVersion": 1,
-	"id": "example-mod19",
+	"id": "example-mod194",
 	"version": "${version}",
-	"name": "PanelStudio-MC19 Example Mod",
-	"description": "An example mod for PanelStudio-MC19.",
+	"name": "PanelStudio-MC194 Example Mod",
+	"description": "An example mod for PanelStudio-MC194.",
 	"authors": ["lukflug"],
 	"contact": {
 		"homepage": "https://lukflug.github.io",
@@ -13,11 +13,11 @@
 	"icon": "assets/examplemod/panelstudio.png",
 	"environment": "*",
 	"entrypoints": {
-		"main": ["com.lukflug.examplemod19.ExampleMod"]
+		"main": ["com.lukflug.examplemod194.ExampleMod"]
 	},
 	"depends": {
 		"fabric": "*",
 		"fabricloader": ">=0.7.4",
-		"minecraft": ["1.19","1.19.1","1.19.2"]
+		"minecraft": ["1.19.3","1.19.4"]
 	}
 }

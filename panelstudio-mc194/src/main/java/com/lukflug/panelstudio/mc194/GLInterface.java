@@ -4,21 +4,15 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
-
-import javax.imageio.ImageIO;
 
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 
 import com.lukflug.panelstudio.base.IInterface;
-import com.mojang.blaze3d.platform.TextureUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.MinecraftClient;
@@ -27,7 +21,6 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormat.DrawMode;
 import net.minecraft.client.render.VertexFormats;
-import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
@@ -48,6 +41,10 @@ public abstract class GLInterface implements IInterface {
 	 * Boolean indicating whether to clip in the horizontal direction. 
 	 */
 	protected boolean clipX;
+	/**
+	 * Keep track of loaded images.
+	 */
+	private final List<Identifier> images=new ArrayList<Identifier>();
 	
 	/**
 	 * Constructor.
@@ -135,23 +132,8 @@ public abstract class GLInterface implements IInterface {
 	
 	@Override
 	public synchronized int loadImage (String name) {
-		try {
-			Identifier rl=new Identifier(getResourcePrefix()+name);
-			InputStream stream = MinecraftClient.getInstance().getResourceManager().getResource(rl).get().getInputStream();
-			BufferedImage image=ImageIO.read(stream);
-			int texture=TextureUtil.generateTextureId();
-			RenderSystem.bindTextureForSetup(texture);
-			int width=image.getWidth(),height=image.getHeight();
-			ByteBuffer buffer=ByteBuffer.allocateDirect(4*width*height).order(ByteOrder.nativeOrder());
-			buffer.asIntBuffer().put(image.getRGB(0,0,width,height,null,0,width));
-			buffer.flip();
-			TextureUtil.prepareImage(texture,width,height);
-			NativeImage.read(buffer).upload(0,0,0,true);
-			return texture;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return 0;
-		}
+		images.add(new Identifier(getResourcePrefix()+name));
+		return images.size();
 	}
 
 	@Override
@@ -178,7 +160,7 @@ public abstract class GLInterface implements IInterface {
 			texCoords[2][0]=temp1;
 		}
 		RenderSystem.setShader(GameRenderer::getPositionColorTexProgram);
-		RenderSystem.setShaderTexture(0,image);
+		RenderSystem.setShaderTexture(0,images.get(image-1));
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		bufferbuilder.begin(DrawMode.QUADS,VertexFormats.POSITION_COLOR_TEXTURE);
