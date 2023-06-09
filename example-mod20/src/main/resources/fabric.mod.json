@@ -1,0 +1,23 @@
+{
+	"schemaVersion": 1,
+	"id": "example-mod194",
+	"version": "${version}",
+	"name": "PanelStudio-MC194 Example Mod",
+	"description": "An example mod for PanelStudio-MC20.",
+	"authors": ["lukflug"],
+	"contact": {
+		"homepage": "https://lukflug.github.io",
+		"sources": "https://github.com/lukflug/PanelStudio"
+	},
+	"license": "MIT",
+	"icon": "assets/examplemod/panelstudio.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": ["com.lukflug.examplemod20.ExampleMod"]
+	},
+	"depends": {
+		"fabric": "*",
+		"fabricloader": ">=0.7.4",
+		"minecraft": ["1.20"]
+	}
+}

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <option name="defaultObfuscationEnv" value="named:intermediary" />
+        <option name="inMapFileNamedIntermediary" value="C:\Users\jayde\.gradle\caches\fabric-loom\mappings\yarn-1.16.5+build.10-v2.tiny" />
+        <option name="outMapFileNamedIntermediary" value="C:\Users\jayde\IdeaProjects\PanelStudio\panelstudio-mc16-fabric\build\loom-cache\mixin-map-1.16.5-1.16.5+build.10-v2.0.tiny" />
+        <option name="outRefMapFile" value="C:\Users\jayde\IdeaProjects\PanelStudio\panelstudio-mc16-fabric\build\classes\java\main\panelstudio-mc16-fabric-refmap.json" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-commons/9.0/5a34a3a9ac44f362f35d1b27932380b0031a3334/asm-commons-9.0.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-util/9.0/7c059a94ab5eed3347bf954e27fab58e52968848/asm-util-9.0.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-analysis/9.0/4630afefbb43939c739445dde0af1a5729a0fb4e/asm-analysis-9.0.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-tree/9.0/9df939f25c556b0c7efe00701d47e77a49837f24/asm-tree-9.0.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm/9.0/af582ff60bc567c42d931500c3fdc20e0141ddf9/asm-9.0.jar" />
+        </processorPath>
+        <module name="PanelStudio.panelstudio-mc16-fabric.main" />
+      </profile>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <option name="defaultObfuscationEnv" value="named:intermediary" />
+        <option name="inMapFileNamedIntermediary" value="C:\Users\jayde\.gradle\caches\fabric-loom\mappings\yarn-1.8.9+build.421-v2.tiny" />
+        <option name="outMapFileNamedIntermediary" value="C:\Users\jayde\IdeaProjects\PanelStudio\panelstudio-mc8-fabric\build\loom-cache\mixin-map-1.8.9-1.8.9+build.421-v2.0.tiny" />
+        <option name="outRefMapFile" value="C:\Users\jayde\IdeaProjects\PanelStudio\panelstudio-mc8-fabric\build\classes\java\main\panelstudio-mc8-fabric-refmap.json" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-commons/9.0/5a34a3a9ac44f362f35d1b27932380b0031a3334/asm-commons-9.0.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-util/9.0/7c059a94ab5eed3347bf954e27fab58e52968848/asm-util-9.0.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-analysis/9.0/4630afefbb43939c739445dde0af1a5729a0fb4e/asm-analysis-9.0.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-tree/9.0/9df939f25c556b0c7efe00701d47e77a49837f24/asm-tree-9.0.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm/9.0/af582ff60bc567c42d931500c3fdc20e0141ddf9/asm-9.0.jar" />
+        </processorPath>
+        <module name="PanelStudio.panelstudio-mc8-fabric.main" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="1.6" />
+  </component>
+</project>
