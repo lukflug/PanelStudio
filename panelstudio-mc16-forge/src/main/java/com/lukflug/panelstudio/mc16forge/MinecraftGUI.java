@@ -127,7 +127,7 @@ public abstract class MinecraftGUI extends Screen {
 			switch (releaseButton) {
 			case IInterface.LBUTTON:
 				lButton=false;
-			break;
+				break;
 			case IInterface.RBUTTON:
 				rButton=false;
 				break;

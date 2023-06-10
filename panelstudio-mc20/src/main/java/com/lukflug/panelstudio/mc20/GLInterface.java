@@ -9,10 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RotationAxis;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 
@@ -20,6 +16,7 @@ import com.lukflug.panelstudio.base.IInterface;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.Tessellator;

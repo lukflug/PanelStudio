@@ -107,8 +107,12 @@ public abstract class MinecraftGUI extends Screen {
 		if (!super.mouseReleased(mouseX,mouseY,clickedButton)) {
 			mouse=new Point((int)Math.round(mouseX),(int)Math.round(mouseY));
 			switch (clickedButton) {
-				case IInterface.LBUTTON: { lButton = true; break; }
-				case IInterface.RBUTTON: { rButton = true; break; }
+			case IInterface.LBUTTON:
+				lButton=true;
+				break;
+			case IInterface.RBUTTON:
+				rButton=true;
+				break;
 			}
 			getGUI().handleButton(clickedButton);
 		}
@@ -120,8 +124,12 @@ public abstract class MinecraftGUI extends Screen {
 		if (!super.mouseReleased(mouseX,mouseY,releaseButton)) {
 			mouse=new Point((int)Math.round(mouseX),(int)Math.round(mouseY));
 			switch (releaseButton) {
-				case IInterface.LBUTTON: { lButton = false; break; }
-				case IInterface.RBUTTON: { rButton = false; break; }
+			case IInterface.LBUTTON:
+				lButton=false;
+				break;
+			case IInterface.RBUTTON:
+				rButton=false;
+				break;
 			}
 			getGUI().handleButton(releaseButton);
 		}

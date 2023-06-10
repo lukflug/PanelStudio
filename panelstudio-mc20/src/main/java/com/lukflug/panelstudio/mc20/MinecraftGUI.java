@@ -2,19 +2,19 @@ package com.lukflug.panelstudio.mc20;
 
 import java.awt.Point;
 
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.container.GUI;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.text.Text;
 
 /**
  * Implementation of Minecraft's {@link Screen} that renders a PanelStudio GUI.
- * @author lukflug, Diliard
+ * @author lukflug, Diliard, RitomG69
  */
 public abstract class MinecraftGUI extends Screen {
 	/**
@@ -108,8 +108,12 @@ public abstract class MinecraftGUI extends Screen {
 		if (!super.mouseReleased(mouseX,mouseY,clickedButton)) {
 			mouse=new Point((int)Math.round(mouseX),(int)Math.round(mouseY));
 			switch (clickedButton) {
-				case IInterface.LBUTTON -> lButton = true;
-				case IInterface.RBUTTON -> rButton = true;
+			case IInterface.LBUTTON:
+				lButton=true;
+				break;
+			case IInterface.RBUTTON:
+				rButton=true;
+				break;
 			}
 			getGUI().handleButton(clickedButton);
 		}
@@ -121,12 +125,12 @@ public abstract class MinecraftGUI extends Screen {
 		if (!super.mouseReleased(mouseX,mouseY,releaseButton)) {
 			mouse=new Point((int)Math.round(mouseX),(int)Math.round(mouseY));
 			switch (releaseButton) {
-				case IInterface.LBUTTON -> {
-					lButton = false;
-				}
-				case IInterface.RBUTTON -> {
-					rButton = false;
-				}
+			case IInterface.LBUTTON:
+				lButton=false;
+				break;
+			case IInterface.RBUTTON:
+				rButton=false;
+				break;
 			}
 			getGUI().handleButton(releaseButton);
 		}
@@ -187,13 +191,17 @@ public abstract class MinecraftGUI extends Screen {
 		
 		@Override
 		public boolean getModifier (int modifier) {
-			return switch (modifier) {
-				case SHIFT -> (modifiers & GLFW.GLFW_MOD_SHIFT) != 0;
-				case CTRL -> (modifiers & GLFW.GLFW_MOD_CONTROL) != 0;
-				case ALT -> (modifiers & GLFW.GLFW_MOD_ALT) != 0;
-				case SUPER -> (modifiers & GLFW.GLFW_MOD_SUPER) != 0;
-				default -> false;
-			};
+			switch (modifier) {
+			case SHIFT:
+				return (modifiers&GLFW.GLFW_MOD_SHIFT)!=0;
+			case CTRL:
+				return (modifiers&GLFW.GLFW_MOD_CONTROL)!=0;
+			case ALT:
+				return (modifiers&GLFW.GLFW_MOD_ALT)!=0;
+			case SUPER:
+				return (modifiers&GLFW.GLFW_MOD_SUPER)!=0;
+		}
+		return false;
 		}
 		
 		@Override
@@ -203,11 +211,13 @@ public abstract class MinecraftGUI extends Screen {
 		
 		@Override
 		public boolean getButton (int button) {
-			return switch (button) {
-				case IInterface.LBUTTON -> lButton;
-				case IInterface.RBUTTON -> rButton;
-				default -> false;
-			};
+			switch (button) {
+			case IInterface.LBUTTON:
+				return lButton;
+			case IInterface.RBUTTON:
+				return rButton;
+		}
+		return false;
 		}
 
 		@Override
@@ -217,7 +227,7 @@ public abstract class MinecraftGUI extends Screen {
 
 		@Override
 		protected float getZLevel() {
-			return 1;
+			return 0;
 		}
 
 		@Override
