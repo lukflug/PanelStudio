@@ -34,11 +34,6 @@ jobs:
         cd example-mod12
         chmod +x gradlew
         ./gradlew build
-    - name: Build ExampleMod16-Fabric
-      run: |
-        cd example-mod16-fabric
-        chmod +x gradlew
-        ./gradlew build
     - name: Build ExampleMod16-Forge
       run: |
         cd example-mod16-forge

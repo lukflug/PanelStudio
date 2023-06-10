@@ -60,7 +60,7 @@ processResources {
 }
 
 shadowJar {
-	classifier = "dev"
+	archiveClassifier = "dev"
 	configurations = [project.configurations.shadow]
 	relocate "com.lukflug.panelstudio","com.lukflug.panelstudio_0_2_4"
 }
