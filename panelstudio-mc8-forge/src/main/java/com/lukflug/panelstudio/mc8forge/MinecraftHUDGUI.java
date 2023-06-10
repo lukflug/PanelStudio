@@ -65,7 +65,7 @@ public abstract class MinecraftHUDGUI extends MinecraftGUI {
 	 * @param scancode the key scancode
 	 */
 	public void handleKeyEvent (int scancode) {
-		if (scancode!=Keyboard.KEY_ESCAPE && !getGUI().getGUIVisibility().isOn() && !getGUI().getGUIVisibility().isOn()) getGUI().handleKey(scancode);
+		if (scancode!=Keyboard.KEY_ESCAPE && !getGUI().getGUIVisibility().isOn() && !getGUI().getHUDVisibility().isOn()) getGUI().handleKey(scancode);
 	}
 	
 	@Override
