@@ -2,8 +2,8 @@
 	"schemaVersion": 1,
 	"id": "panelstudio",
 	"version": "${version}",
-	"name": "PanelStudio-MC194",
-	"description": "A supplement to PanelStudio designed for FabricMC 1.20.",
+	"name": "PanelStudio-MC20",
+	"description": "A supplement to PanelStudio designed for FabricMC 1.20.x.",
 	"authors": ["lukflug, Diliard","RitomG69"],
 	"contact": {
 		"homepage": "https://lukflug.github.io",
@@ -12,6 +12,6 @@
 	"license": "MIT",
 	"environment": "*",
 	"depends": {
-		"minecraft": ["1.20"]
+		"minecraft": ["1.20.x"]
 	}
 }

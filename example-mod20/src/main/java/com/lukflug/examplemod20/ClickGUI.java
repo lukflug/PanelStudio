@@ -13,14 +13,18 @@ import java.util.function.IntFunction;
 import java.util.function.IntPredicate;
 import java.util.function.Supplier;
 
-import com.lukflug.examplemod20.module.*;
+import org.lwjgl.glfw.GLFW;
+
+import com.lukflug.examplemod20.module.Category;
+import com.lukflug.examplemod20.module.ClickGUIModule;
 import com.lukflug.examplemod20.module.ClickGUIModule.Theme;
+import com.lukflug.examplemod20.module.HUDEditorModule;
+import com.lukflug.examplemod20.module.LogoModule;
+import com.lukflug.examplemod20.module.TabGUIModule;
+import com.lukflug.examplemod20.module.WatermarkModule;
 import com.lukflug.examplemod20.setting.BooleanSetting;
 import com.lukflug.examplemod20.setting.ColorSetting;
 import com.lukflug.examplemod20.setting.IntegerSetting;
-import com.lukflug.panelstudio.mc20.MinecraftHUDGUI;
-import org.lwjgl.glfw.GLFW;
-
 import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IBoolean;
@@ -45,6 +49,7 @@ import com.lukflug.panelstudio.layout.PanelLayout;
 import com.lukflug.panelstudio.layout.SearchableLayout;
 import com.lukflug.panelstudio.layout.SinglePanelAdder;
 import com.lukflug.panelstudio.layout.StackedPanelAdder;
+import com.lukflug.panelstudio.mc20.MinecraftHUDGUI;
 import com.lukflug.panelstudio.popup.CenteredPositioner;
 import com.lukflug.panelstudio.popup.IPopupPositioner;
 import com.lukflug.panelstudio.popup.MousePositioner;

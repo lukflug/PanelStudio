@@ -54,8 +54,8 @@ publishing {
 			}
 			artifact sourcesJar
 			pom {
-				name = "PanelStudio-MC194"
-				description = "A supplement to PanelStudio designed for FabricMC 1.20"
+				name = "PanelStudio-MC20"
+				description = "A supplement to PanelStudio designed for FabricMC 1.20.x"
 				url = "https://github.com/lukflug/PanelStudio"
 				licenses {
 					license {
