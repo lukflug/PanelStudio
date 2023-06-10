@@ -31,8 +31,7 @@ configurations.all {
 repositories {
 	maven {
 		name = "lukflug"
-		url = "http://localhost:8080/maven/"// "https://lukflug.github.io/maven/"
-		allowInsecureProtocol = true
+		url = "https://lukflug.github.io/maven/"
 	}
 }
 
@@ -46,7 +45,7 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${loader20}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${api20}"
 	shadow "com.lukflug:panelstudio:${version}"
-	shadow("com.lukflug:panelstudio-mc20:${versionmc}") {changing = true}
+	shadow "com.lukflug:panelstudio-mc20:${versionmc}"
 }
 
 processResources {

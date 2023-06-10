@@ -30,7 +30,7 @@ public class Tab extends TabItem<IToggleable,Boolean> {
 
 	@Override
 	protected void handleSelect (Context context) {
-		contents.get((int)tabState.getTarget()).content.toggle();
+		if (contents.size() > 0) contents.get((int)tabState.getTarget()).content.toggle();
 	}
 
 	@Override

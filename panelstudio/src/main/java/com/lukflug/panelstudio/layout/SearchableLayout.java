@@ -207,17 +207,20 @@ public class SearchableLayout implements ILayout,IScrollSize {
 
 			@Override
 			public void increment() {
+				if (array.length == 0) return;
 				state=(state+1)%array.length;
 			}
 			
 			@Override
 			public void decrement() {
+				if (array.length == 0) return;
 				state-=1;
 				if (state<0) state=array.length-1;
 			}
 
 			@Override
 			public String getValueName() {
+				if (array.length == 0) return "[empty]";
 				return array[state].getDisplayName();
 			}
 

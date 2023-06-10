@@ -73,9 +73,9 @@ public abstract class GLInterface implements IInterface {
 	@Override
 	public void drawString (Point pos, int height, String s, Color c) {
 		GlStateManager.pushMatrix();
-		GlStateManager.translatef(pos.x,pos.y,0);
+		GlStateManager.translate(pos.x,pos.y,0);
 		double scale=height/(double)MinecraftClient.getInstance().textRenderer.fontHeight;
-		GlStateManager.scaled(scale,scale,1);
+		GlStateManager.scale(scale,scale,1);
 		end(false);
 		MinecraftClient.getInstance().textRenderer.drawWithShadow(s,0,0,c.getRGB());
 		begin(false);
