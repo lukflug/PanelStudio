@@ -23,7 +23,7 @@ import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 public class ExampleMod {
 	public static final String MODID="example-mod8-forge";
 	public static final String NAME="PanelStudio-MC8-Forge Example Mod";
-	public static final String VERSION="0.2.1";
+	public static final String VERSION="0.2.4";
 	public static Logger logger;
 	private static ClickGUI gui;
 
